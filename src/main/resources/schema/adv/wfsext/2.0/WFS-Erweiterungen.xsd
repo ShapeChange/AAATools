@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.adv-online.de/namespaces/adv/gid/wfsext/2.0" xmlns:wfsext="http://www.adv-online.de/namespaces/adv/gid/wfsext/2.0" xmlns:fes="http://www.opengis.net/fes/2.0" xmlns:wfs="http://www.opengis.net/wfs/2.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" version="2.0">
+   <xs:import namespace="http://www.opengis.net/wfs/2.0" schemaLocation="../../../ogc/wfs/2.0/wfs.xsd"/>
+   <xs:import namespace="http://www.opengis.net/fes/2.0" schemaLocation="../../../ogc/filter/2.0/filterAll.xsd"/>
+	<xs:element name="PropertyIsOfType" type="fes:BinaryComparisonOpType" substitutionGroup="fes:comparisonOps">
+		<xs:annotation>
+			<xs:documentation>Der Vergleichsoperator ermittelt den Typ der im ersten Operanden angegebenen Eigenschaft (fes:ValueReference) und vergleicht ihn mit der Angabe im zweiten Operanden (fes:Literal). Beide Angaben müssen identisch sein.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="PropertyName" substitutionGroup="fes:AbstractProjectionClause">
+		<xs:annotation>
+			<xs:documentation>Das Verhalten ist identisch zur Verwendung von wfs:PropertyName mit dem Unterschied, dass ausschließlich die Objekte am Ende des mit resolvePath beschriebenen Relationspfades in wfs:additionalObjects zurückgeliefert werden. In der GeoInfoDok 6.0.1 wurde diese WFS-Erweiterung über das Element XlinkPropertyPath mit leafOnly=true realisiert.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:QName">
+					<xs:attribute name="resolve" type="xs:string" use="required" fixed="local"/>
+					<xs:attribute name="leafOnly" type="xs:boolean" use="required" fixed="true"/>
+					<xs:attribute name="resolvePath" type="xs:string" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>	
+</xs:schema>

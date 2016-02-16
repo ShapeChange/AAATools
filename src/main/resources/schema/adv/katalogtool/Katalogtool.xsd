@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified" attributeFormDefault="unqualified">
+	<xs:element name="FC_FeatureCatalogue">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="name" type="xs:string"/>
+				<xs:element name="scope" type="xs:string"/>
+				<xs:element name="modellart" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="profil" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="versionNumber" type="xs:string"/>
+				<xs:element name="versionDate" type="xs:string"/>
+				<xs:element name="producer">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="CI_ResponsibleParty">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="CI_MandatoryParty">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="organisationName" type="xs:string"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="responsibility" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="AC_Objektbereich"/>
+					<xs:element ref="AC_Objektartengruppe"/>
+					<xs:element ref="AC_FeatureType"/>
+					<xs:element ref="FC_FeatureAttribute"/>
+					<xs:element ref="FC_FeatureRelationship"/>
+					<xs:element ref="FC_FeatureOperation"/>
+					<xs:element ref="FC_RelationshipRole"/>
+					<xs:element ref="FC_Value"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AC_Objektbereich">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="name" type="xs:string"/>
+				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="code" type="xs:string" minOccurs="0"/>
+				<xs:element name="diagram" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="src" type="xs:anyURI" use="required"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AC_Objektartengruppe">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="name" type="xs:string"/>
+				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="code" type="xs:string" minOccurs="0"/>
+				<xs:element name="diagram" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="src" type="xs:anyURI" use="required"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="note" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="Objektbereichzugehoerigkeit" type="ReferenceType" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="AC_FeatureType">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="name" type="xs:string"/>
+				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="code" type="xs:string" minOccurs="0"/>
+				<xs:element name="subtypeOf" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="characterizedBy" type="ReferenceType" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="Objektartengruppenzugehoerigkeit" type="ReferenceType" minOccurs="0"/>
+				<xs:element name="Erfassungskriterium" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="modellart" type="xs:string"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Konsistenzbedingung" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="modellart" type="xs:string"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Bildungsregel" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="modellart" type="xs:string"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Lebenszeitintervall" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="wirdTypisiertDurch" minOccurs="0">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="REO"/>
+							<xs:enumeration value="NREO"/>
+							<xs:enumeration value="ZUSO"/>
+							<xs:enumeration value="PMO"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="bedeutung" type="xs:string" minOccurs="0"/>
+				<xs:element name="modellart" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="grunddatenbestand" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="profil" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="letzteAenderungVersion" type="xs:string" minOccurs="0"/>
+				<xs:element name="letzteAenderungRevisionsnummer" type="xs:string" minOccurs="0"/>
+				<xs:element name="themen" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="diagram" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="src" type="xs:anyURI" use="required"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="note" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="nutzungsartkennung" type="xs:string" minOccurs="0"/>
+				<xs:element name="nutzungsart" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FC_FeatureAttribute">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="name" type="xs:string"/>
+				<xs:element name="cardinality" type="xs:string" minOccurs="0"/>
+				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="code" type="xs:string" minOccurs="0"/>
+				<xs:element name="objektbildend" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="modellart" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="grunddatenbestand" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="profil" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="letzteAenderungVersion" type="xs:string" minOccurs="0"/>
+				<xs:element name="letzteAenderungRevisionsnummer" type="xs:string" minOccurs="0"/>
+				<xs:element name="inType" type="ReferenceWithNameType"/>
+				<xs:element name="ValueDataType" type="ReferenceType"/>
+				<xs:element name="ValueDomainType" minOccurs="0">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="enumeratedBy" type="ReferenceType" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FC_FeatureRelationship">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="name" type="xs:string"/>
+				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="roles" type="ReferenceType" minOccurs="0" maxOccurs="2"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FC_FeatureOperation">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="name" type="xs:string"/>
+				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="objectFeatureTypeNames" type="ReferenceType" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FC_RelationshipRole">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="name" type="xs:string"/>
+				<xs:element name="cardinality" type="xs:string" minOccurs="0"/>
+				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="code" type="xs:string" minOccurs="0"/>
+				<xs:element name="objektbildend" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="modellart" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="grunddatenbestand" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="profil" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="letzteAenderungVersion" type="xs:string" minOccurs="0"/>
+				<xs:element name="letzteAenderungRevisionsnummer" type="xs:string" minOccurs="0"/>
+				<xs:element name="inType" type="ReferenceWithNameType"/>
+				<xs:element name="FeatureTypeIncluded" type="ReferenceWithNameType"/>
+				<xs:element name="relation" type="ReferenceType"/>
+				<xs:element name="InverseRole" type="ReferenceType" minOccurs="0"/>
+				<xs:element name="constraints" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="orderIndicator">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="0"/>
+							<xs:enumeration value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="FC_Value">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="label" type="xs:string"/>
+				<xs:element name="code" type="xs:string" minOccurs="0"/>
+				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="modellart" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="grunddatenbestand" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="profil" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="letzteAenderungVersion" type="xs:string" minOccurs="0"/>
+				<xs:element name="letzteAenderungRevisionsnummer" type="xs:string" minOccurs="0"/>
+				<xs:element name="nutzungsartkennung" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="ReferenceType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="idref" type="xs:IDREF"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ReferenceWithNameType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="idref" type="xs:IDREF"/>
+				<xs:attribute name="name" type="xs:string"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>

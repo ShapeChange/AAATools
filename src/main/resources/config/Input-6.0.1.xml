@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<input xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1">
+	<parameter name="inputModelType" value="EA7"/>
+	<parameter name="inputFile" value="AAA-6.0.1.EAP"/>
+	<parameter name="appSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
+	<parameter name="excludedPackages" value="ISO/TC 211,OGC,AAA_Katalog,AAA Versionierungsschema,Web Feature Service Erweiterungen"/>
+	<parameter name="publicOnly" value="true"/>
+	<parameter name="checkingConstraints" value="enabled"/>
+	<parameter name="oclConstraintTypeRegex" value=""/>
+	<parameter name="representTaggedValues" value="AAA:Kennung,AAA:Datum,AAA:Organisation,AAA:Modellart,AAA:Profile,AAA:Grunddatenbestand,AAA:Nutzungsart,AAA:Nutzungsartkennung,AAA:objektbildend,AAA:Themen"/>
+	<stereotypeAliases>
+		<StereotypeAlias wellknown="Application Schema" alias="applicationSchema" />
+		<StereotypeAlias wellknown="Application Schema" alias="schema" />
+		<StereotypeAlias wellknown="Application Schema" alias="requirementsClass" />
+		<StereotypeAlias wellknown="Application Schema" alias="ApplicationSchema" />
+		<StereotypeAlias wellknown="Application Schema" alias="Schema" />
+		<StereotypeAlias wellknown="Type" alias="interface" />
+	</stereotypeAliases>
+</input>
+

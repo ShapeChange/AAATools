@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:wfs="http://www.opengis.net/wfs/2.0" xmlns:wfsext="http://www.adv-online.de/namespaces/adv/gid/wfsext/2.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/gid/7.0" version="7.0.2">
+  <annotation>
+    <appinfo>
+      <gmlProfileSchema xmlns="http://www.opengis.net/gml/3.2">gmlProfile/gmlProfileNAS.xsd</gmlProfileSchema>
+    </appinfo>
+  </annotation>
+  <include schemaLocation="AAA-Basisschema.xsd"/>
+  <include schemaLocation="AAA-Fachschema.xsd"/>
+  <include schemaLocation="NAS-Operationen.xsd"/>
+  <import namespace="http://www.adv-online.de/namespaces/adv/gid/wfsext/2.0" schemaLocation="../../wfsext/2.0/WFS-Erweiterungen.xsd"/>
+  <import namespace="http://www.opengis.net/ows/1.1" schemaLocation="../../../ogc/ows/1.1.0/owsAll.xsd"/>
+  <import namespace="http://www.opengis.net/wfs/2.0" schemaLocation="../../../ogc/wfs/2.0/wfs.xsd"/>
+  <!--XML Schema document created by ShapeChange - http://shapechange.net/-->
+</schema>

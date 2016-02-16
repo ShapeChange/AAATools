@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ShapeChangeConfiguration xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1 resources/schema/ShapeChangeConfiguration.xsd">
+	<input id="nas601">
+		<parameter name="inputModelType" value="EA7"/>
+		<parameter name="inputFile" value="AAA-6.0.1-Kopie.eap"/>
+		<parameter name="appSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
+		<parameter name="publicOnly" value="true"/>
+		<parameter name="checkingConstraints" value="disabled"/>
+		<parameter name="oclConstraintTypeRegex" value=""/>
+		<parameter name="representTaggedValues" value="reverseRoleNAS"/>
+		<parameter name="transformer" value="de.adv_online.aaa.nastool.NasTransformer"/>
+		<parameter name="transformerTargetPath" value="http://repository.gdi-de.org/schemas/adv/"/>
+		<stereotypeAliases>
+			<StereotypeAlias wellknown="Application Schema" alias="applicationSchema" />
+			<StereotypeAlias wellknown="Application Schema" alias="schema" />
+			<StereotypeAlias wellknown="Application Schema" alias="requirementsClass" />
+			<StereotypeAlias wellknown="Application Schema" alias="ApplicationSchema" />
+			<StereotypeAlias wellknown="Application Schema" alias="Schema" />
+			<StereotypeAlias wellknown="Type" alias="interface" />
+			<StereotypeAlias wellknown="" alias="abstract" />
+		</stereotypeAliases>
+	</input>
+	<log>
+		<parameter name="reportLevel" value="WARNING"/>
+		<parameter name="logFile" value="NAS-Log.xml"/>
+	</log>
+	<targets>
+		<TargetXmlSchema class="de.interactive_instruments.ShapeChange.Target.XmlSchema.XmlSchema" mode="enabled">
+			<targetParameter name="outputDirectory" value="Ausgaben/NAS"/>
+			<targetParameter name="defaultEncodingRule" value="NAS"/>
+			<rules>
+				<EncodingRule name="NAS" extends="iso19136_2007">
+					<rule name="rule-xsd-all-no-documentation"/>
+				</EncodingRule>
+			</rules>
+			<xi:include href="resources/config/StandardMapEntries_iso19136_2007.xml"/>
+			<xi:include href="resources/config/StandardMapEntries_iso19139_2007.xml"/>
+			<xi:include href="resources/config/StandardMapEntries_iso19107.xml"/>
+			<xi:include href="resources/config/StandardMapEntries_iso19108.xml"/>
+			<xi:include href="resources/config/StandardMapEntries_iso19111.xml"/>
+			<xi:include href="resources/config/StandardMapEntries_iso19115.xml"/>
+			<xi:include href="resources/config/StandardMapEntries_iso19123.xml"/>
+			<xmlNamespaces>
+				<XmlNamespace nsabr="sc" ns="http://www.interactive-instruments.de/ShapeChange/AppInfo" location="http://shapechange.net/resources/schema/ShapeChangeAppinfo.xsd" />
+				<XmlNamespace nsabr="xsi" ns="http://www.w3.org/2001/XMLSchema-instance"/>
+				<XmlNamespace nsabr="xlink" ns="http://www.w3.org/1999/xlink" location="http://www.w3.org/1999/xlink.xsd" />
+				<XmlNamespace nsabr="gml" ns="http://www.opengis.net/gml/3.2" location="http://schemas.opengis.net/gml/3.2.1/gml.xsd" />
+				<XmlNamespace nsabr="gmd" ns="http://www.isotc211.org/2005/gmd" location="http://schemas.opengis.net/iso/19139/20070417/gmd/gmd.xsd" />
+				<XmlNamespace nsabr="gco" ns="http://www.isotc211.org/2005/gco" location="http://schemas.opengis.net/iso/19139/20070417/gco/gco.xsd" />
+				<XmlNamespace nsabr="ows" ns="http://www.opengis.net/ows" location="http://schemas.opengis.net/ows/1.0.0/owsAll.xsd"/>
+				<XmlNamespace nsabr="wfs" ns="http://www.adv-online.de/namespaces/adv/gid/wfs" location="http://repository.gdi-de.org/schemas/adv/wfs/1.0/WFS-transaction.xsd"/>
+				<XmlNamespace nsabr="feCap" ns="http://www.opengis.net/ogc/filterCapabilities" location="http://repository.gdi-de.org/schemas/adv/filter/1.0/filterCapabilities.xsd"/>
+			</xmlNamespaces>
+			<xsdMapEntries>
+				<XsdMapEntry type="URI" xsdEncodingRules="iso19136_2007" xmlPropertyType="anyURI" xmlType="anyURI" xmlTypeType="simple" xmlTypeContent="simple"/>
+				<XsdMapEntry type="URL" xsdEncodingRules="iso19136_2007" xmlPropertyType="anyURI" xmlType="anyURI" xmlTypeType="simple" xmlTypeContent="simple"/>
+				<XsdMapEntry type="doubleList" xsdEncodingRules="iso19136_2007" xmlPropertyType="gml:doubleList" xmlType="gml:doubleList" xmlTypeType="simple" xmlTypeContent="simple"/>
+				<XsdMapEntry type="AC_FeatureCatalogue" xsdEncodingRules="iso19136_2007" xmlPropertyType="gml:ReferenceType" xmlType="gml:ReferenceType"/>
+				<XsdMapEntry type="CapabilitiesBase" xsdEncodingRules="iso19136_2007" xmlType="ows:CapabilitiesBaseType"/>
+				<XsdMapEntry type="Identification" xsdEncodingRules="iso19136_2007" xmlType="ows:IdentificationType"/>
+				<XsdMapEntry type="Query" xsdEncodingRules="iso19136_2007"  xmlType="wfs:QueryType" xmlElement="wfs:Query" xmlPropertyType="_P_"/>
+				<XsdMapEntry type="FeatureCollection" xsdEncodingRules="iso19136_2007"  xmlType="wfs:FeatureCollectionType" xmlElement="wfs:FeatureCollection" xmlPropertyType="_P_"/>
+				<XsdMapEntry type="Transaction" xsdEncodingRules="iso19136_2007"  xmlType="wfs:TransactionType" xmlElement="wfs:Transaction" xmlPropertyType="_P_"/>
+				<XsdMapEntry type="Filter_Capabilities" xsdEncodingRules="iso19136_2007"  xmlType="feCap:Filter_CapabilitiesType" xmlElement="feCap:Filter_Capabilities" xmlPropertyType="_P_"/>
+			</xsdMapEntries>
+		</TargetXmlSchema>
+	</targets>
+</ShapeChangeConfiguration>
