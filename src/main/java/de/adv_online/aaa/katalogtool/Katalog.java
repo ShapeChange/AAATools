@@ -39,6 +39,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
+import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 import java.util.logging.Level;
@@ -118,7 +120,7 @@ public class Katalog implements Target {
 	private String PQuelle = "Modell";
 	private Model refModel = null;
 	private PackageInfo refPackage = null;
-	private HashMap<Info,HashSet<DiffElement>> diffs = null;
+	private SortedMap<Info,HashSet<DiffElement>> diffs = null;
 	private Differ differ = null;
 	private Boolean Inherit = false;
 	private HashSet<PropertyInfo> exportedAssociation = new HashSet<PropertyInfo>();
@@ -201,7 +203,7 @@ public class Katalog implements Target {
 
 		refModel = getReferenceModel();
 		if (refModel!=null) {
-			HashSet<PackageInfo> set = refModel.schemas(p.name());
+			SortedSet<PackageInfo> set = refModel.schemas(p.name());
 			if (set.size()==1) {
 				differ = new Differ(true, MAList);
 				refPackage = set.iterator().next();
