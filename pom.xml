@@ -54,10 +54,25 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>net.ShapeChange</groupId>
+      <groupId>net.shapechange</groupId>
       <artifactId>ShapeChange</artifactId>
-      <version>2.1.0-SNAPSHOT</version>
+      <version>2.1.0</version>
     </dependency>
+	<dependency>
+	  <groupId>net.shapechange</groupId>
+	  <artifactId>diff-match-patch-20121119</artifactId>
+	  <version>1.0.0</version>
+	</dependency>
+	<dependency>
+		<groupId>de.interactive_instruments.ShapeChange</groupId>
+		<artifactId>ShapeChangeAntlr</artifactId>
+		<version>0.1.0</version>
+	</dependency>
+	<dependency>
+		<groupId>org.antlr</groupId>
+		<artifactId>antlr4-runtime</artifactId>
+		<version>4.5</version>
+	</dependency>
     <dependency>
       <groupId>org.sparx</groupId>
       <artifactId>eaapi</artifactId>

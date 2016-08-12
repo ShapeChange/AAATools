@@ -134,6 +134,7 @@
 				<xs:element name="modellart" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="grunddatenbestand" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="profil" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="taggedValue" type="TaggedValueType" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="letzteAenderungVersion" type="xs:string" minOccurs="0"/>
 				<xs:element name="letzteAenderungRevisionsnummer" type="xs:string" minOccurs="0"/>
 				<xs:element name="themen" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
@@ -164,6 +165,7 @@
 				<xs:element name="modellart" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="grunddatenbestand" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="profil" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="taggedValue" type="TaggedValueType" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="letzteAenderungVersion" type="xs:string" minOccurs="0"/>
 				<xs:element name="letzteAenderungRevisionsnummer" type="xs:string" minOccurs="0"/>
 				<xs:element name="inType" type="ReferenceWithNameType"/>
@@ -177,6 +179,7 @@
 					</xs:simpleType>
 				</xs:element>
 				<xs:element name="enumeratedBy" type="ReferenceType" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="taggedValue" type="TaggedValueType" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="id" type="xs:ID" use="required"/>
 		</xs:complexType>
@@ -212,6 +215,7 @@
 				<xs:element name="modellart" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="grunddatenbestand" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="profil" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="taggedValue" type="TaggedValueType" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="letzteAenderungVersion" type="xs:string" minOccurs="0"/>
 				<xs:element name="letzteAenderungRevisionsnummer" type="xs:string" minOccurs="0"/>
 				<xs:element name="inType" type="ReferenceWithNameType"/>
@@ -240,6 +244,7 @@
 				<xs:element name="modellart" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="grunddatenbestand" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="profil" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="taggedValue" type="TaggedValueType" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="letzteAenderungVersion" type="xs:string" minOccurs="0"/>
 				<xs:element name="letzteAenderungRevisionsnummer" type="xs:string" minOccurs="0"/>
 				<xs:element name="nutzungsartkennung" type="xs:string" minOccurs="0"/>
@@ -259,6 +264,13 @@
 			<xs:extension base="xs:string">
 				<xs:attribute name="idref" type="xs:IDREF"/>
 				<xs:attribute name="name" type="xs:string"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="TaggedValueType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="tag" type="xs:string"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>

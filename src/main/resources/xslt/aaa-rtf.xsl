@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="windows-1252"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <!-- 
 
@@ -11,10 +11,11 @@
 	  Version 1.11 - 12.08.2008
   	Version 1.12 - 24.10.2011
   	Version 1.13 - 23.01.2013
+     Version 1.15 - 11.08.2016
 
-     (c) 2001-2013 interactive instruments GmbH, Bonn
+     (c) 2001-2016 interactive instruments GmbH, Bonn
      im Auftrag der AdV, Arbeitsgemeinschaft der Vermessungsverwaltungen der
-     Länder der Bundesrepublik Deutschland
+     L‰nder der Bundesrepublik Deutschland
 
 	  http://www.adv-online.de/
 
@@ -838,6 +839,65 @@ Stand: <xsl:value-of select="$versionDate"/>
 </xsl:when>
 </xsl:choose>
 
+<xsl:variable name="nft" select="count($featuretype/taggedValue)" />
+<xsl:choose>
+<xsl:when test="$nft >= 1">
+\pard\plain
+\trowd \trgaph71\trleft-71
+\trbrdrt\brdrs\brdrw15 
+\trbrdrl\brdrs\brdrw15 
+\trbrdrb\brdrs\brdrw15 
+\trbrdrr\brdrs\brdrw15 
+\trftsWidth1\trpaddl71\trpaddr71\trpaddfl3\trpaddfr3 
+
+\clvertalt
+\clbrdrt\brdrs\brdrw15 
+\clbrdrl\brdrs\brdrw15 
+\clbrdrb\brdrnone 
+\clbrdrr\brdrs\brdrw15 
+\cltxlrtb\clftsWidth3\clwWidth9145 
+\cellx9074
+
+\pard\plain 
+\s54\ql \li0\ri0\sb60\sa60\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 \b\fs22\lang1031\langfe1031\cgrid\langnp1031\langfenp1031 
+{Weitere Angaben:}
+\b0\cell\row 
+
+\pard\plain
+\trowd 
+\trgaph71\trleft-71
+\trbrdrt\brdrs\brdrw15 
+\trbrdrl\brdrs\brdrw15 
+\trbrdrb\brdrs\brdrw15 
+\trbrdrr\brdrs\brdrw15 
+\trftsWidth1\trpaddl71\trpaddr71\trpaddfl3\trpaddfr3 
+
+\clvertalt
+\clbrdrt\brdrnone 
+\clbrdrl\brdrs\brdrw15 
+\clbrdrb\brdrnone 
+\clbrdrr\brdrnone 
+\cltxlrtb\clftsWidth3\clwWidth499 
+\cellx428
+
+\clvertalt
+\clbrdrt\brdrnone 
+\clbrdrl\brdrnone 
+\clbrdrb\brdrnone 
+\clbrdrr\brdrs\brdrw15 
+\cltxlrtb\clftsWidth3\clwWidth8646 
+\cellx9074
+
+\pard\plain 
+\s52\qj \fi-1418\li1418\ri0\sa60\sl240\slmult0\widctlpar\intbl\tx1418\aspalpha\aspnum\faauto\adjustright\rin0\lin1418 \fs22\lang1031\langfe1031\cgrid\langnp1031\langfenp1031
+<xsl:for-each select="$featuretype/taggedValue">
+<xsl:variable name="tv" select="." />
+\cell <xsl:value-of select="$tv/@tag"/>:\tab <xsl:value-of select="$tv/text()"/>\cell\row 
+</xsl:for-each>\cell\row 
+</xsl:when>
+</xsl:choose>
+
+
 <xsl:for-each select="/FC_FeatureCatalogue/FC_FeatureAttribute">
 <xsl:variable name="featureAtt" select="." />
 <xsl:for-each select="$featuretype/characterizedBy">
@@ -923,6 +983,15 @@ Stand: <xsl:value-of select="$versionDate"/>
 \cell Grunddatenb.:\tab <xsl:value-of select="$featureAtt/grunddatenbestand"/>\cell\row
 </xsl:when>
 </xsl:choose>
+<xsl:variable name="nft" select="count($featureAtt/taggedValue)" />
+<xsl:choose>
+<xsl:when test="$nft >= 1">
+<xsl:for-each select="$featureAtt/taggedValue">
+<xsl:variable name="tv" select="." />
+\cell <xsl:value-of select="$tv/@tag"/>:\tab <xsl:value-of select="$tv/text()"/> \cell\row
+</xsl:for-each>
+</xsl:when>
+</xsl:choose>
 <xsl:variable name="nft" select="count($featureAtt/definition)+count($featureAtt/objektbildend)" />
 <xsl:choose>
 <xsl:when test="$nft >= 1">
@@ -957,7 +1026,7 @@ Stand: <xsl:value-of select="$versionDate"/>
 \s52\qj \fi-1418\li1418\ri0\sa60\sl240\slmult0\widctlpar\intbl\tx1418\aspalpha\aspnum\faauto\adjustright\rin0\lin1418 \fs22\lang1031\langfe1031\cgrid\langnp1031\langfenp1031
 \cell Wertearten:\par
 \pard\plain
-\s55\qj \li0\ri0\sl240\slmult0\widctlpar\intbl\tx1418\tx6167\nooverflow\faroman\rin0\lin0
+\s55\qj \li0\ri0\sl240\slmult0\widctlpar\intbl\tx1418\tx6167\nooverflow\faroman\rin0\lin0\fs22
 {\tab Bezeichner\tab Wert\par}
 <xsl:for-each select="/FC_FeatureCatalogue/FC_Value">
 <xsl:variable name="fcvalue" select="." />
@@ -973,6 +1042,7 @@ Stand: <xsl:value-of select="$versionDate"/>
 \cell\row
 </xsl:when>
 </xsl:choose>
+\cell\row
 </xsl:when>
 </xsl:choose>
 </xsl:for-each>
@@ -1079,6 +1149,16 @@ Stand: <xsl:value-of select="$versionDate"/>
 </xsl:choose>
 </xsl:for-each> 
 \cell\row
+</xsl:when>
+</xsl:choose>
+
+<xsl:variable name="nft" select="count($featureRel/taggedValue)" />
+<xsl:choose>
+<xsl:when test="$nft >= 1">
+<xsl:for-each select="$featureRel/taggedValue">
+<xsl:variable name="tv" select="." />
+\cell <xsl:value-of select="$tv/@tag"/>:\tab <xsl:value-of select="$tv/text()"/>\cell\row 
+</xsl:for-each>
 </xsl:when>
 </xsl:choose>
 

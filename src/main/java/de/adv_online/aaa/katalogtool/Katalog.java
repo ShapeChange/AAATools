@@ -34,14 +34,18 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -76,6 +80,7 @@ import de.interactive_instruments.ShapeChange.Model.Info;
 import de.interactive_instruments.ShapeChange.Model.Model;
 import de.interactive_instruments.ShapeChange.Model.PackageInfo;
 import de.interactive_instruments.ShapeChange.Model.PropertyInfo;
+import de.interactive_instruments.ShapeChange.Model.TaggedValues;
 import de.interactive_instruments.ShapeChange.ModelDiff.DiffElement;
 import de.interactive_instruments.ShapeChange.ModelDiff.DiffElement.Operation;
 import de.interactive_instruments.ShapeChange.ModelDiff.Differ;
@@ -1614,6 +1619,27 @@ public class Katalog implements Target {
 							addAttribute(document,e2,"mode",op.toString());
 						e1.appendChild(e2);					
 						break;
+					}
+				}
+			}
+		}
+		
+		TaggedValues taggedValues = i.taggedValuesForTagList(options.parameter("representTaggedValues"));
+		if(!taggedValues.isEmpty()) {
+			// sort results alphabetically by tag name for consistent output
+			TreeSet<String> tags = new TreeSet<String>(taggedValues.keySet());
+			for(String tag : tags) {
+				// sort values
+				String[] values = taggedValues.get(tag);
+				List<String> valueList = Arrays.asList(values);
+				Collections.sort(valueList);
+				
+				for(String v : values) {
+					if (v.trim().length() > 0) {
+						e2 = document.createElement("taggedValue");
+						e2.setTextContent(v);
+						addAttribute(document,e2,"tag",tag);
+						e1.appendChild(e2);					
 					}
 				}
 			}

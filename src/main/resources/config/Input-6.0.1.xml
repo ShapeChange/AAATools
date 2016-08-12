@@ -7,7 +7,7 @@
 	<parameter name="publicOnly" value="true"/>
 	<parameter name="checkingConstraints" value="enabled"/>
 	<parameter name="oclConstraintTypeRegex" value=""/>
-	<parameter name="representTaggedValues" value="AAA:Kennung,AAA:Datum,AAA:Organisation,AAA:Modellart,AAA:Profile,AAA:Grunddatenbestand,AAA:Nutzungsart,AAA:Nutzungsartkennung,AAA:objektbildend,AAA:Themen,AAA:AAAVersion"/>
+	<parameter name="addTaggedValues" value="AAA:Kennung,AAA:Datum,AAA:Organisation,AAA:Modellart,AAA:Profile,AAA:Grunddatenbestand,AAA:Nutzungsart,AAA:Nutzungsartkennung,AAA:objektbildend,AAA:Themen,AAA:AAAVersion"/>
 	<stereotypeAliases>
 		<StereotypeAlias wellknown="Application Schema" alias="applicationSchema" />
 		<StereotypeAlias wellknown="Application Schema" alias="schema" />
