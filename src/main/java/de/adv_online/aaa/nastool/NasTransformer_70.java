@@ -172,15 +172,9 @@ public class NasTransformer_70 implements Transformer {
 		helper.deleteClass( "AX_LI_ProcessStep_OhneDatenerhebung" );
 		helper.deleteClass( "AX_LI_ProcessStep_MitDatenerhebung" );
 		helper.deleteClass( "AX_LI_ProcessStep_Punktort" );
-		helper.deleteClass( "AX_LI_ProcessStep_OhneDatenerhebung_Description" );
-		helper.deleteClass( "AX_LI_ProcessStep_MitDatenerhebung_Description" );
-		helper.deleteClass( "AX_LI_ProcessStep_Punktort_Description" );
 		helper.deleteClass( "AX_LI_ProcessStep_Bodenhoehe" );
 		helper.deleteClass( "AX_LI_ProcessStep_Dachhoehe" );
 		helper.deleteClass( "AX_LI_ProcessStep3D" );
-		helper.deleteClass( "AX_LI_ProcessStep_Bodenhoehe_Description" );
-		helper.deleteClass( "AX_LI_ProcessStep3D_Description" );
-		helper.deleteClass( "AX_LI_ProcessStep_Dachhoehe_Source" );
 		helper.deleteClass( "Acceleration" );
 		helper.deleteClass( "AD_ReferenzierbaresGitter" );
 		helper.deleteClass( "AD_Wertematrix" );
