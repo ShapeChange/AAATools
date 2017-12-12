@@ -14,8 +14,9 @@
      Version 1.13 - 25.10.2012
      Version 1.14 - 23.01.2013
      Version 1.15 - 11.08.2016
+     Version 1.16 - 11.12.2017
 
-     (c) 2001-2016 interactive instruments GmbH, Bonn
+     (c) 2001-2017 interactive instruments GmbH, Bonn
      im Auftrag der AdV, Arbeitsgemeinschaft der Vermessungsverwaltungen der
      L‰nder der Bundesrepublik Deutschland
 
@@ -291,6 +292,29 @@
                 </xsl:for-each>
               </xsl:if>
             </DIV>
+            <DIV>
+              <xsl:variable name="nft" select="count(retired)" />
+              <xsl:if test="$nft >= 1">
+                <xsl:if test="retired">
+                 <P>
+                   <b>Stillgelegt:</b>
+                 </P>
+                 <xsl:choose>
+                 <xsl:when test="taggedValue[@tag='AAA:GueltigBis']">
+                 <P STYLE="margin-left:20px">
+                  Gültig bis GeoInfoDok
+                  <xsl:call-template name="replace_ins">
+                    <xsl:with-param name="string" select="taggedValue[@tag='AAA:GueltigBis'][1]"/>
+                  </xsl:call-template>
+                 </P>
+                 </xsl:when>
+                 <xsl:otherwise>
+                  <P STYLE="margin-left:20px">Ja</P>
+                 </xsl:otherwise>
+                 </xsl:choose>
+                </xsl:if>
+              </xsl:if>
+            </DIV>
             <table>
               <tr>
                 <td width="100%">
@@ -394,6 +418,29 @@
                     </xsl:for-each>
                   </xsl:if>
                 </DIV>
+            <DIV>
+              <xsl:variable name="nft" select="count($featuretype/retired)" />
+              <xsl:if test="$nft >= 1">
+                <xsl:if test="$featuretype/retired">
+                 <P>
+                   <b>Stillgelegt:</b>
+                 </P>
+                 <xsl:choose>
+                 <xsl:when test="$featuretype/taggedValue[@tag='AAA:GueltigBis']">
+                 <P STYLE="margin-left:20px">
+                  Gültig bis GeoInfoDok
+                  <xsl:call-template name="replace_ins">
+                    <xsl:with-param name="string" select="$featuretype/taggedValue[@tag='AAA:GueltigBis'][1]"/>
+                  </xsl:call-template>
+                 </P>
+                 </xsl:when>
+                 <xsl:otherwise>
+                  <P STYLE="margin-left:20px">Ja</P>
+                 </xsl:otherwise>
+                 </xsl:choose>
+                </xsl:if>
+              </xsl:if>
+            </DIV>
                 <DIV>
                   <xsl:variable name="nft" select="count($featuretype/subtypeOf)" />
                   <xsl:if test="$nft >= 1">
@@ -543,7 +590,7 @@
                   </xsl:if>
                 </DIV>
                 <DIV>
-                  <xsl:variable name="nft" select="count($featuretype/taggedValue)" />
+                  <xsl:variable name="nft" select="count($featuretype/taggedValue[@tag!='AAA:GueltigBis'])" />
                   <xsl:if test="$nft >= 1">
                     <P>
                       <b>Weitere Angaben:</b>
@@ -559,7 +606,7 @@
                               </td>
                               <TD>Wert</TD>
                             </TR>
-                      <xsl:for-each select="$featuretype/taggedValue">
+                      <xsl:for-each select="$featuretype/taggedValue[@tag!='AAA:GueltigBis']">
                         <xsl:variable name="tv" select="." />
                         <TR>
                           <td width="20">
@@ -864,6 +911,29 @@
                           </xsl:for-each>
                         </xsl:if>
                       </DIV>
+            <DIV>
+              <xsl:variable name="nft" select="count($featureAtt/retired)" />
+              <xsl:if test="$nft >= 1">
+                <xsl:if test="$featureAtt/retired">
+                 <P>
+                   <b>Stillgelegt:</b>
+                 </P>
+                 <xsl:choose>
+                 <xsl:when test="$featureAtt/taggedValue[@tag='AAA:GueltigBis']">
+                 <P STYLE="margin-left:20px">
+                  Gültig bis GeoInfoDok
+                  <xsl:call-template name="replace_ins">
+                    <xsl:with-param name="string" select="$featureAtt/taggedValue[@tag='AAA:GueltigBis'][1]"/>
+                  </xsl:call-template>
+                 </P>
+                 </xsl:when>
+                 <xsl:otherwise>
+                  <P STYLE="margin-left:20px">Ja</P>
+                 </xsl:otherwise>
+                 </xsl:choose>
+                </xsl:if>
+              </xsl:if>
+            </DIV>
                       <DIV>
                         <xsl:variable name="nft" select="count($featureAtt/cardinality)" />
                         <xsl:if test="$nft >= 1">
@@ -955,7 +1025,7 @@
                                       </xsl:call-template>
                                     </xsl:otherwise>
                                   </xsl:choose>
-                                  <xsl:if test="count($fcvalue/definition)=1 or count($fcvalue/taggedValue)>=1">
+                                  <xsl:if test="count($fcvalue/definition)=1 or count($fcvalue/retired)=1 or count($fcvalue/taggedValue)>=1">
                                     <table>
                                       <tr>
                                         <td width="20">&#160;</td>
@@ -983,8 +1053,24 @@
                                 </xsl:otherwise>
                               </xsl:choose>
                             </small>
-                                          <xsl:if test="count($fcvalue/taggedValue) >= 1">
-                                  <xsl:for-each select="$fcvalue/taggedValue">
+              <xsl:variable name="nft" select="count($fcvalue/retired)" />
+              <xsl:if test="$nft >= 1">
+                <xsl:if test="$fcvalue/retired">
+					<br/><small><em>Stillgelegt: 
+                 <xsl:choose>
+                 <xsl:when test="$fcvalue/taggedValue[@tag='AAA:GueltigBis']">
+                  Gültig bis GeoInfoDok
+                  <xsl:call-template name="replace_ins">
+                    <xsl:with-param name="string" select="$fcvalue/taggedValue[@tag='AAA:GueltigBis'][1]"/>
+                  </xsl:call-template>
+                 </xsl:when>
+                 <xsl:otherwise>Ja</xsl:otherwise>
+                 </xsl:choose>
+                 </em></small>
+                </xsl:if>
+              </xsl:if>
+                                          <xsl:if test="count($fcvalue/taggedValue[@tag!='AAA:GueltigBis']) >= 1">
+                                  <xsl:for-each select="$fcvalue/taggedValue[@tag!='AAA:GueltigBis']">
                                     <xsl:variable name="tv" select="." />
                                     <br/><small><em>
                                         <xsl:choose>
@@ -1074,7 +1160,7 @@
                         </xsl:if>
                       </DIV>
                       <DIV>
-                        <xsl:variable name="nft" select="count($featureAtt/taggedValue)" />
+                        <xsl:variable name="nft" select="count($featureAtt/taggedValue[@tag!='AAA:GueltigBis'])" />
                         <xsl:if test="$nft >= 1">
                           <P>
                             <b>Weitere Angaben:</b>
@@ -1090,7 +1176,7 @@
                               </td>
                               <TD>Wert</TD>
                             </TR>
-                            <xsl:for-each select="$featureAtt/taggedValue">
+                            <xsl:for-each select="$featureAtt/taggedValue[@tag!='AAA:GueltigBis']">
                               <xsl:variable name="tv" select="." />
                               <TR>
                                 <td width="20">
@@ -1264,6 +1350,29 @@
                           </xsl:for-each>
                         </xsl:if>
                       </DIV>
+            <DIV>
+              <xsl:variable name="nft" select="count($featureRel/retired)" />
+              <xsl:if test="$nft >= 1">
+                <xsl:if test="$featureRel/retired">
+                 <P>
+                   <b>Stillgelegt:</b>
+                 </P>
+                 <xsl:choose>
+                 <xsl:when test="$featureRel/taggedValue[@tag='AAA:GueltigBis']">
+                 <P STYLE="margin-left:20px">
+                  Gültig bis GeoInfoDok
+                  <xsl:call-template name="replace_ins">
+                    <xsl:with-param name="string" select="$featureRel/taggedValue[@tag='AAA:GueltigBis'][1]"/>
+                  </xsl:call-template>
+                 </P>
+                 </xsl:when>
+                 <xsl:otherwise>
+                  <P STYLE="margin-left:20px">Ja</P>
+                 </xsl:otherwise>
+                 </xsl:choose>
+                </xsl:if>
+              </xsl:if>
+            </DIV>
                       <DIV>
                         <P>
                           <b>Kardinalitaet:</b>
@@ -1318,7 +1427,7 @@
                           </xsl:for-each>
                         </UL>
                         <DIV>
-                          <xsl:variable name="nft" select="count($featureRel/taggedValue)" />
+                          <xsl:variable name="nft" select="count($featureRel/taggedValue[@tag!='AAA:GueltigBis'])" />
                           <xsl:if test="$nft >= 1">
                             <P>
                               <b>Weitere Angaben:</b>
@@ -1334,7 +1443,7 @@
                               </td>
                               <TD>Wert</TD>
                             </TR>
-                              <xsl:for-each select="$featureRel/taggedValue">
+                              <xsl:for-each select="$featureRel/taggedValue[@tag!='AAA:GueltigBis']">
                                 <xsl:variable name="tv" select="." />
                                 <TR>
                                   <td width="20">

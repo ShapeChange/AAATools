@@ -49,6 +49,7 @@
 				<xs:element name="name" type="xs:string"/>
 				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="code" type="xs:string" minOccurs="0"/>
+				<xs:element name="retired" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="diagram" minOccurs="0" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:simpleContent>
@@ -68,6 +69,7 @@
 				<xs:element name="name" type="xs:string"/>
 				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="code" type="xs:string" minOccurs="0"/>
+				<xs:element name="retired" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="diagram" minOccurs="0" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:simpleContent>
@@ -89,6 +91,7 @@
 				<xs:element name="name" type="xs:string"/>
 				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="code" type="xs:string" minOccurs="0"/>
+				<xs:element name="retired" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="subtypeOf" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="characterizedBy" type="ReferenceType" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="Objektartengruppenzugehoerigkeit" type="ReferenceType" minOccurs="0"/>
@@ -161,6 +164,7 @@
 				<xs:element name="cardinality" type="xs:string" minOccurs="0"/>
 				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="code" type="xs:string" minOccurs="0"/>
+				<xs:element name="retired" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="objektbildend" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="modellart" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="grunddatenbestand" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
@@ -211,6 +215,7 @@
 				<xs:element name="cardinality" type="xs:string" minOccurs="0"/>
 				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="code" type="xs:string" minOccurs="0"/>
+				<xs:element name="retired" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="objektbildend" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="modellart" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="grunddatenbestand" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
@@ -240,6 +245,7 @@
 			<xs:sequence>
 				<xs:element name="label" type="xs:string"/>
 				<xs:element name="code" type="xs:string" minOccurs="0"/>
+				<xs:element name="retired" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="modellart" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="grunddatenbestand" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>

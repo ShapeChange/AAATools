@@ -12,8 +12,9 @@
   	Version 1.12 - 24.10.2011
   	Version 1.13 - 23.01.2013
      Version 1.15 - 11.08.2016
+     Version 1.16 - 12.12.2017
 
-     (c) 2001-2016 interactive instruments GmbH, Bonn
+     (c) 2001-2017 interactive instruments GmbH, Bonn
      im Auftrag der AdV, Arbeitsgemeinschaft der Vermessungsverwaltungen der
      L‰nder der Bundesrepublik Deutschland
 
@@ -321,6 +322,63 @@ Stand: <xsl:value-of select="$versionDate"/>
 \pard\plain 
 \s51\qj \li0\ri0\sa60\sl240\slmult0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 \fs22\lang1031\langfe1031\cgrid\langnp1031\langfenp1031 
 {\cell <xsl:for-each select="$featuretype/definition"><xsl:value-of select="."/>\par </xsl:for-each>\cell }
+\row
+
+</xsl:when>
+</xsl:choose>
+
+<xsl:variable name="nft" select="count($featuretype/retired)" />
+<xsl:choose>
+<xsl:when test="$nft >= 1">
+
+\pard\plain
+\trowd 
+\trgaph71\trleft-71
+\trbrdrt\brdrs\brdrw15 
+\trbrdrl\brdrs\brdrw15 
+\trbrdrb\brdrs\brdrw15 
+\trbrdrr\brdrs\brdrw15 
+\trftsWidth1\trpaddl71\trpaddr71\trpaddfl3\trpaddfr3 
+\clvertalt
+\clbrdrt\brdrnone 
+\clbrdrl\brdrs\brdrw15 
+\clbrdrb\brdrnone 
+\clbrdrr\brdrs\brdrw15 
+\cltxlrtb\clftsWidth3\clwWidth9145 
+\cellx9074
+
+\pard\plain 
+\s54\ql \li0\ri0\sb60\sa60\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 \b\fs22\lang1031\langfe1031\cgrid\langnp1031\langfenp1031 
+{Stillgelegt:}{\b0 \cell }
+\row
+
+\pard\plain
+\trowd 
+\trgaph71\trleft-71
+\trbrdrt\brdrs\brdrw15 
+\trbrdrl\brdrs\brdrw15 
+\trbrdrb\brdrs\brdrw15 
+\trbrdrr\brdrs\brdrw15 
+\trftsWidth1\trpaddl71\trpaddr71\trpaddfl3\trpaddfr3 
+
+\clvertalt
+\clbrdrt\brdrnone 
+\clbrdrl\brdrs\brdrw15 \clbrdrb\brdrs\brdrw15 
+\clbrdrr\brdrnone 
+\cltxlrtb\clftsWidth3\clwWidth499 
+\cellx428
+
+\clvertalt
+\clbrdrt\brdrnone 
+\clbrdrl\brdrnone \clbrdrb\brdrs\brdrw15
+\clbrdrr\brdrs\brdrw15 
+\cltxlrtb\clftsWidth3\clwWidth8646 
+\cellx9074
+
+\pard\plain 
+\s51\qj \li0\ri0\sa60\sl240\slmult0\widctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0 \fs22\lang1031\langfe1031\cgrid\langnp1031\langfenp1031 
+{\cell <xsl:choose><xsl:when test="$featuretype/taggedValue[@tag='AAA:GueltigBis']">Gültig bis GeoInfoDok <xsl:value-of select="$featuretype/taggedValue[@tag='AAA:GueltigBis'][1]"/></xsl:when>
+ <xsl:otherwise>Ja</xsl:otherwise></xsl:choose>\par \cell }
 \row
 
 </xsl:when>
@@ -839,7 +897,7 @@ Stand: <xsl:value-of select="$versionDate"/>
 </xsl:when>
 </xsl:choose>
 
-<xsl:variable name="nft" select="count($featuretype/taggedValue)" />
+<xsl:variable name="nft" select="count($featuretype/taggedValue[@tag!='AAA:GueltigBis'])" />
 <xsl:choose>
 <xsl:when test="$nft >= 1">
 \pard\plain
@@ -890,7 +948,7 @@ Stand: <xsl:value-of select="$versionDate"/>
 
 \pard\plain 
 \s52\qj \fi-1418\li1418\ri0\sa60\sl240\slmult0\widctlpar\intbl\tx1418\aspalpha\aspnum\faauto\adjustright\rin0\lin1418 \fs22\lang1031\langfe1031\cgrid\langnp1031\langfenp1031
-<xsl:for-each select="$featuretype/taggedValue">
+<xsl:for-each select="$featuretype/taggedValue[@tag!='AAA:GueltigBis']">
 <xsl:variable name="tv" select="." />
 \cell <xsl:value-of select="$tv/@tag"/>:\tab <xsl:value-of select="$tv/text()"/>\cell\row 
 </xsl:for-each>\cell\row 
@@ -959,6 +1017,13 @@ Stand: <xsl:value-of select="$versionDate"/>
 \cell Kennung:\tab <xsl:value-of select="$featureAtt/code"/>\cell\row
 </xsl:when>
 </xsl:choose>
+<xsl:variable name="nft" select="count($featureAtt/retired)" />
+<xsl:choose>
+<xsl:when test="$nft = 1">
+\cell Stillgelegt:\tab <xsl:choose><xsl:when test="$featureAtt/taggedValue[@tag='AAA:GueltigBis']">Gültig bis GeoInfoDok <xsl:value-of select="$featureAtt/taggedValue[@tag='AAA:GueltigBis'][1]"/></xsl:when>
+ <xsl:otherwise>Ja</xsl:otherwise></xsl:choose>\cell\row
+</xsl:when>
+</xsl:choose>
 <xsl:variable name="nft" select="count($featureAtt/ValueDataType)" />
 <xsl:choose>
 <xsl:when test="$nft = 1">
@@ -983,10 +1048,10 @@ Stand: <xsl:value-of select="$versionDate"/>
 \cell Grunddatenb.:\tab <xsl:value-of select="$featureAtt/grunddatenbestand"/>\cell\row
 </xsl:when>
 </xsl:choose>
-<xsl:variable name="nft" select="count($featureAtt/taggedValue)" />
+<xsl:variable name="nft" select="count($featureAtt/taggedValue[@tag!='AAA:GueltigBis'])" />
 <xsl:choose>
 <xsl:when test="$nft >= 1">
-<xsl:for-each select="$featureAtt/taggedValue">
+<xsl:for-each select="$featureAtt/taggedValue[@tag!='AAA:GueltigBis']">
 <xsl:variable name="tv" select="." />
 \cell <xsl:value-of select="$tv/@tag"/>:\tab <xsl:value-of select="$tv/text()"/> \cell\row
 </xsl:for-each>
@@ -1035,6 +1100,7 @@ Stand: <xsl:value-of select="$versionDate"/>
 <xsl:when test="$fcvalue/@id = @idref">
 {\tab <xsl:value-of select="$fcvalue/label"/>\tab <xsl:value-of select="$fcvalue/code"/><xsl:if test="count($fcvalue/grunddatenbestand) >= 1"> (G)</xsl:if>\par}
 <xsl:if test="count($fcvalue/definition)=1">{\li1600 \fs16 <xsl:value-of select="$fcvalue/definition"/> \par \fs20}</xsl:if>
+<xsl:if test="$fcvalue/retired">{\li1600 \fs16 Stillgelegt: <xsl:choose><xsl:when test="$fcvalue/taggedValue[@tag='AAA:GueltigBis']">Gültig bis GeoInfoDok <xsl:value-of select="$fcvalue/taggedValue[@tag='AAA:GueltigBis'][1]"/></xsl:when><xsl:otherwise>Ja</xsl:otherwise></xsl:choose> \par \fs20}</xsl:if>
 </xsl:when>
 </xsl:choose>
 </xsl:for-each>
@@ -1108,6 +1174,12 @@ Stand: <xsl:value-of select="$versionDate"/>
 \cell Kennung:\tab <xsl:value-of select="$featureRel/code"/>\cell\row
 </xsl:when>
 </xsl:choose>
+<xsl:variable name="nft" select="count($featureRel/retired)" />
+<xsl:choose>
+<xsl:when test="$nft = 1">
+\cell Stillgelegt:\tab <xsl:choose><xsl:when test="$featureRel/taggedValue[@tag='AAA:GueltigBis']">Gültig bis GeoInfoDok <xsl:value-of select="$featureRel/taggedValue[@tag='AAA:GueltigBis'][1]"/></xsl:when><xsl:otherwise>Ja</xsl:otherwise></xsl:choose>\cell\row
+</xsl:when>
+</xsl:choose>
 <xsl:variable name="nft" select="count($featureRel/cardinality)" />
 <xsl:choose>
 <xsl:when test="$nft = 1">
@@ -1152,10 +1224,10 @@ Stand: <xsl:value-of select="$versionDate"/>
 </xsl:when>
 </xsl:choose>
 
-<xsl:variable name="nft" select="count($featureRel/taggedValue)" />
+<xsl:variable name="nft" select="count($featureRel/taggedValue[@tag!='AAA:GueltigBis'])" />
 <xsl:choose>
 <xsl:when test="$nft >= 1">
-<xsl:for-each select="$featureRel/taggedValue">
+<xsl:for-each select="$featureRel/taggedValue[@tag!='AAA:GueltigBis']">
 <xsl:variable name="tv" select="." />
 \cell <xsl:value-of select="$tv/@tag"/>:\tab <xsl:value-of select="$tv/text()"/>\cell\row 
 </xsl:for-each>
