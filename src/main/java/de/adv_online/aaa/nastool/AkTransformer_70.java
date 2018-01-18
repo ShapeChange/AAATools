@@ -61,9 +61,7 @@ public class AkTransformer_70 implements Transformer {
 	public void transform() throws ShapeChangeAbortException {
 		
 		helper.prepareModel("AAA_Ausgabekatalog","NAS-AK");
-		
-		helper.deleteClass("List of Elements in Diagram AX_Benutzungsergebnis");
-		
+				
 		/* Bei allen Klassen wird das UML Tagged Value „xsdEncodingRule“ gesetzt: 
 		 * - "NAS" außer bei Typen, die mit einer der Zeichenketten "AX_DQ", "AX_LI", "AX_Datenerhebung" beginnen;
 		 * - bei diesen wird „iso19139_2007“ verwendet.
