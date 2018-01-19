@@ -70,7 +70,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
 import de.adv_online.aaa.profiltool.ProfilRep;
-import de.interactive_instruments.ShapeChange.Converter;
 import de.interactive_instruments.ShapeChange.Options;
 import de.interactive_instruments.ShapeChange.ShapeChangeAbortException;
 import de.interactive_instruments.ShapeChange.ShapeChangeResult;
@@ -596,21 +595,21 @@ public class Katalog implements Target {
 			return;
 		}
 		
-		if (!packageInPackage(ci.pkg()))
+		PackageInfo pix = ci.pkg();
+		if (!packageInPackage(pix))
 			return;
 
 		Operation op = null;
-		if (diffs!=null && diffs.get(ci.pkg())!=null)
-			for (DiffElement diff : diffs.get(ci.pkg())) {
+		if (diffs!=null && pix!=null & diffs.get(pix)!=null)
+			for (DiffElement diff : diffs.get(pix)) {
 				if (diff.subElementType==ElementType.CLASS && ((ClassInfo)diff.subElement)==ci && diff.change==Operation.INSERT) {
 					op=Operation.INSERT;
 					break;
 				}
 			}
 		if (op==null) {
-			PackageInfo pix = ci.pkg();
 			while (pix!=null) {
-				if (diffs!=null && diffs.get(pix.owner())!=null)
+				if (diffs!=null && pix.owner()!=null && diffs.get(pix.owner())!=null)
 					for (DiffElement diff : diffs.get(pix.owner())) {
 						if (diff.subElementType==ElementType.SUBPACKAGE && ((PackageInfo)diff.subElement)==pix && diff.change==Operation.INSERT) {
 							op=Operation.INSERT;
