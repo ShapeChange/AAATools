@@ -1,0 +1,1 @@
+java -jar AAATools-${project.version}.jar -d -c "Konfigurationen/AAAKatalog-DLM50-7.0.3.xml" 

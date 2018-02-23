@@ -202,18 +202,21 @@
                     <include>AAAKatalog-AFIS-6.0.1.xml</include>
                     <include>AAAKatalog-ALKIS-6.0.1.xml</include>
                     <include>AAAKatalog-BasisDLM-6.0.1.xml</include>
+                    <include>AAAKatalog-DLM50-6.0.1.xml</include>
                     <include>AAAProfil-6.0.1.xml</include>
                     <include>NAS-6.0.1.xml</include>
                     <include>Input-7.0.3.xml</include>
                     <include>AAAKatalog-AFIS-7.0.3.xml</include>
                     <include>AAAKatalog-ALKIS-7.0.3.xml</include>
                     <include>AAAKatalog-BasisDLM-7.0.3.xml</include>
+                    <include>AAAKatalog-DLM50-7.0.3.xml</include>
                     <include>AAAProfil-7.0.3.xml</include>
                     <include>NAS-7.0.3.xml</include>
                     <include>AK-7.0.3.xml</include>
                     <include>AAAKatalog-AFIS-7.0.3-Aenderungen.xml</include>
                     <include>AAAKatalog-ALKIS-7.0.3-Aenderungen.xml</include>
                     <include>AAAKatalog-BasisDLM-7.0.3-Aenderungen.xml</include>
+                    <include>AAAKatalog-DLM50-7.0.3-Aenderungen.xml</include>
                   </includes>
                 </resource>
               </resources>
@@ -235,6 +238,7 @@
                     <include>katalog_afis.bat</include>
                     <include>katalog_alkis.bat</include>
                     <include>katalog_basisdlm.bat</include>
+                    <include>katalog_dlm50.bat</include>
                     <include>profil.bat</include>
                     <include>nas.bat</include>
                     <include>ak.bat</include>
