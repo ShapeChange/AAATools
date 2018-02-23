@@ -10,7 +10,7 @@
 	</log>
 	<targets>
 		<Target class="de.adv_online.aaa.katalogtool.Katalog" mode="enabled">
-			<targetParameter name="Verzeichnis" value="Ausgaben/Kataloge"/>
+			<targetParameter name="Verzeichnis" value="Ausgaben/Kataloge/Basis-DLM"/>
 			<targetParameter name="paket" value="AFIS-ALKIS-ATKIS Fachschema"/>
 			<targetParameter name="modellarten" value="Basis-DLM"/>
 			<targetParameter name="profile" value=""/>

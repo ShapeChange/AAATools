@@ -43,7 +43,6 @@ import de.interactive_instruments.ShapeChange.Target.Target;
  */
 public class Profil implements Target {
 
-	public static final int TARGET_AAA_Profiltool = 402;
 	public static final int STATUS_WRITE_3AP = 31;
 	public static final int STATUS_WRITE_MODEL = 32;
 	public static final int STATUS_CLEAN_MODEL = 33;
@@ -59,10 +58,6 @@ public class Profil implements Target {
 	private String ziel = null;
 	private boolean error = false;
 	
-	public int getTargetID() {
-		return TARGET_AAA_Profiltool;
-	}
-
 	// FIXME New diagnostics-only flag is to be considered
 	public void initialise(PackageInfo p, Model m, Options o,
 			ShapeChangeResult r, boolean diagOnly) throws ShapeChangeAbortException {
@@ -149,17 +144,22 @@ public class Profil implements Target {
 		if (ziel.equals("DateiModell")) {
 			theProfile.writeToFile(outputDirectory+"/"+theProfile.name()+"__export.3ap");
 			theProfile.writeToModel();
-			result.addResult(getTargetID(), outputDirectory, theProfile.name()+"__export.3ap", options.parameter(this.getClass().getName(),"modellarten"));
+			result.addResult(getTargetName(), outputDirectory, theProfile.name()+"__export.3ap", options.parameter(this.getClass().getName(),"modellarten"));
 		} else if (ziel.equals("Modell")) {
 			theProfile.writeToModel();
 		} else if (ziel.equals("Datei")) {
 			theProfile.writeToFile(outputDirectory+"/"+theProfile.name()+"__export.3ap");
-			result.addResult(getTargetID(), outputDirectory, theProfile.name()+"__export.3ap", options.parameter(this.getClass().getName(),"modellarten"));
+			result.addResult(getTargetName(), outputDirectory, theProfile.name()+"__export.3ap", options.parameter(this.getClass().getName(),"modellarten"));
 		} else if (ziel.equals("Ohne")) {
 			theProfile.clearInModel();
 		} else {
 			result.addError("Der Parameter 'Ziel' hat den unbekannten Wert '"+ziel+"'. Die Ausführung des Profiltools wird abgebrochen");
 			error = true;
 		}
+	}
+
+	@Override
+	public String getTargetName() {
+		return "AAA-Profil (3ap-Datei)";
 	}
 }

@@ -79,7 +79,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 	/**
 	 * 
 	 */
-	public static final String VERSION_TEXT = "1.0.0";
+	public static final String VERSION_TEXT = "1.1.0";
 	private static final String title = "AAA-Katalogtool";
 	
 	private static final long serialVersionUID = -2443287559064380497L;
@@ -246,6 +246,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 
 	JTextField modellartField = null; 
 	
+	private JCheckBox retiredBox;
 	private JCheckBox grundDatBox;
 	
 	private JCheckBox profEinschrBox;
@@ -374,7 +375,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 
         
 		// frame size
-        int height = 720;
+        int height = 760;
         int width = 600;
 
         pack();
@@ -436,6 +437,11 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 		s = options.parameter(paramKatalogClass,"geerbteEigenschaften");
 		if (s!=null && s.equals("true"))
 			geerbEigBool = true;
+
+        Boolean retiredBool = false;
+		s = options.parameter(paramKatalogClass,"stillgelegteElemente");
+		if (s!=null && s.equals("true"))
+			retiredBool = true;
 
         String modellartenStr;
 		s = options.parameter(paramKatalogClass,"modellarten");
@@ -562,6 +568,13 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
         geerbEigBox.addItemListener(this);
         geerbEigPanel.add(geerbEigBox);
         outOptBox.add(geerbEigPanel);
+
+        final JPanel retiredPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 10, 5));
+        retiredBox = new JCheckBox("Auch stillgelegte Modellelemente (Stereotype <<retired>>) ausgeben");
+        retiredBox.setSelected(retiredBool);
+        retiredBox.addItemListener(this);
+        retiredPanel.add(retiredBox);
+        outOptBox.add(retiredPanel);
 
         final JPanel outOptPanel = new JPanel();
         outOptPanel.add(outOptBox);
@@ -762,6 +775,10 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			options.setParameter(paramKatalogClass,"geerbteEigenschaften","true");
 		else
 			options.setParameter(paramKatalogClass,"geerbteEigenschaften","false");
+		if(retiredBox.isSelected())
+			options.setParameter(paramKatalogClass,"stillgelegteElemente","true");
+		else
+			options.setParameter(paramKatalogClass,"stillgelegteElemente","false");
 		options.setParameter(paramKatalogClass,"modellarten", modellartField.getText());
 		if(grundDatBox.isSelected())
 			options.setParameter(paramKatalogClass,"nurGrunddatenbestand","true");
@@ -793,6 +810,10 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 					m.put("geerbteEigenschaften","true");
 				else
 					m.put("geerbteEigenschaften","false");
+				if(retiredBox.isSelected())
+					m.put("stillgelegteElemente","true");
+				else
+					m.put("stillgelegteElemente","false");
 				m.put("modellarten", modellartField.getText());
 				if(grundDatBox.isSelected())
 					m.put("nurGrunddatenbestand","true");
@@ -855,6 +876,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			appSchemaField.setEnabled(false); 
 			schemaKennField.setEnabled(false); 
 			geerbEigBox.setEnabled(false);
+			retiredBox.setEnabled(false);
 			modellartField.setEnabled(false); 
 			grundDatBox.setEnabled(false);
 			profEinschrBox.setEnabled(false);
@@ -887,6 +909,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			appSchemaField.setEnabled(true); 
 			schemaKennField.setEnabled(true); 
 			geerbEigBox.setEnabled(true);
+			retiredBox.setEnabled(true);
 			modellartField.setEnabled(true); 
 			grundDatBox.setEnabled(true);
 			profEinschrBox.setEnabled(true);
@@ -1038,80 +1061,44 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			break;
 		// Targets
 		case Converter.STATUS_TARGET_INITSTART:
-			switch(converter.getCurrentTargetID()){
-			// Target ShpFileFactory
-			case Katalog.TARGET_AAA_Katalogtool:
-				msg += "AAA-Katalogtool: Initialisierung der Katalogerzeugung";
-				break;
-			// default: delete status bar text
-			default:
-				msg = null;
-				statusBar.delText();
-			}
-			break;
-			
+			msg += "AAA-Katalogtool: Initialisierung der Katalogerzeugung";
+			break;			
 		case Converter.STATUS_TARGET_PROCESS:
-			switch(converter.getCurrentTargetID()){
-			// Target ShpFileFactory
-			case Katalog.TARGET_AAA_Katalogtool:
-				msg += "AAA-Katalogtool: Erzeugung des Katalogs";
-				break;
-			// default: delete status bar text
-			default:
-				msg = null;
-				statusBar.delText();
-			}
+			msg += "AAA-Katalogtool: Erzeugung des Katalogs";
 			break;
-			
 		case Converter.STATUS_TARGET_WRITE:
-			switch(converter.getCurrentTargetID()){
-			// Target ShpFileFactory
-			case Katalog.TARGET_AAA_Katalogtool:
-				msg += "AAA-Katalogtool: Schreiben des Katalogs";
-				break;
-			// default: delete status bar text
-			default:
-				msg = null;
-				statusBar.delText();
-			}
+			msg += "AAA-Katalogtool: Schreiben des Katalogs";
 			break;
-
 		case Katalog.STATUS_WRITE_XML:
 			msg += "AAA-Katalogtool: Schreiben des Katalogs";
 			if(targetLabels!=null && targetLabels.size()>=1)
 				msg += " - " + targetLabels.get(0);
 			break;
-		
 		case Katalog.STATUS_WRITE_HTML:
 			msg += "AAA-Katalogtool: Schreiben des Katalogs";
 			if(targetLabels!=null && targetLabels.size()>=2)
 				msg += " - " + targetLabels.get(1);
 			break;
-		
 		case Katalog.STATUS_WRITE_RTF:
 			msg += "AAA-Katalogtool: Schreiben des Katalogs";
 			if(targetLabels!=null && targetLabels.size()>=3)
 				msg += " - " + targetLabels.get(2);
-			break;
-		
+			break;		
 		case Katalog.STATUS_WRITE_NART:
 			msg += "AAA-Katalogtool: Schreiben des Katalogs";
 			if(targetLabels!=null && targetLabels.size()>=4)
 				msg += " - " + targetLabels.get(3);
 			break;
-		
 		case Katalog.STATUS_WRITE_GFC:
 			msg += "AAA-Katalogtool: Schreiben des Katalogs";
 			if(targetLabels!=null && targetLabels.size()>=5)
 				msg += " - " + targetLabels.get(4);
 			break;
-		
 		case Katalog.STATUS_WRITE_CSV:
 			msg += "AAA-Katalogtool: Schreiben des Katalogs";
 			if(targetLabels!=null && targetLabels.size()>=6)
 				msg += " - " + targetLabels.get(5);
 			break;
-		
 		// default: delete status bar text
 		default:
 			msg = null;

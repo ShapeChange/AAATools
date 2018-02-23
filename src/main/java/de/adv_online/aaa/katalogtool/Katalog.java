@@ -95,7 +95,6 @@ import de.interactive_instruments.ShapeChange.UI.StatusBoard;
  */
 public class Katalog implements Target {
 
-	public static final int TARGET_AAA_Katalogtool = 401;
 	public static final int STATUS_WRITE_RTF = 21;
 	public static final int STATUS_WRITE_NART = 22;
 	public static final int STATUS_WRITE_HTML = 23;
@@ -120,12 +119,13 @@ public class Katalog implements Target {
 	private HashSet<ProfilRep> profile = new HashSet<ProfilRep>();
 	private Boolean OnlyGDB = false;
 	private Boolean OnlyProfile = false;
+	private Boolean Retired = false;
 	private String[] MAList;
 	private String[] PList;
 	private String PQuelle = "Modell";
 	private Model refModel = null;
 	private PackageInfo refPackage = null;
-	private SortedMap<Info,HashSet<DiffElement>> diffs = null;
+	private SortedMap<Info, SortedSet<DiffElement>> diffs = null;
 	private Differ differ = null;
 	private Boolean Inherit = false;
 	private HashSet<PropertyInfo> exportedAssociation = new HashSet<PropertyInfo>();
@@ -133,10 +133,6 @@ public class Katalog implements Target {
 	
 	private Map<String, String> regeln = null; 
 	private String OutputFormat  = "";
-
-	public int getTargetID() {
-		return TARGET_AAA_Katalogtool;
-	}
 
 	// FIXME New diagnostics-only flag is to be considered
 	public void initialise(PackageInfo p, Model m, Options o,
@@ -151,7 +147,7 @@ public class Katalog implements Target {
 			error = true;
 			return;
 		}
-
+		
 		outputDirectory = options.parameter(this.getClass().getName(),"Verzeichnis");
 		if (outputDirectory==null)
 			outputDirectory = options.parameter("outputDirectory");
@@ -165,6 +161,10 @@ public class Katalog implements Target {
 		s = options.parameter(this.getClass().getName(),"geerbteEigenschaften");
 		if (s!=null && s.equals("true"))
 			Inherit = true;
+
+		s = options.parameter(this.getClass().getName(),"stillgelegteElemente");
+		if (s!=null && s.equals("true"))
+			Retired = true;
 
 		s = options.parameter(this.getClass().getName(),"profile");
 		if (s==null || s.trim().length()==0)
@@ -213,7 +213,7 @@ public class Katalog implements Target {
 				differ = new Differ(true, MAList);
 				refPackage = set.iterator().next();
 				diffs = differ.diff(p, refPackage);
-				for (Entry<Info,HashSet<DiffElement>> me : diffs.entrySet()) {
+				for (Entry<Info,SortedSet<DiffElement>> me : diffs.entrySet()) {
 					MessageContext mc = result.addInfo("Model difference - "+me.getKey().fullName().replace(p.fullName(),p.name()));
 					if (mc!=null) {
 						for (DiffElement diff : me.getValue()) {
@@ -458,6 +458,12 @@ public class Katalog implements Target {
 			}
 			if (e3!=null)
 				e1.appendChild(e3);
+			
+			if (pix.stereotype("retired")) {
+				e2 = document.createElement("retired");
+				e2.setTextContent("true");
+				e1.appendChild(e2);
+			}
 		}
 		
 		try {
@@ -589,21 +595,21 @@ public class Katalog implements Target {
 			return;
 		}
 		
-		if (!packageInPackage(ci.pkg()))
+		PackageInfo pix = ci.pkg();
+		if (!packageInPackage(pix))
 			return;
 
 		Operation op = null;
-		if (diffs!=null && diffs.get(ci.pkg())!=null)
-			for (DiffElement diff : diffs.get(ci.pkg())) {
+		if (diffs!=null && pix!=null & diffs.get(pix)!=null)
+			for (DiffElement diff : diffs.get(pix)) {
 				if (diff.subElementType==ElementType.CLASS && ((ClassInfo)diff.subElement)==ci && diff.change==Operation.INSERT) {
 					op=Operation.INSERT;
 					break;
 				}
 			}
 		if (op==null) {
-			PackageInfo pix = ci.pkg();
 			while (pix!=null) {
-				if (diffs!=null && diffs.get(pix.owner())!=null)
+				if (diffs!=null && pix.owner()!=null && diffs.get(pix.owner())!=null)
 					for (DiffElement diff : diffs.get(pix.owner())) {
 						if (diff.subElementType==ElementType.SUBPACKAGE && ((PackageInfo)diff.subElement)==pix && diff.change==Operation.INSERT) {
 							op=Operation.INSERT;
@@ -699,6 +705,12 @@ public class Katalog implements Target {
 		if (op!=null)
 			addAttribute(document,e2,"mode",op.toString());
 		e1.appendChild(e2);
+
+		if (propi.stereotype("retired")) {
+			e2 = document.createElement("retired");
+			e2.setTextContent("true");
+			e1.appendChild(e2);
+		}
 		
 		e2 = document.createElement("definition");
 		s = propi.documentation();
@@ -814,6 +826,10 @@ public class Katalog implements Target {
 			if (!MatchingProfile(s))
 				return false;
 		}
+		
+		String s = i.name();
+		if (!Retired && i.stereotype("retired"))
+			return false;
 		
 		return true;
 	}
@@ -975,6 +991,12 @@ public class Katalog implements Target {
 				e2.setTextContent(PrepareToPrint(s));
 				if (op!=null)
 					addAttribute(document,e2,"mode",op.toString());
+				e1.appendChild(e2);
+			}
+
+			if (ci.stereotype("retired")) {
+				e2 = document.createElement("retired");
+				e2.setTextContent("true");
 				e1.appendChild(e2);
 			}
 			
@@ -1363,7 +1385,13 @@ public class Katalog implements Target {
 				addAttribute(document,e2,"mode",op.toString());
 			e1.appendChild(e2);
 		}
-			
+
+		if (propi.stereotype("retired")) {
+			e2 = document.createElement("retired");
+			e2.setTextContent("true");
+			e1.appendChild(e2);
+		}
+				
 		s = propi.taggedValue("AAA:objektbildend");
 		if (s!=null && s.toLowerCase().equals("true")) {
 			e2 = document.createElement("objektbildend");
@@ -1887,7 +1915,7 @@ public class Katalog implements Target {
 				    TransformerFactory transFact = TransformerFactory.newInstance( );
 				    Transformer trans = transFact.newTransformer(xsltSource);
 				    trans.transform(xmlSource, res);
-					result.addResult(getTargetID(), outputDirectory, outfileName, options.parameter(this.getClass().getName(),"modellarten"));
+					result.addResult(getTargetName(), outputDirectory, outfileName, options.parameter(this.getClass().getName(),"modellarten"));
 				}
 			}
 		    
@@ -1901,4 +1929,9 @@ public class Katalog implements Target {
 	   }	
 		    
 	}
+
+@Override
+public String getTargetName() {
+	return "AAA-Objektartenkatalog";
+}
 }

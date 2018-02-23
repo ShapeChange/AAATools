@@ -890,39 +890,15 @@ public class ProfilDialog extends JFrame implements ActionListener, ItemListener
 
 		// Targets
 		case Converter.STATUS_TARGET_INITSTART:
-			switch(converter.getCurrentTargetID()){
-			case Profil.TARGET_AAA_Profiltool:
-				msg += "AAA-Profiltool: Initialisierung der Profilverarbeitung";
-				break;
-			// default: delete status bar text
-			default:
-				msg = null;
-				statusBar.delText();
-			}
+			msg += "AAA-Profiltool: Initialisierung der Profilverarbeitung";
 			break;
 			
 		case Converter.STATUS_TARGET_PROCESS:
-			switch(converter.getCurrentTargetID()){
-			case Profil.TARGET_AAA_Profiltool:
-				msg += "AAA-Profiltool: Lesen/Erzeugen des Profils";
-				break;
-			// default: delete status bar text
-			default:
-				msg = null;
-				statusBar.delText();
-			}
+			msg += "AAA-Profiltool: Lesen/Erzeugen des Profils";
 			break;
 			
 		case Converter.STATUS_TARGET_WRITE:
-			switch(converter.getCurrentTargetID()){
-			case Profil.TARGET_AAA_Profiltool:
-				msg += "AAA-Profiltool: Schreiben des Profils";
-				break;
-			// default: delete status bar text
-			default:
-				msg = null;
-				statusBar.delText();
-			}
+			msg += "AAA-Profiltool: Schreiben des Profils";
 			break;
 
 		case Profil.STATUS_WRITE_3AP:
