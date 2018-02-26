@@ -179,6 +179,42 @@
               <excludeArtifactIds>Saxon-HE</excludeArtifactIds>
             </configuration>
           </execution>
+			<execution>
+			  <id>resource-dependencies-1</id>
+			  <phase>package</phase>
+			  <goals>
+				 <goal>unpack</goal>
+			  </goals>
+			  <configuration>
+			    <artifactItems>
+            	<artifactItem>
+                 <groupId>net.shapechange</groupId>
+				 	  <artifactId>ShapeChange</artifactId>
+				     <type>jar</type>
+            	</artifactItem>
+			    </artifactItems>
+				 <includes>**/StandardMapEntries_iso19136_2007.xml,**/StandardMapEntries_iso19139_2007.xml,**/StandardMapEntries_iso19107.xml,**/StandardMapEntries_iso19108.xml,**/StandardMapEntries_iso19111.xml,**/StandardMapEntries_iso19115.xml,**/StandardMapEntries_iso19123.xml,**/StandardMapEntries_gmlcov.xml</includes>
+				 <outputDirectory>${project.build.directory}/appassembler/config-sc</outputDirectory>
+			  </configuration>
+			</execution>
+			<execution>
+			  <id>resource-dependencies-2</id>
+			  <phase>package</phase>
+			  <goals>
+				 <goal>unpack</goal>
+			  </goals>
+			  <configuration>
+			    <artifactItems>
+            	<artifactItem>
+                 <groupId>net.shapechange</groupId>
+				 	  <artifactId>ShapeChange</artifactId>
+				     <type>jar</type>
+            	</artifactItem>
+			    </artifactItems>
+				 <includes>**/ShapeChangeAppinfo.xsd,**/ShapeChangeConfiguration.xsd,**/ShapeChangeResult.xsd</includes>
+				 <outputDirectory>${project.build.directory}/appassembler/schema-sc</outputDirectory>
+			  </configuration>
+			</execution>
         </executions>
       </plugin>
       <plugin>
@@ -319,32 +355,6 @@
             </configuration>
           </execution>
           <execution>
-            <id>copy-resources8</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <includeEmptyDirs>true</includeEmptyDirs>
-              <outputDirectory>${project.build.directory}/appassembler/config-sc</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${project.basedir}/../ShapeChange/src/main/resources/config</directory>
-                  <includes>
-                    <include>StandardMapEntries_iso19136_2007.xml</include>
-                    <include>StandardMapEntries_iso19139_2007.xml</include>
-                    <include>StandardMapEntries_iso19107.xml</include>
-                    <include>StandardMapEntries_iso19108.xml</include>
-                    <include>StandardMapEntries_iso19111.xml</include>
-                    <include>StandardMapEntries_iso19115.xml</include>
-                    <include>StandardMapEntries_iso19123.xml</include>
-                    <include>StandardMapEntries_gmlcov.xml</include>
-                  </includes>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-          <execution>
             <id>copy-resources9</id>
             <phase>package</phase>
             <goals>
@@ -356,27 +366,6 @@
               <resources>
                 <resource>
                   <directory>${project.basedir}/src/main/resources/xslt</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>copy-resourcesA</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <includeEmptyDirs>true</includeEmptyDirs>
-              <outputDirectory>${project.build.directory}/appassembler/schema-sc</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${project.basedir}/../ShapeChange/src/main/resources/schema</directory>
-                  <includes>
-                    <include>ShapeChangeAppinfo.xsd</include>
-                    <include>ShapeChangeConfiguration.xsd</include>
-                    <include>ShapeChangeResult.xsd</include>
-                  </includes>
                 </resource>
               </resources>
             </configuration>

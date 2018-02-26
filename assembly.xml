@@ -27,7 +27,7 @@
     </fileSet>
     <fileSet>
       <directory>target/appassembler/config-sc</directory>
-      <outputDirectory>/resources/config</outputDirectory>
+      <outputDirectory>/resources</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>target/appassembler/xslt</directory>
@@ -39,7 +39,7 @@
     </fileSet>
     <fileSet>
       <directory>target/appassembler/schema-sc</directory>
-      <outputDirectory>/resources/schema</outputDirectory>
+      <outputDirectory>/resources</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>target/appassembler/shell</directory>
