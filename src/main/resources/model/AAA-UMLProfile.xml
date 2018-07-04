@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <UMLProfile>
 
-	<!-- created by Clemens Portele - last edit: 2017-12-11 -->
+	<!-- created by Clemens Portele - last edit: 2018-06-21 - Ticket #4388 -->
 
 	<Documentation id="AAA" name="AAA-Anwendungsschema" version="7.0-2" notes="UML Profile für das AAA-Anwendungsschema der GeoInfoDok."/>
 
@@ -54,6 +54,7 @@
 					<Tag name="AAA:Kennung" description="Kennung"/>
 					<Tag name="AAA:Grunddatenbestand" description="Kommagetrennte Liste der Modellarten, bei denen die Objektart Teil des Grunddatenbestands ist"/>
 					<Tag name="AAA:Profile" description="Kommagetrennte Liste der Profile, zu denen die Objektart gehört"/>
+					<Tag name="AAA:Revisionsnummer" description="Ticketnummer(n) im Ticketsystem der GeoInfoDok"/>
 					<Tag name="AAA:LetzteAenderung" description="Datum und Kommentar der letzten Änderung"/>
 					<Tag name="AAA:Nutzungsart" description="Angaben für den Nutzungsartenkatalog"/>
 					<Tag name="AAA:Nutzungsartkennung" description="Angaben für den Nutzungsartenkatalog"/>
@@ -75,6 +76,7 @@
 					<Tag name="AAA:Kennung" description="Kennung"/>
 					<Tag name="AAA:Grunddatenbestand" description="Kommagetrennte Liste der Modellarten, bei denen der Typ Teil des Grunddatenbestands ist"/>
 					<Tag name="AAA:Profile" description="Kommagetrennte Liste der Profile, zu denen der Typ gehört"/>
+					<Tag name="AAA:Revisionsnummer" description="Ticketnummer(n) im Ticketsystem der GeoInfoDok"/>
 					<Tag name="AAA:LetzteAenderung" description="Datum und Kommentar der letzten Änderung"/>
 					<Tag name="AAA:Nutzungsart" description="Angaben für den Nutzungsartenkatalog"/>
 					<Tag name="AAA:Nutzungsartkennung" description="Angaben für den Nutzungsartenkatalog"/>
@@ -94,6 +96,7 @@
 					<Tag name="AAA:Kennung" description="Kennung"/>
 					<Tag name="AAA:Grunddatenbestand" description="Kommagetrennte Liste der Modellarten, bei denen der Datentyp Teil des Grunddatenbestands ist"/>
 					<Tag name="AAA:Profile" description="Kommagetrennte Liste der Profile, zu denen der Datentyp gehört"/>
+					<Tag name="AAA:Revisionsnummer" description="Ticketnummer(n) im Ticketsystem der GeoInfoDok"/>
 					<Tag name="AAA:LetzteAenderung" description="Datum und Kommentar der letzten Änderung"/>
 					<Tag name="AAA:Nutzungsart" description="Angaben für den Nutzungsartenkatalog"/>
 					<Tag name="AAA:Nutzungsartkennung" description="Angaben für den Nutzungsartenkatalog"/>
@@ -112,6 +115,7 @@
 					<Tag name="AAA:Kennung" description="Kennung"/>
 					<Tag name="AAA:Grunddatenbestand" description="Kommagetrennte Liste der Modellarten, bei denen der Datentyp Teil des Grunddatenbestands ist"/>
 					<Tag name="AAA:Profile" description="Kommagetrennte Liste der Profile, zu denen der Datentyp gehört"/>
+					<Tag name="AAA:Revisionsnummer" description="Ticketnummer(n) im Ticketsystem der GeoInfoDok"/>
 					<Tag name="AAA:LetzteAenderung" description="Datum und Kommentar der letzten Änderung"/>
 					<Tag name="AAA:Nutzungsart" description="Angaben für den Nutzungsartenkatalog"/>
 					<Tag name="AAA:Nutzungsartkennung" description="Angaben für den Nutzungsartenkatalog"/>
@@ -129,6 +133,7 @@
 					<Tag name="AAA:Kennung" description="Kennung"/>
 					<Tag name="AAA:Grunddatenbestand" description="Kommagetrennte Liste der Modellarten, bei denen der Datentyp Teil des Grunddatenbestands ist"/>
 					<Tag name="AAA:Profile" description="Kommagetrennte Liste der Profile, zu denen der Datentyp gehört"/>
+					<Tag name="AAA:Revisionsnummer" description="Ticketnummer(n) im Ticketsystem der GeoInfoDok"/>
 					<Tag name="AAA:LetzteAenderung" description="Datum und Kommentar der letzten Änderung"/>
 					<Tag name="AAA:Nutzungsart" description="Angaben für den Nutzungsartenkatalog"/>
 					<Tag name="AAA:Nutzungsartkennung" description="Angaben für den Nutzungsartenkatalog"/>
@@ -148,6 +153,7 @@
 					<Tag name="AAA:Kennung" description="Kennung"/>
 					<Tag name="AAA:Grunddatenbestand" description="Kommagetrennte Liste der Modellarten, bei denen der Datentyp Teil des Grunddatenbestands ist"/>
 					<Tag name="AAA:Profile" description="Kommagetrennte Liste der Profile, zu denen der Datentyp gehört"/>
+					<Tag name="AAA:Revisionsnummer" description="Ticketnummer(n) im Ticketsystem der GeoInfoDok"/>
 					<Tag name="AAA:LetzteAenderung" description="Datum und Kommentar der letzten Änderung"/>
 					<Tag name="AAA:Nutzungsart" description="Angaben für den Nutzungsartenkatalog"/>
 					<Tag name="AAA:Nutzungsartkennung" description="Angaben für den Nutzungsartenkatalog"/>
@@ -169,7 +175,9 @@
 					<Tag name="AAA:Kennung" description="Kennung"/>
 					<Tag name="AAA:Grunddatenbestand" description="Kommagetrennte Liste der Modellarten, bei denen die Eigenschaft Teil des Grunddatenbestands ist"/>
 					<Tag name="AAA:Profile" description="Kommagetrennte Liste der Profile, zu denen die Eigenschaft gehört"/>
+					<Tag name="AAA:Revisionsnummer" description="Ticketnummer(n) im Ticketsystem der GeoInfoDok"/>
 					<Tag name="AAA:LetzteAenderung" description="Datum und Kommentar der letzten Änderung"/>
+					<Tag name="AAA:Landnutzung" description="Die betroffene Werteart ist relevant für die automatisierte Ableitung der Landnutzung (LN)." values="true | false"/>
 					<Tag name="AAA:Nutzungsartkennung" description="Angaben für den Nutzungsartenkatalog"/>
 					<Tag name="AAA:objektbildend" description="Kommagetrennte Liste der Modellarten, bei denen die Eigenschaft objektbildened ist"/>
 				</TaggedValues>
