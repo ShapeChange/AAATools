@@ -15,8 +15,9 @@
      Version 1.14 - 23.01.2013
      Version 1.15 - 11.08.2016
      Version 1.16 - 11.12.2017
+     Version 1.17 - 05.07.2018
 
-     (c) 2001-2017 interactive instruments GmbH, Bonn
+     (c) 2001-2018 interactive instruments GmbH, Bonn
      im Auftrag der AdV, Arbeitsgemeinschaft der Vermessungsverwaltungen der
      L‰nder der Bundesrepublik Deutschland
 
@@ -590,7 +591,7 @@
                   </xsl:if>
                 </DIV>
                 <DIV>
-                  <xsl:variable name="nft" select="count($featuretype/taggedValue[@tag!='AAA:GueltigBis'])" />
+                  <xsl:variable name="nft" select="count($featuretype/taggedValue[@tag!='AAA:GueltigBis' and @tag!='AAA:Landnutzung'])" />
                   <xsl:if test="$nft >= 1">
                     <P>
                       <b>Weitere Angaben:</b>
@@ -606,7 +607,7 @@
                               </td>
                               <TD>Wert</TD>
                             </TR>
-                      <xsl:for-each select="$featuretype/taggedValue[@tag!='AAA:GueltigBis']">
+                      <xsl:for-each select="$featuretype/taggedValue[@tag!='AAA:GueltigBis' and @tag!='AAA:Landnutzung']">
                         <xsl:variable name="tv" select="." />
                         <TR>
                           <td width="20">
@@ -1069,8 +1070,8 @@
                  </em></small>
                 </xsl:if>
               </xsl:if>
-                                          <xsl:if test="count($fcvalue/taggedValue[@tag!='AAA:GueltigBis']) >= 1">
-                                  <xsl:for-each select="$fcvalue/taggedValue[@tag!='AAA:GueltigBis']">
+                                          <xsl:if test="count($fcvalue/taggedValue[@tag!='AAA:GueltigBis' and @tag!='AAA:Landnutzung']) >= 1">
+                                  <xsl:for-each select="$fcvalue/taggedValue[@tag!='AAA:GueltigBis' and @tag!='AAA:Landnutzung']">
                                     <xsl:variable name="tv" select="." />
                                     <br/><small><em>
                                         <xsl:choose>
@@ -1153,6 +1154,23 @@
                                       </xsl:otherwise>
                                     </xsl:choose>
                                   </xsl:if>
+                                  <xsl:if test="count($fcvalue/taggedValue[@tag='AAA:Landnutzung' and translate(.,'TRUE','true')='true']) >= 1">
+                                    <xsl:choose>
+                                      <xsl:when test="$fcvalue/taggedValue[@tag='AAA:Landnutzung' and translate(.,'TRUE','true')='true'][1]/@mode='DELETE'">
+                                        <del style="background:#ffe6e6;">
+                  (LN)
+                </del>
+                                      </xsl:when>
+                                      <xsl:when test="$fcvalue/taggedValue[@tag='AAA:Landnutzung' and translate(.,'TRUE','true')='true'][1]/@mode='INSERT'">
+                                        <ins style="background:#e6ffe6;">
+                  (LN)
+                </ins>
+                                      </xsl:when>
+                                      <xsl:otherwise>
+                                        (LN)
+                                      </xsl:otherwise>
+                                    </xsl:choose>
+                                  </xsl:if>
                                 </TD>
                               </TR>
                             </xsl:for-each>
@@ -1160,7 +1178,7 @@
                         </xsl:if>
                       </DIV>
                       <DIV>
-                        <xsl:variable name="nft" select="count($featureAtt/taggedValue[@tag!='AAA:GueltigBis'])" />
+                        <xsl:variable name="nft" select="count($featureAtt/taggedValue[@tag!='AAA:GueltigBis' and @tag!='AAA:Landnutzung'])" />
                         <xsl:if test="$nft >= 1">
                           <P>
                             <b>Weitere Angaben:</b>
@@ -1176,7 +1194,7 @@
                               </td>
                               <TD>Wert</TD>
                             </TR>
-                            <xsl:for-each select="$featureAtt/taggedValue[@tag!='AAA:GueltigBis']">
+                            <xsl:for-each select="$featureAtt/taggedValue[@tag!='AAA:GueltigBis' and @tag!='AAA:Landnutzung']">
                               <xsl:variable name="tv" select="." />
                               <TR>
                                 <td width="20">
@@ -1427,7 +1445,7 @@
                           </xsl:for-each>
                         </UL>
                         <DIV>
-                          <xsl:variable name="nft" select="count($featureRel/taggedValue[@tag!='AAA:GueltigBis'])" />
+                          <xsl:variable name="nft" select="count($featureRel/taggedValue[@tag!='AAA:GueltigBis' and @tag!='AAA:Landnutzung'])" />
                           <xsl:if test="$nft >= 1">
                             <P>
                               <b>Weitere Angaben:</b>
@@ -1443,7 +1461,7 @@
                               </td>
                               <TD>Wert</TD>
                             </TR>
-                              <xsl:for-each select="$featureRel/taggedValue[@tag!='AAA:GueltigBis']">
+                              <xsl:for-each select="$featureRel/taggedValue[@tag!='AAA:GueltigBis' and @tag!='AAA:Landnutzung']">
                                 <xsl:variable name="tv" select="." />
                                 <TR>
                                   <td width="20">

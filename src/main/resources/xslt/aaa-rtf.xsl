@@ -13,8 +13,9 @@
   	Version 1.13 - 23.01.2013
      Version 1.15 - 11.08.2016
      Version 1.16 - 12.12.2017
+     Version 1.17 - 05.07.2018
 
-     (c) 2001-2017 interactive instruments GmbH, Bonn
+     (c) 2001-2018 interactive instruments GmbH, Bonn
      im Auftrag der AdV, Arbeitsgemeinschaft der Vermessungsverwaltungen der
      L‰nder der Bundesrepublik Deutschland
 
@@ -897,7 +898,7 @@ Stand: <xsl:value-of select="$versionDate"/>
 </xsl:when>
 </xsl:choose>
 
-<xsl:variable name="nft" select="count($featuretype/taggedValue[@tag!='AAA:GueltigBis'])" />
+<xsl:variable name="nft" select="count($featuretype/taggedValue[@tag!='AAA:GueltigBis' and @tag!='AAA:Landnutzung'])" />
 <xsl:choose>
 <xsl:when test="$nft >= 1">
 \pard\plain
@@ -948,7 +949,7 @@ Stand: <xsl:value-of select="$versionDate"/>
 
 \pard\plain 
 \s52\qj \fi-1418\li1418\ri0\sa60\sl240\slmult0\widctlpar\intbl\tx1418\aspalpha\aspnum\faauto\adjustright\rin0\lin1418 \fs22\lang1031\langfe1031\cgrid\langnp1031\langfenp1031
-<xsl:for-each select="$featuretype/taggedValue[@tag!='AAA:GueltigBis']">
+<xsl:for-each select="$featuretype/taggedValue[@tag!='AAA:GueltigBis' and @tag!='AAA:Landnutzung']">
 <xsl:variable name="tv" select="." />
 \cell <xsl:value-of select="$tv/@tag"/>:\tab <xsl:value-of select="$tv/text()"/>\cell\row 
 </xsl:for-each>\cell\row 
@@ -1048,10 +1049,10 @@ Stand: <xsl:value-of select="$versionDate"/>
 \cell Grunddatenb.:\tab <xsl:value-of select="$featureAtt/grunddatenbestand"/>\cell\row
 </xsl:when>
 </xsl:choose>
-<xsl:variable name="nft" select="count($featureAtt/taggedValue[@tag!='AAA:GueltigBis'])" />
+<xsl:variable name="nft" select="count($featureAtt/taggedValue[@tag!='AAA:GueltigBis' and @tag!='AAA:Landnutzung'])" />
 <xsl:choose>
 <xsl:when test="$nft >= 1">
-<xsl:for-each select="$featureAtt/taggedValue[@tag!='AAA:GueltigBis']">
+<xsl:for-each select="$featureAtt/taggedValue[@tag!='AAA:GueltigBis' and @tag!='AAA:Landnutzung']">
 <xsl:variable name="tv" select="." />
 \cell <xsl:value-of select="$tv/@tag"/>:\tab <xsl:value-of select="$tv/text()"/> \cell\row
 </xsl:for-each>
@@ -1098,7 +1099,7 @@ Stand: <xsl:value-of select="$versionDate"/>
 <xsl:for-each select="$featureAtt/enumeratedBy">
 <xsl:choose>
 <xsl:when test="$fcvalue/@id = @idref">
-{\tab <xsl:value-of select="$fcvalue/label"/>\tab <xsl:value-of select="$fcvalue/code"/><xsl:if test="count($fcvalue/grunddatenbestand) >= 1"> (G)</xsl:if>\par}
+{\tab <xsl:value-of select="$fcvalue/label"/>\tab <xsl:value-of select="$fcvalue/code"/><xsl:if test="count($fcvalue/grunddatenbestand) >= 1"> (G)</xsl:if><xsl:if test="count($fcvalue/taggedValue[@tag='AAA:Landnutzung' and translate(.,'TRUE','true')='true']) >= 1"> (LN)</xsl:if>\par}
 <xsl:if test="count($fcvalue/definition)=1">{\li1600 \fs16 <xsl:value-of select="$fcvalue/definition"/> \par \fs20}</xsl:if>
 <xsl:if test="$fcvalue/retired">{\li1600 \fs16 Stillgelegt: <xsl:choose><xsl:when test="$fcvalue/taggedValue[@tag='AAA:GueltigBis']">Gültig bis GeoInfoDok <xsl:value-of select="$fcvalue/taggedValue[@tag='AAA:GueltigBis'][1]"/></xsl:when><xsl:otherwise>Ja</xsl:otherwise></xsl:choose> \par \fs20}</xsl:if>
 </xsl:when>
@@ -1224,10 +1225,10 @@ Stand: <xsl:value-of select="$versionDate"/>
 </xsl:when>
 </xsl:choose>
 
-<xsl:variable name="nft" select="count($featureRel/taggedValue[@tag!='AAA:GueltigBis'])" />
+<xsl:variable name="nft" select="count($featureRel/taggedValue[@tag!='AAA:GueltigBis' and @tag!='AAA:Landnutzung'])" />
 <xsl:choose>
 <xsl:when test="$nft >= 1">
-<xsl:for-each select="$featureRel/taggedValue[@tag!='AAA:GueltigBis']">
+<xsl:for-each select="$featureRel/taggedValue[@tag!='AAA:GueltigBis' and @tag!='AAA:Landnutzung']">
 <xsl:variable name="tv" select="." />
 \cell <xsl:value-of select="$tv/@tag"/>:\tab <xsl:value-of select="$tv/text()"/>\cell\row 
 </xsl:for-each>
