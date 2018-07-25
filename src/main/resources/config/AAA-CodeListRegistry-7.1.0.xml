@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ShapeChangeConfiguration xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1 resources/schema/ShapeChangeConfiguration.xsd">
+	<input xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1">
+		<parameter name="inputModelType" value="EA7"/>
+		<parameter name="inputFile" value="AAA-7.1.0-rc.1.EAP"/>
+		<parameter name="appSchemaNameRegex" value="AFIS-ALKIS-ATKIS Anwendungsschema|LN_Landnutzung|LB_Landbedeckung|GV_Geometrische Verbesserungen"/>
+		<parameter name="excludedPackages" value="ISO/TC 211,OGC,AAA_Ausgabekatalog,AAA_Objektartenkatalog,AAA Versionierungsschema,Web Feature Service Erweiterungen,AAA_Signaturenkatalog"/>
+		<parameter name="publicOnly" value="true"/>
+		<parameter name="checkingConstraints" value="enabled"/>
+		<parameter name="oclConstraintTypeRegex" value=""/>
+		<parameter name="addTaggedValues" value="AAA:Kennung,AAA:Datum,AAA:Organisation,AAA:Modellart,AAA:Profile,AAA:Grunddatenbestand,AAA:Nutzungsart,AAA:Nutzungsartkennung,AAA:objektbildend,AAA:Themen,AAA:AAAVersion,AAA:GueltigBis,AAA:Revisionsnummer,AAA:Landnutzung,AAA:UnitOfMeasure"/>
+		<parameter name="representTaggedValues" value="AAA:GueltigBis,AAA:Landnutzung"/>
+		<stereotypeAliases>
+			<StereotypeAlias wellknown="Application Schema" alias="applicationSchema" />
+			<StereotypeAlias wellknown="Application Schema" alias="schema" />
+			<StereotypeAlias wellknown="Application Schema" alias="requirementsClass" />
+			<StereotypeAlias wellknown="Application Schema" alias="ApplicationSchema" />
+			<StereotypeAlias wellknown="Application Schema" alias="Schema" />
+			<StereotypeAlias wellknown="Type" alias="interface" />
+		</stereotypeAliases>
+	</input>
+	<log>
+		<parameter name="reportLevel" value="INFO"/>
+		<parameter name="logFile" value="AAA-CL-Log.xml"/>
+	</log>
+	<targets>
+		<Target class="de.interactive_instruments.ShapeChange.Target.Codelists.CodelistRegister" mode="enabled">
+			<targetParameter name="outputDirectory" value="Ausgaben/CL"/>
+			<targetParameter name="xsltPath" value="http://shapechange.net/resources/xslt"/>
+			<targetParameter name="baseURI" value="http://services.interactive-instruments.de/aaa/cl"/>
+			<targetParameter name="title" value="Register für Codelisten und Enumerationen der GeoInfoDok"/>
+			<targetParameter name="description" value="Das Register für Codelisten und Enumerationen der GeoInfoDok enthält alle Codelisten und Enumerationen mit ihren Wertearten für die Versionen 6.0.1 und 7.1.0 GeoInfoDok. In der HTML-Ausgabe sind die Ergänzungen in der GeoInfoDok 7.1.0 grün markiert, Löschungen sind rot markiert. Sobald die GDI-DE Registry verfügbar ist, ist vorgesehen, die Registryinhalte in die Registry der GDI-DE zu migrieren."/>
+			<targetParameter name="config" value="GeoInfoDok"/>
+			<targetParameter name="datetimePublished" value="2009-05-31T10:00:00Z"/>
+			<targetParameter name="datetimeUpdated" value="2018-07-31T00:00:00Z"/>
+			<targetParameter name="referenceModelType" value="EA7"/>
+			<targetParameter name="referenceModelFile" value="AAA-6.0.1.eap"/>
+		</Target>
+	</targets>
+</ShapeChangeConfiguration>

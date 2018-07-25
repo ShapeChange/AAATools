@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<input xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1">
+	<parameter name="inputModelType" value="EA7"/>
+	<parameter name="inputFile" value="AAA-7.1.0-rc.1.EAP"/>
+	<parameter name="appSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
+	<parameter name="excludedPackages" value="ISO/TC 211,OGC,AAA_Ausgabekatalog,AAA_Objektartenkatalog,AAA Versionierungsschema,Web Feature Service Erweiterungen,AAA_Signaturenkatalog"/>
+	<parameter name="publicOnly" value="true"/>
+	<parameter name="checkingConstraints" value="enabled"/>
+	<parameter name="oclConstraintTypeRegex" value=""/>
+	<parameter name="addTaggedValues" value="AAA:Kennung,AAA:Datum,AAA:Organisation,AAA:Modellart,AAA:Profile,AAA:Grunddatenbestand,AAA:Nutzungsart,AAA:Nutzungsartkennung,AAA:objektbildend,AAA:Themen,AAA:AAAVersion,AAA:GueltigBis,AAA:Revisionsnummer,AAA:Landnutzung,AAA:UnitOfMeasure"/>
+	<parameter name="representTaggedValues" value="AAA:GueltigBis,AAA:Landnutzung"/>
+	<stereotypeAliases>
+		<StereotypeAlias wellknown="Application Schema" alias="applicationSchema" />
+		<StereotypeAlias wellknown="Application Schema" alias="schema" />
+		<StereotypeAlias wellknown="Application Schema" alias="requirementsClass" />
+		<StereotypeAlias wellknown="Application Schema" alias="ApplicationSchema" />
+		<StereotypeAlias wellknown="Application Schema" alias="Schema" />
+		<StereotypeAlias wellknown="Type" alias="interface" />
+	</stereotypeAliases>
+</input>
+

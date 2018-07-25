@@ -1,1 +1,1 @@
-java -jar AAATools-${project.version}.jar -d -c "Konfigurationen/AAAProfil-7.0.3.xml" 
+java -jar AAATools-${project.version}.jar -d -c "Konfigurationen/AAAProfil-7.1.0.xml" 

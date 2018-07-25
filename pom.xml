@@ -14,7 +14,7 @@
     <repository>
       <id>ShapeChange</id>
       <name>ShapeChange repository</name>
-      <url>http://shapechange.net/resources/dist/</url>
+      <url>https://shapechange.net/resources/dist/</url>
     </repository>
   </repositories>
   <dependencies>
@@ -88,10 +88,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <distributionManagement>
-    <repository>
-      <id>ftp-repository</id>
-      <url>ftp://shapechange.net/</url>
-    </repository>
+	<repository>
+		<id>ssh-repository</id>
+		<url>scpexe://ec2-18-195-82-157.eu-central-1.compute.amazonaws.com/home/bitnami/apps/wordpress/htdocs/resources/dist</url>
+	</repository>
   </distributionManagement>
   <build>
     <resources>  
@@ -241,18 +241,25 @@
                     <include>AAAKatalog-DLM50-6.0.1.xml</include>
                     <include>AAAProfil-6.0.1.xml</include>
                     <include>NAS-6.0.1.xml</include>
-                    <include>Input-7.0.3.xml</include>
-                    <include>AAAKatalog-AFIS-7.0.3.xml</include>
-                    <include>AAAKatalog-ALKIS-7.0.3.xml</include>
-                    <include>AAAKatalog-BasisDLM-7.0.3.xml</include>
-                    <include>AAAKatalog-DLM50-7.0.3.xml</include>
-                    <include>AAAProfil-7.0.3.xml</include>
-                    <include>NAS-7.0.3.xml</include>
-                    <include>AK-7.0.3.xml</include>
-                    <include>AAAKatalog-AFIS-7.0.3-Aenderungen.xml</include>
-                    <include>AAAKatalog-ALKIS-7.0.3-Aenderungen.xml</include>
-                    <include>AAAKatalog-BasisDLM-7.0.3-Aenderungen.xml</include>
-                    <include>AAAKatalog-DLM50-7.0.3-Aenderungen.xml</include>
+                    <include>Input-7.1.0.xml</include>
+                    <include>AAAKatalog-GV-7.1.0.xml</include>
+                    <include>AAAKatalog-LB-7.1.0.xml</include>
+                    <include>AAAKatalog-LN-7.1.0.xml</include>
+                    <include>AAAKatalog-AS-7.1.0.xml</include>
+                    <include>AAAKatalog-AFIS-7.1.0.xml</include>
+                    <include>AAAKatalog-ALKIS-7.1.0.xml</include>
+                    <include>AAAKatalog-BasisDLM-7.1.0.xml</include>
+                    <include>AAAKatalog-DLM50-7.1.0.xml</include>
+                    <include>AAAProfil-7.1.0.xml</include>
+                    <include>NAS-7.1.0.xml</include>
+                    <include>NAS-AK-7.1.0.xml</include>
+                    <include>NAS-GV-7.1.0.xml</include>
+                    <include>NAS-LB-7.1.0.xml</include>
+                    <include>NAS-LN-7.1.0.xml</include>
+                    <include>AAAKatalog-AFIS-7.1.0-Aenderungen.xml</include>
+                    <include>AAAKatalog-ALKIS-7.1.0-Aenderungen.xml</include>
+                    <include>AAAKatalog-BasisDLM-7.1.0-Aenderungen.xml</include>
+                    <include>AAAKatalog-DLM50-7.1.0-Aenderungen.xml</include>
                   </includes>
                 </resource>
               </resources>
@@ -275,6 +282,7 @@
                     <include>katalog_alkis.bat</include>
                     <include>katalog_basisdlm.bat</include>
                     <include>katalog_dlm50.bat</include>
+                    <include>710.bat</include>
                     <include>profil.bat</include>
                     <include>nas.bat</include>
                     <include>ak.bat</include>
@@ -348,7 +356,7 @@
                   <directory>${project.basedir}/src/main/resources/model</directory>
                   <includes>
                     <include>AAA-6.0.1.eap</include>
-                    <include>AAA-7.0.3.eap</include>
+                    <include>AAA-7.1.0-rc.1.eap</include>
                   </includes>
                 </resource>
               </resources>
@@ -434,11 +442,11 @@
       </plugins>
     </pluginManagement>
     <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-         <artifactId>wagon-ftp</artifactId>
-         <version>2.2</version>
-      </extension>
+		<extension>
+			<groupId>org.apache.maven.wagon</groupId>
+			<artifactId>wagon-ssh-external</artifactId>
+			<version>3.1.0</version>
+		</extension>
     </extensions>
   </build>
 </project>
