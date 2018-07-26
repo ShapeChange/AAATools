@@ -245,21 +245,23 @@
                     <include>AAAKatalog-GV-7.1.0.xml</include>
                     <include>AAAKatalog-LB-7.1.0.xml</include>
                     <include>AAAKatalog-LN-7.1.0.xml</include>
+                    <include>AAAKatalog-AK-7.1.0.xml</include>
                     <include>AAAKatalog-AS-7.1.0.xml</include>
                     <include>AAAKatalog-AFIS-7.1.0.xml</include>
                     <include>AAAKatalog-ALKIS-7.1.0.xml</include>
                     <include>AAAKatalog-BasisDLM-7.1.0.xml</include>
                     <include>AAAKatalog-DLM50-7.1.0.xml</include>
+                    <include>AAAKatalog-AFIS-7.1.0-Aenderungen.xml</include>
+                    <include>AAAKatalog-ALKIS-7.1.0-Aenderungen.xml</include>
+                    <include>AAAKatalog-BasisDLM-7.1.0-Aenderungen.xml</include>
+                    <include>AAAKatalog-DLM50-7.1.0-Aenderungen.xml</include>
                     <include>AAAProfil-7.1.0.xml</include>
                     <include>NAS-7.1.0.xml</include>
                     <include>NAS-AK-7.1.0.xml</include>
                     <include>NAS-GV-7.1.0.xml</include>
                     <include>NAS-LB-7.1.0.xml</include>
                     <include>NAS-LN-7.1.0.xml</include>
-                    <include>AAAKatalog-AFIS-7.1.0-Aenderungen.xml</include>
-                    <include>AAAKatalog-ALKIS-7.1.0-Aenderungen.xml</include>
-                    <include>AAAKatalog-BasisDLM-7.1.0-Aenderungen.xml</include>
-                    <include>AAAKatalog-DLM50-7.1.0-Aenderungen.xml</include>
+                    <include>AAA-CodeListRegistry-7.1.0.xml</include>
                   </includes>
                 </resource>
               </resources>
