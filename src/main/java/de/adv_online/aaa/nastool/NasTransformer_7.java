@@ -123,7 +123,11 @@ public class NasTransformer_7 implements Transformer {
 		helper.changeType( "AX_DQDachhoehe", "herkunft", "LI_Lineage" );
 		helper.changeType( "AX_DQBodenhoehe", "herkunft", "LI_Lineage" );
 		helper.changeType( "AX_DQErhebung3D", "herkunft3D", "LI_ProcessStep" );
+		helper.changeType( "AX_DQSchwere", "genauigkeitswert", "Measure" );
 		helper.changeType( "AX_Schwereanomalie_Schwere", "wert", "Measure" );
+		helper.changeType( "AX_Schwere", "schwerewert", "Measure" );
+		helper.changeType( "AX_VertikalerSchweregradient", "genauigkeitVertikalerSchweregradient", "Measure" );
+		helper.changeType( "AX_VertikalerSchweregradient", "wertVertikalerSchweregradient", "Measure" );
 		helper.changeType( "AX_Sperrauftrag", "uuidListe", "URI" );
 		helper.changeType( "AX_Entsperrauftrag", "uuidListe", "URI" );
 		helper.changeType( "ExceptionFortfuehrung", "bereitsGesperrteObjekte", "URI" );
@@ -176,11 +180,12 @@ public class NasTransformer_7 implements Transformer {
 		helper.deleteClass( "AX_LI_ProcessStep_Dachhoehe" );
 		helper.deleteClass( "AX_LI_ProcessStep3D" );
 		helper.deleteClass( "Acceleration" );
+		helper.deleteClass( "AccelerationGradient" );
 		helper.deleteClass( "AD_ReferenzierbaresGitter" );
 		helper.deleteClass( "AD_Wertematrix" );
 		helper.deleteClass( "AA_UUID" );
-		helper.deleteClass( "AX_Listenelement3D" );
-		helper.deleteClass( "AX_NullEnumeration3D" );		
+		// helper.deleteClass( "AX_Listenelement3D" );
+		// helper.deleteClass( "AX_NullEnumeration3D" );		
 		
 		/* Bei allen Klassen wird das UML Tagged Value „xsdEncodingRule“ gesetzt: 
 		 * - "NAS" außer bei Typen, die mit einer der Zeichenketten "AX_DQ", "AX_LI", "AX_Datenerhebung" beginnen;

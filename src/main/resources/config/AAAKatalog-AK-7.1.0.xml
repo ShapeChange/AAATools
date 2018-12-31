@@ -34,7 +34,7 @@
 			<targetParameter name="letzteAenderung" value="true"/>
 			<targetParameter name="geerbteEigenschaften" value="false"/>
 			<targetParameter name="schemakennungen" value="*"/>
-			<targetParameter name="ausgabeformat" value="HTML,RTF,XML"/>
+			<targetParameter name="ausgabeformat" value="HTML,DOCX,XML"/>
 			<targetParameter name="xsltPfad" value="resources/xslt"/>
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 		</Target>

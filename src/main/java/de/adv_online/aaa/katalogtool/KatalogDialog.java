@@ -219,7 +219,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
     	// Reihenfolge der Einträge sollte stabil bleiben - wird verwendet in statusChanged()!
     	targetLabels.add("XML");
     	targetLabels.add("HTML");
-    	targetLabels.add("RTF");
+    	targetLabels.add("DOCX");
     	targetLabels.add("Nart-CSV");
     	targetLabels.add("GFC");
     	targetLabels.add("CSV");
@@ -1079,7 +1079,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			if(targetLabels!=null && targetLabels.size()>=2)
 				msg += " - " + targetLabels.get(1);
 			break;
-		case Katalog.STATUS_WRITE_RTF:
+		case Katalog.STATUS_WRITE_DOCX:
 			msg += "AAA-Katalogtool: Schreiben des Katalogs";
 			if(targetLabels!=null && targetLabels.size()>=3)
 				msg += " - " + targetLabels.get(2);

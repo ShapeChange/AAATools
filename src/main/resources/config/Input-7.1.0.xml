@@ -8,7 +8,7 @@
 	<parameter name="checkingConstraints" value="enabled"/>
 	<parameter name="oclConstraintTypeRegex" value=""/>
 	<parameter name="addTaggedValues" value="AAA:Kennung,AAA:Datum,AAA:Organisation,AAA:Modellart,AAA:Profile,AAA:Grunddatenbestand,AAA:Nutzungsart,AAA:Nutzungsartkennung,AAA:objektbildend,AAA:Themen,AAA:AAAVersion,AAA:GueltigBis,AAA:Revisionsnummer,AAA:Landnutzung,AAA:UnitOfMeasure"/>
-	<parameter name="representTaggedValues" value="AAA:GueltigBis,AAA:Landnutzung"/>
+	<parameter name="representTaggedValues" value="AAA:GueltigBis,AAA:Landnutzung,AAA:Modellart,AAA:Grunddatenbestand,AAA:Kennung"/>
 	<stereotypeAliases>
 		<StereotypeAlias wellknown="Application Schema" alias="applicationSchema" />
 		<StereotypeAlias wellknown="Application Schema" alias="schema" />

@@ -9,6 +9,8 @@
 				<xs:element name="profil" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="versionNumber" type="xs:string"/>
 				<xs:element name="versionDate" type="xs:string"/>
+				<xs:element name="referenceModelVersionNumber" type="xs:string" minOccurs="0"/>
+				<xs:element name="aaaVersionNumber" type="xs:string" minOccurs="0"/>
 				<xs:element name="producer">
 					<xs:complexType>
 						<xs:sequence>

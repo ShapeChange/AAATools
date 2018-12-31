@@ -16,6 +16,7 @@
      Version 1.15 - 11.08.2016
      Version 1.16 - 11.12.2017
      Version 1.17 - 05.07.2018
+     Version 1.18 - 31.12.2018
 
      (c) 2001-2018 interactive instruments GmbH, Bonn
      im Auftrag der AdV, Arbeitsgemeinschaft der Vermessungsverwaltungen der
@@ -47,17 +48,19 @@
         <xsl:value-of select="$version" />
       </P>
       <P>
-        <b>Stand:</b>
+        <b>Veröffentlichung:</b>
       </P>
       <P STYLE="margin-left:20px">
         <xsl:value-of select="FC_FeatureCatalogue/versionDate" />
       </P>
+      <xsl:if test="FC_FeatureCatalogue/referenceModelVersionNumber">
       <P>
         <b>Referenzversion:</b>
       </P>
       <P STYLE="margin-left:20px">
         <xsl:value-of select="FC_FeatureCatalogue/referenceModelVersionNumber" />
       </P>
+      </xsl:if>
       <P>
         <b>Anwendungsgebiet:</b>
       </P>
@@ -66,27 +69,20 @@
           <xsl:with-param name="string" select="FC_FeatureCatalogue/scope" />
         </xsl:call-template>
       </P>
+      <xsl:if test="FC_FeatureCatalogue/aaaVersionNumber">
+      <P>
+        <b>Referenziertes AAA-Anwendungsschema:</b>
+      </P>
+      <P STYLE="margin-left:20px">
+        <xsl:value-of select="FC_FeatureCatalogue/aaaVersionNumber" />
+      </P>
+      </xsl:if>
       <P>
         <b>Verantwortliche Institution:</b>
       </P>
       <P STYLE="margin-left:20px">
         <xsl:value-of select="FC_FeatureCatalogue/producer/CI_ResponsibleParty/CI_MandatoryParty/organisationName" />
       </P>
-      <xsl:variable name="nft" select="count(FC_FeatureCatalogue/producer/CI_ResponsibleParty/responsibility)" />
-      <xsl:if test="$nft >= 1">
-        <P>
-          <b>Verantwortlichkeiten (siehe ISO 19115):</b>
-        </P>
-        <ul>
-          <xsl:for-each select="FC_FeatureCatalogue/producer/CI_ResponsibleParty/responsibility">
-            <P STYLE="margin-left:20px">
-              <LI>
-                <xsl:value-of select="." />
-              </LI>
-            </P>
-          </xsl:for-each>
-        </ul>
-      </xsl:if>
       <a><xsl:attribute name="name">uebersicht</xsl:attribute>
         <h2>Liste der Objektartenbereiche und Objektartengruppen mit ihren Objektarten und Datentypen</h2>
       </a>

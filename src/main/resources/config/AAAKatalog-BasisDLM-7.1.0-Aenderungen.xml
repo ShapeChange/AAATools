@@ -15,8 +15,9 @@
 			<targetParameter name="modellarten" value="Basis-DLM"/>
 			<targetParameter name="profile" value=""/>
 			<targetParameter name="profilquelle" value="Modell"/>
+			<targetParameter name="stillgelegteElemente" value="true"/>
 			<targetParameter name="nurGrunddatenbestand" value="false"/>
-			<targetParameter name="letzteAenderung" value="false"/>
+			<targetParameter name="letzteAenderung" value="true"/>
 			<targetParameter name="geerbteEigenschaften" value="false"/>
 			<targetParameter name="schemakennungen" value="*"/>
 			<targetParameter name="ausgabeformat" value="HTML"/>

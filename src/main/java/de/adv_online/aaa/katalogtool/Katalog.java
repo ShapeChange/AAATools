@@ -29,14 +29,17 @@ package de.adv_online.aaa.katalogtool;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -61,6 +64,7 @@ import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.xml.serializer.OutputPropertiesFactory;
 import org.apache.xml.serializer.Serializer;
 import org.apache.xml.serializer.SerializerFactory;
@@ -70,12 +74,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
 import de.adv_online.aaa.profiltool.ProfilRep;
+import de.interactive_instruments.ShapeChange.MessageSource;
 import de.interactive_instruments.ShapeChange.Options;
 import de.interactive_instruments.ShapeChange.ShapeChangeAbortException;
 import de.interactive_instruments.ShapeChange.ShapeChangeResult;
 import de.interactive_instruments.ShapeChange.Type;
 import de.interactive_instruments.ShapeChange.Model.ClassInfo;
 import de.interactive_instruments.ShapeChange.Model.Constraint;
+import de.interactive_instruments.ShapeChange.Model.ImageMetadata;
 import de.interactive_instruments.ShapeChange.Model.Info;
 import de.interactive_instruments.ShapeChange.Model.Model;
 import de.interactive_instruments.ShapeChange.Model.PackageInfo;
@@ -88,12 +94,14 @@ import de.interactive_instruments.ShapeChange.ModelDiff.DiffElement.ElementType;
 import de.interactive_instruments.ShapeChange.ShapeChangeResult.MessageContext;
 import de.interactive_instruments.ShapeChange.Target.Target;
 import de.interactive_instruments.ShapeChange.UI.StatusBoard;
+import de.interactive_instruments.ShapeChange.Util.XsltWriter;
+import de.interactive_instruments.ShapeChange.Util.ZipHandler;
 
 /**
  * @author Clemens Portele (portele <at> interactive-instruments <dot> de)
  *
  */
-public class Katalog implements Target {
+public class Katalog implements Target, MessageSource {
 
 	public static final int STATUS_WRITE_RTF = 21;
 	public static final int STATUS_WRITE_NART = 22;
@@ -101,6 +109,14 @@ public class Katalog implements Target {
 	public static final int STATUS_WRITE_XML = 24;
 	public static final int STATUS_WRITE_GFC = 25;
 	public static final int STATUS_WRITE_CSV = 26;
+	public static final int STATUS_WRITE_DOCX = 27;
+
+	/**
+	 * The string used as placeholder in the docx template. The paragraph this
+	 * placeholder text belongs to will be replaced with the feature catalogue.
+	 */
+	public static final String DOCX_PLACEHOLDER = "ShapeChangeFeatureCatalogue";
+	public static final String DOCX_TEMPLATE_URL = "resources/templates/aaa-template.docx";
 	
 	private PackageInfo pi = null;
 	private Model model = null;
@@ -210,7 +226,7 @@ public class Katalog implements Target {
 		if (refModel!=null) {
 			SortedSet<PackageInfo> set = refModel.schemas(p.name());
 			if (set.size()==1) {
-				differ = new Differ(true, MAList);
+				differ = new Differ(true, MAList, model, refModel);
 				refPackage = set.iterator().next();
 				diffs = differ.diff(p, refPackage);
 				for (Entry<Info,SortedSet<DiffElement>> me : diffs.entrySet()) {
@@ -308,6 +324,23 @@ public class Katalog implements Target {
 			e1.setTextContent("(unbekannt)");
 		root.appendChild(e1);			
 
+		if (refPackage!=null){
+			e1 = document.createElement("referenceModelVersionNumber");
+			root.appendChild(e1);
+			e1.setTextContent(refPackage.version());
+		}
+		
+		s = p.taggedValue("AAA:AAAVersion");
+		if (s!=null && !s.isEmpty()) {
+			e1 = document.createElement("aaaVersionNumber");
+			root.appendChild(e1);
+			e1.setTextContent(s);
+		}
+
+		String zielversion = "6.0.1";
+		if (s!=null && !s.isEmpty())
+			zielversion = s;		
+		
 		Element e2, e3, e4;
 		e1 = document.createElement("producer");
 		e2 = document.createElement("CI_ResponsibleParty");
@@ -323,17 +356,6 @@ public class Katalog implements Target {
 		e2.appendChild(e3);
 		e3.appendChild(e4);
 		
-		if (refPackage!=null){
-			e1 = document.createElement("referenceModelVersionNumber");
-			root.appendChild(e1);
-			e1.setTextContent(refPackage.version());
-		}
-		
-		s = p.taggedValue("AAA:AAAVersion");
-		String zielversion = "6.0.1";
-		if (s!=null && !s.isEmpty())
-			zielversion = s;
-
 		for (String pf : PList) {
 			if (PQuelle.equals("Datei"))
 				profile.add(new ProfilRep(pi, model, options, result, zielversion, outputDirectory+"/"+pf+".3ap"));
@@ -462,6 +484,8 @@ public class Katalog implements Target {
 			if (pix.stereotype("retired")) {
 				e2 = document.createElement("retired");
 				e2.setTextContent("true");
+				if (op!=null)
+					addAttribute(document,e2,"mode",op.toString());
 				e1.appendChild(e2);
 			}
 		}
@@ -706,12 +730,6 @@ public class Katalog implements Target {
 			addAttribute(document,e2,"mode",op.toString());
 		e1.appendChild(e2);
 
-		if (propi.stereotype("retired")) {
-			e2 = document.createElement("retired");
-			e2.setTextContent("true");
-			e1.appendChild(e2);
-		}
-		
 		e2 = document.createElement("definition");
 		s = propi.documentation();
 		if (diffs!=null && diffs.get(propi)!=null)
@@ -827,7 +845,6 @@ public class Katalog implements Target {
 				return false;
 		}
 		
-		String s = i.name();
 		if (!Retired && i.stereotype("retired"))
 			return false;
 		
@@ -994,12 +1011,6 @@ public class Katalog implements Target {
 				e1.appendChild(e2);
 			}
 
-			if (ci.stereotype("retired")) {
-				e2 = document.createElement("retired");
-				e2.setTextContent("true");
-				e1.appendChild(e2);
-			}
-			
 			for (String t :  ci.supertypes()) {
 				ClassInfo cix = model.classById(t);
 				if (cix!=null) {
@@ -1063,7 +1074,7 @@ public class Katalog implements Target {
 			}
 			
 			// New style for constraints, only if no reference model, as otherwise this has already been taken into account so that we could diff it
-			if (refModel==null) { 
+			if (refModel==null || op==Operation.INSERT) { 
 				for (Constraint ocl : ci.constraints()) {
 					s = null;
 					
@@ -1386,12 +1397,6 @@ public class Katalog implements Target {
 			e1.appendChild(e2);
 		}
 
-		if (propi.stereotype("retired")) {
-			e2 = document.createElement("retired");
-			e2.setTextContent("true");
-			e1.appendChild(e2);
-		}
-				
 		s = propi.taggedValue("AAA:objektbildend");
 		if (s!=null && s.toLowerCase().equals("true")) {
 			e2 = document.createElement("objektbildend");
@@ -1628,6 +1633,73 @@ public class Katalog implements Target {
 				}
 			}
 		
+		s = i.taggedValue("AAA:Landnutzung");
+		Operation tagop = op;
+		if (diffs!=null && diffs.get(i)!=null) {
+			for (DiffElement diff : diffs.get(i)) {
+				if (diff.subElementType==ElementType.AAALANDNUTZUNG) {
+					if (diff.change==Operation.DELETE) {
+						tagop = Operation.DELETE;
+						s = "true";
+					} else if (diff.change==Operation.INSERT) {
+						tagop = Operation.INSERT;
+						s = "true";
+					}									 
+					break;
+				}
+			}
+		}
+		if (s!=null && s.length()>0) {
+			e2 = document.createElement("taggedValue");
+			e2.setTextContent(s);
+			addAttribute(document,e2,"tag","AAA:Landnutzung");
+			if (tagop!=null)
+				addAttribute(document,e2,"mode",tagop.toString());
+			e1.appendChild(e2);					
+		}	
+		
+		s = i.stereotypes().contains("retired") ? "true" : null;
+		tagop = op;
+		if (diffs!=null && diffs.get(i)!=null) {
+			for (DiffElement diff : diffs.get(i)) {
+				if (diff.subElementType==ElementType.AAARETIRED) {
+					if (diff.change==Operation.DELETE) {
+						tagop = Operation.DELETE;
+						s = "true";
+					} else if (diff.change==Operation.INSERT) {
+						tagop = Operation.INSERT;
+						s = "true";
+					}									 
+					break;
+				}
+			}
+		}
+		if (s!=null && s.length()>0) {
+			e2 = document.createElement("retired");
+			e2.setTextContent(s);
+			if (tagop!=null)
+				addAttribute(document,e2,"mode",tagop.toString());
+			e1.appendChild(e2);					
+		}	
+		
+		s = i.taggedValue("AAA:GueltigBis");
+		if (diffs!=null && diffs.get(i)!=null)
+			for (DiffElement diff : diffs.get(i)) {
+				if (diff.subElementType==ElementType.AAAGUELTIGBIS) {
+					s = differ.diff_toString(diff.diff);
+					break;
+				}
+			}
+		if (s!=null && s.length()>0) {
+			e2 = document.createElement("taggedValue");
+			e2.setTextContent(s);
+			addAttribute(document,e2,"tag","AAA:GueltigBis");
+			e2.setTextContent(s);
+			if (op!=null)
+				addAttribute(document,e2,"mode",op.toString());
+			e1.appendChild(e2);
+		}
+		
 		s = "";
 		for (ProfilRep pf : profile) {
 			if (pf.contains(i)) {
@@ -1651,25 +1723,43 @@ public class Katalog implements Target {
 				}
 			}
 		}
-		
-		TaggedValues taggedValues = i.taggedValuesForTagList(options.parameter("representTaggedValues"));
-		if(!taggedValues.isEmpty()) {
+
+		String taglist = options.parameter("representTaggedValues");
+		if (taglist!=null && taglist.trim().length()>0) {
 			// sort results alphabetically by tag name for consistent output
-			TreeSet<String> tags = new TreeSet<String>(taggedValues.keySet());
+			String[] tagarray = taglist.split(",");
+			TreeSet<String> tags = new TreeSet<String>();
+			for (String tag : tagarray) {
+				if (!tag.matches("AAA:(Modellart|Grunddatenbestand|Kennung|objektbildend|Revisionsnummer|Landnutzung|GueltigBis)"))
+					tags.add(tag.trim());
+			}
+			
 			for(String tag : tags) {
-				// sort values
-				String[] values = taggedValues.get(tag);
-				List<String> valueList = Arrays.asList(values);
-				Collections.sort(valueList);
+				String[] values = i.taggedValuesForTag(tag);
 				
-				for(String v : values) {
-					if (v.trim().length() > 0) {
-						e2 = document.createElement("taggedValue");
-						e2.setTextContent(v);
-						addAttribute(document,e2,"tag",tag);
-						e1.appendChild(e2);					
+				// in AAA there is only one value per tag
+				s = values.length>0? values[0].trim() : null;
+
+				// Standard process for text values
+				boolean found = false;
+				if (diffs!=null && diffs.get(i)!=null) {
+					for (DiffElement diff : diffs.get(i)) {
+						if (diff.subElementType==ElementType.TAG && diff.tag.equalsIgnoreCase(tag)) {
+							s = differ.diff_toString(diff.diff);
+							found = true;
+							break;
+						}
 					}
 				}
+				
+				if (s!=null && s.length()>0) {
+					e2 = document.createElement("taggedValue");
+					e2.setTextContent(s);
+					addAttribute(document,e2,"tag",tag);
+					if (!found && op!=null)
+						addAttribute(document,e2,"mode",op.toString());
+					e1.appendChild(e2);					
+				}					
 			}
 		}
 
@@ -1732,7 +1822,7 @@ public class Katalog implements Target {
 			String outfileBasename = pi.xsdDocument().replace(".xsd", "");
 
 			writeNART(xmlName, outfileBasename);
-			writeRTF(xmlName, outfileBasename);
+			writeDOCX(xmlName, outfileBasename);
 			writeHTML(xmlName, outfileBasename);
 			writeXML(xmlName, outfileBasename);
 			writeGFC(xmlName, outfileBasename);
@@ -1760,10 +1850,11 @@ public class Katalog implements Target {
 	}
 
 	private void writeRTF(String xmlName, String outfileBasename){
-		StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_RTF);
 
 		if(!OutputFormat.toLowerCase().contains("rtf"))
 			return;
+
+		StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_RTF);
 		
 		String xslfofileName = options.parameter(this.getClass().getName(),"xslrtfFile");
 		if (xslfofileName==null)
@@ -1773,15 +1864,192 @@ public class Katalog implements Target {
 		if(xmlName!=null && xmlName.length()>0
 				&& xslfofileName!=null && xslfofileName.length()>0
 				&& rtffileName!=null && rtffileName.length()>0){
-			xsltWrite(xmlName, xslfofileName, rtffileName);
+            // Setup input and output files
+            File outDir = new File(outputDirectory);
+            File xmlFile = new File(outDir, xmlName);
+           	File outFile = new File(outDir, rtffileName);
+			xsltWrite(xmlFile, xslfofileName, outFile, null);
+		}
+		
+	}
+	
+	/**
+	 * Transforms the contents of the temporary feature catalogue xml and
+	 * inserts it into a specific place (denoted by a placeholder) of a docx
+	 * template file. The result is copied into a new output file. The template
+	 * file is not modified.
+	 * 
+	 * @param xmlName
+	 *            Name of the temporary feature catalogue xml file, located in
+	 *            the output directory.
+	 * @param outfileBasename
+	 *            Base name of the output file, without file type ending.
+	 */
+	private void writeDOCX(String xmlName, String outfileBasename) {
+
+		if (!OutputFormat.toLowerCase().contains("docx"))
+			return;
+
+		StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_DOCX);
+
+		ZipHandler zipHandler = new ZipHandler();
+
+		String xsldocxfileName = options.parameter(this.getClass().getName(),"xsldocxFile");
+		if (xsldocxfileName==null)
+			xsldocxfileName = "aaa-docx.xsl";
+		
+		String docxfileName = outfileBasename + ".docx";
+
+		String docxTemplateFilePath = options.parameter(this.getClass().getName(),
+				"docxTemplateFilePath");
+		if (docxTemplateFilePath == null)
+			docxTemplateFilePath = options.parameter("docxTemplateFilePath");
+		// if no path is provided, use the directory of the default template
+		if (docxTemplateFilePath == null) {
+			docxTemplateFilePath = DOCX_TEMPLATE_URL;
+			result.addDebug(this, 17, "docxTemplateFilePath",
+					DOCX_TEMPLATE_URL);
+		}
+				
+		try {
+
+			// Setup directories
+			File outDir = new File(outputDirectory);
+			File tmpDir = new File(outDir, "tmpdocx");
+			File tmpinputDir = new File(tmpDir, "input");
+			File tmpoutputDir = new File(tmpDir, "output");
+
+			// get docx template
+
+			// create temporary file for the docx template copy
+			File docxtemplate_copy = new File(tmpDir, "docxtemplatecopy.tmp");
+
+			// populate temporary file either from remote or local URI
+			if (docxTemplateFilePath.toLowerCase().startsWith("http")) {
+				URL templateUrl = new URL(docxTemplateFilePath);
+				FileUtils.copyURLToFile(templateUrl, docxtemplate_copy);
+			} else {
+				File docxtemplate = new File(docxTemplateFilePath);
+				if (docxtemplate.exists()) {
+					FileUtils.copyFile(docxtemplate, docxtemplate_copy);
+				} else {
+					result.addError(this, 19, docxtemplate.getAbsolutePath());
+					return;
+				}
+			}
+
+			/*
+			 * Unzip the docx template to tmpinputDir and tmpoutputDir The
+			 * contents of the tmpinputdir will be used as input for the
+			 * transformation. The transformation result will overwrite the
+			 * relevant files in the tmpoutputDir.
+			 */
+			zipHandler.unzip(docxtemplate_copy, tmpinputDir);
+			zipHandler.unzip(docxtemplate_copy, tmpoutputDir);
+
+			/*
+			 * Get hold of the styles.xml file from which the transformation
+			 * will get relevant information. The path to this file will be used
+			 * as a transformation parameter.
+			 */
+			File styleXmlFile = new File(tmpinputDir, "word/styles.xml");
+			if (!styleXmlFile.canRead()) {
+				result.addError(null, 301, styleXmlFile.getName(),
+						"styles.xml");
+				return;
+			}
+
+			/*
+			 * Get hold of the temporary feature catalog xml file. The path to
+			 * this file will be used as a transformation parameter.
+			 */
+			File xmlFile = new File(outDir, xmlName);
+			if (!xmlFile.canRead()) {
+				result.addError(null, 301, xmlFile.getName(), xmlName);
+				return;
+			}
+
+			/*
+			 * Get hold of the input document.xml file (internal .xml file from
+			 * the docxtemplate). It will be used as the source for the
+			 * transformation.
+			 */
+			File indocumentxmlFile = new File(tmpinputDir, "word/document.xml");
+			if (!indocumentxmlFile.canRead()) {
+				result.addError(null, 301, indocumentxmlFile.getName(),
+						"document.xml");
+				return;
+			}
+
+			/*
+			 * Get hold of the output document.xml file. It will be used as the
+			 * transformation target.
+			 */
+			File outdocumentxmlFile = new File(tmpoutputDir,
+					"word/document.xml");
+			if (!outdocumentxmlFile.canWrite()) {
+				result.addError(null, 307, outdocumentxmlFile.getName(),
+						"document.xml");
+				return;
+			}
+
+			/*
+			 * Prepare the transformation.
+			 */
+			Map<String,String> transformationParameters = new HashMap<String,String>();
+			transformationParameters.put("styleXmlPath",
+					styleXmlFile.toURI().toString());
+			transformationParameters.put("catalogXmlPath",
+					xmlFile.toURI().toString());
+			transformationParameters.put("DOCX_PLACEHOLDER", DOCX_PLACEHOLDER);
+
+			/*
+			 * Execute the transformation.
+			 */
+			this.xsltWrite(indocumentxmlFile, xsldocxfileName, outdocumentxmlFile, transformationParameters);
+
+			/*
+			 * === Create the docx result file ===
+			 */
+
+			// Get hold of the output docx file (it will be overwritten or
+			// initialized).
+			File outFile = new File(outDir, docxfileName);
+
+			/*
+			 * Zip the temporary output directory and copy it to the output docx
+			 * file.
+			 */
+			zipHandler.zip(tmpoutputDir, outFile);
+
+			/*
+			 * === Delete the temporary directory ===
+			 */
+
+			try {
+				FileUtils.deleteDirectory(tmpDir);
+			} catch (IOException e) {
+				result.addWarning(this, 20, e.getMessage());
+			}
+
+			result.addResult(getTargetName(), outputDirectory, docxfileName,
+					null);
+
+		} catch (Exception e) {
+			String m = e.getMessage();
+			if (m != null) {
+				result.addError(m);
+			}
+			e.printStackTrace(System.err);
 		}
 	}
 	
 	private void writeHTML(String xmlName, String outfileBasename){
-		StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_HTML);
 
 		if(!OutputFormat.toLowerCase().contains("html"))
 			return;
+
+		StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_HTML);
 		
 		String xslfofileName = options.parameter(this.getClass().getName(),"xslhtmlFile");
 		if (xslfofileName==null)
@@ -1791,15 +2059,20 @@ public class Katalog implements Target {
 		if(xmlName!=null && xmlName.length()>0
 				&& xslfofileName!=null && xslfofileName.length()>0
 				&& htmlfileName!=null && htmlfileName.length()>0){
-			xsltWrite(xmlName, xslfofileName, htmlfileName);
+            // Setup input and output files
+            File outDir = new File(outputDirectory);
+            File xmlFile = new File(outDir, xmlName);
+           	File outFile = new File(outDir, htmlfileName);
+			xsltWrite(xmlFile, xslfofileName, outFile, null);
 		}
 	}
 	
 	private void writeXML(String xmlName, String outfileBasename){
-		StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_XML);
 
 		if(!OutputFormat.toLowerCase().contains("xml"))
 			return;
+
+		StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_XML);
 		
 		String xslfofileName = options.parameter(this.getClass().getName(),"xslxmlFile");
 		if (xslfofileName==null)
@@ -1809,15 +2082,20 @@ public class Katalog implements Target {
 		if(xmlName!=null && xmlName.length()>0
 				&& xslfofileName!=null && xslfofileName.length()>0
 				&& xmloutFileName!=null && xmloutFileName.length()>0){
-			xsltWrite(xmlName, xslfofileName, xmloutFileName);
+            // Setup input and output files
+            File outDir = new File(outputDirectory);
+            File xmlFile = new File(outDir, xmlName);
+           	File outFile = new File(outDir, xmloutFileName);
+			xsltWrite(xmlFile, xslfofileName, outFile, null);
 		}
 	}
 	
 	private void writeGFC(String xmlName, String outfileBasename){
-		StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_GFC);
 
 		if(!OutputFormat.toLowerCase().contains("gfc"))
 			return;
+
+		StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_GFC);
 		
 		String xslfofileName = options.parameter(this.getClass().getName(),"xslgfcFile");
 		if (xslfofileName==null)
@@ -1827,16 +2105,21 @@ public class Katalog implements Target {
 		if(xmlName!=null && xmlName.length()>0
 				&& xslfofileName!=null && xslfofileName.length()>0
 				&& xmloutFileName!=null && xmloutFileName.length()>0){
-			xsltWrite(xmlName, xslfofileName, xmloutFileName);
+            // Setup input and output files
+            File outDir = new File(outputDirectory);
+            File xmlFile = new File(outDir, xmlName);
+           	File outFile = new File(outDir, xmloutFileName);
+			xsltWrite(xmlFile, xslfofileName, outFile, null);
 		}
 	}
 	
 	private void writeCSV(String xmlName, String outfileBasename){
-		StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_CSV);
 
 		if(!OutputFormat.toLowerCase().contains("csv"))
 			return;
-		
+
+		StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_CSV);
+
 		String xslfofileName = options.parameter(this.getClass().getName(),"xslcsvFile");
 		if (xslfofileName==null)
 			xslfofileName = "aaa-csv.xsl";
@@ -1845,15 +2128,20 @@ public class Katalog implements Target {
 		if(xmlName!=null && xmlName.length()>0
 				&& xslfofileName!=null && xslfofileName.length()>0
 				&& csvoutFileName!=null && csvoutFileName.length()>0){
-			xsltWrite(xmlName, xslfofileName, csvoutFileName);
+            // Setup input and output files
+            File outDir = new File(outputDirectory);
+            File xmlFile = new File(outDir, xmlName);
+           	File outFile = new File(outDir, csvoutFileName);
+			xsltWrite(xmlFile, xslfofileName, outFile, null);
 		}
 	}
 	
 	private void writeNART(String xmlName, String outfileBasename){
-		StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_NART);
 
 		if(!OutputFormat.toLowerCase().contains("csv"))
 			return;
+
+		StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_NART);
 		
 		String xslfofileName = options.parameter(this.getClass().getName(),"xslnartcsvFile");
 		if (xslfofileName==null)
@@ -1863,25 +2151,26 @@ public class Katalog implements Target {
 		if(xmlName!=null && xmlName.length()>0
 				&& xslfofileName!=null && xslfofileName.length()>0
 				&& csvoutFileName!=null && csvoutFileName.length()>0){
-			xsltWrite(xmlName, xslfofileName, csvoutFileName);
+            // Setup input and output files
+            File outDir = new File(outputDirectory);
+            File xmlFile = new File(outDir, xmlName);
+           	File outFile = new File(outDir, csvoutFileName);
+			xsltWrite(xmlFile, xslfofileName, outFile, null);
 		}
 	}
 	
-   private void xsltWrite(String xmlName, String xsltfileName, String outfileName){
+   private void xsltWrite(File xmlFile, String xsltfileName, File outFile, Map<String,String> parameters){
 	   try{
 			String xsltPath = options.parameter(this.getClass().getName(),"xsltPfad");
 			if (xsltPath==null)
 				xsltPath = "src/main/resources/xslt";
 
-			// Setup directories
-            File outDir = new File(outputDirectory);
-
-            // Setup input and output files
-            File xmlFile = new File(outDir, xmlName);
-           	File outFile = new File(outDir, outfileName);
-	        
            	if(!xmlFile.canRead()){
-            	result.addError(null, 301, xmlFile.getName(), outfileName);
+            	result.addError(null, 301, xmlFile.getName(), xmlFile.getCanonicalPath());
+            	return;
+            }
+           	if(!outFile.getParentFile().canWrite()){
+            	result.addError(null, 307, outFile.getName(), outFile.getCanonicalPath());
             	return;
             }
 		    
@@ -1914,11 +2203,15 @@ public class Katalog implements Target {
 				if (xsltSource!=null) {
 				    TransformerFactory transFact = TransformerFactory.newInstance( );
 				    Transformer trans = transFact.newTransformer(xsltSource);
+				    if (parameters!=null) {
+				    	for (Entry<String,String> parameter : parameters.entrySet() ) {
+						    trans.setParameter(parameter.getKey().toString(), parameter.getValue());
+				    	}
+				    }
 				    trans.transform(xmlSource, res);
-					result.addResult(getTargetName(), outputDirectory, outfileName, options.parameter(this.getClass().getName(),"modellarten"));
+					result.addResult(getTargetName(), outputDirectory, outFile.getCanonicalPath(), options.parameter(this.getClass().getName(),"modellarten"));
 				}
 			}
-		    
 
 	   } catch (Exception e) {
 			String m = e.getMessage();
@@ -1930,8 +2223,60 @@ public class Katalog implements Target {
 		    
 	}
 
-@Override
-public String getTargetName() {
-	return "AAA-Objektartenkatalog";
-}
+	@Override
+	public String getTargetName() {
+		return "AAA-Objektartenkatalog";
+	}
+	
+	/**
+	 * This is the message text provision proper. It returns a message for a
+	 * number.
+	 * 
+	 * @param mnr
+	 *            Message number
+	 * @return Message text or null
+	 */
+	protected String messageText(int mnr) {
+		switch (mnr) {
+		case 12:
+			return "Directory named '$1$' does not exist or is not accessible.";
+		case 13:
+			return "File '$1$' does not exist or is not accessible.";
+		case 17:
+			return "No value provided for configuration parameter '$1$', defaulting to: '$2$'.";
+		case 18:
+			return "XSLT stylesheet $1$ not found.";
+		case 19:
+			return "DOCX template $1$ not found.";
+		case 20:
+			return "Could not delete temporary directory created for docx transformation; IOException message is: $1$";
+		}
+		return null;
+	}
+
+	@Override
+	/**
+	 * <p>
+	 * This method returns messages belonging to the Feature Catalogue target by
+	 * their message number. The organization corresponds to the logic in module
+	 * ShapeChangeResult. All functions in that class, which require an message
+	 * number can be redirected to the function at hand.
+	 * </p>
+	 * 
+	 * @param mnr
+	 *            Message number
+	 * @return Message text, including $x$ substitution points.
+	 */
+	public String message(int mnr) {
+		// Get the message proper and return it with an identification prefixed
+		String mess = messageText(mnr);
+		if (mess == null)
+			return null;
+		String prefix = "";
+		if (mess.startsWith("??")) {
+			prefix = "??";
+			mess = mess.substring(2);
+		}
+		return prefix + "Katalogtool: " + mess;
+	}
 }
