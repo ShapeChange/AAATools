@@ -242,10 +242,10 @@
                     <include>AAAProfil-6.0.1.xml</include>
                     <include>NAS-6.0.1.xml</include>
                     <include>Input-7.1.0.xml</include>
-                    <include>AAAKatalog-GV-7.1.0.xml</include>
-                    <include>AAAKatalog-LB-7.1.0.xml</include>
-                    <include>AAAKatalog-LN-7.1.0.xml</include>
-                    <include>AAAKatalog-AK-7.1.0.xml</include>
+                    <include>AAAKatalog-GV-1.0.0.xml</include>
+                    <include>AAAKatalog-LB-1.0.0.xml</include>
+                    <include>AAAKatalog-LN-1.0.0.xml</include>
+                    <include>AAAKatalog-AK-1.0.0.xml</include>
                     <include>AAAKatalog-AS-7.1.0.xml</include>
                     <include>AAAKatalog-AFIS-7.1.0.xml</include>
                     <include>AAAKatalog-ALKIS-7.1.0.xml</include>
@@ -257,10 +257,10 @@
                     <include>AAAKatalog-DLM50-7.1.0-Aenderungen.xml</include>
                     <include>AAAProfil-7.1.0.xml</include>
                     <include>NAS-7.1.0.xml</include>
-                    <include>NAS-AK-7.1.0.xml</include>
-                    <include>NAS-GV-7.1.0.xml</include>
-                    <include>NAS-LB-7.1.0.xml</include>
-                    <include>NAS-LN-7.1.0.xml</include>
+                    <include>NAS-AK-1.0.0.xml</include>
+                    <include>NAS-GV-1.0.0.xml</include>
+                    <include>NAS-LB-1.0.0.xml</include>
+                    <include>NAS-LN-1.0.0.xml</include>
                     <include>AAA-CodeListRegistry-7.1.0.xml</include>
                   </includes>
                 </resource>
@@ -286,8 +286,6 @@
                     <include>katalog_dlm50.bat</include>
                     <include>710.bat</include>
                     <include>profil.bat</include>
-                    <include>nas.bat</include>
-                    <include>ak.bat</include>
                   </includes>
                 </resource>
               </resources>
@@ -358,7 +356,7 @@
                   <directory>${project.basedir}/src/main/resources/model</directory>
                   <includes>
                     <include>AAA-6.0.1.eap</include>
-                    <include>AAA-7.1.0-rc.1.eap</include>
+                    <include>AAA-7.1.0-rc.2.eap</include>
                   </includes>
                 </resource>
               </resources>

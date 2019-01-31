@@ -1,1 +1,0 @@
-java -jar AAATools-${project.version}.jar -c "Konfigurationen/AK-7.1.0.xml" 

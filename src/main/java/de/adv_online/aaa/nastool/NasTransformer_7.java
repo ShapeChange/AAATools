@@ -138,7 +138,6 @@ public class NasTransformer_7 implements Transformer {
 		helper.changeType( "DCP", "HTTP", "URI" );
 		helper.changeType( "DCP", "email", "URI" );		
 		helper.changeType( "AP_TransformationsMatrix_3D", "parameter", "doubleList" );
-		helper.changeType( "AX_MassOderNullListe3D", "werte", "doubleOrNilReasonList" );
 		helper.changeType( "AX_Fortfuehrungsergebnis", "fortfuehrungsnachweis", "Any" );
 		
 		/* Verweise in den Projektsteuerungskatalog werden als XLink-href realisiert (Map-Entry mit gml:Referencetype in ShapeChange-Konfiguration):
