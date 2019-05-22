@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:lb="http://www.adv-online.de/namespaces/adv/lb/1.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/lb/1.0" version="1.0.0">
+  <import namespace="http://www.adv-online.de/namespaces/adv/gid/7.1" schemaLocation="../../nas/7.1/aaa.xsd"/>
+  <import namespace="http://www.opengis.net/gml/3.2" schemaLocation="../../../ogc/gml/3.2.1/gml.xsd"/>
+  <!--XML Schema document created by ShapeChange - http://shapechange.net/-->
+  <element name="LB_Aktualitaetsstand_Landbedeckung" substitutionGroup="gml:AbstractObject" type="lb:LB_Aktualitaetsstand_LandbedeckungType"/>
+  <complexType name="LB_Aktualitaetsstand_LandbedeckungType">
+    <sequence>
+      <element name="artDerAktualitaet" type="lb:LB_ArtDerAktualitaet_LandbedeckungType"/>
+      <element name="datumDerAktualitaet" type="date"/>
+    </sequence>
+  </complexType>
+  <complexType name="LB_Aktualitaetsstand_LandbedeckungPropertyType">
+    <sequence>
+      <element ref="lb:LB_Aktualitaetsstand_Landbedeckung"/>
+    </sequence>
+  </complexType>
+  <simpleType name="LB_ArtDerAktualitaet_LandbedeckungType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+      <enumeration value="3000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LB_ArtDerErhebung_LandbedeckungType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+      <enumeration value="3100"/>
+      <enumeration value="3200"/>
+      <enumeration value="4000"/>
+      <enumeration value="5000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LB_ArtDerRichtigkeit_LandbedeckungType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+      <enumeration value="3000"/>
+      <enumeration value="4000"/>
+      <enumeration value="5000"/>
+      <enumeration value="6000"/>
+    </restriction>
+  </simpleType>
+  <element name="LB_Binnengewaesser" substitutionGroup="lb:LB_Landbedeckung" type="lb:LB_BinnengewaesserType"/>
+  <complexType name="LB_BinnengewaesserType">
+    <complexContent>
+      <extension base="lb:LB_LandbedeckungType">
+        <sequence>
+          <element minOccurs="0" name="gewaesserart" type="lb:LB_Gewaesserart_BinnengewaesserType"/>
+          <element minOccurs="0" name="fliesseigenschaft" type="lb:LB_Fliesseigenschaft_BinnengewaesserType"/>
+          <element minOccurs="0" name="wasserfuehrung" type="lb:LB_Wasserfuehrung_BinnengewaesserType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LB_Blattform_HolzigeVegetationType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+    </restriction>
+  </simpleType>
+  <element name="LB_Eis" substitutionGroup="lb:LB_Landbedeckung" type="lb:LB_EisType"/>
+  <complexType name="LB_EisType">
+    <complexContent>
+      <extension base="lb:LB_LandbedeckungType">
+        <sequence>
+          <element minOccurs="0" name="eisart" type="lb:LB_Eisart_EisType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LB_Eisart_EisType">
+    <restriction base="string">
+      <enumeration value="2010"/>
+      <enumeration value="2020"/>
+    </restriction>
+  </simpleType>
+  <element name="LB_Festgestein" substitutionGroup="lb:LB_Landbedeckung" type="lb:LB_FestgesteinType"/>
+  <complexType name="LB_FestgesteinType">
+    <complexContent>
+      <extension base="lb:LB_LandbedeckungType">
+        <sequence/>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LB_Fliesseigenschaft_BinnengewaesserType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LB_GeometrischeGenauigkeit_LandbedeckungType">
+    <restriction base="string">
+      <enumeration value="1100"/>
+      <enumeration value="1200"/>
+      <enumeration value="1300"/>
+      <enumeration value="1400"/>
+      <enumeration value="1500"/>
+      <enumeration value="1600"/>
+      <enumeration value="1700"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LB_Gewaesserart_BinnengewaesserType">
+    <restriction base="string">
+      <enumeration value="1010"/>
+      <enumeration value="1020"/>
+      <enumeration value="2000"/>
+      <enumeration value="3010"/>
+      <enumeration value="3020"/>
+      <enumeration value="4000"/>
+      <enumeration value="5000"/>
+    </restriction>
+  </simpleType>
+  <element name="LB_HochbauUndBaulicheNebenflaeche" substitutionGroup="lb:LB_Landbedeckung" type="lb:LB_HochbauUndBaulicheNebenflaecheType"/>
+  <complexType name="LB_HochbauUndBaulicheNebenflaecheType">
+    <complexContent>
+      <extension base="lb:LB_LandbedeckungType">
+        <sequence/>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element name="LB_HolzigeVegetation" substitutionGroup="lb:LB_Landbedeckung" type="lb:LB_HolzigeVegetationType"/>
+  <complexType name="LB_HolzigeVegetationType">
+    <complexContent>
+      <extension base="lb:LB_LandbedeckungType">
+        <sequence>
+          <element minOccurs="0" name="vegetationsmerkmal" type="lb:LB_Vegetationsmerkmal_HolzigeVegetationType"/>
+          <element minOccurs="0" name="wassersaettigung" type="lb:LB_Wassersaettigung_HolzigeVegetationType"/>
+          <element maxOccurs="2" minOccurs="0" name="blattform" type="lb:LB_Blattform_HolzigeVegetationType"/>
+          <element minOccurs="0" name="verjuengungsflaeche" type="boolean"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element name="LB_KrautigeVegetation" substitutionGroup="lb:LB_Landbedeckung" type="lb:LB_KrautigeVegetationType"/>
+  <complexType name="LB_KrautigeVegetationType">
+    <complexContent>
+      <extension base="lb:LB_LandbedeckungType">
+        <sequence>
+          <element minOccurs="0" name="vegetationsmerkmal" type="lb:LB_Vegetationsmerkmal_KrautigeVegetationType"/>
+          <element minOccurs="0" name="wassersaettigung" type="lb:LB_Wassersaettigung_KrautigeVegetationType"/>
+          <element minOccurs="0" name="salzigerStandort" type="boolean"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element abstract="true" name="LB_Landbedeckung" substitutionGroup="adv:TA_SurfaceComponent" type="lb:LB_LandbedeckungType"/>
+  <complexType abstract="true" name="LB_LandbedeckungType">
+    <complexContent>
+      <extension base="adv:TA_SurfaceComponentType">
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0" name="artDerErhebung" type="lb:LB_ArtDerErhebung_LandbedeckungType"/>
+          <element minOccurs="0" name="geometrischeGenauigkeit" type="lb:LB_GeometrischeGenauigkeit_LandbedeckungType"/>
+          <element minOccurs="0" name="bodenaufloesung" type="double"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="inhaltlicheRichtigkeitMitInstanzbezug" type="lb:LB_Richtigkeit_LandbedeckungPropertyType"/>
+          <element maxOccurs="3" minOccurs="0" name="aktualitaetsstand" type="lb:LB_Aktualitaetsstand_LandbedeckungPropertyType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element name="LB_Lockermaterial" substitutionGroup="lb:LB_Landbedeckung" type="lb:LB_LockermaterialType"/>
+  <complexType name="LB_LockermaterialType">
+    <complexContent>
+      <extension base="lb:LB_LandbedeckungType">
+        <sequence>
+          <element minOccurs="0" name="oberflaechenmaterial" type="lb:LB_Oberflaechenmaterial_LockermaterialType"/>
+          <element minOccurs="0" name="wassersaettigung" type="lb:LB_Wassersaettigung_LockermaterialType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element name="LB_Meer" substitutionGroup="lb:LB_Landbedeckung" type="lb:LB_MeerType"/>
+  <complexType name="LB_MeerType">
+    <complexContent>
+      <extension base="lb:LB_LandbedeckungType">
+        <sequence>
+          <element minOccurs="0" name="meerart" type="lb:LB_Meerart_MeerType"/>
+          <element minOccurs="0" name="tideeinfluss" type="boolean"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LB_Meerart_MeerType">
+    <restriction base="string">
+      <enumeration value="1010"/>
+      <enumeration value="1020"/>
+      <enumeration value="1030"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LB_Oberflaechenmaterial_LockermaterialType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+      <enumeration value="3000"/>
+      <enumeration value="4000"/>
+      <enumeration value="5000"/>
+    </restriction>
+  </simpleType>
+  <element name="LB_Richtigkeit_Landbedeckung" substitutionGroup="gml:AbstractObject" type="lb:LB_Richtigkeit_LandbedeckungType"/>
+  <complexType name="LB_Richtigkeit_LandbedeckungType">
+    <sequence>
+      <element name="artDerRichtigkeit" type="lb:LB_ArtDerRichtigkeit_LandbedeckungType"/>
+      <element name="wertDerRichtigkeit" type="double"/>
+    </sequence>
+  </complexType>
+  <complexType name="LB_Richtigkeit_LandbedeckungPropertyType">
+    <sequence>
+      <element ref="lb:LB_Richtigkeit_Landbedeckung"/>
+    </sequence>
+  </complexType>
+  <element name="LB_Tiefbau" substitutionGroup="lb:LB_Landbedeckung" type="lb:LB_TiefbauType"/>
+  <complexType name="LB_TiefbauType">
+    <complexContent>
+      <extension base="lb:LB_LandbedeckungType">
+        <sequence/>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LB_Vegetationsmerkmal_HolzigeVegetationType">
+    <restriction base="string">
+      <enumeration value="4000"/>
+      <enumeration value="5000"/>
+      <enumeration value="6000"/>
+      <enumeration value="7000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LB_Vegetationsmerkmal_KrautigeVegetationType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+      <enumeration value="3000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LB_Wasserfuehrung_BinnengewaesserType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LB_Wassersaettigung_HolzigeVegetationType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LB_Wassersaettigung_KrautigeVegetationType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LB_Wassersaettigung_LockermaterialType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+    </restriction>
+  </simpleType>
+</schema>

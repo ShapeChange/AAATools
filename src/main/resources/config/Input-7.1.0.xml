@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <input xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1">
 	<parameter name="inputModelType" value="EA7"/>
-	<parameter name="inputFile" value="AAA-7.1.0-rc.2.EAP"/>
+	<parameter name="inputFile" value="AAA-7.1.0.eap"/>
 	<parameter name="appSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
 	<parameter name="excludedPackages" value="ISO/TC 211,OGC,AAA_Ausgabekatalog,AAA_Objektartenkatalog,AAA Versionierungsschema,Web Feature Service Erweiterungen,AAA_Signaturenkatalog"/>
 	<parameter name="publicOnly" value="true"/>

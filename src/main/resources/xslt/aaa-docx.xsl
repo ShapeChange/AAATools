@@ -17,7 +17,7 @@
  <!-- Catalogue content -->
  <!-- ================= -->
  <!-- The path to the catalogue tmp xml is set automatically by ShapeChange. -->
- <xsl:param name="catalogXmlPath">../../Ausgaben/Kataloge/Basis-DLM/aaa.tmp.xml</xsl:param>
+ <xsl:param name="catalogXmlPath">Ausgaben/Kataloge/aaa.tmp.xml</xsl:param>
  <!-- When executed with ShapeChange, the absolute URI to the catalog XML is automatically determined via a custom URI resolver. -->
  <xsl:variable name="catalog" select="document($catalogXmlPath)"/>
  <xsl:key match="/*/*[@id]" name="modelElement" use="@id"/>
@@ -26,7 +26,7 @@
  <!-- Docx style XML -->
  <!-- ============== -->
  <!-- The path to the docx internal document.xml is set automatically by ShapeChange. -->
- <xsl:param name="styleXmlPath">../../_template/word/styles.xml</xsl:param>
+ <xsl:param name="styleXmlPath">_template/word/styles.xml</xsl:param>
  <!-- When executed with ShapeChange, the absolute URI to the style XML is automatically determined via a custom URI resolver. -->
  <xsl:variable name="heading1Id"
   select="document($styleXmlPath)/w:styles/w:style[w:name/@w:val = 'heading 1']/@w:styleId"/>
@@ -373,6 +373,22 @@
 	<xsl:with-param name="title">Definition:</xsl:with-param>
 	<xsl:with-param name="lines" select="$featuretype/definition"/>
    </xsl:call-template>
+   <xsl:if test="$featuretype/retired">
+    <xsl:choose>
+     <xsl:when test="$featuretype/taggedValue[@tag='AAA:GueltigBis']">
+      <xsl:call-template name="entry">
+	   <xsl:with-param name="title">Stillgelegt:</xsl:with-param>
+	   <xsl:with-param name="lines">Gültig bis GeoInfoDok <xsl:value-of select="$featuretype/taggedValue[@tag='AAA:GueltigBis'][1]"/></xsl:with-param>
+      </xsl:call-template>
+     </xsl:when>
+     <xsl:otherwise>
+      <xsl:call-template name="entry">
+	   <xsl:with-param name="title">Stillgelegt:</xsl:with-param>
+	   <xsl:with-param name="lines">Ja</xsl:with-param>
+      </xsl:call-template>
+     </xsl:otherwise>
+    </xsl:choose>
+   </xsl:if>
    <xsl:call-template name="entry">
 	<xsl:with-param name="title">Abgeleitet aus:</xsl:with-param>
 	<xsl:with-param name="lines" select="$featuretype/subtypeOf"/>
@@ -439,6 +455,22 @@
    <xsl:with-param name="title">Kennung:</xsl:with-param>
    <xsl:with-param name="lines" select="$featureProp/code"/>
   </xsl:call-template>
+  <xsl:if test="$featureProp/retired">
+   <xsl:choose>
+    <xsl:when test="$featureProp/taggedValue[@tag='AAA:GueltigBis']">
+     <xsl:call-template name="propentry">
+      <xsl:with-param name="title">Stillgelegt:</xsl:with-param>
+      <xsl:with-param name="lines">Gültig bis GeoInfoDok <xsl:value-of select="$featureProp/taggedValue[@tag='AAA:GueltigBis'][1]"/></xsl:with-param>
+     </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+     <xsl:call-template name="propentry">
+      <xsl:with-param name="title">Stillgelegt:</xsl:with-param>
+      <xsl:with-param name="lines">Ja</xsl:with-param>
+     </xsl:call-template>
+    </xsl:otherwise>
+   </xsl:choose>
+  </xsl:if>
   <xsl:call-template name="propentry">
    <xsl:with-param name="title">Datentyp:</xsl:with-param>
    <xsl:with-param name="lines" select="$featureProp/ValueDataType"/>
@@ -494,6 +526,22 @@
    <xsl:with-param name="title">Kennung:</xsl:with-param>
    <xsl:with-param name="lines" select="$featureProp/code"/>
   </xsl:call-template>
+  <xsl:if test="$featureProp/retired">
+   <xsl:choose>
+    <xsl:when test="$featureProp/taggedValue[@tag='AAA:GueltigBis']">
+     <xsl:call-template name="propentry">
+      <xsl:with-param name="title">Stillgelegt:</xsl:with-param>
+      <xsl:with-param name="lines">Gültig bis GeoInfoDok <xsl:value-of select="$featureProp/taggedValue[@tag='AAA:GueltigBis'][1]"/></xsl:with-param>
+     </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+     <xsl:call-template name="propentry">
+      <xsl:with-param name="title">Stillgelegt:</xsl:with-param>
+      <xsl:with-param name="lines">Ja</xsl:with-param>
+     </xsl:call-template>
+    </xsl:otherwise>
+   </xsl:choose>
+  </xsl:if>
   <xsl:call-template name="propentry">
    <xsl:with-param name="title">Zielobjektart:</xsl:with-param>
    <xsl:with-param name="lines" select="$featureProp/FeatureTypeIncluded/@name"/>
@@ -515,7 +563,7 @@
    <xsl:with-param name="lines" select="key('modelElement', $featureProp/InverseRole/@idref)/name"/>
   </xsl:call-template>
   <xsl:call-template name="propentry">
-   <xsl:with-param name="title">Anmerkung:</xsl:with-param>
+   <xsl:with-param name="title">Definition:</xsl:with-param>
    <xsl:with-param name="lines" select="$featureProp/definition"/>
   </xsl:call-template>
  </xsl:template>
@@ -680,19 +728,40 @@
       </w:p>
       <xsl:if test="$value/definition">
       	<xsl:for-each select="$value/definition">
-         <w:p>
-          <w:r>
-           <w:rPr>
-            <w:rStyle>
-             <xsl:attribute name="w:val">
-              <xsl:value-of disable-output-escaping="no" select="$smallId"/>
-             </xsl:attribute>
-            </w:rStyle>
-           </w:rPr>
-   		   <w:t><xsl:value-of disable-output-escaping="no" select="."/></w:t>
-          </w:r>
-         </w:p>
+         <xsl:if test="string-length(.)>0">
+          <w:p>
+           <w:r>
+            <w:rPr>
+             <w:rStyle>
+              <xsl:attribute name="w:val">
+               <xsl:value-of disable-output-escaping="no" select="$smallId"/>
+              </xsl:attribute>
+             </w:rStyle>
+            </w:rPr>
+   		    <w:t><xsl:value-of disable-output-escaping="no" select="."/></w:t>
+           </w:r>
+          </w:p>
+         </xsl:if> 
       	</xsl:for-each>
+      </xsl:if>
+      <xsl:if test="$value/retired">
+       <w:p>
+        <w:r>
+         <w:rPr>
+          <w:rStyle>
+           <xsl:attribute name="w:val">
+            <xsl:value-of disable-output-escaping="no" select="$smallId"/>
+           </xsl:attribute>
+          </w:rStyle>
+         </w:rPr>
+   		 <w:t>
+          <xsl:choose>
+           <xsl:when test="$value/taggedValue[@tag='AAA:GueltigBis']">Stillgelegt: Gültig bis GeoInfoDok<xsl:value-of disable-output-escaping="no" select="$value/taggedValue[@tag='AAA:GueltigBis'][1]"/></xsl:when>
+           <xsl:otherwise>Stillgelegt: Ja</xsl:otherwise>
+          </xsl:choose>
+   		 </w:t>
+        </w:r>
+       </w:p>
       </xsl:if>
      </w:tc>
      <w:tc>
@@ -705,6 +774,7 @@
    		<w:t>
    		 <xsl:value-of disable-output-escaping="no" select="$value/code"/>
    		 <xsl:if test="$value/grunddatenbestand"><xsl:text> (G)</xsl:text></xsl:if>
+   		 <xsl:if test="$value/taggedValue[@tag='AAA:Landnutzung' and translate(.,'TRUE','true')='true']"><xsl:text> (LN)</xsl:text></xsl:if>
    		</w:t>
        </w:r>
       </w:p>

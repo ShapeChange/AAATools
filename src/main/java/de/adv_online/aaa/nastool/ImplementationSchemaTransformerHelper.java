@@ -173,10 +173,8 @@ public class ImplementationSchemaTransformerHelper {
 		for (Element e : aaaClasses.values()) {
 			String n = e.GetName();
 			String st = e.GetStereotype().toLowerCase();
-			if (st.equals("enumeration") &&
-				(n.startsWith("AX_LI") || n.startsWith("AX_DQ"))) {
-				setTaggedValue(e.GetTaggedValues(), "xsdEncodingRule", "iso19139_2007");
-			} else if (n.startsWith("AX_Datenerhebung")) {
+			String type = e.GetType().toLowerCase();
+			if ((st.equals("enumeration") || type.equals("enumeration")) && (n.startsWith("AX_Datenerhebung") || n.startsWith("AX_LI") || n.startsWith("AX_DQ"))) {
 				setTaggedValue(e.GetTaggedValues(), "xsdEncodingRule", "iso19139_2007");
 			} else {
 				setTaggedValue(e.GetTaggedValues(), "xsdEncodingRule", "NAS");
