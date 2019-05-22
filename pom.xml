@@ -358,13 +358,6 @@
                   <includes>
                     <include>AAA-6.0.1.eap</include>
                     <include>AAA-7.1.0.eap</include>
-                    <include>AAA-Diagram.xml</include>
-                    <include>AAA-MDG.eap</include>
-                    <include>AAA-MDG.xml</include>
-                    <include>AAA-Profile.xml</include>
-                    <include>AAA-Toolbox.xml</include>
-                    <include>AAA.bmp</include>
-                    <include>AAA.mts</include>          
                   </includes>
                 </resource>
               </resources>
@@ -398,6 +391,31 @@
               <resources>
                 <resource>
                   <directory>${project.basedir}/src/main/resources/xslt</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-resourcesA</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <includeEmptyDirs>true</includeEmptyDirs>
+              <outputDirectory>${project.build.directory}/appassembler/uml-profile</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/src/main/resources/uml-profile</directory>
+                  <includes>
+                    <include>AAA-Diagram.xml</include>
+                    <include>AAA-MDG.eap</include>
+                    <include>AAA-MDG.xml</include>
+                    <include>AAA-Profile.xml</include>
+                    <include>AAA-Toolbox.xml</include>
+                    <include>AAA.bmp</include>
+                    <include>AAA.mts</include>          
+                  </includes>
                 </resource>
               </resources>
             </configuration>

@@ -42,6 +42,10 @@
       <outputDirectory>/resources/schema</outputDirectory>
     </fileSet>
     <fileSet>
+      <directory>target/appassembler/uml-profile</directory>
+      <outputDirectory>/resources/uml-profile</outputDirectory>
+    </fileSet>
+    <fileSet>
       <directory>target/appassembler/schema-sc</directory>
       <outputDirectory>/resources</outputDirectory>
     </fileSet>
