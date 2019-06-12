@@ -339,6 +339,7 @@
                   </xsl:when>
                 </xsl:choose>
                 <BR/>
+                <a><xsl:attribute name="name"><xsl:value-of select="$featuretype/name" /></xsl:attribute></a>
                 <a>
                   <xsl:attribute name="name"><xsl:value-of select="$featuretype/@id" /></xsl:attribute>
                   <TABLE>
@@ -832,6 +833,7 @@
                           <xsl:attribute name="style">background-color:#e6ffe6;</xsl:attribute>
                         </xsl:when>
                       </xsl:choose>
+	                  <a><xsl:attribute name="name"><xsl:value-of select="$featuretype/name" />__<xsl:value-of select="$featureAtt/name" /></xsl:attribute></a>
                       <A><xsl:attribute name="name"><xsl:value-of select="$featuretype/@id" />-<xsl:value-of select="$featureAtt/@id" /></xsl:attribute>
                         <table>
                           <tr>
@@ -1271,6 +1273,7 @@
                           <xsl:attribute name="style">background-color:#e6ffe6;</xsl:attribute>
                         </xsl:when>
                       </xsl:choose>
+	                  <a><xsl:attribute name="name"><xsl:value-of select="$featuretype/name" />__<xsl:value-of select="$featureRel/name" /></xsl:attribute></a>
                       <A><xsl:attribute name="name"><xsl:value-of select="$featuretype/@id" />-<xsl:value-of select="$featureRel/@id" /></xsl:attribute>
                         <table>
                           <tr>
@@ -1529,6 +1532,7 @@
                   <DIV>
                     <xsl:for-each select="/FC_FeatureCatalogue/FC_FeatureOperation[attribute::id=$featuretype/characterizedBy/@idref]">
                       <xsl:variable name="featureOpr" select="." />
+	                  <a><xsl:attribute name="name"><xsl:value-of select="$featuretype/name" />__<xsl:value-of select="$featureOpr/name" /></xsl:attribute></a>
                       <A><xsl:attribute name="name"><xsl:value-of select="$featuretype/@id" />-<xsl:value-of select="$featureOpr/@id" /></xsl:attribute>
                         <table>
                           <tr>

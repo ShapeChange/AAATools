@@ -60,6 +60,7 @@ import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.stream.StreamResult;
@@ -1849,6 +1850,7 @@ public class Katalog implements Target, MessageSource {
 		printed = true;
 	}
 
+	@SuppressWarnings("unused")
 	private void writeRTF(String xmlName, String outfileBasename){
 
 		if(!OutputFormat.toLowerCase().contains("rtf"))
@@ -2161,6 +2163,24 @@ public class Katalog implements Target, MessageSource {
 	
    private void xsltWrite(File xmlFile, String xsltfileName, File outFile, Map<String,String> parameters){
 	   try{
+			String xslTransformerFactory = options.parameter(this.getClass().getName(),"xslTransformerFactory");
+			if (xslTransformerFactory!=null) {
+				try {
+					System.setProperty("javax.xml.transform.TransformerFactory",
+							xslTransformerFactory);
+					@SuppressWarnings("unused")
+					TransformerFactory factory = TransformerFactory.newInstance();
+					
+					if (factory.getClass().getName().equalsIgnoreCase("net.sf.saxon.TransformerFactoryImpl")) {
+						// fine - this is an XSLT 2.0 processor
+					} else {
+						result.addError(this, 102);
+					}
+				} catch (TransformerFactoryConfigurationError e) {
+					result.addError(this, 100, xslTransformerFactory);
+				}
+			}
+
 			String xsltPath = options.parameter(this.getClass().getName(),"xsltPfad");
 			if (xsltPath==null)
 				xsltPath = "src/main/resources/xslt";
@@ -2250,6 +2270,10 @@ public class Katalog implements Target, MessageSource {
 			return "DOCX template $1$ not found.";
 		case 20:
 			return "Could not delete temporary directory created for docx transformation; IOException message is: $1$";
+		case 100:
+			return "Parameter 'xslTransformerFactory' is set to '$1$'. A transformer with this factory could not be instantiated. Make the implementation of the transformer factory available on the classpath.";
+		case 102:
+			return "This version of the AAA-Tools requires an XSLT 2.0 processor, which should be set via the configuration parameter 'xslTransformerFactory'. That parameter was not found, and the default TransformerFactory implementation is not 'net.sf.saxon.TransformerFactoryImpl' (which is known to be an XSLT 2.0 processor); ensure that the parameter is configured correctly.";
 		}
 		return null;
 	}

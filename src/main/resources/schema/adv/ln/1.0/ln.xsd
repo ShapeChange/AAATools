@@ -436,7 +436,7 @@
       <extension base="adv:TA_SurfaceComponentType">
         <sequence>
           <element minOccurs="0" name="datumDerLetztenUeberpruefung" type="dateTime"/>
-          <element minOccurs="0" name="ergebnisDerUeberpruefung" type="ln:LN_IstWeitereNutzung_LandnutzungType"/>
+          <element minOccurs="0" name="ergebnisDerUeberpruefung" type="ln:LN_ErgebnisDerUeberpruefung_LandnutzungType"/>
           <element minOccurs="0" name="istWeitereNutzung" type="ln:LN_IstWeitereNutzung_LandnutzungType"/>
         </sequence>
       </extension>

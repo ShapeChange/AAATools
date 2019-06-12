@@ -174,7 +174,8 @@ public class ImplementationSchemaTransformerHelper {
 			String n = e.GetName();
 			String st = e.GetStereotype().toLowerCase();
 			String type = e.GetType().toLowerCase();
-			if ((st.equals("enumeration") || type.equals("enumeration")) && (n.startsWith("AX_Datenerhebung") || n.startsWith("AX_LI") || n.startsWith("AX_DQ"))) {
+			if ((st.equals("enumeration") || type.equals("enumeration")) && 
+				(n.equals("AX_BezugspunktDach") || n.equals("AX_Datenerhebung") || n.equals("AX_Datenerhebung3D") || n.equals("AX_Datenerhebung_Punktort") || n.startsWith("AX_LI") || n.startsWith("AX_DQ"))) {
 				setTaggedValue(e.GetTaggedValues(), "xsdEncodingRule", "iso19139_2007");
 			} else {
 				setTaggedValue(e.GetTaggedValues(), "xsdEncodingRule", "NAS");

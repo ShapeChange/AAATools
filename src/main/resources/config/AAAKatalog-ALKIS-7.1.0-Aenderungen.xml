@@ -22,6 +22,7 @@
 			<targetParameter name="schemakennungen" value="*"/>
 			<targetParameter name="ausgabeformat" value="HTML"/>
 			<targetParameter name="xsltPfad" value="resources/xslt"/>
+			<targetParameter name="xslTransformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 			<targetParameter name="referenceModelType" value="EA7"/>
 			<targetParameter name="referenceModelFile" value="AAA-6.0.1.EAP"/>

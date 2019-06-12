@@ -2,7 +2,7 @@
   <include schemaLocation="AAA-Basisschema.xsd"/>
   <include schemaLocation="aaa.xsd"/>
   <import namespace="http://www.interactive-instruments.de/ShapeChange/AppInfo" schemaLocation="../../../ShapeChangeAppinfo.xsd"/>
-  <import namespace="http://www.isotc211.org/2005/gco" schemaLocation="../../iso/19139/20070417/gco/gco.xsd"/>
+  <import namespace="http://www.isotc211.org/2005/gco" schemaLocation="../../../iso/19139/20070417/gco/gco.xsd"/>
   <import namespace="http://www.isotc211.org/2005/gmd" schemaLocation="../../../iso/19139/20070417/gmd/gmd.xsd"/>
   <import namespace="http://www.opengis.net/gml/3.2" schemaLocation="../../../ogc/gml/3.2.1/gml.xsd"/>
   <import namespace="http://www.opengis.net/gml/3.3/exr" schemaLocation="../../../ogc/gml/3.3/extdEncRule.xsd"/>
@@ -2690,7 +2690,8 @@
       <enumeration value="9999"/>
     </restriction>
   </simpleType>
-  <simpleType name="AX_BezugspunktDachType">
+  <element name="AX_BezugspunktDach" substitutionGroup="gco:CharacterString" type="adv:AX_BezugspunktDach_Type"/>
+  <simpleType name="AX_BezugspunktDach_Type">
     <restriction base="string">
       <enumeration value="1000"/>
       <enumeration value="2000"/>
@@ -2701,6 +2702,12 @@
       <enumeration value="9998"/>
     </restriction>
   </simpleType>
+  <complexType name="AX_BezugspunktDach_PropertyType">
+    <sequence minOccurs="0">
+      <element ref="adv:AX_BezugspunktDach"/>
+    </sequence>
+    <attribute ref="gco:nilReason"/>
+  </complexType>
   <simpleType name="AX_Blattart_BuchungsblattType">
     <restriction base="string">
       <enumeration value="1000"/>
@@ -3414,7 +3421,7 @@
   <complexType name="AX_DQSchwereType">
     <sequence>
       <element minOccurs="0" name="zustaendigeStelleBerechnung" type="adv:AX_Dienststelle_SchluesselPropertyType"/>
-      <element minOccurs="0" name="datenerhebung" type="adv:AX_Datenerhebung_Schwere_PropertyType"/>
+      <element minOccurs="0" name="datenerhebung" type="adv:AX_Datenerhebung_SchwereType"/>
       <element minOccurs="0" name="berechnungsdatum" type="date"/>
       <element minOccurs="0" name="genauigkeitsstufe" type="adv:AX_Genauigkeitsstufe_SchwereType"/>
       <element minOccurs="0" name="genauigkeitswert" type="gml:MeasureType"/>
@@ -3481,7 +3488,7 @@
             </annotation>
           </element>
           <element minOccurs="0" name="name" type="string"/>
-          <element minOccurs="0" name="ergebnisDerUeberpruefung" type="adv:AX_Art_DammWallDeichType"/>
+          <element minOccurs="0" name="ergebnisDerUeberpruefung" type="adv:AX_ErgebnisDerUeberpruefung_DammWallDeichType"/>
           <element minOccurs="0" name="qualitaetsangaben" type="adv:AX_DQMitDatenerhebungPropertyType"/>
         </sequence>
       </extension>
@@ -3664,39 +3671,20 @@
     </sequence>
     <attribute ref="gco:nilReason"/>
   </complexType>
-  <element name="AX_Datenerhebung_Schwere" substitutionGroup="gco:CharacterString" type="adv:AX_Datenerhebung_Schwere_Type"/>
-  <simpleType name="AX_Datenerhebung_Schwere_Type">
+  <simpleType name="AX_Datenerhebung_SchwereType">
     <restriction base="string">
       <enumeration value="0800"/>
       <enumeration value="0900"/>
-      <enumeration value="1000">
-        <annotation>
-          <documentation>Höhenunterschied bis 1 m, Horizontalabstand bis 5 m</documentation>
-        </annotation>
-      </enumeration>
+      <enumeration value="1000"/>
       <enumeration value="2000"/>
-      <enumeration value="3000">
-        <annotation>
-          <documentation>Topografische Reduktion erfolgt nur als Plattenreduktion</documentation>
-        </annotation>
-      </enumeration>
-      <enumeration value="3050">
-        <annotation>
-          <documentation>Topografische Reduktion erfolgt als Platten- und Geländereduktion</documentation>
-        </annotation>
-      </enumeration>
+      <enumeration value="3000"/>
+      <enumeration value="3050"/>
       <enumeration value="3100"/>
       <enumeration value="3200"/>
       <enumeration value="4000"/>
       <enumeration value="9998"/>
     </restriction>
   </simpleType>
-  <complexType name="AX_Datenerhebung_Schwere_PropertyType">
-    <sequence minOccurs="0">
-      <element ref="adv:AX_Datenerhebung_Schwere"/>
-    </sequence>
-    <attribute ref="gco:nilReason"/>
-  </complexType>
   <simpleType name="AX_Datenformat_BenutzerType">
     <restriction base="string">
       <enumeration value="1000"/>
@@ -6830,16 +6818,8 @@
   <element name="AX_LI_ProcessStep3D_Description" substitutionGroup="gco:CharacterString" type="adv:AX_LI_ProcessStep3D_Description_Type"/>
   <simpleType name="AX_LI_ProcessStep3D_Description_Type">
     <restriction base="string">
-      <enumeration value="Erhebung">
-        <annotation>
-          <documentation>Erhebung beschreibt im Attribut 'stepDateTime' den Erfassungszeitpunkt (Zeitpunkt der Messung).</documentation>
-        </annotation>
-      </enumeration>
-      <enumeration value="Berechnung">
-        <annotation>
-          <documentation>Berechnung beschreibt im Attribut 'stepDateTime' den Auswertezeitpunkt.</documentation>
-        </annotation>
-      </enumeration>
+      <enumeration value="Erhebung"/>
+      <enumeration value="Berechnung"/>
     </restriction>
   </simpleType>
   <complexType name="AX_LI_ProcessStep3D_Description_PropertyType">
@@ -6919,16 +6899,8 @@
   <element name="AX_LI_ProcessStep_Punktort_Description" substitutionGroup="gco:CharacterString" type="adv:AX_LI_ProcessStep_Punktort_Description_Type"/>
   <simpleType name="AX_LI_ProcessStep_Punktort_Description_Type">
     <restriction base="string">
-      <enumeration value="Erhebung">
-        <annotation>
-          <documentation>Erhebung beschreibt im Attribut 'stepDateTime' den Erfassungszeitpunkt (Zeitpunkt der Messung), z. B. für Position, Lage oder Höhe.</documentation>
-        </annotation>
-      </enumeration>
-      <enumeration value="Berechnung">
-        <annotation>
-          <documentation>Berechnung beschreibt im Attribut 'stepDateTime' den Auswertezeitpunkt, z. B. von Position, Lage oder Höhe.</documentation>
-        </annotation>
-      </enumeration>
+      <enumeration value="Erhebung"/>
+      <enumeration value="Berechnung"/>
     </restriction>
   </simpleType>
   <complexType name="AX_LI_ProcessStep_Punktort_Description_PropertyType">
