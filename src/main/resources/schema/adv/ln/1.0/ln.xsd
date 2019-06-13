@@ -1,0 +1,730 @@
+<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:ln="http://www.adv-online.de/namespaces/adv/ln/1.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/ln/1.0" version="1.0.0">
+  <import namespace="http://www.adv-online.de/namespaces/adv/gid/7.1" schemaLocation="../../nas/7.1/aaa.xsd"/>
+  <!--XML Schema document created by ShapeChange - http://shapechange.net/-->
+  <element name="LN_Abbau" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_AbbauType"/>
+  <complexType name="LN_AbbauType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="name" type="string"/>
+          <element minOccurs="0" name="bezeichnung" type="string"/>
+          <element minOccurs="0" name="art" type="ln:LN_Art_AbbauType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="abbaugut" type="ln:LN_Abbaugut_AbbauType"/>
+          <element minOccurs="0" name="foerdergut" type="ln:LN_Foerdergut_AbbauType"/>
+          <element minOccurs="0" name="zustand" type="ln:LN_Zustand_AbbauType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LN_Abbaugut_AbbauType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+      <enumeration value="3000"/>
+      <enumeration value="4000"/>
+      <enumeration value="5000"/>
+    </restriction>
+  </simpleType>
+  <element name="LN_AquakulturUndFischereiwirtschaft" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_AquakulturUndFischereiwirtschaftType"/>
+  <complexType name="LN_AquakulturUndFischereiwirtschaftType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element maxOccurs="2" minOccurs="0" name="art" type="ln:LN_Art_AquakulturUndFischereiwirtschaftType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LN_ArtDerBestattungsflaeche_BestattungType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+      <enumeration value="3000"/>
+      <enumeration value="4000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_ArtDerBetriebsflaeche_LandwirtschaftType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_ArtDesParkplatzes_StrassenUndWegeverkehrType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Art_AbbauType">
+    <restriction base="string">
+      <enumeration value="3110"/>
+      <enumeration value="3120"/>
+      <enumeration value="3200"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Art_AquakulturUndFischereiwirtschaftType">
+    <restriction base="string">
+      <enumeration value="6400"/>
+      <enumeration value="6500"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Art_ForstwirtschaftType">
+    <restriction base="string">
+      <enumeration value="6100"/>
+      <enumeration value="6200"/>
+      <enumeration value="6300"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Art_FreiluftUndNaherholungType">
+    <restriction base="string">
+      <enumeration value="4400"/>
+      <enumeration value="4410"/>
+      <enumeration value="4420"/>
+      <enumeration value="4430"/>
+      <enumeration value="4440"/>
+      <enumeration value="4450"/>
+      <enumeration value="4470"/>
+      <enumeration value="4480"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Art_FreizeitanlageType">
+    <restriction base="string">
+      <enumeration value="4210"/>
+      <enumeration value="4220"/>
+      <enumeration value="4230"/>
+      <enumeration value="4240"/>
+      <enumeration value="4250"/>
+      <enumeration value="4260"/>
+      <enumeration value="4270"/>
+      <enumeration value="4310"/>
+      <enumeration value="4320"/>
+      <enumeration value="4330"/>
+      <enumeration value="4340"/>
+      <enumeration value="4350"/>
+      <enumeration value="4360"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Art_GewerblicheDienstleistungenType">
+    <restriction base="string">
+      <enumeration value="1310"/>
+      <enumeration value="1320"/>
+      <enumeration value="1330"/>
+      <enumeration value="1410"/>
+      <enumeration value="1510"/>
+      <enumeration value="1520"/>
+      <enumeration value="1530"/>
+      <enumeration value="1540"/>
+      <enumeration value="1570"/>
+      <enumeration value="1600"/>
+      <enumeration value="1560"/>
+      <enumeration value="1550"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Art_IndustrieUndVerarbeitendesGewerbeType">
+    <restriction base="string">
+      <enumeration value="1801"/>
+      <enumeration value="1802"/>
+      <enumeration value="1803"/>
+      <enumeration value="1804"/>
+      <enumeration value="1805"/>
+      <enumeration value="1806"/>
+      <enumeration value="1807"/>
+      <enumeration value="1808"/>
+      <enumeration value="1809"/>
+      <enumeration value="1810"/>
+      <enumeration value="1811"/>
+      <enumeration value="1812"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Art_VersorgungUndEntsorgungType">
+    <restriction base="string">
+      <enumeration value="2520"/>
+      <enumeration value="2530"/>
+      <enumeration value="2540"/>
+      <enumeration value="2570"/>
+      <enumeration value="2580"/>
+      <enumeration value="2610"/>
+      <enumeration value="2620"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Art_WasserwirtschaftType">
+    <restriction base="string">
+      <enumeration value="7100"/>
+      <enumeration value="7110"/>
+      <enumeration value="7120"/>
+      <enumeration value="7130"/>
+      <enumeration value="7200"/>
+    </restriction>
+  </simpleType>
+  <element name="LN_Bahnverkehr" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_BahnverkehrType"/>
+  <complexType name="LN_BahnverkehrType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="bezeichnung" type="string"/>
+          <element minOccurs="0" name="funktion" type="ln:LN_Funktion_BahnverkehrType"/>
+          <element minOccurs="0" name="zustand" type="ln:LN_Zustand_BahnverkehrType"/>
+          <element minOccurs="0" name="zweitname" type="string"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element name="LN_Bestattung" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_BestattungType"/>
+  <complexType name="LN_BestattungType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="name" type="string"/>
+          <element minOccurs="0" name="artDerBestattungsflaeche" type="ln:LN_ArtDerBestattungsflaeche_BestattungType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LN_Bewirtschaftung_LandwirtschaftType">
+    <restriction base="string">
+      <enumeration value="1010"/>
+      <enumeration value="1011"/>
+      <enumeration value="1012"/>
+      <enumeration value="1013"/>
+      <enumeration value="1014"/>
+      <enumeration value="1020"/>
+      <enumeration value="1030"/>
+      <enumeration value="1040"/>
+      <enumeration value="1050"/>
+      <enumeration value="1060"/>
+      <enumeration value="1070"/>
+      <enumeration value="1080"/>
+      <enumeration value="1200"/>
+      <enumeration value="1300"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_ErgebnisDerUeberpruefung_LandnutzungType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+      <enumeration value="3000"/>
+      <enumeration value="4000"/>
+      <enumeration value="9999"/>
+    </restriction>
+  </simpleType>
+  <element name="LN_Flugverkehr" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_FlugverkehrType"/>
+  <complexType name="LN_FlugverkehrType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="funktion" type="ln:LN_Funktion_FlugverkehrType"/>
+          <element maxOccurs="2" minOccurs="0" name="nutzung" type="ln:LN_Nutzung_FlugverkehrType"/>
+          <element minOccurs="0" name="zustand" type="ln:LN_Zustand_FlugverkehrType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LN_Foerdergut_AbbauType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+      <enumeration value="3000"/>
+      <enumeration value="4000"/>
+      <enumeration value="5000"/>
+    </restriction>
+  </simpleType>
+  <element name="LN_Forstwirtschaft" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_ForstwirtschaftType"/>
+  <complexType name="LN_ForstwirtschaftType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="art" type="ln:LN_Art_ForstwirtschaftType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element name="LN_FreiluftUndNaherholung" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_FreiluftUndNaherholungType"/>
+  <complexType name="LN_FreiluftUndNaherholungType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="name" type="string"/>
+          <element minOccurs="0" name="bezeichnung" type="string"/>
+          <element minOccurs="0" name="art" type="ln:LN_Art_FreiluftUndNaherholungType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element name="LN_Freizeitanlage" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_FreizeitanlageType"/>
+  <complexType name="LN_FreizeitanlageType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="name" type="string"/>
+          <element minOccurs="0" name="bezeichnung" type="string"/>
+          <element minOccurs="0" name="art" type="ln:LN_Art_FreizeitanlageType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LN_Funktion_BahnverkehrType">
+    <restriction base="string">
+      <enumeration value="5210"/>
+      <enumeration value="5211"/>
+      <enumeration value="5212"/>
+      <enumeration value="5220"/>
+      <enumeration value="5230"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Funktion_FlugverkehrType">
+    <restriction base="string">
+      <enumeration value="5310"/>
+      <enumeration value="5311"/>
+      <enumeration value="5312"/>
+      <enumeration value="5313"/>
+      <enumeration value="5314"/>
+      <enumeration value="5320"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Funktion_KulturUndUnterhaltungType">
+    <restriction base="string">
+      <enumeration value="1210"/>
+      <enumeration value="1220"/>
+      <enumeration value="1230"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Funktion_LagerungType">
+    <restriction base="string">
+      <enumeration value="8100"/>
+      <enumeration value="8200"/>
+      <enumeration value="8300"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Funktion_OeffentlicheEinrichtungenType">
+    <restriction base="string">
+      <enumeration value="1110"/>
+      <enumeration value="1120"/>
+      <enumeration value="1140"/>
+      <enumeration value="1150"/>
+      <enumeration value="1160"/>
+      <enumeration value="1170"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Funktion_SchiffsverkehrType">
+    <restriction base="string">
+      <enumeration value="5410"/>
+      <enumeration value="5411"/>
+      <enumeration value="5412"/>
+      <enumeration value="5413"/>
+      <enumeration value="5420"/>
+      <enumeration value="5421"/>
+      <enumeration value="5422"/>
+      <enumeration value="5423"/>
+      <enumeration value="5424"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Funktion_SchutzanlageType">
+    <restriction base="string">
+      <enumeration value="5540"/>
+      <enumeration value="5530"/>
+      <enumeration value="5520"/>
+      <enumeration value="5510"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Funktion_StrassenUndWegeverkehrType">
+    <restriction base="string">
+      <enumeration value="5110"/>
+      <enumeration value="5111"/>
+      <enumeration value="5112"/>
+      <enumeration value="5120"/>
+      <enumeration value="5130"/>
+      <enumeration value="5140"/>
+      <enumeration value="5150"/>
+      <enumeration value="5160"/>
+      <enumeration value="5170"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Funktion_WasserwirtschaftType">
+    <restriction base="string">
+      <enumeration value="7111"/>
+      <enumeration value="7112"/>
+      <enumeration value="7113"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Fussgaengerzone_StrassenUndWegeverkehrType">
+    <restriction base="string">
+      <enumeration value="5130"/>
+    </restriction>
+  </simpleType>
+  <element name="LN_GewerblicheDienstleistungen" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_GewerblicheDienstleistungenType"/>
+  <complexType name="LN_GewerblicheDienstleistungenType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="name" type="string"/>
+          <element minOccurs="0" name="bezeichnung" type="string"/>
+          <element minOccurs="0" name="art" type="ln:LN_Art_GewerblicheDienstleistungenType"/>
+          <element minOccurs="0" name="zustand" type="ln:LN_Zustand_GewerblicheDienstleistungenType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LN_Hafenkategorie_SchiffsverkehrType">
+    <restriction base="string">
+      <enumeration value="1010"/>
+      <enumeration value="1020"/>
+      <enumeration value="1030"/>
+      <enumeration value="1040"/>
+      <enumeration value="1050"/>
+      <enumeration value="1060"/>
+      <enumeration value="1070"/>
+    </restriction>
+  </simpleType>
+  <element name="LN_IndustrieUndVerarbeitendesGewerbe" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_IndustrieUndVerarbeitendesGewerbeType"/>
+  <complexType name="LN_IndustrieUndVerarbeitendesGewerbeType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="name" type="string"/>
+          <element minOccurs="0" name="bezeichnung" type="string"/>
+          <element minOccurs="0" name="art" type="ln:LN_Art_IndustrieUndVerarbeitendesGewerbeType"/>
+          <element minOccurs="0" name="zustand" type="ln:LN_Zustand_IndustrieUndVerarbeitendesGewerbeType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LN_IstWeitereNutzung_LandnutzungType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+    </restriction>
+  </simpleType>
+  <element name="LN_KulturUndUnterhaltung" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_KulturUndUnterhaltungType"/>
+  <complexType name="LN_KulturUndUnterhaltungType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="funktion" type="ln:LN_Funktion_KulturUndUnterhaltungType"/>
+          <element minOccurs="0" name="zustand" type="ln:LN_Zustand_KulturUndUnterhaltungType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LN_Lagergut_LagerungType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+      <enumeration value="3000"/>
+      <enumeration value="4000"/>
+      <enumeration value="5000"/>
+      <enumeration value="7000"/>
+      <enumeration value="8000"/>
+      <enumeration value="9000"/>
+    </restriction>
+  </simpleType>
+  <element name="LN_Lagerung" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_LagerungType"/>
+  <complexType name="LN_LagerungType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="name" type="string"/>
+          <element minOccurs="0" name="funktion" type="ln:LN_Funktion_LagerungType"/>
+          <element minOccurs="0" name="lagergut" type="ln:LN_Lagergut_LagerungType"/>
+          <element minOccurs="0" name="oberflaeche" type="ln:LN_Oberflaeche_LagerungType"/>
+          <element minOccurs="0" name="zustand" type="ln:LN_Zustand_LagerungType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element abstract="true" name="LN_Landnutzung" substitutionGroup="adv:TA_SurfaceComponent" type="ln:LN_LandnutzungType"/>
+  <complexType abstract="true" name="LN_LandnutzungType">
+    <complexContent>
+      <extension base="adv:TA_SurfaceComponentType">
+        <sequence>
+          <element minOccurs="0" name="datumDerLetztenUeberpruefung" type="dateTime"/>
+          <element minOccurs="0" name="ergebnisDerUeberpruefung" type="ln:LN_ErgebnisDerUeberpruefung_LandnutzungType"/>
+          <element minOccurs="0" name="istWeitereNutzung" type="ln:LN_IstWeitereNutzung_LandnutzungType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element name="LN_Landwirtschaft" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_LandwirtschaftType"/>
+  <complexType name="LN_LandwirtschaftType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="name" type="ln:LN_ArtDerBetriebsflaeche_LandwirtschaftType"/>
+          <element minOccurs="0" name="bewirtschaftung" type="ln:LN_Bewirtschaftung_LandwirtschaftType"/>
+          <element maxOccurs="2" minOccurs="0" name="artDerBetriebsflaeche" type="ln:LN_ArtDerBetriebsflaeche_LandwirtschaftType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LN_Nutzung_FlugverkehrType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Nutzung_SchiffsverkehrType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Oberflaeche_LagerungType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+    </restriction>
+  </simpleType>
+  <element name="LN_OeffentlicheEinrichtungen" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_OeffentlicheEinrichtungenType"/>
+  <complexType name="LN_OeffentlicheEinrichtungenType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="name" type="string"/>
+          <element minOccurs="0" name="funktion" type="ln:LN_Funktion_OeffentlicheEinrichtungenType"/>
+          <element minOccurs="0" name="zustand" type="ln:LN_Zustand_OeffentlicheEinrichtungenType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element name="LN_OhneNutzung" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_OhneNutzungType"/>
+  <complexType name="LN_OhneNutzungType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="name" type="string"/>
+          <element minOccurs="0" name="bezeichnung" type="string"/>
+          <element minOccurs="0" name="zweitname" type="string"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LN_Primaerenergie_VersorgungUndEntsorgungType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+      <enumeration value="3000"/>
+      <enumeration value="4000"/>
+      <enumeration value="5000"/>
+      <enumeration value="6000"/>
+      <enumeration value="7100"/>
+      <enumeration value="7200"/>
+      <enumeration value="7300"/>
+      <enumeration value="7400"/>
+      <enumeration value="7500"/>
+    </restriction>
+  </simpleType>
+  <element name="LN_Schiffsverkehr" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_SchiffsverkehrType"/>
+  <complexType name="LN_SchiffsverkehrType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="name" type="string"/>
+          <element minOccurs="0" name="funktion" type="ln:LN_Funktion_SchiffsverkehrType"/>
+          <element minOccurs="0" name="hafenkategorie" type="ln:LN_Hafenkategorie_SchiffsverkehrType"/>
+          <element maxOccurs="2" minOccurs="0" name="nutzung" type="ln:LN_Nutzung_SchiffsverkehrType"/>
+          <element minOccurs="0" name="zustand" type="ln:LN_Zustand_SchiffsverkehrType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element name="LN_Schutzanlage" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_SchutzanlageType"/>
+  <complexType name="LN_SchutzanlageType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="funktion" type="ln:LN_Funktion_SchutzanlageType"/>
+          <element minOccurs="0" name="zuflusssteuerung" type="ln:LN_Zuflusssteuerung_SchutzanlageType"/>
+          <element minOccurs="0" name="typ" type="ln:LN_Typ_SchutzanlageType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element name="LN_Sportanlage" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_SportanlageType"/>
+  <complexType name="LN_SportanlageType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="name" type="string"/>
+          <element minOccurs="0" name="bezeichnung" type="string"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="sportart" type="ln:LN_Sportart_SportanlageType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LN_Sportart_SportanlageType">
+    <restriction base="string">
+      <enumeration value="1010"/>
+      <enumeration value="1011"/>
+      <enumeration value="1020"/>
+      <enumeration value="1013"/>
+      <enumeration value="1030"/>
+      <enumeration value="1040"/>
+      <enumeration value="1050"/>
+      <enumeration value="1070"/>
+      <enumeration value="1080"/>
+      <enumeration value="1060"/>
+      <enumeration value="1110"/>
+      <enumeration value="1120"/>
+      <enumeration value="1130"/>
+      <enumeration value="1012"/>
+      <enumeration value="1140"/>
+    </restriction>
+  </simpleType>
+  <element name="LN_StrassenUndWegeverkehr" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_StrassenUndWegeverkehrType"/>
+  <complexType name="LN_StrassenUndWegeverkehrType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="name" type="string"/>
+          <element minOccurs="0" name="bezeichnung" type="string"/>
+          <element minOccurs="0" name="funktion" type="ln:LN_Funktion_StrassenUndWegeverkehrType"/>
+          <element minOccurs="0" name="artDesParkplatzes" type="ln:LN_ArtDesParkplatzes_StrassenUndWegeverkehrType"/>
+          <element minOccurs="0" name="fussgaengerzone" type="ln:LN_Fussgaengerzone_StrassenUndWegeverkehrType"/>
+          <element minOccurs="0" name="zustand" type="ln:LN_Zustand_StrassenUndWegeverkehrType"/>
+          <element minOccurs="0" name="zweitname" type="string"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LN_Typ_SchutzanlageType">
+    <restriction base="string">
+      <enumeration value="1910"/>
+      <enumeration value="1920"/>
+      <enumeration value="1930"/>
+      <enumeration value="1940"/>
+      <enumeration value="1950"/>
+    </restriction>
+  </simpleType>
+  <element name="LN_VersorgungUndEntsorgung" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_VersorgungUndEntsorgungType"/>
+  <complexType name="LN_VersorgungUndEntsorgungType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="name" type="string"/>
+          <element minOccurs="0" name="bezeichnung" type="string"/>
+          <element minOccurs="0" name="art" type="ln:LN_Art_VersorgungUndEntsorgungType"/>
+          <element minOccurs="0" name="primaerenergie" type="ln:LN_Primaerenergie_VersorgungUndEntsorgungType"/>
+          <element minOccurs="0" name="zustand" type="ln:LN_Zustand_VersorgungUndEntsorgungType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element name="LN_Wasserwirtschaft" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_WasserwirtschaftType"/>
+  <complexType name="LN_WasserwirtschaftType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="art" type="ln:LN_Art_WasserwirtschaftType"/>
+          <element maxOccurs="2" minOccurs="0" name="funktion" type="ln:LN_Funktion_WasserwirtschaftType"/>
+          <element minOccurs="0" name="zustand" type="ln:LN_Zustand_WasserwirtschaftType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element name="LN_Wohnnutzung" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_WohnnutzungType"/>
+  <complexType name="LN_WohnnutzungType">
+    <complexContent>
+      <extension base="ln:LN_LandnutzungType">
+        <sequence>
+          <element minOccurs="0" name="name" type="string"/>
+          <element minOccurs="0" name="bezeichnung" type="string"/>
+          <element minOccurs="0" name="zeitlichkeit" type="ln:LN_Zeitlichkeit_WohnnutzungType"/>
+          <element minOccurs="0" name="zustand" type="ln:LN_Zustand_WohnnutzungType"/>
+          <element minOccurs="0" name="zweitname" type="string"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="LN_Zeitlichkeit_WohnnutzungType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Zuflusssteuerung_SchutzanlageType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Zustand_AbbauType">
+    <restriction base="string">
+      <enumeration value="2100"/>
+      <enumeration value="8000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Zustand_BahnverkehrType">
+    <restriction base="string">
+      <enumeration value="2100"/>
+      <enumeration value="4000"/>
+      <enumeration value="8000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Zustand_FlugverkehrType">
+    <restriction base="string">
+      <enumeration value="2100"/>
+      <enumeration value="4000"/>
+      <enumeration value="8000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Zustand_GewerblicheDienstleistungenType">
+    <restriction base="string">
+      <enumeration value="2100"/>
+      <enumeration value="8000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Zustand_IndustrieUndVerarbeitendesGewerbeType">
+    <restriction base="string">
+      <enumeration value="2100"/>
+      <enumeration value="8000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Zustand_KulturUndUnterhaltungType">
+    <restriction base="string">
+      <enumeration value="2100"/>
+      <enumeration value="8000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Zustand_LagerungType">
+    <restriction base="string">
+      <enumeration value="2100"/>
+      <enumeration value="8000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Zustand_OeffentlicheEinrichtungenType">
+    <restriction base="string">
+      <enumeration value="2100"/>
+      <enumeration value="8000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Zustand_SchiffsverkehrType">
+    <restriction base="string">
+      <enumeration value="2100"/>
+      <enumeration value="4000"/>
+      <enumeration value="8000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Zustand_StrassenUndWegeverkehrType">
+    <restriction base="string">
+      <enumeration value="2100"/>
+      <enumeration value="4000"/>
+      <enumeration value="8000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Zustand_VersorgungUndEntsorgungType">
+    <restriction base="string">
+      <enumeration value="2100"/>
+      <enumeration value="8000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Zustand_WasserwirtschaftType">
+    <restriction base="string">
+      <enumeration value="2100"/>
+      <enumeration value="4000"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="LN_Zustand_WohnnutzungType">
+    <restriction base="string">
+      <enumeration value="2100"/>
+      <enumeration value="8000"/>
+    </restriction>
+  </simpleType>
+</schema>

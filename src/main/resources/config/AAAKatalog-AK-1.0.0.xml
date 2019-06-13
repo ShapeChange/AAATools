@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ShapeChangeConfiguration xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1 resources/schema/ShapeChangeConfiguration.xsd">
+	<input xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1">
+		<parameter name="inputModelType" value="EA7"/>
+		<parameter name="inputFile" value="AAA-7.1.0.eap"/>
+		<parameter name="appSchemaName" value="AAA_Ausgabekatalog"/>
+		<parameter name="excludedPackages" value="ISO/TC 211,OGC,GV_Geometrische Verbesserungen,LB_Landbedeckung,LN_Landnutzung,AAA_Objektartenkatalog,AAA Versionierungsschema,Web Feature Service Erweiterungen,AAA_Signaturenkatalog"/>
+		<parameter name="publicOnly" value="true"/>
+		<parameter name="checkingConstraints" value="enabled"/>
+		<parameter name="oclConstraintTypeRegex" value=""/>
+		<parameter name="addTaggedValues" value="AAA:Kennung,AAA:Datum,AAA:Organisation,AAA:Modellart,AAA:Profile,AAA:Grunddatenbestand,AAA:Nutzungsart,AAA:Nutzungsartkennung,AAA:objektbildend,AAA:Themen,AAA:AAAVersion,AAA:GueltigBis,AAA:Revisionsnummer,AAA:Landnutzung,AAA:UnitOfMeasure"/>
+		<parameter name="representTaggedValues" value="AAA:GueltigBis,AAA:Landnutzung"/>
+		<stereotypeAliases>
+			<StereotypeAlias wellknown="Application Schema" alias="applicationSchema" />
+			<StereotypeAlias wellknown="Application Schema" alias="schema" />
+			<StereotypeAlias wellknown="Application Schema" alias="requirementsClass" />
+			<StereotypeAlias wellknown="Application Schema" alias="ApplicationSchema" />
+			<StereotypeAlias wellknown="Application Schema" alias="Schema" />
+			<StereotypeAlias wellknown="Type" alias="interface" />
+		</stereotypeAliases>
+	</input>
+	<log>
+		<parameter name="reportLevel" value="WARNING"/>
+		<parameter name="logFile" value="AAA-Katalogtool-Log.xml"/>
+	</log>
+	<targets>
+		<Target class="de.adv_online.aaa.katalogtool.Katalog" mode="enabled">
+			<targetParameter name="Verzeichnis" value="Ausgaben/Kataloge/AK"/>
+			<targetParameter name="modellarten" value="Basis-DLM,DLM50,DLM250,DLM1000,DTK10,DTK25,DTK50,DTK100,DTK250,DTK1000,DFGM,DLKM,DKKM500,DKKM1000,DKKM2000,DKKM5000,DHM,LoD1,LoD2,LoD3"/>
+			<targetParameter name="profile" value=""/>
+			<targetParameter name="profilquelle" value="Modell"/>
+			<targetParameter name="stillgelegteElemente" value="true"/>
+			<targetParameter name="nurGrunddatenbestand" value="false"/>
+			<targetParameter name="letzteAenderung" value="true"/>
+			<targetParameter name="geerbteEigenschaften" value="false"/>
+			<targetParameter name="schemakennungen" value="*"/>
+			<targetParameter name="ausgabeformat" value="HTML,DOCX,XML"/>
+			<targetParameter name="xsltPfad" value="resources/xslt"/>
+			<targetParameter name="xslTransformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
+			<targetParameter name="notesRuleMarker" value="-==-"/>
+		</Target>
+	</targets>
+</ShapeChangeConfiguration>

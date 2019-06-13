@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gv="http://www.adv-online.de/namespaces/adv/gv/1.0" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/AppInfo" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/gv/1.0" version="1.0.0">
+  <import namespace="http://www.adv-online.de/namespaces/adv/gid/7.1" schemaLocation="../../nas/7.1/aaa.xsd"/>
+  <import namespace="http://www.interactive-instruments.de/ShapeChange/AppInfo" schemaLocation="../../ShapeChangeAppinfo.xsd"/>
+  <import namespace="http://www.opengis.net/gml/3.2" schemaLocation="../../../ogc/gml/3.2.1/gml.xsd"/>
+  <!--XML Schema document created by ShapeChange - http://shapechange.net/-->
+  <simpleType name="GV_ArtDerHomogenisierung_HomogenisierungsgebietType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+      <enumeration value="2100"/>
+      <enumeration value="2200"/>
+      <enumeration value="3000"/>
+      <enumeration value="4000"/>
+    </restriction>
+  </simpleType>
+  <element name="GV_Homogenisierungsgebiet" substitutionGroup="adv:AU_Flaechenobjekt" type="gv:GV_HomogenisierungsgebietType"/>
+  <complexType name="GV_HomogenisierungsgebietType">
+    <complexContent>
+      <extension base="adv:AU_FlaechenobjektType">
+        <sequence>
+          <element minOccurs="0" name="datum" type="dateTime"/>
+          <element minOccurs="0" name="artDerHomogenisierung" type="gv:GV_ArtDerHomogenisierung_HomogenisierungsgebietType"/>
+          <element minOccurs="0" name="ausfuehrendeStelle" type="adv:AX_Dienststelle_SchluesselPropertyType"/>
+          <element minOccurs="0" name="bemerkung" type="string"/>
+          <element minOccurs="0" name="status" type="gv:GV_Status_HomogenisierungsgebietType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="hat" type="gml:ReferenceType">
+            <annotation>
+              <appinfo>
+                <targetElement xmlns="http://www.opengis.net/gml/3.2">gv:GV_Klaffen</targetElement>
+                <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">gv:gehoertZu</reversePropertyName>
+              </appinfo>
+            </annotation>
+          </element>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element name="GV_Klaffen" substitutionGroup="adv:AU_Punkthaufenobjekt" type="gv:GV_KlaffenType"/>
+  <complexType name="GV_KlaffenType">
+    <complexContent>
+      <extension base="adv:AU_PunkthaufenobjektType">
+        <sequence>
+          <element minOccurs="0" name="name" type="string"/>
+          <element minOccurs="0" name="beschreibung" type="string"/>
+          <element minOccurs="0" name="ausdehnung">
+            <complexType>
+              <complexContent>
+                <extension base="gml:AbstractMemberType">
+                  <sequence minOccurs="0">
+                    <element ref="gml:Envelope"/>
+                  </sequence>
+                  <attributeGroup ref="gml:AssociationAttributeGroup"/>
+                </extension>
+              </complexContent>
+            </complexType>
+          </element>
+          <element maxOccurs="unbounded" name="verschiebung" type="gv:GV_Verschiebung_KlaffenPropertyType"/>
+          <element minOccurs="0" name="gehoertZu" type="gml:ReferenceType">
+            <annotation>
+              <appinfo>
+                <targetElement xmlns="http://www.opengis.net/gml/3.2">gv:GV_Homogenisierungsgebiet</targetElement>
+                <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">gv:hat</reversePropertyName>
+                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+              </appinfo>
+            </annotation>
+          </element>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="GV_Status_HomogenisierungsgebietType">
+    <restriction base="string">
+      <enumeration value="1000"/>
+      <enumeration value="2000"/>
+      <enumeration value="3000"/>
+    </restriction>
+  </simpleType>
+  <element name="GV_Verschiebung_Klaffen" substitutionGroup="gml:AbstractObject" type="gv:GV_Verschiebung_KlaffenType"/>
+  <complexType name="GV_Verschiebung_KlaffenType">
+    <sequence>
+      <element name="koordinaten" type="gml:PointPropertyType"/>
+      <element minOccurs="0" name="stuetzpunkt" type="boolean"/>
+    </sequence>
+  </complexType>
+  <complexType name="GV_Verschiebung_KlaffenPropertyType">
+    <sequence>
+      <element ref="gv:GV_Verschiebung_Klaffen"/>
+    </sequence>
+  </complexType>
+</schema>

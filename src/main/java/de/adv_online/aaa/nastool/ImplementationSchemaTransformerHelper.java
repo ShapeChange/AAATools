@@ -173,10 +173,9 @@ public class ImplementationSchemaTransformerHelper {
 		for (Element e : aaaClasses.values()) {
 			String n = e.GetName();
 			String st = e.GetStereotype().toLowerCase();
-			if (st.equals("enumeration") &&
-				(n.startsWith("AX_LI") || n.startsWith("AX_DQ"))) {
-				setTaggedValue(e.GetTaggedValues(), "xsdEncodingRule", "iso19139_2007");
-			} else if (n.startsWith("AX_Datenerhebung")) {
+			String type = e.GetType().toLowerCase();
+			if ((st.equals("enumeration") || type.equals("enumeration")) && 
+				(n.equals("AX_BezugspunktDach") || n.equals("AX_Datenerhebung") || n.equals("AX_Datenerhebung3D") || n.equals("AX_Datenerhebung_Punktort") || n.startsWith("AX_LI") || n.startsWith("AX_DQ"))) {
 				setTaggedValue(e.GetTaggedValues(), "xsdEncodingRule", "iso19139_2007");
 			} else {
 				setTaggedValue(e.GetTaggedValues(), "xsdEncodingRule", "NAS");
@@ -457,7 +456,9 @@ public class ImplementationSchemaTransformerHelper {
 
 		r2c.SetIsNavigable(r1c.GetIsNavigable());
 		String s = r1c.GetCardinality();
-		if (s.startsWith("1"))
+		if (s.equals("1"))
+			s = "0..1";
+		else if (s.startsWith("1"))
 			s = "0"+s.substring(1);
 		r2c.SetCardinality(s);
 		r2c.SetRoleNote(r1c.GetRoleNote());
@@ -470,7 +471,9 @@ public class ImplementationSchemaTransformerHelper {
 
 		r2s.SetIsNavigable(r1s.GetIsNavigable());
 		s = r1s.GetCardinality();
-		if (s.startsWith("1"))
+		if (s.equals("1"))
+			s = "0..1";
+		else if (s.startsWith("1"))
 			s = "0"+s.substring(1);
 		r2s.SetCardinality(s);
     	if (r1.GetClientID()==e1.GetElementID()) {

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<UMLProfile profiletype="uml2">
+	<Documentation id="012F3B58-6" name="AAA" version="1.0" notes="AAA"/>
+	<Content>
+		<Stereotypes>
+			<Stereotype name="Logisch" notes="Logische Elemente (Klassen, Attribute, Assoziationsrollen) und ihre Relationen." cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+				<AppliesTo>
+					<Apply type="ToolboxPage"/>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="AAA::codeList(UML::Class)" type="" description="" unit="" values="" default="Codelisten-Datentyp"/>
+					<Tag name="AAA::dataType(UML::Class)" type="" description="" unit="" values="" default="Datentyp"/>
+					<Tag name="AAA::enum(UML::Attribute)" type="" description="" unit="" values="" default="Werteart"/>
+					<Tag name="AAA::enumeration(UML::Enumeration)" type="" description="" unit="" values="" default="Enumeration"/>
+					<Tag name="AAA::featureType(UML::Class)" type="" description="" unit="" values="" default="Objektart"/>
+					<Tag name="AAA::property(UML::AssociationEnd)" type="" description="" unit="" values="" default="Relationsart"/>
+					<Tag name="AAA::property(UML::Attribute)" type="" description="" unit="" values="" default="Attributart"/>
+					<Tag name="AAA::type(UML::Class)" type="" description="" unit="" values="" default="abstrakter Typ"/>
+					<Tag name="AAA::union(UML::Class)" type="" description="" unit="" values="" default="Union-Datentyp"/>
+					<Tag name="UML::Aggregation" type="" description="" unit="" values="" default="aggregation"/>
+					<Tag name="UML::Association" type="" description="" unit="" values="" default="association"/>
+					<Tag name="UML::AssociationClass" type="" description="" unit="" values="" default="association class"/>
+					<Tag name="UML::Composition" type="" description="" unit="" values="" default="composition"/>
+					<Tag name="UML::Dependency" type="" description="" unit="" values="" default="dependency"/>
+					<Tag name="UML::Generalization" type="" description="" unit="" values="" default="generalization"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Paket" notes="Pakete und ihre Relationen." cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+				<AppliesTo>
+					<Apply type="ToolboxPage"/>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="AAA::applicationSchema(UML::Package)" type="" description="" unit="" values="" default="Anwendungsschema"/>
+					<Tag name="AAA::import(UML::Dependency)" type="" description="" unit="" values="" default="import"/>
+					<Tag name="AAA::package(UML::Package)" type="" description="" unit="" values="" default="Paket (im Anwendungsschema)"/>
+					<Tag name="UML::Dependency" type="" description="" unit="" values="" default="dependency"/>
+				</TaggedValues>
+			</Stereotype>
+		</Stereotypes>
+		<TaggedValueTypes/>
+	</Content>
+</UMLProfile>

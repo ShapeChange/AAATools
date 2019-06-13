@@ -34,8 +34,16 @@
       <outputDirectory>/resources/xslt</outputDirectory>
     </fileSet>
     <fileSet>
+      <directory>target/appassembler/templates</directory>
+      <outputDirectory>/resources/templates</outputDirectory>
+    </fileSet>
+    <fileSet>
       <directory>target/appassembler/schema</directory>
       <outputDirectory>/resources/schema</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>target/appassembler/uml-profile</directory>
+      <outputDirectory>/resources/uml-profile</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>target/appassembler/schema-sc</directory>

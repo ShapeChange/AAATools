@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ShapeChangeConfiguration xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1 resources/schema/ShapeChangeConfiguration.xsd">
+	<xi:include href="Konfigurationen/Input-7.1.0.xml"/>
+	<dialog>
+		<parameter name="dialogClass" value="de.adv_online.aaa.katalogtool.KatalogDialog"/>
+	</dialog>
+	<log>
+		<parameter name="reportLevel" value="WARNING"/>
+		<parameter name="logFile" value="AAA-Katalogtool-Log.xml"/>
+	</log>
+	<targets>
+		<Target class="de.adv_online.aaa.katalogtool.Katalog" mode="enabled">
+			<targetParameter name="Verzeichnis" value="Ausgaben/Kataloge/DLM50"/>
+			<targetParameter name="paket" value="AFIS-ALKIS-ATKIS Fachschema"/>
+			<targetParameter name="modellarten" value="DLM50"/>
+			<targetParameter name="profile" value=""/>
+			<targetParameter name="profilquelle" value="Modell"/>
+			<targetParameter name="stillgelegteElemente" value="true"/>
+			<targetParameter name="nurGrunddatenbestand" value="false"/>
+			<targetParameter name="letzteAenderung" value="true"/>
+			<targetParameter name="geerbteEigenschaften" value="false"/>
+			<targetParameter name="schemakennungen" value="*"/>
+			<targetParameter name="ausgabeformat" value="HTML,DOCX,XML"/>
+			<targetParameter name="xsltPfad" value="resources/xslt"/>
+			<targetParameter name="xslTransformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
+			<targetParameter name="notesRuleMarker" value="-==-"/>
+		</Target>
+	</targets>
+</ShapeChangeConfiguration>

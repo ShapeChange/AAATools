@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<UMLProfile profiletype="uml2">
+	<Documentation id="09E873D9-E" name="AAA" version="1.0" notes="AAA"/>
+	<Content>
+		<Stereotypes>
+			<Stereotype name="AAA - Logisch" alias="Logical" notes="Logisches Diagramm für die Anwendungsschemamodellierung." cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+				<AppliesTo>
+					<Apply type="Diagram_Logical">
+						<Property name="frameString" value="#DGMALIAS#"/>
+						<Property name="toolbox" value="AAA"/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="AAA - Paket" alias="Package" notes="Paketdiagramm für die Anwendungsschemamodellierung." cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+				<AppliesTo>
+					<Apply type="Diagram_Package">
+						<Property name="frameString" value="#DGMALIAS#"/>
+						<Property name="toolbox" value="AAA"/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+		</Stereotypes>
+		<TaggedValueTypes/>
+	</Content>
+</UMLProfile>
