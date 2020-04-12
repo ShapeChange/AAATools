@@ -5,7 +5,10 @@
 	Version 0.1 - 09.05.2013
 		erste Version
 		
-     (c) 2013 interactive instruments GmbH, Bonn
+	Version 0.2 - 11.04.2020
+		- Unterstützung für neue Standardmodellarten in GeoInfoDok NEU
+
+     (c) 2013-2020 interactive instruments GmbH, Bonn
      im Auftrag der AdV, Arbeitsgemeinschaft der Vermessungsverwaltungen der
      Länder der Bundesrepublik Deutschland
 
@@ -14,7 +17,7 @@
 	  -->
 	<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
 	<xsl:variable name="advMA">
-		<xsl:text> DLKM DKKM500 DKKM1000 DKKM2000 DKKM5000 Basis-DLM DLM50 DLM250 DLM1000 DTK10 DTK25 DTK50 DTK100 DTK250 DTK1000 DFGM DHM LoD1 LoD2 LoD3 </xsl:text>
+		<xsl:text> DLKM DKKM500 DKKM1000 DKKM2000 DKKM5000 Basis-DLM DLM50 DLM250 DLM1000 DTK10 DTK25 DTK50 DTK100 DTK250 DTK1000 DFGM DGM2 DGM5 DGM25 DGM50 DHM LoD1 LoD2 LoD3 GeoBasis-DE GVM BORIS </xsl:text>
 	</xsl:variable>
 	<xsl:decimal-format name="code" NaN="999999"/>
 	<xsl:template match="/">
