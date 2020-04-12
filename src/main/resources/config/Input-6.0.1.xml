@@ -3,7 +3,7 @@
 	<parameter name="inputModelType" value="EA7"/>
 	<parameter name="inputFile" value="AAA-6.0.1.EAP"/>
 	<parameter name="appSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
-	<parameter name="excludedPackages" value="ISO/TC 211,OGC,AAA_Katalog,AAA Versionierungsschema,Web Feature Service Erweiterungen"/>
+	<parameter name="excludedPackages" value="ISO 19103 Edition 1,ISO 19107 Spatial schema,ISO 19108 Temporal schema,ISO/CD 19110 Rev 1 Feature Catalog,ISO 19109 Rules for application schema,ISO 19111 Referencing by coordinates,ISO 19115 Metadata,ISO 19123 Schema for coverage geometry and functions,ISO 19136 Edition 1,Informative,ISO 19157 Data quality,OGC,AAA_Katalog,AAA Versionierungsschema,Web Feature Service Erweiterungen"/>
 	<parameter name="publicOnly" value="true"/>
 	<parameter name="checkingConstraints" value="enabled"/>
 	<parameter name="oclConstraintTypeRegex" value=""/>
