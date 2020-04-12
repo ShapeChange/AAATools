@@ -1232,16 +1232,16 @@ public class Katalog implements Target, MessageSource {
 			if (listOnly)
 				PrintPropertyRef(propi, e1, top);
 			else 
-				PrintProperty(propi, top);
+				PrintProperty(ci, propi, top, op==Operation.DELETE);
 		}
 		
 		if (diffs!=null && diffs.get(ci)!=null)
 			for (DiffElement diff : diffs.get(ci)) {
 				if (diff.subElementType==ElementType.PROPERTY && diff.change==Operation.DELETE) {
 					if (listOnly)
-						PrintPropertyRef((PropertyInfo)diff.subElement, e1, Operation.DELETE);
+						PrintPropertyRef((PropertyInfo) diff.subElement, e1, Operation.DELETE);
 					else 
-						PrintProperty((PropertyInfo)diff.subElement, Operation.DELETE);
+						PrintProperty(ci, (PropertyInfo)diff.subElement, Operation.DELETE, op==Operation.DELETE);
 				}
 			}			
 		
@@ -1265,7 +1265,7 @@ public class Katalog implements Target, MessageSource {
 		} 
 	}
 
-	private void PrintProperty(PropertyInfo propi, Operation op) {
+	private void PrintProperty(ClassInfo ci, PropertyInfo propi, Operation op, boolean deletedClass) {
 		if (!ExportProperty(propi)) 
 			return;
 		
@@ -1308,15 +1308,21 @@ public class Katalog implements Target, MessageSource {
 			}
 		}
 		
-		PrintPropertyDetail(propi,assocId,op);
+		PrintPropertyDetail(deletedClass?propi.inClass():ci,propi,assocId,op);
 		PropertyInfo propi2 = propi.reverseProperty();
-		if (propi2!=null && ExportProperty(propi2))
-			PrintPropertyDetail(propi2,assocId,op);
+		if (propi2!=null && ExportProperty(propi2)) {
+			ClassInfo ci2;
+			if (deletedClass || op!=Operation.DELETE)
+				ci2 = propi2.inClass();
+			else
+				ci2 = model.classByName(propi2.inClass().name());
+			PrintPropertyDetail(ci2,propi2,assocId,op);
+		}
 		
 		processedProperty.add(propi);
 	}
 
-	private void PrintPropertyDetail(PropertyInfo propi, String assocId, Operation op) {
+	private void PrintPropertyDetail(ClassInfo ci, PropertyInfo propi, String assocId, Operation op) {
 		Element e1, e2;
 		if (propi.isAttribute())
 			e1 = document.createElement("FC_FeatureAttribute");
@@ -1410,8 +1416,8 @@ public class Katalog implements Target, MessageSource {
 		PrintStandardElements(propi,e1,op);
 
 		e2 = document.createElement("inType");
-		addAttribute(document,e2,"idref","_C"+propi.inClass().id());
-		addAttribute(document,e2,"name",propi.inClass().name());
+		addAttribute(document,e2,"idref","_C"+ci.id());
+		addAttribute(document,e2,"name",ci.name());
 		if (op!=null)
 			addAttribute(document,e2,"mode",op.toString());
 		e1.appendChild(e2);					
@@ -1420,9 +1426,13 @@ public class Katalog implements Target, MessageSource {
 		if (!propi.isAttribute()) {
 			if (ti!=null) {
 				e2 = document.createElement("FeatureTypeIncluded");
-				ClassInfo cix = model.classById(ti.id);
+				ClassInfo cix = null;
+				if (op!=Operation.DELETE)
+					cix = model.classById(ti.id);
+				else
+					cix = model.classByName(ti.name);
 				if (cix!=null && ExportClass(cix,false, null)) {
-					addAttribute(document,e2,"idref","_C"+ti.id);
+					addAttribute(document,e2,"idref","_C"+cix.id());
 				}
 				s = ti.name;
 				if (diffs!=null && diffs.get(propi)!=null)
