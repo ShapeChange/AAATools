@@ -77,6 +77,7 @@ import org.w3c.dom.ProcessingInstruction;
 import de.adv_online.aaa.profiltool.ProfilRep;
 import de.interactive_instruments.ShapeChange.MessageSource;
 import de.interactive_instruments.ShapeChange.Options;
+import de.interactive_instruments.ShapeChange.RuleRegistry;
 import de.interactive_instruments.ShapeChange.ShapeChangeAbortException;
 import de.interactive_instruments.ShapeChange.ShapeChangeResult;
 import de.interactive_instruments.ShapeChange.Type;
@@ -150,6 +151,22 @@ public class Katalog implements Target, MessageSource {
 	
 	private Map<String, String> regeln = null; 
 	private String OutputFormat  = "";
+	
+	@Override
+	public void registerRulesAndRequirements(RuleRegistry r) {
+		// nothing to add
+	}
+
+	@Override
+	public String getTargetIdentifier() {
+		return "aaa-katalogtool";
+	}
+
+	@Override
+	public String getDefaultEncodingRule() {
+		// not relevant for this target
+		return null;
+	}	
 
 	// FIXME New diagnostics-only flag is to be considered
 	public void initialise(PackageInfo p, Model m, Options o,
