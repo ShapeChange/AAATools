@@ -404,6 +404,8 @@ public class Katalog implements Target, MessageSource {
 			imt = "de.interactive_instruments.ShapeChange.Model.Xmi10.Xmi10Document";
 		else if (imt.equalsIgnoreCase("gsip"))
 			imt = "us.mitre.ShapeChange.Model.GSIP.GSIPDocument";
+		else if (imt.equalsIgnoreCase("scxml"))
+			imt = "de.interactive_instruments.ShapeChange.Model.Generic.GenericModel";
 		
 		Model m = null;
 		
@@ -453,7 +455,7 @@ public class Katalog implements Target, MessageSource {
 				e1 = document.createElement("AC_Objektbereich");
 				e3 = null;
 			}
-			addAttribute(document,e1,"id","_P"+pix.id());
+			addAttribute(document,e1,"id","_"+pix.id());
 			if (op!=null)
 				addAttribute(document,e1,"mode",op.toString());
 			root.appendChild(e1);
@@ -511,7 +513,7 @@ public class Katalog implements Target, MessageSource {
 		try {
 			for (PackageInfo pix2 : pix.containedPackages()) {
 				boolean found = false;
-				if (diffs!=null && diffs.get(pix)!=null)
+				if (diffs!=null && diffs.get(pix)!=null && ExportPackage(pix2,op))
 					for (DiffElement diff : diffs.get(pix)) {
 						if (diff.subElementType==ElementType.SUBPACKAGE && diff.subElement==pix2 && diff.change==Operation.INSERT) {
 							PrintPackage(pix2,Operation.INSERT);
@@ -522,7 +524,7 @@ public class Katalog implements Target, MessageSource {
 				if (!found)
 					PrintPackage(pix2,op);
 			}
-			if (diffs!=null && diffs.get(pix)!=null)
+			if (diffs!=null && diffs.get(pix)!=null && ExportPackage(pix,op))
 				for (DiffElement diff : diffs.get(pix)) {
 					if (diff.subElementType==ElementType.SUBPACKAGE && diff.change==Operation.DELETE) {
 						PrintPackage((PackageInfo)diff.subElement,Operation.DELETE);
@@ -1063,9 +1065,9 @@ public class Katalog implements Target, MessageSource {
 			
 			e2 = document.createElement("Objektartengruppenzugehoerigkeit");
 			if (op!=Operation.DELETE)
-				addAttribute(document,e2,"idref","_P"+ci.pkg().id());
+				addAttribute(document,e2,"idref","_"+ci.pkg().id());
 			else
-				addAttribute(document,e2,"idref","_P"+pix.id());
+				addAttribute(document,e2,"idref","_"+pix.id());
 			e1.appendChild(e2);					
 			
 			s = getDocBrEkKbd(ci, "BR", "");

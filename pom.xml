@@ -235,6 +235,8 @@
                   <directory>${project.basedir}/src/main/resources/config</directory>
                   <includes>
                     <include>Input-6.0.1.xml</include>
+                    <include>Input-SCXML-6.0.1.xml</include>
+                    <include>Export-6.0.1.xml</include>
                     <include>AAAKatalog-AFIS-6.0.1.xml</include>
                     <include>AAAKatalog-ALKIS-6.0.1.xml</include>
                     <include>AAAKatalog-BasisDLM-6.0.1.xml</include>
@@ -243,6 +245,8 @@
                     <include>AAAProfil-6.0.1.xml</include>
                     <include>NAS-6.0.1.xml</include>
                     <include>Input-7.1.0.xml</include>
+                    <include>Input-SCXML-7.1.0.xml</include>
+                    <include>Export-7.1.0.xml</include>
                     <include>AAAKatalog-GV-1.0.0.xml</include>
                     <include>AAAKatalog-LB-1.0.0.xml</include>
                     <include>AAAKatalog-LN-1.0.0.xml</include>
@@ -287,6 +291,7 @@
                     <include>katalog_dlm50.bat</include>
                     <include>710.bat</include>
                     <include>profil.bat</include>
+                    <include>export_scxml.bat</include>
                   </includes>
                 </resource>
               </resources>
@@ -358,6 +363,8 @@
                   <includes>
                     <include>AAA-6.0.1.eap</include>
                     <include>AAA-7.1.0.eap</include>
+                    <include>AAA-6.0.1.xml.zip</include>
+                    <include>AAA-7.1.0.xml.zip</include>
                   </includes>
                 </resource>
               </resources>
