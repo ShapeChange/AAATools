@@ -30,6 +30,7 @@
 package de.adv_online.aaa.profiltool;
 
 import de.interactive_instruments.ShapeChange.Options;
+import de.interactive_instruments.ShapeChange.RuleRegistry;
 import de.interactive_instruments.ShapeChange.ShapeChangeAbortException;
 import de.interactive_instruments.ShapeChange.ShapeChangeResult;
 import de.interactive_instruments.ShapeChange.Model.ClassInfo;
@@ -57,6 +58,22 @@ public class Profil implements Target {
 	private String quelle = null;
 	private String ziel = null;
 	private boolean error = false;
+
+	@Override
+	public void registerRulesAndRequirements(RuleRegistry r) {
+		// nothing to add
+	}
+
+	@Override
+	public String getTargetIdentifier() {
+		return "aaa-profiltool";
+	}
+
+	@Override
+	public String getDefaultEncodingRule() {
+		// not relevant for this target
+		return null;
+	}
 	
 	// FIXME New diagnostics-only flag is to be considered
 	public void initialise(PackageInfo p, Model m, Options o,

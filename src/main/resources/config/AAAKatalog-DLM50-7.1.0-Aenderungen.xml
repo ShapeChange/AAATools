@@ -24,8 +24,8 @@
 			<targetParameter name="xsltPfad" value="resources/xslt"/>
 			<targetParameter name="xslTransformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
 			<targetParameter name="notesRuleMarker" value="-==-"/>
-			<targetParameter name="referenceModelType" value="EA7"/>
-			<targetParameter name="referenceModelFile" value="AAA-6.0.1.eap"/>
+			<targetParameter name="referenceModelType" value="SCXML"/>
+			<targetParameter name="referenceModelFile" value="AAA-6.0.1.xml.zip"/>
 			<!-- 
 			-->
 		</Target>

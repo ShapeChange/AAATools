@@ -77,6 +77,7 @@ import org.w3c.dom.ProcessingInstruction;
 import de.adv_online.aaa.profiltool.ProfilRep;
 import de.interactive_instruments.ShapeChange.MessageSource;
 import de.interactive_instruments.ShapeChange.Options;
+import de.interactive_instruments.ShapeChange.RuleRegistry;
 import de.interactive_instruments.ShapeChange.ShapeChangeAbortException;
 import de.interactive_instruments.ShapeChange.ShapeChangeResult;
 import de.interactive_instruments.ShapeChange.Type;
@@ -150,6 +151,22 @@ public class Katalog implements Target, MessageSource {
 	
 	private Map<String, String> regeln = null; 
 	private String OutputFormat  = "";
+	
+	@Override
+	public void registerRulesAndRequirements(RuleRegistry r) {
+		// nothing to add
+	}
+
+	@Override
+	public String getTargetIdentifier() {
+		return "aaa-katalogtool";
+	}
+
+	@Override
+	public String getDefaultEncodingRule() {
+		// not relevant for this target
+		return null;
+	}	
 
 	// FIXME New diagnostics-only flag is to be considered
 	public void initialise(PackageInfo p, Model m, Options o,
@@ -387,6 +404,8 @@ public class Katalog implements Target, MessageSource {
 			imt = "de.interactive_instruments.ShapeChange.Model.Xmi10.Xmi10Document";
 		else if (imt.equalsIgnoreCase("gsip"))
 			imt = "us.mitre.ShapeChange.Model.GSIP.GSIPDocument";
+		else if (imt.equalsIgnoreCase("scxml"))
+			imt = "de.interactive_instruments.ShapeChange.Model.Generic.GenericModel";
 		
 		Model m = null;
 		
@@ -436,7 +455,7 @@ public class Katalog implements Target, MessageSource {
 				e1 = document.createElement("AC_Objektbereich");
 				e3 = null;
 			}
-			addAttribute(document,e1,"id","_P"+pix.id());
+			addAttribute(document,e1,"id","_"+pix.id());
 			if (op!=null)
 				addAttribute(document,e1,"mode",op.toString());
 			root.appendChild(e1);
@@ -494,7 +513,7 @@ public class Katalog implements Target, MessageSource {
 		try {
 			for (PackageInfo pix2 : pix.containedPackages()) {
 				boolean found = false;
-				if (diffs!=null && diffs.get(pix)!=null)
+				if (diffs!=null && diffs.get(pix)!=null && ExportPackage(pix2,op))
 					for (DiffElement diff : diffs.get(pix)) {
 						if (diff.subElementType==ElementType.SUBPACKAGE && diff.subElement==pix2 && diff.change==Operation.INSERT) {
 							PrintPackage(pix2,Operation.INSERT);
@@ -505,7 +524,7 @@ public class Katalog implements Target, MessageSource {
 				if (!found)
 					PrintPackage(pix2,op);
 			}
-			if (diffs!=null && diffs.get(pix)!=null)
+			if (diffs!=null && diffs.get(pix)!=null && ExportPackage(pix,op))
 				for (DiffElement diff : diffs.get(pix)) {
 					if (diff.subElementType==ElementType.SUBPACKAGE && diff.change==Operation.DELETE) {
 						PrintPackage((PackageInfo)diff.subElement,Operation.DELETE);
@@ -1046,9 +1065,9 @@ public class Katalog implements Target, MessageSource {
 			
 			e2 = document.createElement("Objektartengruppenzugehoerigkeit");
 			if (op!=Operation.DELETE)
-				addAttribute(document,e2,"idref","_P"+ci.pkg().id());
+				addAttribute(document,e2,"idref","_"+ci.pkg().id());
 			else
-				addAttribute(document,e2,"idref","_P"+pix.id());
+				addAttribute(document,e2,"idref","_"+pix.id());
 			e1.appendChild(e2);					
 			
 			s = getDocBrEkKbd(ci, "BR", "");
@@ -1232,16 +1251,16 @@ public class Katalog implements Target, MessageSource {
 			if (listOnly)
 				PrintPropertyRef(propi, e1, top);
 			else 
-				PrintProperty(propi, top);
+				PrintProperty(ci, propi, top, op==Operation.DELETE);
 		}
 		
 		if (diffs!=null && diffs.get(ci)!=null)
 			for (DiffElement diff : diffs.get(ci)) {
 				if (diff.subElementType==ElementType.PROPERTY && diff.change==Operation.DELETE) {
 					if (listOnly)
-						PrintPropertyRef((PropertyInfo)diff.subElement, e1, Operation.DELETE);
+						PrintPropertyRef((PropertyInfo) diff.subElement, e1, Operation.DELETE);
 					else 
-						PrintProperty((PropertyInfo)diff.subElement, Operation.DELETE);
+						PrintProperty(ci, (PropertyInfo)diff.subElement, Operation.DELETE, op==Operation.DELETE);
 				}
 			}			
 		
@@ -1265,7 +1284,7 @@ public class Katalog implements Target, MessageSource {
 		} 
 	}
 
-	private void PrintProperty(PropertyInfo propi, Operation op) {
+	private void PrintProperty(ClassInfo ci, PropertyInfo propi, Operation op, boolean deletedClass) {
 		if (!ExportProperty(propi)) 
 			return;
 		
@@ -1308,15 +1327,21 @@ public class Katalog implements Target, MessageSource {
 			}
 		}
 		
-		PrintPropertyDetail(propi,assocId,op);
+		PrintPropertyDetail(deletedClass?propi.inClass():ci,propi,assocId,op);
 		PropertyInfo propi2 = propi.reverseProperty();
-		if (propi2!=null && ExportProperty(propi2))
-			PrintPropertyDetail(propi2,assocId,op);
+		if (propi2!=null && ExportProperty(propi2)) {
+			ClassInfo ci2;
+			if (deletedClass || op!=Operation.DELETE)
+				ci2 = propi2.inClass();
+			else
+				ci2 = model.classByName(propi2.inClass().name());
+			PrintPropertyDetail(ci2,propi2,assocId,op);
+		}
 		
 		processedProperty.add(propi);
 	}
 
-	private void PrintPropertyDetail(PropertyInfo propi, String assocId, Operation op) {
+	private void PrintPropertyDetail(ClassInfo ci, PropertyInfo propi, String assocId, Operation op) {
 		Element e1, e2;
 		if (propi.isAttribute())
 			e1 = document.createElement("FC_FeatureAttribute");
@@ -1410,8 +1435,8 @@ public class Katalog implements Target, MessageSource {
 		PrintStandardElements(propi,e1,op);
 
 		e2 = document.createElement("inType");
-		addAttribute(document,e2,"idref","_C"+propi.inClass().id());
-		addAttribute(document,e2,"name",propi.inClass().name());
+		addAttribute(document,e2,"idref","_C"+ci.id());
+		addAttribute(document,e2,"name",ci.name());
 		if (op!=null)
 			addAttribute(document,e2,"mode",op.toString());
 		e1.appendChild(e2);					
@@ -1420,9 +1445,13 @@ public class Katalog implements Target, MessageSource {
 		if (!propi.isAttribute()) {
 			if (ti!=null) {
 				e2 = document.createElement("FeatureTypeIncluded");
-				ClassInfo cix = model.classById(ti.id);
+				ClassInfo cix = null;
+				if (op!=Operation.DELETE)
+					cix = model.classById(ti.id);
+				else
+					cix = model.classByName(ti.name);
 				if (cix!=null && ExportClass(cix,false, null)) {
-					addAttribute(document,e2,"idref","_C"+ti.id);
+					addAttribute(document,e2,"idref","_C"+cix.id());
 				}
 				s = ti.name;
 				if (diffs!=null && diffs.get(propi)!=null)
