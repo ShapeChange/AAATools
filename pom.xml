@@ -76,7 +76,7 @@
     <dependency>
       <groupId>org.sparx</groupId>
       <artifactId>eaapi</artifactId>
-      <version>13.5.1351</version>
+      <version>14.1.1428</version>
     </dependency>
     <dependency>
       <groupId>org.apache.xmlgraphics</groupId>
