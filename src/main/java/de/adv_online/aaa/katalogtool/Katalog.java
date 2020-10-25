@@ -105,11 +105,8 @@ import de.interactive_instruments.ShapeChange.Util.ZipHandler;
  */
 public class Katalog implements Target, MessageSource {
 
-	public static final int STATUS_WRITE_RTF = 21;
-	public static final int STATUS_WRITE_NART = 22;
 	public static final int STATUS_WRITE_HTML = 23;
 	public static final int STATUS_WRITE_XML = 24;
-	public static final int STATUS_WRITE_GFC = 25;
 	public static final int STATUS_WRITE_CSV = 26;
 	public static final int STATUS_WRITE_DOCX = 27;
 
@@ -278,50 +275,33 @@ public class Katalog implements Target, MessageSource {
 					
 		document = createDocument();
 
-		ProcessingInstruction proci;
-		proci = document.createProcessingInstruction("xml-stylesheet",
-				"type='text/xsl' href='./aaa-html.xsl'");
-		document.appendChild(proci);
-		
 		document.appendChild(document.createComment("(c) Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der Bundesrepublik Deutschland [http://www.adv-online.de/]"));
 
 		root = document.createElement("FC_FeatureCatalogue");
 		document.appendChild(root);
-		addAttribute(document, root, "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		addAttribute(document, root, "xsi:noNamespaceSchemaLocation", "Katalogtool.xsd");
 
 		Element e1 = document.createElement("name");
 		e1.setTextContent(pi.name());
 		root.appendChild(e1);
 
-		e1 = document.createElement("scope");
-		s = pi.documentation() + "\n"+"Berücksichtigte Modellarten:";
 		ClassInfo cma = model.classByName("AA_AdVStandardModell");
 		Collection<PropertyInfo> cpropi = null;
 		if (cma!=null)
 			cpropi = cma.properties().values();
 
 		for (String ma : MAList) {
-			s += "\n"+ma+": ";
-			String s1 = "(unbekannt)";
+			e1 = document.createElement("modellart");
+			e1.setTextContent(ma);
 			if (cpropi!=null) {
 				for (PropertyInfo propi : cpropi) {
 					String siv = propi.initialValue();
 					if (siv!=null && siv.equals(ma)) {
-						s1 = propi.name();
+						e1.setAttribute("name", propi.name());
 						break;
-					}	
+					}
 				}
 			}
-			s += s1;
-		}
-		e1.setTextContent(s);
-		root.appendChild(e1);
-		
-		for (String ma : MAList) {
-			e1 = document.createElement("modellart");
-			e1.setTextContent(ma);
-			root.appendChild(e1);			
+			root.appendChild(e1);
 		}
 
 		for (String pf : PList) {
@@ -451,6 +431,7 @@ public class Katalog implements Target, MessageSource {
 				if (op!=null)
 					addAttribute(document,e1,"mode",op.toString());
 				e3 = document.createElement("Objektbereichzugehoerigkeit");
+				addAttribute(document,e3,"idref","_"+pix.owner().id());
 			} else {
 				e1 = document.createElement("AC_Objektbereich");
 				e3 = null;
@@ -508,6 +489,15 @@ public class Katalog implements Target, MessageSource {
 					addAttribute(document,e2,"mode",op.toString());
 				e1.appendChild(e2);
 			}
+
+			String nart = pix.taggedValue("AAA:Nutzungsartkennung");
+			if (nart!=null && nart.length()>0) {
+				e2 = document.createElement("nutzungsartkennung");
+				e2.setTextContent(nart);
+				if (op!=null)
+					addAttribute(document,e2,"mode",op.toString());
+				e1.appendChild(e2);
+			}
 		}
 		
 		try {
@@ -550,13 +540,21 @@ public class Katalog implements Target, MessageSource {
 
 	    return count;
 	}
-	
+
 	private void PrintLineByLine(String s, String ename, Element e1, Operation op) {
+		PrintLineByLine(s, ename, null, null, e1, op);
+	}
+
+	private void PrintLineByLine(String s, String ename, String aname, String aval, Element e1, Operation op) {
 		boolean ins = false;
 		boolean del = false;
 		String[] lines = s.replace("\r\n", "\n").replace("\r", "\n").split("\n");
 		for(String line : lines) {
+			if (line.isEmpty())
+				continue;
 			Element e2 = document.createElement(ename);
+			if (aname!=null && aval!=null && !aval.isEmpty())
+				e2.setAttribute(aname, aval);
 			
 			line = PrepareToPrint(line);
 			
@@ -580,7 +578,7 @@ public class Katalog implements Target, MessageSource {
 			if (op!=null)
 				addAttribute(document,e2,"mode",op.toString());
 			e1.appendChild(e2);
-		}		
+		}
 	}
 
 	private String PrepareToPrint(String s) {
@@ -908,6 +906,7 @@ public class Katalog implements Target, MessageSource {
 	private String getDocBrEkKbd(ClassInfo ci, String cat, String filter){
 		String ret = null;
 		String doc = ci.documentation();
+
 		if (diffs!=null && diffs.get(ci)!=null)
 			for (DiffElement diff : diffs.get(ci)) {
 				if (diff.subElementType==ElementType.DOCUMENTATION) {
@@ -994,25 +993,12 @@ public class Katalog implements Target, MessageSource {
 			e1.appendChild(e2);
 			
 			s = getDoc(ci);
-			String s1 = "";
-			String s2 = "";
-			String s3 = "";
-			String s4 = "";
-			
-			s = s.replace("Lebenszeitinterval:", "Lebenszeitintervall:");
-			s = s.replace("Lebenszeitintervallbescheibung:", "Lebenszeitintervall:");
-			if (s.contains("Lebenszeitintervall:")) {
-				String[] sarr = s.split("Lebenszeitintervall:");
-				s = sarr[0];
-				s1 = sarr[1];
-			}
-	
+			Map<String,String> br = new HashMap<>();
+			Map<String,String> kbd = new HashMap<>();
+			Map<String,String> ek = new HashMap<>();
+
 			if (s!=null && s.length()>0) {
 				PrintLineByLine(s,"definition",e1,op);
-			}
-			
-			if (ci.isAbstract()) {
-				PrintLineByLine("Es handelt sich um eine abstrakte Objektart.","definition",e1,op);
 			}
 			
 			s = ci.taggedValue("AAA:Kennung");
@@ -1072,24 +1058,24 @@ public class Katalog implements Target, MessageSource {
 			
 			s = getDocBrEkKbd(ci, "BR", "");
 			if (s!=null && s.length()>0) {
-				s2 = s;
+				br.put("*", s);
 			}
 			for (String ma : MAList) {
 				s = getDocBrEkKbd(ci, "BR", ma);
 				if (s!=null && s.length()>0) {
-					s2 += "\n"+ma+": "+s;
+					br.put(ma, s);
 				}
 			}		
 	
 			// Old style for constraints
 			s = getDocBrEkKbd(ci, "KBD", "");
 			if (s!=null && s.length()>0) {
-				s3 = s;
+				kbd.put("*", s);
 			}
 			for (String ma : MAList) {
 				s = getDocBrEkKbd(ci, "KBD", ma);
 				if (s!=null && s.length()>0) {
-					s3 += "\n"+ma+": "+s;
+					kbd.put(ma, s);
 				}
 			}
 			
@@ -1101,19 +1087,23 @@ public class Katalog implements Target, MessageSource {
 					// Ignore constraints on supertypes
 					if (!ocl.contextModelElmt().id().equals(ci.id()))
 						continue;
-					
+
+					String makbd = null;
 					if (ocl.name().equalsIgnoreCase("alle")) {
 						s = ocl.text();
+						makbd = "*";
 					} else {
 						for (String ma : MAList) {
 							if (ocl.name().equalsIgnoreCase(ma)) {
 								s = ocl.text();
+								makbd = ma;
 								break;
 							}
 						}
 					}
-					if (s!=null) {
+					if (s!=null && makbd!=null) {
 						String[] sa = s.split("/\\*");
+						String res = "";
 						for (String sc: sa) {
 							sc = sc.trim();
 							if (sc.isEmpty())
@@ -1122,43 +1112,46 @@ public class Katalog implements Target, MessageSource {
 								sc = sc.replaceAll("\\*/.*","");
 								sc = sc.trim();
 							}
-							if (ocl.name().equalsIgnoreCase("alle")) {
-								s3 += "\n"+sc;
-							} else {
-								s3 += "\n"+ocl.name()+": "+sc;
-							}
+							res += sc + System.lineSeparator();
 						}
+						res = res.trim();
+						if (!res.isEmpty())
+							kbd.put(makbd, res);
 					}
 				}			
 			}
 			
 			s = getDocBrEkKbd(ci, "EK", "");
 			if (s!=null && s.length()>0) {
-				s4 = s;
+				ek.put("*", s);
 			}
 			for (String ma : MAList) {
 				s = getDocBrEkKbd(ci, "EK", ma);
 				if (s!=null && s.length()>0) {
-					s4 += "\n"+ma+": "+s;
+					ek.put(ma, s);
 				}
 			}		
-	
-			if (s4.length()>0) {
-				PrintLineByLine(s4,"Erfassungskriterium",e1,op);
+
+			for (Map.Entry<String, String> entry : ek.entrySet()) {
+				PrintLineByLine(entry.getValue(), "erfassungskriterium", "modellart", entry.getKey(), e1, op);
 			}
-			
-			if (s3.length()>0) {
-				PrintLineByLine(s3,"Konsistenzbedingung",e1,op);
+
+			for (Map.Entry<String, String> entry : kbd.entrySet()) {
+				PrintLineByLine(entry.getValue(), "konsistenzbedingung", "modellart", entry.getKey(), e1, op);
 			}
-	
-			if (s2.length()>0) {
-				PrintLineByLine(s2,"Bildungsregel",e1,op);
+
+			for (Map.Entry<String, String> entry : br.entrySet()) {
+				PrintLineByLine(entry.getValue(), "bildungsregel", "modellart", entry.getKey(), e1, op);
 			}
-	
-			if (s1.length()>0) {
-				PrintLineByLine(s1,"Lebenszeitintervall",e1,op);
+
+			if (ci.isAbstract()) {
+				e2 = document.createElement("abstrakt");
+				e2.setTextContent("true");
+				if (op!=null)
+					addAttribute(document,e2,"mode",op.toString());
+				e1.appendChild(e2);
 			}
-			
+
 			if (ci.isKindOf("AA_REO")) {
 				e2 = document.createElement("wirdTypisiertDurch");
 				e2.setTextContent("REO");
@@ -1351,9 +1344,14 @@ public class Katalog implements Target, MessageSource {
 		if (op!=null)
 			addAttribute(document,e1,"mode",op.toString());
 		root.appendChild(e1);
-			
+
+		String s = propi.taggedValue("sequenceNumber");
+		if (s!=null) {
+			e1.setAttribute("sequenceNumber", PrepareToPrint(s));
+		}
+
 		e2 = document.createElement("name");
-		String s = propi.name();
+		s = propi.name();
 		if (diffs!=null && diffs.get(propi)!=null)
 			for (DiffElement diff : diffs.get(propi)) {
 				if (diff.subElementType==ElementType.NAME) {
@@ -1365,7 +1363,7 @@ public class Katalog implements Target, MessageSource {
 		if (op!=null)
 			addAttribute(document,e2,"mode",op.toString());
 		e1.appendChild(e2);
-		
+
 		e2 = document.createElement("cardinality");
 		s = propi.cardinality().toString();
 		if (diffs!=null && diffs.get(propi)!=null)
@@ -1393,18 +1391,38 @@ public class Katalog implements Target, MessageSource {
 		}
 		
 		if (!propi.isAttribute() && !propi.isNavigable()) {
-			PrintLineByLine("Es handelt sich um die inverse Relationsrichtung.","definition",e1,op);
+			e2 = document.createElement("inverseRichtung");
+			e2.setTextContent("true");
+			if (op!=null)
+				addAttribute(document,e2,"mode",op.toString());
+			e1.appendChild(e2);
 		}
 		
 		if (propi.isDerived()) {
-			PrintLineByLine("Es handelt sich um eine abgeleitete Eigenschaft.","definition",e1,op);
+			e2 = document.createElement("derived");
+			e2.setTextContent("true");
+			if (op!=null)
+				addAttribute(document,e2,"mode",op.toString());
+			e1.appendChild(e2);
 		}
 		
 		s = propi.initialValue();
 		if (propi.isAttribute() && s!=null && s.length()>0) {
-			PrintLineByLine("Das Attribut ist bei Objekterzeugung mit dem Wert "+PrepareToPrint(s)+" vorbelegt.","definition",e1,op);
-		}			
-			
+			e2 = document.createElement("initialValue");
+			e2.setTextContent(PrepareToPrint(s));
+			if (op!=null)
+				addAttribute(document,e2,"mode",op.toString());
+			e1.appendChild(e2);
+		}
+
+		if (propi.isAttribute() && propi.isReadOnly()) {
+			e2 = document.createElement("readOnly");
+			e2.setTextContent("true");
+			if (op!=null)
+				addAttribute(document,e2,"mode",op.toString());
+			e1.appendChild(e2);
+		}
+
 		s = propi.taggedValue("AAA:Kennung");
 		if (diffs!=null && diffs.get(propi)!=null)
 			for (DiffElement diff : diffs.get(propi)) {
@@ -1851,11 +1869,9 @@ public class Katalog implements Target, MessageSource {
 			
 			String outfileBasename = pi.xsdDocument().replace(".xsd", "");
 
-			writeNART(xmlName, outfileBasename);
 			writeDOCX(xmlName, outfileBasename);
 			writeHTML(xmlName, outfileBasename);
 			writeXML(xmlName, outfileBasename);
-			writeGFC(xmlName, outfileBasename);
 			writeCSV(xmlName, outfileBasename);
 
 	        File outDir = new File(outputDirectory);
@@ -1877,31 +1893,6 @@ public class Katalog implements Target, MessageSource {
 			refModel.shutdown();
 		
 		printed = true;
-	}
-
-	@SuppressWarnings("unused")
-	private void writeRTF(String xmlName, String outfileBasename){
-
-		if(!OutputFormat.toLowerCase().contains("rtf"))
-			return;
-
-		StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_RTF);
-		
-		String xslfofileName = options.parameter(this.getClass().getName(),"xslrtfFile");
-		if (xslfofileName==null)
-			xslfofileName = "aaa-rtf.xsl";
-		String rtffileName = outfileBasename+".rtf";
-		
-		if(xmlName!=null && xmlName.length()>0
-				&& xslfofileName!=null && xslfofileName.length()>0
-				&& rtffileName!=null && rtffileName.length()>0){
-            // Setup input and output files
-            File outDir = new File(outputDirectory);
-            File xmlFile = new File(outDir, xmlName);
-           	File outFile = new File(outDir, rtffileName);
-			xsltWrite(xmlFile, xslfofileName, outFile, null);
-		}
-		
 	}
 	
 	/**
@@ -2121,29 +2112,6 @@ public class Katalog implements Target, MessageSource {
 		}
 	}
 	
-	private void writeGFC(String xmlName, String outfileBasename){
-
-		if(!OutputFormat.toLowerCase().contains("gfc"))
-			return;
-
-		StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_GFC);
-		
-		String xslfofileName = options.parameter(this.getClass().getName(),"xslgfcFile");
-		if (xslfofileName==null)
-			xslfofileName = "aaa-xml-gfc.xsl";
-		String xmloutFileName = outfileBasename+".gfc.xml";
-		
-		if(xmlName!=null && xmlName.length()>0
-				&& xslfofileName!=null && xslfofileName.length()>0
-				&& xmloutFileName!=null && xmloutFileName.length()>0){
-            // Setup input and output files
-            File outDir = new File(outputDirectory);
-            File xmlFile = new File(outDir, xmlName);
-           	File outFile = new File(outDir, xmloutFileName);
-			xsltWrite(xmlFile, xslfofileName, outFile, null);
-		}
-	}
-	
 	private void writeCSV(String xmlName, String outfileBasename){
 
 		if(!OutputFormat.toLowerCase().contains("csv"))
@@ -2155,29 +2123,6 @@ public class Katalog implements Target, MessageSource {
 		if (xslfofileName==null)
 			xslfofileName = "aaa-csv.xsl";
 		String csvoutFileName = outfileBasename+".csv";
-		
-		if(xmlName!=null && xmlName.length()>0
-				&& xslfofileName!=null && xslfofileName.length()>0
-				&& csvoutFileName!=null && csvoutFileName.length()>0){
-            // Setup input and output files
-            File outDir = new File(outputDirectory);
-            File xmlFile = new File(outDir, xmlName);
-           	File outFile = new File(outDir, csvoutFileName);
-			xsltWrite(xmlFile, xslfofileName, outFile, null);
-		}
-	}
-	
-	private void writeNART(String xmlName, String outfileBasename){
-
-		if(!OutputFormat.toLowerCase().contains("csv"))
-			return;
-
-		StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_NART);
-		
-		String xslfofileName = options.parameter(this.getClass().getName(),"xslnartcsvFile");
-		if (xslfofileName==null)
-			xslfofileName = "aaa-nart-csv.xsl";
-		String csvoutFileName = outfileBasename+"-nart.csv";
 		
 		if(xmlName!=null && xmlName.length()>0
 				&& xslfofileName!=null && xslfofileName.length()>0
