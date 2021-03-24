@@ -1,7 +1,7 @@
 /**
  * AAA-Katalogtool
  *
- * (c) 2009-2012 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
+ * (c) 2009-2020 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
  * Länder der Bundesrepublik Deutschland (AdV)
  *
  * This program is free software: you can redistribute it and/or modify
