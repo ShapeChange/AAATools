@@ -1863,6 +1863,12 @@ public class Katalog implements Target, MessageSource {
 
 		try {
 			String xmlName = pi.xsdDocument().replace(".xsd", "")+".tmp.xml";
+			
+		File f = new File(outputDirectory);
+		if(!f.exists()) {
+		    FileUtils.forceMkdir(f);
+		}
+			
 	        OutputStream fout= new FileOutputStream(outputDirectory + "/" + xmlName);
 	        OutputStream bout= new BufferedOutputStream(fout);
 	        OutputStreamWriter outputXML = new OutputStreamWriter(bout, outputFormat.getProperty("encoding"));
