@@ -128,6 +128,7 @@ public class NasTransformer_7 implements Transformer {
 		helper.changeType( "AX_Schwere", "schwerewert", "Measure" );
 		helper.changeType( "AX_VertikalerSchweregradient", "genauigkeitVertikalerSchweregradient", "Measure" );
 		helper.changeType( "AX_VertikalerSchweregradient", "wertVertikalerSchweregradient", "Measure" );
+		helper.changeType( "AX_Leitung", "spannungsebene", "Measure" );
 		helper.changeType( "AX_Sperrauftrag", "uuidListe", "URI" );
 		helper.changeType( "AX_Entsperrauftrag", "uuidListe", "URI" );
 		helper.changeType( "ExceptionFortfuehrung", "bereitsGesperrteObjekte", "URI" );
@@ -178,6 +179,7 @@ public class NasTransformer_7 implements Transformer {
 		helper.deleteClass( "AX_LI_ProcessStep_Bodenhoehe" );
 		helper.deleteClass( "AX_LI_ProcessStep_Dachhoehe" );
 		helper.deleteClass( "AX_LI_ProcessStep3D" );
+		helper.deleteClass( "Voltage" );
 		helper.deleteClass( "Acceleration" );
 		helper.deleteClass( "AccelerationGradient" );
 		helper.deleteClass( "AD_ReferenzierbaresGitter" );

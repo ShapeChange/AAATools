@@ -2,6 +2,7 @@
 	<annotation>
 		<documentation>extdEncRule.xsd, part of GML 3.3. Copyright (c) [2011, 2018] Open Geospatial Consortium, Inc. To obtain additional rights of use, visit http://www.opengeospatial.org/legal/.</documentation>
 	</annotation>
+	<import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../w3c/xml.xsd"/>
 	<element name="extendedEncodingRule" type="anyURI"/>
 	<!-- element targetCodeList added in version 3.3.1 as it was missing in version 3.3.0 -->
 	<element name="targetCodeList" type="string"/>

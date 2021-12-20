@@ -35,23 +35,16 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -61,9 +54,8 @@ import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.xml.serializer.OutputPropertiesFactory;
@@ -72,7 +64,6 @@ import org.apache.xml.serializer.SerializerFactory;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.ProcessingInstruction;
 
 import de.adv_online.aaa.profiltool.ProfilRep;
 import de.interactive_instruments.ShapeChange.MessageSource;
@@ -80,23 +71,20 @@ import de.interactive_instruments.ShapeChange.Options;
 import de.interactive_instruments.ShapeChange.RuleRegistry;
 import de.interactive_instruments.ShapeChange.ShapeChangeAbortException;
 import de.interactive_instruments.ShapeChange.ShapeChangeResult;
+import de.interactive_instruments.ShapeChange.ShapeChangeResult.MessageContext;
 import de.interactive_instruments.ShapeChange.Type;
 import de.interactive_instruments.ShapeChange.Model.ClassInfo;
 import de.interactive_instruments.ShapeChange.Model.Constraint;
-import de.interactive_instruments.ShapeChange.Model.ImageMetadata;
 import de.interactive_instruments.ShapeChange.Model.Info;
 import de.interactive_instruments.ShapeChange.Model.Model;
 import de.interactive_instruments.ShapeChange.Model.PackageInfo;
 import de.interactive_instruments.ShapeChange.Model.PropertyInfo;
-import de.interactive_instruments.ShapeChange.Model.TaggedValues;
 import de.interactive_instruments.ShapeChange.ModelDiff.DiffElement;
+import de.interactive_instruments.ShapeChange.ModelDiff.DiffElement.ElementType;
 import de.interactive_instruments.ShapeChange.ModelDiff.DiffElement.Operation;
 import de.interactive_instruments.ShapeChange.ModelDiff.Differ;
-import de.interactive_instruments.ShapeChange.ModelDiff.DiffElement.ElementType;
-import de.interactive_instruments.ShapeChange.ShapeChangeResult.MessageContext;
 import de.interactive_instruments.ShapeChange.Target.Target;
 import de.interactive_instruments.ShapeChange.UI.StatusBoard;
-import de.interactive_instruments.ShapeChange.Util.XsltWriter;
 import de.interactive_instruments.ShapeChange.Util.ZipHandler;
 
 /**
@@ -105,6 +93,41 @@ import de.interactive_instruments.ShapeChange.Util.ZipHandler;
  */
 public class Katalog implements Target, MessageSource {
 
+	// TODO: Alle Inhaltsstrings in Konstanten wandeln
+	private static final String AAA_KATALOGTOOL = "aaa-katalogtool";
+	private static final String AAA_KENNUNG = "AAA:Kennung";
+	private static final String AAA_NUTZUNGSARTKENNUNG = "AAA:Nutzungsartkennung";
+	private static final String AUSGABEFORMAT = "ausgabeformat";
+	private static final String AUSWERTEREGEL = "Auswerteregel";
+	private static final String CODE = "code";
+	private static final String COPYRIGHT = "(c) Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der Bundesrepublik Deutschland [http://www.adv-online.de/]";
+	private static final String DATEI = "Datei";
+	private static final String DEFINITION = "definition";
+	private static final String DEL_CLOSE = "[[/del]]";
+	private static final String DEL_CLOSE_OPEN = "[[/del]][[del]]";
+	private static final String DEL_OPEN = "[[del]]";
+	private static final String DEL_OPEN_CLOSE = "[[del]][[/del]]";
+	private static final String GEERBTE_EIGENSCHAFTEN = "geerbteEigenschaften";
+	private static final String IDREF = "idref";
+	private static final String INS_CLOSE = "[[/ins]]";
+	private static final String INS_CLOSE_OPEN = "[[/ins]][[ins]]";
+	private static final String INS_OPEN = "[[ins]]";
+	private static final String INS_OPEN_CLOSE = "[[ins]][[/ins]]";
+	private static final String MODE = "mode";
+	private static final String MODELL = "Modell";
+	private static final String MODELLART = "modellart";
+	private static final String MODELLARTEN = "modellarten";
+	private static final String NUR_GRUNDDATENBESTAND = "nurGrunddatenbestand";
+	private static final String NUTZUNGSARTKENNUNG = "nutzungsartkennung";
+	private static final String OUTPUT_DIRECTORY = "outputDirectory";
+	private static final String PAKET = "paket";
+	private static final String PROFILE2 = "profile";
+	private static final String PROFILQUELLE = "profilquelle";
+	private static final String RETIRED = "retired";
+	private static final String SCHEMAKENNUNGEN = "schemakennungen";
+	private static final String STILLGELEGTE_ELEMENTE = "stillgelegteElemente";
+	private static final String TRUE = "true";
+	private static final String VERZEICHNIS = "Verzeichnis";
 	public static final int STATUS_WRITE_HTML = 23;
 	public static final int STATUS_WRITE_XML = 24;
 	public static final int STATUS_WRITE_CSV = 26;
@@ -137,7 +160,7 @@ public class Katalog implements Target, MessageSource {
 	private Boolean Retired = false;
 	private String[] MAList;
 	private String[] PList;
-	private String PQuelle = "Modell";
+	private String PQuelle = MODELL;
 	private Model refModel = null;
 	private PackageInfo refPackage = null;
 	private SortedMap<Info, SortedSet<DiffElement>> diffs = null;
@@ -146,7 +169,8 @@ public class Katalog implements Target, MessageSource {
 	private HashSet<PropertyInfo> exportedAssociation = new HashSet<PropertyInfo>();
 	private HashSet<PropertyInfo> processedProperty = new HashSet<PropertyInfo>();
 	
-	private Map<String, String> regeln = null; 
+	private Map<String, String> regelnClass = null; 
+	private Map<String, String> regelnProp = null; 
 	private String OutputFormat  = "";
 	
 	@Override
@@ -156,7 +180,7 @@ public class Katalog implements Target, MessageSource {
 
 	@Override
 	public String getTargetIdentifier() {
-		return "aaa-katalogtool";
+		return AAA_KATALOGTOOL;
 	}
 
 	@Override
@@ -179,25 +203,25 @@ public class Katalog implements Target, MessageSource {
 			return;
 		}
 		
-		outputDirectory = options.parameter(this.getClass().getName(),"Verzeichnis");
+		outputDirectory = options.parameter(this.getClass().getName(),VERZEICHNIS);
 		if (outputDirectory==null)
-			outputDirectory = options.parameter("outputDirectory");
+			outputDirectory = options.parameter(OUTPUT_DIRECTORY);
 		if (outputDirectory==null)
 			outputDirectory = options.parameter(".");
 
-		String s = options.parameter(this.getClass().getName(),"nurGrunddatenbestand");
-		if (s!=null && s.equals("true"))
+		String s = options.parameter(this.getClass().getName(),NUR_GRUNDDATENBESTAND);
+		if (s!=null && s.equals(TRUE))
 			OnlyGDB = true;
 
-		s = options.parameter(this.getClass().getName(),"geerbteEigenschaften");
-		if (s!=null && s.equals("true"))
+		s = options.parameter(this.getClass().getName(),GEERBTE_EIGENSCHAFTEN);
+		if (s!=null && s.equals(TRUE))
 			Inherit = true;
 
-		s = options.parameter(this.getClass().getName(),"stillgelegteElemente");
-		if (s!=null && s.equals("true"))
+		s = options.parameter(this.getClass().getName(),STILLGELEGTE_ELEMENTE);
+		if (s!=null && s.equals(TRUE))
 			Retired = true;
 
-		s = options.parameter(this.getClass().getName(),"profile");
+		s = options.parameter(this.getClass().getName(),PROFILE2);
 		if (s==null || s.trim().length()==0)
 			PList = new String[0];
 		else
@@ -205,33 +229,33 @@ public class Katalog implements Target, MessageSource {
 		if (PList.length>0)
 			OnlyProfile = true;
 		
-		s = options.parameter(this.getClass().getName(),"profilquelle");
+		s = options.parameter(this.getClass().getName(),PROFILQUELLE);
 		if (s!=null)
 			PQuelle = s.trim();
-		if (!PQuelle.equals("Datei") && !PQuelle.equals("Modell")) {
+		if (!PQuelle.equals(DATEI) && !PQuelle.equals(MODELL)) {
 			result.addError("Die Profilquelle '"+PQuelle+"' ist unbekannt, es wird 'Modell' verwendet.");
-			PQuelle = "Modell";
+			PQuelle = MODELL;
 		}
 					
-		s = options.parameter(this.getClass().getName(),"modellarten");
+		s = options.parameter(this.getClass().getName(),MODELLARTEN);
 		if (s==null || s.trim().length()==0)
 			MAList = new String[0];
 		else
 			MAList = s.trim().split(",");
 		
-		s = options.parameter(this.getClass().getName(),"schemakennungen");
+		s = options.parameter(this.getClass().getName(),SCHEMAKENNUNGEN);
 		if (s!=null && s.length()>0)
 			Prefixes = s;
 		else
 			Prefixes = "*";
 
-		s = options.parameter(this.getClass().getName(),"paket");
+		s = options.parameter(this.getClass().getName(),PAKET);
 		if (s!=null && s.length()>0)
 			Package = s;
 		else
 			Package = "";
 
-		s = options.parameter(this.getClass().getName(),"ausgabeformat");
+		s = options.parameter(this.getClass().getName(),AUSGABEFORMAT);
 		if (s!=null && s.length()>0)
 			OutputFormat = s;
 		else
@@ -254,7 +278,7 @@ public class Katalog implements Target, MessageSource {
 							if (diff.subElement!=null) {
 								s += " "+diff.subElement.name(); 
 								if (diff.subElementType==ElementType.CLASS || diff.subElementType==ElementType.SUBPACKAGE || diff.subElementType==ElementType.PROPERTY) {
-									String s2 = diff.subElement.taggedValue("AAA:Kennung"); 
+									String s2 = diff.subElement.taggedValue(AAA_KENNUNG); 
 									if (s2!=null && !s2.isEmpty()) 
 										s += " ("+s2+")";
 								} else if (diff.subElementType==ElementType.ENUM) {
@@ -263,7 +287,7 @@ public class Katalog implements Target, MessageSource {
 										s += " ("+s2+")";
 								}
 							} else if (diff.diff!=null)
-								s += " "+ differ.diff_toString(diff.diff).replace("[[/ins]][[ins]]", "").replace("[[/del]][[del]]", "").replace("[[ins]][[/ins]]", "").replace("[[del]][[/del]]", "");
+								s += " "+ differ.diff_toString(diff.diff).replace(INS_CLOSE_OPEN, "").replace(DEL_CLOSE_OPEN, "").replace(INS_OPEN_CLOSE, "").replace(DEL_OPEN_CLOSE, "");
 							else
 								s += " ???";
 							mc.addDetail(s);
@@ -275,7 +299,7 @@ public class Katalog implements Target, MessageSource {
 					
 		document = createDocument();
 
-		document.appendChild(document.createComment("(c) Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der Bundesrepublik Deutschland [http://www.adv-online.de/]"));
+		document.appendChild(document.createComment(COPYRIGHT));
 
 		root = document.createElement("FC_FeatureCatalogue");
 		document.appendChild(root);
@@ -290,7 +314,7 @@ public class Katalog implements Target, MessageSource {
 			cpropi = cma.properties().values();
 
 		for (String ma : MAList) {
-			e1 = document.createElement("modellart");
+			e1 = document.createElement(MODELLART);
 			e1.setTextContent(ma);
 			if (cpropi!=null) {
 				for (PropertyInfo propi : cpropi) {
@@ -355,7 +379,7 @@ public class Katalog implements Target, MessageSource {
 		e3.appendChild(e4);
 		
 		for (String pf : PList) {
-			if (PQuelle.equals("Datei"))
+			if (PQuelle.equals(DATEI))
 				profile.add(new ProfilRep(pi, model, options, result, zielversion, outputDirectory+"/"+pf+".3ap"));
 			else {
 				String[] sa = pf.split("_",2);
@@ -429,16 +453,16 @@ public class Katalog implements Target, MessageSource {
 			if (pix.containedPackages().size()==0) {
 				e1 = document.createElement("AC_Objektartengruppe");
 				if (op!=null)
-					addAttribute(document,e1,"mode",op.toString());
+					addAttribute(document,e1,MODE,op.toString());
 				e3 = document.createElement("Objektbereichzugehoerigkeit");
-				addAttribute(document,e3,"idref","_"+pix.owner().id());
+				addAttribute(document,e3,IDREF,"_"+pix.owner().id());
 			} else {
 				e1 = document.createElement("AC_Objektbereich");
 				e3 = null;
 			}
 			addAttribute(document,e1,"id","_"+pix.id());
 			if (op!=null)
-				addAttribute(document,e1,"mode",op.toString());
+				addAttribute(document,e1,MODE,op.toString());
 			root.appendChild(e1);
 			e2 = document.createElement("name");
 			String s = pix.name();
@@ -451,51 +475,51 @@ public class Katalog implements Target, MessageSource {
 				}
 			e2.setTextContent(PrepareToPrint(s));
 			if (op!=null)
-				addAttribute(document,e2,"mode",op.toString());
+				addAttribute(document,e2,MODE,op.toString());
 			e1.appendChild(e2);
 			s = pix.documentation();
 			if (diffs!=null && diffs.get(pix)!=null)
 				for (DiffElement diff : diffs.get(pix)) {
 					if (diff.subElementType==ElementType.DOCUMENTATION) {
-						s = differ.diff_toString(diff.diff).replace("[[/ins]][[ins]]", "").replace("[[/del]][[del]]", "").replace("[[ins]][[/ins]]", "").replace("[[del]][[/del]]", "");
+						s = differ.diff_toString(diff.diff).replace(INS_CLOSE_OPEN, "").replace(DEL_CLOSE_OPEN, "").replace(INS_OPEN_CLOSE, "").replace(DEL_OPEN_CLOSE, "");
 						break;
 					}
 				}
 			if (s!=null && s.length()>0) {
-				PrintLineByLine(s,"definition",e1,op);
+				PrintLineByLine(s,DEFINITION,e1,op);
 			}
-			s = pix.taggedValue("AAA:Kennung");
+			s = pix.taggedValue(AAA_KENNUNG);
 			if (diffs!=null && diffs.get(pix)!=null)
 				for (DiffElement diff : diffs.get(pix)) {
-					if (diff.subElementType==ElementType.TAG && diff.tag.equalsIgnoreCase("AAA:Kennung")) {
+					if (diff.subElementType==ElementType.TAG && diff.tag.equalsIgnoreCase(AAA_KENNUNG)) {
 						s = differ.diff_toString(diff.diff);
 						break;
 					}
 				}
 			if (s!=null && s.length()>0) {
-				e2 = document.createElement("code");
+				e2 = document.createElement(CODE);
 				e2.setTextContent(PrepareToPrint(s));
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);
 			}
 			if (e3!=null)
 				e1.appendChild(e3);
 			
-			if (pix.stereotype("retired")) {
-				e2 = document.createElement("retired");
-				e2.setTextContent("true");
+			if (pix.stereotype(RETIRED)) {
+				e2 = document.createElement(RETIRED);
+				e2.setTextContent(TRUE);
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);
 			}
 
-			String nart = pix.taggedValue("AAA:Nutzungsartkennung");
+			String nart = pix.taggedValue(AAA_NUTZUNGSARTKENNUNG);
 			if (nart!=null && nart.length()>0) {
-				e2 = document.createElement("nutzungsartkennung");
+				e2 = document.createElement(NUTZUNGSARTKENNUNG);
 				e2.setTextContent(nart);
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);
 			}
 		}
@@ -559,24 +583,24 @@ public class Katalog implements Target, MessageSource {
 			line = PrepareToPrint(line);
 			
 			if (ins) {
-				line = "[[ins]]"+line;
+				line = INS_OPEN+line;
 				ins = false;
 			} else if (del) {
-				line = "[[del]]"+line;
+				line = DEL_OPEN+line;
 				del = false;
 			}
 			
-			if (count(line,"[[ins]]")>count(line,"[[/ins]]")) {
+			if (count(line,INS_OPEN)>count(line,INS_CLOSE)) {
 				ins = true;
-				line += "[[/ins]]";
-			} else if (count(line,"[[del]]")>count(line,"[[/del]]")) {
+				line += INS_CLOSE;
+			} else if (count(line,DEL_OPEN)>count(line,DEL_CLOSE)) {
 				del = true;
-				line += "[[/del]]";
+				line += DEL_CLOSE;
 			}			
 
 			e2.setTextContent(line);
 			if (op!=null)
-				addAttribute(document,e2,"mode",op.toString());
+				addAttribute(document,e2,MODE,op.toString());
 			e1.appendChild(e2);
 		}
 	}
@@ -647,7 +671,7 @@ public class Katalog implements Target, MessageSource {
 			return;
 
 		Operation op = null;
-		if (diffs!=null && pix!=null & diffs.get(pix)!=null)
+		if (diffs!=null && pix!=null && diffs.get(pix)!=null)
 			for (DiffElement diff : diffs.get(pix)) {
 				if (diff.subElementType==ElementType.CLASS && ((ClassInfo)diff.subElement)==ci && diff.change==Operation.INSERT) {
 					op=Operation.INSERT;
@@ -727,7 +751,7 @@ public class Katalog implements Target, MessageSource {
 		Element e1 = document.createElement("FC_Value");
 		addAttribute(document,e1,"id","_A"+propi.id());
 		if (op!=null)
-			addAttribute(document,e1,"mode",op.toString());
+			addAttribute(document,e1,MODE,op.toString());
 		root.appendChild(e1);
 
 		Element e2 = document.createElement("label");
@@ -741,19 +765,19 @@ public class Katalog implements Target, MessageSource {
 			}
 		e2.setTextContent(PrepareToPrint(s));
 		if (op!=null)
-			addAttribute(document,e2,"mode",op.toString());
+			addAttribute(document,e2,MODE,op.toString());
 		e1.appendChild(e2);
 
-		e2 = document.createElement("code");
+		e2 = document.createElement(CODE);
 		s = propi.initialValue();
 		if (s==null || s.length()==0)
 			s = "(wie Bezeichner)";
 		e2.setTextContent(PrepareToPrint(s));
 		if (op!=null)
-			addAttribute(document,e2,"mode",op.toString());
+			addAttribute(document,e2,MODE,op.toString());
 		e1.appendChild(e2);
 
-		e2 = document.createElement("definition");
+		e2 = document.createElement(DEFINITION);
 		s = propi.documentation();
 		if (diffs!=null && diffs.get(propi)!=null)
 			for (DiffElement diff : diffs.get(propi)) {
@@ -764,17 +788,17 @@ public class Katalog implements Target, MessageSource {
 			}
 		e2.setTextContent(PrepareToPrint(s));
 		if (op!=null)
-			addAttribute(document,e2,"mode",op.toString());
+			addAttribute(document,e2,MODE,op.toString());
 		e1.appendChild(e2);
 		
 		PrintStandardElements(propi,e1,op);
 		
-		String nart = propi.taggedValue("AAA:Nutzungsartkennung");
+		String nart = propi.taggedValue(AAA_NUTZUNGSARTKENNUNG);
 		if (nart!=null && nart.length()>0) {
-			e2 = document.createElement("nutzungsartkennung");
+			e2 = document.createElement(NUTZUNGSARTKENNUNG);
 			e2.setTextContent(nart);
 			if (op!=null)
-				addAttribute(document,e2,"mode",op.toString());
+				addAttribute(document,e2,MODE,op.toString());
 			e1.appendChild(e2);
 		}
 	}
@@ -868,7 +892,7 @@ public class Katalog implements Target, MessageSource {
 				return false;
 		}
 		
-		if (!Retired && i.stereotype("retired"))
+		if (!Retired && i.stereotype(RETIRED))
 			return false;
 		
 		return true;
@@ -924,14 +948,14 @@ public class Katalog implements Target, MessageSource {
 		if(marker==null || marker.length()==0)
 			marker = "-==-";
 		
-		if(regeln==null){
-			regeln = new TreeMap<String, String>();
-			regeln.put("BR", "Bildungsregel");
-			regeln.put("EK", "Erfassungskriterium");
-			regeln.put("KBD", "Konsistenzbedingung");
+		if(regelnClass==null){
+			regelnClass = new TreeMap<String, String>();
+			regelnClass.put("BR", "Bildungsregel");
+			regelnClass.put("EK", "Erfassungskriterium");
+			regelnClass.put("KBD", "Konsistenzbedingung");
 		}
 		
-		String reg = regeln.get(cat);
+		String reg = regelnClass.get(cat);
 		if(reg==null)
 			return null;
 		
@@ -948,11 +972,50 @@ public class Katalog implements Target, MessageSource {
 		return ret;
 	}
 	
-	private String getDoc(ClassInfo ci){
+	private String getDocArBr(PropertyInfo pi, String cat){
+		String ret = null;
+		String doc = pi.documentation();
 
-		String doc = ci.documentation();
-		if (diffs!=null && diffs.get(ci)!=null)
-			for (DiffElement diff : diffs.get(ci)) {
+		if (diffs!=null && diffs.get(pi)!=null)
+			for (DiffElement diff : diffs.get(pi)) {
+				if (diff.subElementType==ElementType.DOCUMENTATION) {
+					doc = differ.diff_toString(diff.diff);
+					break;
+				}
+			}
+
+		String marker = options.parameter( this.getClass().getName(), "notesRuleMarker" );
+		if(marker==null || marker.length()==0)
+			marker = "-==-";
+		
+		if(regelnProp==null){
+			regelnProp = new TreeMap<String, String>();
+			regelnProp.put("AR", AUSWERTEREGEL);
+			regelnProp.put("BR", "Bildungsregel");
+		}
+		
+		String reg = regelnProp.get(cat);
+		if(reg==null)
+			return null;
+		
+		if(doc!=null){
+			String filter = marker + " " + reg + " " + marker;
+			if(doc.contains(filter)){
+				int start = doc.indexOf(filter)+filter.length();
+				int end = doc.indexOf(marker, start);
+				if(end==-1)
+					end = doc.length();
+				ret = doc.substring(start, end).trim();
+			}
+		}
+		return ret;
+	}
+	
+	private String getDoc(Info i){
+
+		String doc = i.documentation();
+		if (diffs!=null && diffs.get(i)!=null)
+			for (DiffElement diff : diffs.get(i)) {
 				if (diff.subElementType==ElementType.DOCUMENTATION) {
 					doc = differ.diff_toString(diff.diff);
 					break;
@@ -980,7 +1043,7 @@ public class Katalog implements Target, MessageSource {
 			Element e1 = document.createElement("AC_FeatureType");
 			addAttribute(document,e1,"id","_C"+ci.id());
 			if (op!=null)
-				addAttribute(document,e1,"mode",op.toString());
+				addAttribute(document,e1,MODE,op.toString());
 			root.appendChild(e1);
 			
 			Element e2 = document.createElement("name");
@@ -994,7 +1057,7 @@ public class Katalog implements Target, MessageSource {
 				}
 			e2.setTextContent(PrepareToPrint(s));
 			if (op!=null)
-				addAttribute(document,e2,"mode",op.toString());
+				addAttribute(document,e2,MODE,op.toString());
 			e1.appendChild(e2);
 			
 			s = getDoc(ci);
@@ -1003,22 +1066,22 @@ public class Katalog implements Target, MessageSource {
 			Map<String,String> ek = new HashMap<>();
 
 			if (s!=null && s.length()>0) {
-				PrintLineByLine(s,"definition",e1,op);
+				PrintLineByLine(s,DEFINITION,e1,op);
 			}
 			
-			s = ci.taggedValue("AAA:Kennung");
+			s = ci.taggedValue(AAA_KENNUNG);
 			if (diffs!=null && diffs.get(ci)!=null)
 				for (DiffElement diff : diffs.get(ci)) {
-					if (diff.subElementType==ElementType.TAG && diff.tag.equalsIgnoreCase("AAA:Kennung")) {
+					if (diff.subElementType==ElementType.TAG && diff.tag.equalsIgnoreCase(AAA_KENNUNG)) {
 						s = differ.diff_toString(diff.diff);
 						break;
 					}
 				}
 			if (s!=null && s.length()>0) {
-				e2 = document.createElement("code");
+				e2 = document.createElement(CODE);
 				e2.setTextContent(PrepareToPrint(s));
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);
 			}
 
@@ -1030,13 +1093,13 @@ public class Katalog implements Target, MessageSource {
 					if (diffs!=null && diffs.get(ci)!=null)
 						for (DiffElement diff : diffs.get(ci)) {
 							if (diff.subElementType==ElementType.SUPERTYPE && diff.change==Operation.INSERT && (ClassInfo)diff.subElement==cix) {
-								s = "[[ins]]"+s+"[[/ins]]";
+								s = INS_OPEN+s+INS_CLOSE;
 								break;
 							}
 						}		
 					e2.setTextContent(s);
 					if (op!=null)
-						addAttribute(document,e2,"mode",op.toString());
+						addAttribute(document,e2,MODE,op.toString());
 					e1.appendChild(e2);					
 				}
 			}
@@ -1044,10 +1107,10 @@ public class Katalog implements Target, MessageSource {
 				for (DiffElement diff : diffs.get(ci)) {
 					if (diff.subElementType==ElementType.SUPERTYPE && diff.change==Operation.DELETE) {
 						e2 = document.createElement("subtypeOf");
-						s = "[[del]]"+diff.subElement.name()+"[[/del]]";
+						s = DEL_OPEN+diff.subElement.name()+DEL_CLOSE;
 						e2.setTextContent(s);
 						if (op!=null)
-							addAttribute(document,e2,"mode",op.toString());
+							addAttribute(document,e2,MODE,op.toString());
 						e1.appendChild(e2);					
 					}
 				}		
@@ -1056,9 +1119,9 @@ public class Katalog implements Target, MessageSource {
 			
 			e2 = document.createElement("Objektartengruppenzugehoerigkeit");
 			if (op!=Operation.DELETE)
-				addAttribute(document,e2,"idref","_"+ci.pkg().id());
+				addAttribute(document,e2,IDREF,"_"+ci.pkg().id());
 			else
-				addAttribute(document,e2,"idref","_"+pix.id());
+				addAttribute(document,e2,IDREF,"_"+pix.id());
 			e1.appendChild(e2);					
 			
 			s = getDocBrEkKbd(ci, "BR", "");
@@ -1138,22 +1201,22 @@ public class Katalog implements Target, MessageSource {
 			}		
 
 			for (Map.Entry<String, String> entry : ek.entrySet()) {
-				PrintLineByLine(entry.getValue(), "erfassungskriterium", "modellart", entry.getKey(), e1, op);
+				PrintLineByLine(entry.getValue(), "erfassungskriterium", MODELLART, entry.getKey(), e1, op);
 			}
 
 			for (Map.Entry<String, String> entry : kbd.entrySet()) {
-				PrintLineByLine(entry.getValue(), "konsistenzbedingung", "modellart", entry.getKey(), e1, op);
+				PrintLineByLine(entry.getValue(), "konsistenzbedingung", MODELLART, entry.getKey(), e1, op);
 			}
 
 			for (Map.Entry<String, String> entry : br.entrySet()) {
-				PrintLineByLine(entry.getValue(), "bildungsregel", "modellart", entry.getKey(), e1, op);
+				PrintLineByLine(entry.getValue(), "bildungsregel", MODELLART, entry.getKey(), e1, op);
 			}
 
 			if (ci.isAbstract()) {
 				e2 = document.createElement("abstrakt");
-				e2.setTextContent("true");
+				e2.setTextContent(TRUE);
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);
 			}
 
@@ -1161,28 +1224,28 @@ public class Katalog implements Target, MessageSource {
 				e2 = document.createElement("wirdTypisiertDurch");
 				e2.setTextContent("REO");
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);					
 			}
 			if (ci.isKindOf("AA_NREO")) {
 				e2 = document.createElement("wirdTypisiertDurch");
 				e2.setTextContent("NREO");
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);					
 			}
 			if (ci.isKindOf("AA_ZUSO")) {
 				e2 = document.createElement("wirdTypisiertDurch");
 				e2.setTextContent("ZUSO");
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);					
 			}
 			if (ci.isKindOf("AA_PMO")) {
 				e2 = document.createElement("wirdTypisiertDurch");
 				e2.setTextContent("PMO");
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);					
 			}
 			
@@ -1191,33 +1254,33 @@ public class Katalog implements Target, MessageSource {
 				e2 = document.createElement("bedeutung");
 				e2.setTextContent("Objektart");
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);
 				break;
 			case Options.DATATYPE:
 				e2 = document.createElement("bedeutung");
 				e2.setTextContent("Datentyp");
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);
 				break;
 			case Options.UNION:
 				e2 = document.createElement("bedeutung");
 				e2.setTextContent("Auswahldatentyp");
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);
 				break;
 			}
 			
 			PrintStandardElements(ci,e1,op);
 			
-			s = ci.taggedValue("AAA:Nutzungsartkennung");
+			s = ci.taggedValue(AAA_NUTZUNGSARTKENNUNG);
 			if (s!=null && s.length()>0) {
-				e2 = document.createElement("nutzungsartkennung");
+				e2 = document.createElement(NUTZUNGSARTKENNUNG);
 				e2.setTextContent(s);
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);
 			}
 			
@@ -1226,7 +1289,7 @@ public class Katalog implements Target, MessageSource {
 				e2 = document.createElement("nutzungsart");
 				e2.setTextContent(s);
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);
 			}
 		}
@@ -1275,9 +1338,9 @@ public class Katalog implements Target, MessageSource {
 	private void PrintPropertyRef(PropertyInfo propi, Element e1, Operation op) {
 		if (ExportProperty(propi)) {
 			Element e2 = document.createElement("characterizedBy");
-			addAttribute(document,e2,"idref","_A"+propi.id());
+			addAttribute(document,e2,IDREF,"_A"+propi.id());
 			if (op!=null)
-				addAttribute(document,e2,"mode",op.toString());
+				addAttribute(document,e2,MODE,op.toString());
 			e1.appendChild(e2);
 		} 
 	}
@@ -1301,18 +1364,18 @@ public class Katalog implements Target, MessageSource {
 				e2.setTextContent(PrepareToPrint("(unbestimmt)"));
 				e1.appendChild(e2);
 				e2 = document.createElement("roles");
-				addAttribute(document,e2,"idref","_A"+propi.id());
+				addAttribute(document,e2,IDREF,"_A"+propi.id());
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);
 				exportedAssociation.add(propi);
 				PropertyInfo propi2 = propi.reverseProperty();
 				if (propi2!=null) {
 					if (ExportProperty(propi2)) {
 						e2 = document.createElement("roles");
-						addAttribute(document,e2,"idref","_A"+propi2.id());
+						addAttribute(document,e2,IDREF,"_A"+propi2.id());
 						if (op!=null)
-							addAttribute(document,e2,"mode",op.toString());
+							addAttribute(document,e2,MODE,op.toString());
 						e1.appendChild(e2);
 					}
 					exportedAssociation.add(propi2);
@@ -1347,7 +1410,7 @@ public class Katalog implements Target, MessageSource {
 			e1 = document.createElement("FC_RelationshipRole");
 		addAttribute(document,e1,"id","_A"+propi.id());
 		if (op!=null)
-			addAttribute(document,e1,"mode",op.toString());
+			addAttribute(document,e1,MODE,op.toString());
 		root.appendChild(e1);
 
 		String s = propi.taggedValue("sequenceNumber");
@@ -1366,7 +1429,7 @@ public class Katalog implements Target, MessageSource {
 			}
 		e2.setTextContent(PrepareToPrint(s));
 		if (op!=null)
-			addAttribute(document,e2,"mode",op.toString());
+			addAttribute(document,e2,MODE,op.toString());
 		e1.appendChild(e2);
 
 		e2 = document.createElement("cardinality");
@@ -1380,34 +1443,37 @@ public class Katalog implements Target, MessageSource {
 			}
 		e2.setTextContent(PrepareToPrint(s));
 		if (op!=null)
-			addAttribute(document,e2,"mode",op.toString());
+			addAttribute(document,e2,MODE,op.toString());
 		e1.appendChild(e2);
 			
-		s = propi.documentation();
-		if (diffs!=null && diffs.get(propi)!=null)
-			for (DiffElement diff : diffs.get(propi)) {
-				if (diff.subElementType==ElementType.DOCUMENTATION) {
-					s = differ.diff_toString(diff.diff);
-					break;
-				}
-			}
+		s = getDoc(propi);
 		if (s!=null && s.length()>0) {
-			PrintLineByLine(s,"definition",e1,op);
+			PrintLineByLine(s,DEFINITION,e1,op);
 		}
-		
+
+		s = getDocArBr(propi, "AR");
+		if (s!=null && s.length()>0) {
+			PrintLineByLine(s, "auswerteregel", e1, op);
+		}
+
+		s = getDocArBr(propi, "BR");
+		if (s!=null && s.length()>0) {
+			PrintLineByLine(s, "bildungsregel", e1, op);
+		}
+
 		if (!propi.isAttribute() && !propi.isNavigable()) {
 			e2 = document.createElement("inverseRichtung");
-			e2.setTextContent("true");
+			e2.setTextContent(TRUE);
 			if (op!=null)
-				addAttribute(document,e2,"mode",op.toString());
+				addAttribute(document,e2,MODE,op.toString());
 			e1.appendChild(e2);
 		}
 		
 		if (propi.isDerived()) {
 			e2 = document.createElement("derived");
-			e2.setTextContent("true");
+			e2.setTextContent(TRUE);
 			if (op!=null)
-				addAttribute(document,e2,"mode",op.toString());
+				addAttribute(document,e2,MODE,op.toString());
 			e1.appendChild(e2);
 		}
 		
@@ -1416,52 +1482,52 @@ public class Katalog implements Target, MessageSource {
 			e2 = document.createElement("initialValue");
 			e2.setTextContent(PrepareToPrint(s));
 			if (op!=null)
-				addAttribute(document,e2,"mode",op.toString());
+				addAttribute(document,e2,MODE,op.toString());
 			e1.appendChild(e2);
 		}
 
 		if (propi.isAttribute() && propi.isReadOnly()) {
 			e2 = document.createElement("readOnly");
-			e2.setTextContent("true");
+			e2.setTextContent(TRUE);
 			if (op!=null)
-				addAttribute(document,e2,"mode",op.toString());
+				addAttribute(document,e2,MODE,op.toString());
 			e1.appendChild(e2);
 		}
 
-		s = propi.taggedValue("AAA:Kennung");
+		s = propi.taggedValue(AAA_KENNUNG);
 		if (diffs!=null && diffs.get(propi)!=null)
 			for (DiffElement diff : diffs.get(propi)) {
-				if (diff.subElementType==ElementType.TAG && diff.tag.equalsIgnoreCase("AAA:Kennung")) {
+				if (diff.subElementType==ElementType.TAG && diff.tag.equalsIgnoreCase(AAA_KENNUNG)) {
 					s = differ.diff_toString(diff.diff);
 					break;
 				}
 			}
 		if (s!=null && s.length()>0) {
-			e2 = document.createElement("code");
+			e2 = document.createElement(CODE);
 			if (propi.isDerived())
 				s = "(DER) "+s;
 			e2.setTextContent(PrepareToPrint(s));
 			if (op!=null)
-				addAttribute(document,e2,"mode",op.toString());
+				addAttribute(document,e2,MODE,op.toString());
 			e1.appendChild(e2);
 		}
 
 		s = propi.taggedValue("AAA:objektbildend");
-		if (s!=null && s.toLowerCase().equals("true")) {
+		if (s!=null && s.toLowerCase().equals(TRUE)) {
 			e2 = document.createElement("objektbildend");
-			e2.setTextContent("true");
+			e2.setTextContent(TRUE);
 			if (op!=null)
-				addAttribute(document,e2,"mode",op.toString());
+				addAttribute(document,e2,MODE,op.toString());
 			e1.appendChild(e2);
 		}
 			
 		PrintStandardElements(propi,e1,op);
 
 		e2 = document.createElement("inType");
-		addAttribute(document,e2,"idref","_C"+ci.id());
+		addAttribute(document,e2,IDREF,"_C"+ci.id());
 		addAttribute(document,e2,"name",ci.name());
 		if (op!=null)
-			addAttribute(document,e2,"mode",op.toString());
+			addAttribute(document,e2,MODE,op.toString());
 		e1.appendChild(e2);					
 		
 		Type ti = propi.typeInfo();
@@ -1474,7 +1540,7 @@ public class Katalog implements Target, MessageSource {
 				else
 					cix = model.classByName(ti.name);
 				if (cix!=null && ExportClass(cix,false, null)) {
-					addAttribute(document,e2,"idref","_C"+cix.id());
+					addAttribute(document,e2,IDREF,"_C"+cix.id());
 				}
 				s = ti.name;
 				if (diffs!=null && diffs.get(propi)!=null)
@@ -1486,18 +1552,18 @@ public class Katalog implements Target, MessageSource {
 					}
 				addAttribute(document,e2,"name",s);
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);					
 			}
 			e2 = document.createElement("relation");
-			addAttribute(document,e2,"idref",assocId);
+			addAttribute(document,e2,IDREF,assocId);
 			e1.appendChild(e2);
 			PropertyInfo propi2 = propi.reverseProperty();
 			if (propi2!=null && ExportProperty(propi2)) {
 				e2 = document.createElement("InverseRole");
-				addAttribute(document,e2,"idref","_A"+propi2.id());
+				addAttribute(document,e2,IDREF,"_A"+propi2.id());
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);
 			}
 			e2 = document.createElement("orderIndicator");
@@ -1506,7 +1572,7 @@ public class Katalog implements Target, MessageSource {
 			else
 				e2.setTextContent("0");		
 			if (op!=null)
-				addAttribute(document,e2,"mode",op.toString());
+				addAttribute(document,e2,MODE,op.toString());
 			e1.appendChild(e2);
 		} else {
 			if (ti!=null) {
@@ -1531,18 +1597,18 @@ public class Katalog implements Target, MessageSource {
 							}
 						e2.setTextContent(PrepareToPrint(s));
 						if (op!=null)
-							addAttribute(document,e2,"mode",op.toString());
+							addAttribute(document,e2,MODE,op.toString());
 						e1.appendChild(e2);
 						e2 = document.createElement("ValueDomainType");
 						if (op!=null)
-							addAttribute(document,e2,"mode",op.toString());
+							addAttribute(document,e2,MODE,op.toString());
 						e1.appendChild(e2);
 						if (!cix.name().equals("Boolean")) {
 							e2.setTextContent("1");
 							for (PropertyInfo ei : cix.properties().values()) {
 								if (ei!=null && ExportValue(ei)) {
 									e2 = document.createElement("enumeratedBy");
-									addAttribute(document,e2,"idref","_A"+ei.id());
+									addAttribute(document,e2,IDREF,"_A"+ei.id());
 									e1.appendChild(e2);
 								}
 							}
@@ -1550,7 +1616,7 @@ public class Katalog implements Target, MessageSource {
 								for (DiffElement diff : diffs.get(cix)) {
 									if (diff.subElementType==ElementType.ENUM && diff.change==Operation.DELETE) {
 										e2 = document.createElement("enumeratedBy");
-										addAttribute(document,e2,"idref","_A"+((PropertyInfo)diff.subElement).id());
+										addAttribute(document,e2,IDREF,"_A"+((PropertyInfo)diff.subElement).id());
 										e1.appendChild(e2);
 									}
 								}			
@@ -1568,7 +1634,7 @@ public class Katalog implements Target, MessageSource {
 					default:
 						e2 = document.createElement("ValueDataType");
 						if (ExportClass(cix,false,null))
-							addAttribute(document,e2,"idref","_C"+cix.id());
+							addAttribute(document,e2,IDREF,"_C"+cix.id());
 						s = cix.name();
 						if (diffs!=null && diffs.get(propi)!=null)
 							for (DiffElement diff : diffs.get(propi)) {
@@ -1579,12 +1645,12 @@ public class Katalog implements Target, MessageSource {
 							}
 						e2.setTextContent(PrepareToPrint(s));
 						if (op!=null)
-							addAttribute(document,e2,"mode",op.toString());
+							addAttribute(document,e2,MODE,op.toString());
 						e1.appendChild(e2);
 						e2 = document.createElement("ValueDomainType");
 						e2.setTextContent("0");
 						if (op!=null)
-							addAttribute(document,e2,"mode",op.toString());
+							addAttribute(document,e2,MODE,op.toString());
 						e1.appendChild(e2);
 						break;
 					}
@@ -1600,14 +1666,14 @@ public class Katalog implements Target, MessageSource {
 						}
 					e2.setTextContent(PrepareToPrint(s));
 					if (op!=null)
-						addAttribute(document,e2,"mode",op.toString());
+						addAttribute(document,e2,MODE,op.toString());
 					e1.appendChild(e2);
 				}
 			} else {
 				e2 = document.createElement("ValueDataType");
 				e2.setTextContent("(unbestimmt)");
 				if (op!=null)
-					addAttribute(document,e2,"mode",op.toString());
+					addAttribute(document,e2,MODE,op.toString());
 				e1.appendChild(e2);
 			}
 		}		
@@ -1622,19 +1688,19 @@ public class Katalog implements Target, MessageSource {
 				ma = ma.trim();
 				for (String max : MAList) {
 					if (ma.contains(max)) {
-						e2 = document.createElement("modellart");
+						e2 = document.createElement(MODELLART);
 						e2.setTextContent(ma);
 						boolean found = false;
 						if (diffs!=null && diffs.get(i)!=null)
 							for (DiffElement diff : diffs.get(i)) {
 								if (diff.subElementType==ElementType.AAAMODELLART && diff.tag.equals(ma) && diff.change==Operation.INSERT) {
-									addAttribute(document,e2,"mode",Operation.INSERT.toString());
+									addAttribute(document,e2,MODE,Operation.INSERT.toString());
 									found = true;
 									break;
 								}
 							}
 						if (!found && op!=null)
-							addAttribute(document,e2,"mode",op.toString());
+							addAttribute(document,e2,MODE,op.toString());
 						e1.appendChild(e2);					
 						break;
 					}
@@ -1644,9 +1710,9 @@ public class Katalog implements Target, MessageSource {
 		if (diffs!=null && diffs.get(i)!=null)
 			for (DiffElement diff : diffs.get(i)) {
 				if (diff.subElementType==ElementType.AAAMODELLART && diff.change==Operation.DELETE) {
-					e2 = document.createElement("modellart");
+					e2 = document.createElement(MODELLART);
 					e2.setTextContent(diff.tag);
-					addAttribute(document,e2,"mode",Operation.DELETE.toString());
+					addAttribute(document,e2,MODE,Operation.DELETE.toString());
 					e1.appendChild(e2);					
 				}
 			}
@@ -1663,13 +1729,13 @@ public class Katalog implements Target, MessageSource {
 						if (diffs!=null && diffs.get(i)!=null)
 							for (DiffElement diff : diffs.get(i)) {
 								if (diff.subElementType==ElementType.AAAGRUNDDATENBESTAND && diff.tag.equals(ma) && diff.change==Operation.INSERT) {
-									addAttribute(document,e2,"mode",Operation.INSERT.toString());
+									addAttribute(document,e2,MODE,Operation.INSERT.toString());
 									found = true;
 									break;
 								}
 							}
 						if (!found && op!=null)
-							addAttribute(document,e2,"mode",op.toString());
+							addAttribute(document,e2,MODE,op.toString());
 						e1.appendChild(e2);					
 						break;
 					}
@@ -1681,7 +1747,7 @@ public class Katalog implements Target, MessageSource {
 				if (diff.subElementType==ElementType.AAAGRUNDDATENBESTAND && diff.change==Operation.DELETE) {
 					e2 = document.createElement("grunddatenbestand");
 					e2.setTextContent(diff.tag);
-					addAttribute(document,e2,"mode",Operation.DELETE.toString());
+					addAttribute(document,e2,MODE,Operation.DELETE.toString());
 					e1.appendChild(e2);					
 				}
 			}
@@ -1693,10 +1759,10 @@ public class Katalog implements Target, MessageSource {
 				if (diff.subElementType==ElementType.AAALANDNUTZUNG) {
 					if (diff.change==Operation.DELETE) {
 						tagop = Operation.DELETE;
-						s = "true";
+						s = TRUE;
 					} else if (diff.change==Operation.INSERT) {
 						tagop = Operation.INSERT;
-						s = "true";
+						s = TRUE;
 					}									 
 					break;
 				}
@@ -1707,31 +1773,31 @@ public class Katalog implements Target, MessageSource {
 			e2.setTextContent(s);
 			addAttribute(document,e2,"tag","AAA:Landnutzung");
 			if (tagop!=null)
-				addAttribute(document,e2,"mode",tagop.toString());
+				addAttribute(document,e2,MODE,tagop.toString());
 			e1.appendChild(e2);					
 		}	
 		
-		s = i.stereotypes().contains("retired") ? "true" : null;
+		s = i.stereotypes().contains(RETIRED) ? TRUE : null;
 		tagop = op;
 		if (diffs!=null && diffs.get(i)!=null) {
 			for (DiffElement diff : diffs.get(i)) {
 				if (diff.subElementType==ElementType.AAARETIRED) {
 					if (diff.change==Operation.DELETE) {
 						tagop = Operation.DELETE;
-						s = "true";
+						s = TRUE;
 					} else if (diff.change==Operation.INSERT) {
 						tagop = Operation.INSERT;
-						s = "true";
+						s = TRUE;
 					}									 
 					break;
 				}
 			}
 		}
 		if (s!=null && s.length()>0) {
-			e2 = document.createElement("retired");
+			e2 = document.createElement(RETIRED);
 			e2.setTextContent(s);
 			if (tagop!=null)
-				addAttribute(document,e2,"mode",tagop.toString());
+				addAttribute(document,e2,MODE,tagop.toString());
 			e1.appendChild(e2);					
 		}	
 		
@@ -1749,7 +1815,7 @@ public class Katalog implements Target, MessageSource {
 			addAttribute(document,e2,"tag","AAA:GueltigBis");
 			e2.setTextContent(s);
 			if (op!=null)
-				addAttribute(document,e2,"mode",op.toString());
+				addAttribute(document,e2,MODE,op.toString());
 			e1.appendChild(e2);
 		}
 		
@@ -1769,7 +1835,7 @@ public class Katalog implements Target, MessageSource {
 						e2 = document.createElement("profil");
 						e2.setTextContent(pf);
 						if (op!=null)
-							addAttribute(document,e2,"mode",op.toString());
+							addAttribute(document,e2,MODE,op.toString());
 						e1.appendChild(e2);					
 						break;
 					}
@@ -1810,7 +1876,7 @@ public class Katalog implements Target, MessageSource {
 					e2.setTextContent(s);
 					addAttribute(document,e2,"tag",tag);
 					if (!found && op!=null)
-						addAttribute(document,e2,"mode",op.toString());
+						addAttribute(document,e2,MODE,op.toString());
 					e1.appendChild(e2);					
 				}					
 			}
@@ -1889,7 +1955,7 @@ public class Katalog implements Target, MessageSource {
 			File xmlFile = new File(outDir, xmlName);
 			
 			String s = options.parameter(this.getClass().getName(),"tmpLoeschen");
-			if (s!=null && s.equalsIgnoreCase("true"))
+			if (s!=null && s.equalsIgnoreCase(TRUE))
 				xmlFile.delete();
 			
 		} catch (Exception e) {
@@ -2214,7 +2280,7 @@ public class Katalog implements Target, MessageSource {
 				    	}
 				    }
 				    trans.transform(xmlSource, res);
-					result.addResult(getTargetName(), outputDirectory, outFile.getCanonicalPath(), options.parameter(this.getClass().getName(),"modellarten"));
+					result.addResult(getTargetName(), outputDirectory, outFile.getCanonicalPath(), options.parameter(this.getClass().getName(),MODELLARTEN));
 				}
 			}
 

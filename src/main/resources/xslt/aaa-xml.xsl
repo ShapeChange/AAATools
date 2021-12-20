@@ -145,6 +145,24 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
 			</AC_Konsistenzbedingung>
 		</konsistenzbedingung>
 	</xsl:template>
+	<xsl:template name="Auswerteregel">
+		<xsl:param name="list"/>
+		<xsl:param name="mart"/>
+		<auswerteregel>
+			<AC_Auswerteregel>
+				<regel>
+					<xsl:value-of select="$list" separator="&#xa;"/>
+				</regel>
+				<xsl:if test="$mart!='*'">
+					<modellart>
+						<xsl:call-template name="AA_Modellart">
+							<xsl:with-param name="mart" select="$mart"/>				
+						</xsl:call-template>
+					</modellart>
+				</xsl:if>		
+			</AC_Auswerteregel>
+		</auswerteregel>
+	</xsl:template>
 	<xsl:template name="Bildungsregel">
 		<xsl:param name="list"/>
 		<xsl:param name="mart"/>
@@ -631,6 +649,18 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
 						<objektbildend>false</objektbildend>
 					</xsl:otherwise>
 				</xsl:choose>
+				<xsl:if test="auswerteregel">
+					<xsl:call-template name="Auswerteregel">
+						<xsl:with-param name="list" select="auswerteregel"/>
+						<xsl:with-param name="mart" select="'*'" />
+					</xsl:call-template>
+				</xsl:if>
+				<xsl:if test="bildungsregel">
+					<xsl:call-template name="Bildungsregel">
+						<xsl:with-param name="list" select="bildungsregel"/>
+						<xsl:with-param name="mart" select="'*'" />
+					</xsl:call-template>
+				</xsl:if>
 			</AC_FeatureAttribute>
 		</gml:dictionaryEntry>
 	</xsl:template>

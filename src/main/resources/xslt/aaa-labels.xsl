@@ -12,7 +12,9 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
   <xsl:variable name="fc.Anwendungsgebiet">Anwendungsgebiet</xsl:variable>
   <xsl:variable name="fc.Art">Art</xsl:variable>
   <xsl:variable name="fc.Attributarten">Attributarten</xsl:variable>
+  <xsl:variable name="fc.Auswerteregel">Auswerteregel</xsl:variable>
   <xsl:variable name="fc.Bezeichnung">Bezeichnung</xsl:variable>
+  <xsl:variable name="fc.Bildungsregel">Bildungsregel</xsl:variable>
   <xsl:variable name="fc.Bildungsregeln">Bildungsregeln</xsl:variable>
   <xsl:variable name="fc.Datentyp">Datentyp</xsl:variable>
   <xsl:variable name="fc.Defaultwert">Initialer Wert bei Objekterzeugung</xsl:variable>

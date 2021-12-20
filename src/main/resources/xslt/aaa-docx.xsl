@@ -529,7 +529,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
      </xsl:call-template>
   </xsl:for-each-group> 
   </xsl:if>
-   <xsl:for-each select="key('modelElement', $featuretype/characterizedBy/@idref)">
+  <xsl:for-each select="key('modelElement', $featuretype/characterizedBy/@idref|/FC_FeatureCatalogue/FC_RelationshipRole[inType/@idref=$featuretype/@id]/@id)">
 	<!-- apply an alphabetical sort of feature type characteristics (attributes, relationships etc) -->
    <xsl:sort select="@sequenceNumber" />
 	<xsl:sort select="name"/>
@@ -575,6 +575,23 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
    <xsl:with-param name="title">Definition:</xsl:with-param>
    <xsl:with-param name="lines" select="$featureProp/definition"/>
   </xsl:call-template>
+  <xsl:if test="$featureProp/auswerteregel">
+   <xsl:call-template name="propentry">
+      <xsl:with-param name="title">
+         <xsl:value-of select="$fc.Auswerteregel" />:
+      </xsl:with-param>
+      <xsl:with-param name="lines" select="$featureProp/auswerteregel"/>
+   </xsl:call-template>
+ </xsl:if>
+  <xsl:if test="$featureProp/bildungsregel">
+   <xsl:call-template name="propentry">
+      <xsl:with-param name="title">
+         <xsl:value-of select="$fc.Bildungsregel" />:
+      </xsl:with-param>
+      <xsl:with-param name="lines" select="$featureProp/bildungsregel"/>
+   </xsl:call-template>
+ </xsl:if>
+
   <!-- nicht in HTML und DOCX: objektbildend -->
   <xsl:if test="$featureProp/retired">
    <xsl:choose>

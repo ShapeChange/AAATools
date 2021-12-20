@@ -485,6 +485,14 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
         <h5><xsl:value-of select="$fc.Definition" />:</h5>
         <xsl:apply-templates select="definition" mode="absatz" />
       </xsl:if>
+      <xsl:if test="auswerteregel">
+        <h5><xsl:value-of select="$fc.Auswerteregel" />:</h5>
+        <xsl:apply-templates select="auswerteregel" mode="absatz" />
+      </xsl:if>
+      <xsl:if test="bildungsregel">
+        <h5><xsl:value-of select="$fc.Bildungsregel" />:</h5>
+        <xsl:apply-templates select="bildungsregel" mode="absatz" />
+      </xsl:if>
       <!-- nicht in HTML und DOCX 
       <xsl:if test="objektbildend">
         <h5><xsl:value-of select="$fc.Objektbildend" />:</h5>

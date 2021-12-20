@@ -70,7 +70,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 	 * 
 	 */
 	public static final String VERSION_TEXT = "1.3.0";
-	private static final String title = "AAA-Katalogtool";
+	private static final String TITLE = "AAA-Katalogtool";
 	
 	private static final long serialVersionUID = -2443287559064380497L;
 	
@@ -276,7 +276,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 	private String paramKatalogClass = "de.adv_online.aaa.katalogtool.Katalog";
 	
 	public KatalogDialog(){
-		super(title);
+		super(TITLE);
      	converter = null;
     	result = null;
     	options = null;
@@ -286,7 +286,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 	}
 	
 	public KatalogDialog(Converter c, Options o, ShapeChangeResult r, String xmi) throws ShapeChangeAbortException{
-		super(title);
+		super(TITLE);
      	converter = null;
     	result = null;
     	options = null;
