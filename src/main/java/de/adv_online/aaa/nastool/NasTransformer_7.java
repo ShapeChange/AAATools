@@ -122,7 +122,7 @@ public class NasTransformer_7 implements Transformer {
 		helper.changeTypeAndMultiplicity( "AX_DQPunktort", "herkunft", "LI_Lineage", "0", "1" );
 		helper.changeType( "AX_DQDachhoehe", "herkunft", "LI_Lineage" );
 		helper.changeType( "AX_DQBodenhoehe", "herkunft", "LI_Lineage" );
-		helper.changeType( "AX_DQErhebung3D", "herkunft3D", "LI_ProcessStep" );
+		helper.changeTypeAndMultiplicity( "AX_DQErhebung3D", "herkunft3D", "LI_Lineage", "0" , "1" );
 		helper.changeType( "AX_DQSchwere", "genauigkeitswert", "Measure" );
 		helper.changeType( "AX_Schwereanomalie_Schwere", "wert", "Measure" );
 		helper.changeType( "AX_Schwere", "schwerewert", "Measure" );
