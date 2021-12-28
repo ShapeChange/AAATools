@@ -239,7 +239,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
 				<xsl:if test="count(nutzungsartkennung)=1">
 					<xsl:for-each select="tokenize(nutzungsartkennung, ',')">
 						<nutzungsartkennung>				
-							<xsl:value-of select="."/>
+							<xsl:value-of select="normalize-space(.)"/>
 						</nutzungsartkennung>
             	</xsl:for-each>
 				</xsl:if>
@@ -298,7 +298,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
 				<xsl:if test="count(nutzungsartkennung)=1">
 					<xsl:for-each select="tokenize(nutzungsartkennung, ',')">
 						<nutzungsartkennung>				
-							<xsl:value-of select="."/>
+							<xsl:value-of select="normalize-space(.)"/>
 						</nutzungsartkennung>
             	</xsl:for-each>
 				</xsl:if>
@@ -398,7 +398,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
 				<xsl:if test="count(nutzungsartkennung)=1">
 					<xsl:for-each select="tokenize(nutzungsartkennung, ',')">
 						<nutzungsartkennung>				
-							<xsl:value-of select="."/>
+							<xsl:value-of select="normalize-space(.)"/>
 						</nutzungsartkennung>
             	</xsl:for-each>
 				</xsl:if>
@@ -714,7 +714,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
 				<xsl:if test="count(nutzungsartkennung)=1">
 					<xsl:for-each select="tokenize(nutzungsartkennung, ',')">
 						<nutzungsartkennung>				
-							<xsl:value-of select="."/>
+							<xsl:value-of select="normalize-space(.)"/>
 						</nutzungsartkennung>
             	</xsl:for-each>
 				</xsl:if>
