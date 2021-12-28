@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:fes="http://www.opengis.net/fes/2.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmlcov="http://www.opengis.net/gmlcov/1.0" xmlns:gmlexr="http://www.opengis.net/gml/3.3/exr" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/AppInfo" xmlns:wfs="http://www.opengis.net/wfs/2.0" xmlns:wfsext="http://www.adv-online.de/namespaces/adv/gid/wfsext/2.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/gid/7.1" version="7.1.0">
+<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:fes="http://www.opengis.net/fes/2.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmlcov="http://www.opengis.net/gmlcov/1.0" xmlns:gmlexr="http://www.opengis.net/gml/3.3/exr" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/AppInfo" xmlns:wfs="http://www.opengis.net/wfs/2.0" xmlns:wfsext="http://www.adv-online.de/namespaces/adv/gid/wfsext/2.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/gid/7.1" version="7.1.1">
   <include schemaLocation="aaa.xsd"/>
   <import namespace="http://www.adv-online.de/namespaces/adv/gid/wfsext/2.0" schemaLocation="../../wfsext/2.0/WFS-Erweiterungen.xsd"/>
   <import namespace="http://www.interactive-instruments.de/ShapeChange/AppInfo" schemaLocation="../../../ShapeChangeAppinfo.xsd"/>
@@ -33,7 +33,7 @@
       <enumeration value="LoD3"/>
       <enumeration value="GeoBasis-DE"/>
       <enumeration value="GVM"/>
-      <enumeration value="BORIS"/>
+      <enumeration value="BRM"/>
     </restriction>
   </simpleType>
   <element name="AA_Aktivitaet" substitutionGroup="adv:AA_NREO" type="adv:AA_AktivitaetType"/>
@@ -47,7 +47,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AA_Vorgang</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:enthaelt</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -111,7 +111,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AA_Antrag</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:gebiet</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -146,7 +146,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AA_Meilenstein</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:wer</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -164,7 +164,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AA_Vorgang</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:bearbeitbarDurch</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -388,7 +388,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AA_Aktivitaet</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:status</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -397,7 +397,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AA_Vorgang</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:status</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -406,7 +406,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AA_Antrag</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:bearbeitungsstatus</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -476,7 +476,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AP_Darstellung</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:dientZurDarstellungVon</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -485,7 +485,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AX_Gestaltung3D</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:dientZurDarstellungVon</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -494,7 +494,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AP_FPO</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:dientZurDarstellungVon</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -503,7 +503,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AP_KPO_3D</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:dientZurDarstellungVon</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -512,7 +512,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AP_LPO</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:dientZurDarstellungVon</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -521,7 +521,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AP_PTO</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:dientZurDarstellungVon</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -530,7 +530,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AP_LTO</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:dientZurDarstellungVon</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -539,7 +539,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AP_PPO</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:dientZurDarstellungVon</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -565,7 +565,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AA_Antrag</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:verweistAuf</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -600,7 +600,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AA_REO</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:istAbgeleitetAus</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -617,7 +617,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AA_REO</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:hatDirektUnten</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -690,7 +690,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AA_Projektsteuerung</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:enthaelt</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -715,7 +715,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AA_Vorgang</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:synchronisiertMit</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -733,7 +733,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AA_Objekt</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:istTeilVon</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
             <complexType>
@@ -765,6 +765,7 @@
           </element>
           <element maxOccurs="unbounded" minOccurs="0" name="zeigtAufExternes" type="adv:AA_FachdatenverbindungPropertyType"/>
           <element minOccurs="0" name="quellobjektID" type="string"/>
+          <element minOccurs="0" name="name" type="string"/>
           <element minOccurs="0" name="beschreibung" type="string"/>
         </sequence>
       </extension>
@@ -786,6 +787,7 @@
           </element>
           <element maxOccurs="unbounded" minOccurs="0" name="zeigtAufExternes" type="adv:AA_FachdatenverbindungPropertyType"/>
           <element minOccurs="0" name="quellobjektID" type="string"/>
+          <element minOccurs="0" name="name" type="string"/>
           <element minOccurs="0" name="beschreibung" type="string"/>
         </sequence>
       </extension>
@@ -951,7 +953,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AP_PTO</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:hat</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -960,7 +962,7 @@
               <appinfo>
                 <targetElement xmlns="http://www.opengis.net/gml/3.2">adv:AP_LTO</targetElement>
                 <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">adv:hat</reversePropertyName>
-                <taggedValue xmlns="http://www.interactive-instruments.de/ShapeChange/AppInfo" tag="reverseRoleNAS">true</taggedValue>
+                <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
               </appinfo>
             </annotation>
           </element>
@@ -1017,7 +1019,13 @@
               </appinfo>
             </annotation>
           </element>
-          <element minOccurs="0" name="drehwinkel" type="gml:AngleType"/>
+          <element minOccurs="0" name="drehwinkel" type="gml:AngleType">
+            <annotation>
+              <appinfo>
+                <sc:taggedValue tag="AAA:UnitOfMeasure">rad</sc:taggedValue>
+              </appinfo>
+            </annotation>
+          </element>
           <element minOccurs="0" name="skalierung" type="double"/>
         </sequence>
       </extension>
@@ -1052,7 +1060,13 @@
               </appinfo>
             </annotation>
           </element>
-          <element minOccurs="0" name="drehwinkel" type="gml:AngleType"/>
+          <element minOccurs="0" name="drehwinkel" type="gml:AngleType">
+            <annotation>
+              <appinfo>
+                <sc:taggedValue tag="AAA:UnitOfMeasure">rad</sc:taggedValue>
+              </appinfo>
+            </annotation>
+          </element>
         </sequence>
       </extension>
     </complexContent>
@@ -1309,8 +1323,7 @@
     <restriction base="string">
       <enumeration value="transparentXlinks"/>
       <enumeration value="multiplePropertyValues"/>
-      <enumeration value="XlinkPropertyName"/>
-      <enumeration value="XlinkPropertyPath"/>
+      <enumeration value="PropertyName"/>
       <enumeration value="XlinkPropertyPath_leafOnly"/>
       <enumeration value="PropertyIsOfType"/>
     </restriction>
