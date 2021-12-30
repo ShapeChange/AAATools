@@ -7,7 +7,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
 	<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
 	<xsl:include href="aaa-labels.xsl"/>
 	<xsl:variable name="advMA">
-		<xsl:text> DLKM DKKM500 DKKM1000 DKKM2000 DKKM5000 Basis-DLM DLM50 DLM250 DLM1000 DTK10 DTK25 DTK50 DTK100 DTK250 DTK1000 DFGM DGM2 DGM5 DGM25 DGM50 DHM LoD1 LoD2 LoD3 GeoBasis-DE GVM BORIS </xsl:text>
+		<xsl:text> DLKM DKKM500 DKKM1000 DKKM2000 DKKM5000 Basis-DLM DLM50 DLM250 DLM1000 DTK10 DTK25 DTK50 DTK100 DTK250 DTK1000 DFGM DGM2 DGM5 DGM25 DGM50 DHM LoD1 LoD2 LoD3 GeoBasis-DE GVM BRM </xsl:text>
 	</xsl:variable>
 	<xsl:decimal-format name="code" NaN="999999"/>
 	<xsl:template match="/">
