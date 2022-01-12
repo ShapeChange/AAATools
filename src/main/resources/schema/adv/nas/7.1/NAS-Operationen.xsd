@@ -344,6 +344,12 @@
       <extension base="adv:AX_BenutzungsergebnisType">
         <sequence>
           <element maxOccurs="unbounded" minOccurs="0" name="koordinatenangaben" type="adv:AA_KoordinatenreferenzsystemangabenPropertyType"/>
+          <element name="auftragsnummer" type="string"/>
+          <element minOccurs="0" name="portionskennung" type="adv:AX_PortionskennungPropertyType"/>
+          <element minOccurs="0" name="letzteAbgabeArt" type="adv:AX_LetzteAbgabeArtType"/>
+          <element name="profilkennung" type="string"/>
+          <element minOccurs="0" name="abgabeintervallBeginn" type="dateTime"/>
+          <element minOccurs="0" name="abgabeintervallEnde" type="dateTime"/>
           <element name="geaenderteObjekte">
             <complexType>
               <sequence>
@@ -351,12 +357,6 @@
               </sequence>
             </complexType>
           </element>
-          <element name="auftragsnummer" type="string"/>
-          <element minOccurs="0" name="portionskennung" type="adv:AX_PortionskennungPropertyType"/>
-          <element minOccurs="0" name="letzteAbgabeArt" type="adv:AX_LetzteAbgabeArtType"/>
-          <element name="profilkennung" type="string"/>
-          <element minOccurs="0" name="abgabeintervallBeginn" type="dateTime"/>
-          <element minOccurs="0" name="abgabeintervallEnde" type="dateTime"/>
         </sequence>
       </extension>
     </complexContent>
