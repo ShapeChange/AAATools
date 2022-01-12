@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema targetNamespace="http://www.adv-online.de/namespaces/adv/gid/wfsext" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:wfsext="http://www.adv-online.de/namespaces/adv/gid/wfsext" xmlns:wfs="http://www.adv-online.de/namespaces/adv/gid/wfs" xmlns:ogc="http://www.adv-online.de/namespaces/adv/gid/ogc" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" version="6.0">
-	<xs:import namespace="http://www.adv-online.de/namespaces/adv/gid/wfs" schemaLocation="../../wfs/1.0.0/WFS-transaction.xsd"/>
-	<xs:import namespace="http://www.adv-online.de/namespaces/adv/gid/ogc" schemaLocation="../../filter/1.0.0/filter.xsd"/>
+	<xs:import namespace="http://www.adv-online.de/namespaces/adv/gid/wfs" schemaLocation="../../../ogc/wfs/1.0.0/WFS-transaction.xsd"/>
+	<xs:import namespace="http://www.adv-online.de/namespaces/adv/gid/ogc" schemaLocation="../../../ogc/filter/1.0.0/filter.xsd"/>
 	<xs:import namespace="http://www.opengis.net/gml/3.2" schemaLocation="../../../ogc/gml/3.2.1/gml.xsd"/>
 	<xs:complexType name="XlinkPropertyNameType" mixed="true">
 		<xs:complexContent mixed="true">
