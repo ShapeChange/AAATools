@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:lb="http://www.adv-online.de/namespaces/adv/lb/1.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/lb/1.0" version="1.0.0">
+<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:lb="http://www.adv-online.de/namespaces/adv/lb/1.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/lb/1.0" version="1.0.1">
   <import namespace="http://www.adv-online.de/namespaces/adv/gid/7.1" schemaLocation="../../nas/7.1/aaa.xsd"/>
   <import namespace="http://www.opengis.net/gml/3.2" schemaLocation="../../../ogc/gml/3.2.1/gml.xsd"/>
   <!--XML Schema document created by ShapeChange - http://shapechange.net/-->
@@ -111,8 +111,8 @@
       <enumeration value="5000"/>
     </restriction>
   </simpleType>
-  <element name="LB_HochbauUndBaulicheNebenflaeche" substitutionGroup="lb:LB_Landbedeckung" type="lb:LB_HochbauUndBaulicheNebenflaecheType"/>
-  <complexType name="LB_HochbauUndBaulicheNebenflaecheType">
+  <element name="LB_Hochbau" substitutionGroup="lb:LB_Landbedeckung" type="lb:LB_HochbauType"/>
+  <complexType name="LB_HochbauType">
     <complexContent>
       <extension base="lb:LB_LandbedeckungType">
         <sequence/>

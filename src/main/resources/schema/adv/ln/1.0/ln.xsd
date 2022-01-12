@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:ln="http://www.adv-online.de/namespaces/adv/ln/1.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/ln/1.0" version="1.0.0">
+<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:ln="http://www.adv-online.de/namespaces/adv/ln/1.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/ln/1.0" version="1.0.1">
   <import namespace="http://www.adv-online.de/namespaces/adv/gid/7.1" schemaLocation="../../nas/7.1/aaa.xsd"/>
   <!--XML Schema document created by ShapeChange - http://shapechange.net/-->
   <element name="LN_Abbau" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_AbbauType"/>
@@ -7,7 +7,6 @@
       <extension base="ln:LN_LandnutzungType">
         <sequence>
           <element minOccurs="0" name="name" type="string"/>
-          <element minOccurs="0" name="bezeichnung" type="string"/>
           <element minOccurs="0" name="art" type="ln:LN_Art_AbbauType"/>
           <element maxOccurs="unbounded" minOccurs="0" name="abbaugut" type="ln:LN_Abbaugut_AbbauType"/>
           <element minOccurs="0" name="foerdergut" type="ln:LN_Foerdergut_AbbauType"/>
@@ -72,7 +71,6 @@
     <restriction base="string">
       <enumeration value="6100"/>
       <enumeration value="6200"/>
-      <enumeration value="6300"/>
     </restriction>
   </simpleType>
   <simpleType name="LN_Art_FreiluftUndNaherholungType">
@@ -102,6 +100,7 @@
       <enumeration value="4340"/>
       <enumeration value="4350"/>
       <enumeration value="4360"/>
+      <enumeration value="4370"/>
     </restriction>
   </simpleType>
   <simpleType name="LN_Art_GewerblicheDienstleistungenType">
@@ -161,10 +160,9 @@
     <complexContent>
       <extension base="ln:LN_LandnutzungType">
         <sequence>
-          <element minOccurs="0" name="bezeichnung" type="string"/>
           <element minOccurs="0" name="funktion" type="ln:LN_Funktion_BahnverkehrType"/>
           <element minOccurs="0" name="zustand" type="ln:LN_Zustand_BahnverkehrType"/>
-          <element minOccurs="0" name="zweitname" type="string"/>
+          <element minOccurs="0" name="name" type="string"/>
         </sequence>
       </extension>
     </complexContent>
@@ -188,6 +186,7 @@
       <enumeration value="1013"/>
       <enumeration value="1014"/>
       <enumeration value="1020"/>
+      <enumeration value="1021"/>
       <enumeration value="1030"/>
       <enumeration value="1040"/>
       <enumeration value="1050"/>
@@ -204,7 +203,6 @@
       <enumeration value="2000"/>
       <enumeration value="3000"/>
       <enumeration value="4000"/>
-      <enumeration value="9999"/>
     </restriction>
   </simpleType>
   <element name="LN_Flugverkehr" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_FlugverkehrType"/>
@@ -234,6 +232,7 @@
       <extension base="ln:LN_LandnutzungType">
         <sequence>
           <element minOccurs="0" name="art" type="ln:LN_Art_ForstwirtschaftType"/>
+          <element minOccurs="0" name="name" type="string"/>
         </sequence>
       </extension>
     </complexContent>
@@ -244,7 +243,6 @@
       <extension base="ln:LN_LandnutzungType">
         <sequence>
           <element minOccurs="0" name="name" type="string"/>
-          <element minOccurs="0" name="bezeichnung" type="string"/>
           <element minOccurs="0" name="art" type="ln:LN_Art_FreiluftUndNaherholungType"/>
         </sequence>
       </extension>
@@ -256,7 +254,6 @@
       <extension base="ln:LN_LandnutzungType">
         <sequence>
           <element minOccurs="0" name="name" type="string"/>
-          <element minOccurs="0" name="bezeichnung" type="string"/>
           <element minOccurs="0" name="art" type="ln:LN_Art_FreizeitanlageType"/>
         </sequence>
       </extension>
@@ -337,6 +334,7 @@
       <enumeration value="5150"/>
       <enumeration value="5160"/>
       <enumeration value="5170"/>
+      <enumeration value="5180"/>
     </restriction>
   </simpleType>
   <simpleType name="LN_Funktion_WasserwirtschaftType">
@@ -357,7 +355,6 @@
       <extension base="ln:LN_LandnutzungType">
         <sequence>
           <element minOccurs="0" name="name" type="string"/>
-          <element minOccurs="0" name="bezeichnung" type="string"/>
           <element minOccurs="0" name="art" type="ln:LN_Art_GewerblicheDienstleistungenType"/>
           <element minOccurs="0" name="zustand" type="ln:LN_Zustand_GewerblicheDienstleistungenType"/>
         </sequence>
@@ -373,6 +370,7 @@
       <enumeration value="1050"/>
       <enumeration value="1060"/>
       <enumeration value="1070"/>
+      <enumeration value="1080"/>
     </restriction>
   </simpleType>
   <element name="LN_IndustrieUndVerarbeitendesGewerbe" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_IndustrieUndVerarbeitendesGewerbeType"/>
@@ -381,7 +379,6 @@
       <extension base="ln:LN_LandnutzungType">
         <sequence>
           <element minOccurs="0" name="name" type="string"/>
-          <element minOccurs="0" name="bezeichnung" type="string"/>
           <element minOccurs="0" name="art" type="ln:LN_Art_IndustrieUndVerarbeitendesGewerbeType"/>
           <element minOccurs="0" name="zustand" type="ln:LN_Zustand_IndustrieUndVerarbeitendesGewerbeType"/>
         </sequence>
@@ -400,6 +397,7 @@
         <sequence>
           <element minOccurs="0" name="funktion" type="ln:LN_Funktion_KulturUndUnterhaltungType"/>
           <element minOccurs="0" name="zustand" type="ln:LN_Zustand_KulturUndUnterhaltungType"/>
+          <element minOccurs="0" name="name" type="string"/>
         </sequence>
       </extension>
     </complexContent>
@@ -438,6 +436,7 @@
           <element minOccurs="0" name="datumDerLetztenUeberpruefung" type="dateTime"/>
           <element minOccurs="0" name="ergebnisDerUeberpruefung" type="ln:LN_ErgebnisDerUeberpruefung_LandnutzungType"/>
           <element minOccurs="0" name="istWeitereNutzung" type="ln:LN_IstWeitereNutzung_LandnutzungType"/>
+          <element minOccurs="0" name="mappingannahme" type="boolean"/>
         </sequence>
       </extension>
     </complexContent>
@@ -447,7 +446,7 @@
     <complexContent>
       <extension base="ln:LN_LandnutzungType">
         <sequence>
-          <element minOccurs="0" name="name" type="ln:LN_ArtDerBetriebsflaeche_LandwirtschaftType"/>
+          <element minOccurs="0" name="name" type="string"/>
           <element minOccurs="0" name="bewirtschaftung" type="ln:LN_Bewirtschaftung_LandwirtschaftType"/>
           <element maxOccurs="2" minOccurs="0" name="artDerBetriebsflaeche" type="ln:LN_ArtDerBetriebsflaeche_LandwirtschaftType"/>
         </sequence>
@@ -490,8 +489,6 @@
       <extension base="ln:LN_LandnutzungType">
         <sequence>
           <element minOccurs="0" name="name" type="string"/>
-          <element minOccurs="0" name="bezeichnung" type="string"/>
-          <element minOccurs="0" name="zweitname" type="string"/>
         </sequence>
       </extension>
     </complexContent>
@@ -533,6 +530,7 @@
           <element minOccurs="0" name="funktion" type="ln:LN_Funktion_SchutzanlageType"/>
           <element minOccurs="0" name="zuflusssteuerung" type="ln:LN_Zuflusssteuerung_SchutzanlageType"/>
           <element minOccurs="0" name="typ" type="ln:LN_Typ_SchutzanlageType"/>
+          <element minOccurs="0" name="name" type="string"/>
         </sequence>
       </extension>
     </complexContent>
@@ -543,7 +541,6 @@
       <extension base="ln:LN_LandnutzungType">
         <sequence>
           <element minOccurs="0" name="name" type="string"/>
-          <element minOccurs="0" name="bezeichnung" type="string"/>
           <element maxOccurs="unbounded" minOccurs="0" name="sportart" type="ln:LN_Sportart_SportanlageType"/>
         </sequence>
       </extension>
@@ -553,19 +550,18 @@
     <restriction base="string">
       <enumeration value="1010"/>
       <enumeration value="1011"/>
-      <enumeration value="1020"/>
+      <enumeration value="1012"/>
       <enumeration value="1013"/>
+      <enumeration value="1020"/>
       <enumeration value="1030"/>
       <enumeration value="1040"/>
       <enumeration value="1050"/>
+      <enumeration value="1060"/>
       <enumeration value="1070"/>
       <enumeration value="1080"/>
-      <enumeration value="1060"/>
       <enumeration value="1110"/>
       <enumeration value="1120"/>
       <enumeration value="1130"/>
-      <enumeration value="1012"/>
-      <enumeration value="1140"/>
     </restriction>
   </simpleType>
   <element name="LN_StrassenUndWegeverkehr" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_StrassenUndWegeverkehrType"/>
@@ -574,12 +570,10 @@
       <extension base="ln:LN_LandnutzungType">
         <sequence>
           <element minOccurs="0" name="name" type="string"/>
-          <element minOccurs="0" name="bezeichnung" type="string"/>
           <element minOccurs="0" name="funktion" type="ln:LN_Funktion_StrassenUndWegeverkehrType"/>
           <element minOccurs="0" name="artDesParkplatzes" type="ln:LN_ArtDesParkplatzes_StrassenUndWegeverkehrType"/>
           <element minOccurs="0" name="fussgaengerzone" type="ln:LN_Fussgaengerzone_StrassenUndWegeverkehrType"/>
           <element minOccurs="0" name="zustand" type="ln:LN_Zustand_StrassenUndWegeverkehrType"/>
-          <element minOccurs="0" name="zweitname" type="string"/>
         </sequence>
       </extension>
     </complexContent>
@@ -599,7 +593,6 @@
       <extension base="ln:LN_LandnutzungType">
         <sequence>
           <element minOccurs="0" name="name" type="string"/>
-          <element minOccurs="0" name="bezeichnung" type="string"/>
           <element minOccurs="0" name="art" type="ln:LN_Art_VersorgungUndEntsorgungType"/>
           <element minOccurs="0" name="primaerenergie" type="ln:LN_Primaerenergie_VersorgungUndEntsorgungType"/>
           <element minOccurs="0" name="zustand" type="ln:LN_Zustand_VersorgungUndEntsorgungType"/>
@@ -615,6 +608,7 @@
           <element minOccurs="0" name="art" type="ln:LN_Art_WasserwirtschaftType"/>
           <element maxOccurs="2" minOccurs="0" name="funktion" type="ln:LN_Funktion_WasserwirtschaftType"/>
           <element minOccurs="0" name="zustand" type="ln:LN_Zustand_WasserwirtschaftType"/>
+          <element minOccurs="0" name="name" type="string"/>
         </sequence>
       </extension>
     </complexContent>
@@ -625,10 +619,8 @@
       <extension base="ln:LN_LandnutzungType">
         <sequence>
           <element minOccurs="0" name="name" type="string"/>
-          <element minOccurs="0" name="bezeichnung" type="string"/>
           <element minOccurs="0" name="zeitlichkeit" type="ln:LN_Zeitlichkeit_WohnnutzungType"/>
           <element minOccurs="0" name="zustand" type="ln:LN_Zustand_WohnnutzungType"/>
-          <element minOccurs="0" name="zweitname" type="string"/>
         </sequence>
       </extension>
     </complexContent>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema targetNamespace="http://www.adv-online.de/namespaces/adv/gid/fc/6.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:nas="http://www.adv-online.de/namespaces/adv/gid/6.0" xmlns:aaafc="http://www.adv-online.de/namespaces/adv/gid/fc/6.0" elementFormDefault="qualified">
+<xs:schema targetNamespace="http://www.adv-online.de/namespaces/adv/gid/fc/7.1" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:nas="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:aaafc="http://www.adv-online.de/namespaces/adv/gid/fc/7.1" elementFormDefault="qualified">
 	<xs:import namespace="http://www.opengis.net/gml/3.2" schemaLocation="../../ogc/gml/3.2.1/gml.xsd"/>
 	<xs:import namespace="http://www.isotc211.org/2005/gmd" schemaLocation="../../iso/19139/20070417/gmd/gmd.xsd"/>
 	<xs:simpleType name="MultiplicityType">
@@ -118,6 +118,7 @@
 					<xs:element name="cardinality" type="aaafc:MultiplicityType" default="0..*"/>
 					<xs:element name="type" type="aaafc:FC_RoleTypeType" default="ordinary"/>
 					<xs:element name="isOrdered" type="xs:boolean" default="false"/>
+					<xs:element name="isNavigable" type="xs:boolean" default="false"/>
 					<xs:element name="relation" type="gml:ReferenceType">
 						<xs:annotation>
 							<xs:appinfo>

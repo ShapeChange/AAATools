@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 
+(c) 2001-2020 interactive instruments GmbH, Bonn
+im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der Bundesrepublik Deutschland (AdV)
+-->
 <xsl:stylesheet version="2.0"
  xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
  xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
  xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema"
  xmlns:sc="http://shapechange.net/functions" exclude-result-prefixes="sc xs xsl">
-
- <!-- (c) 2001-2018 interactive instruments GmbH, Bonn -->
 
  <!-- =============== -->
  <!-- Output settings -->
@@ -57,6 +59,16 @@
  <xsl:variable name="tableColumn34Width">3700</xsl:variable>
  <xsl:variable name="tableColumn234Width">4700</xsl:variable>
 
+ <!-- ====== -->
+ <!-- Labels -->
+ <!-- ====== -->
+ <xsl:include href="aaa-labels.xsl"/>
+
+ <!-- =================================== -->
+ <!-- Sort Kennungen as six digit numbers -->
+ <!-- =================================== -->
+ <xsl:decimal-format name="code" NaN="999999" />
+
  <!-- ======================== -->
  <!-- Transformation templates -->
  <!-- ======================== -->
@@ -82,7 +94,8 @@
    </w:pPr>
    <w:r>
     <w:t>
-     <xsl:text>Objektartenkatalog </xsl:text>
+     <xsl:value-of select="$fc.Objektartenkatalog" />
+     <xsl:text> </xsl:text>
      <xsl:value-of disable-output-escaping="no" select="name"/>
     </w:t>
    </w:r>
@@ -97,7 +110,7 @@
    </w:pPr>
    <w:r>
     <w:t>
-     <xsl:text>Versionsnummer</xsl:text>
+     <xsl:value-of select="$fc.Version" />
     </w:t>
    </w:r>
   </w:p>
@@ -118,7 +131,7 @@
    </w:pPr>
    <w:r>
     <w:t>
-     <xsl:text>Veröffentlichung</xsl:text>
+     <xsl:value-of select="$fc.Veröffentlichung" />
     </w:t>
    </w:r>
   </w:p>
@@ -139,19 +152,47 @@
    </w:pPr>
    <w:r>
     <w:t>
-     <xsl:text>Anwendungsgebiet</xsl:text>
+     <xsl:value-of select="$fc.Anwendungsgebiet" />
     </w:t>
    </w:r>
   </w:p>
-  <xsl:for-each select="scope">
+  <w:p>
+   <w:r>
+    <w:t>
+     <xsl:value-of select="$fc.Modellarten" /><xsl:text>:</xsl:text>
+    </w:t>
+   </w:r>
+  </w:p>
+  <xsl:for-each select="modellart">
    <w:p>
     <w:r>
      <w:t>
-      <xsl:value-of disable-output-escaping="no" select="."/>
+      <xsl:text> - </xsl:text>
+      <xsl:value-of disable-output-escaping="no" select="text()"/>
+      <xsl:if test="@name">: <xsl:value-of select="@name" /></xsl:if>
      </w:t>
     </w:r>
    </w:p>
   </xsl:for-each>
+  <xsl:if test="profil">
+   <w:p>
+      <w:r>
+      <w:t>
+      <xsl:value-of select="$fc.Profile" /><xsl:text>:</xsl:text>
+      </w:t>
+      </w:r>
+   </w:p>
+   <xsl:for-each select="profil">
+      <w:p>
+      <w:r>
+      <w:t>
+         <xsl:text> - </xsl:text>
+         <xsl:value-of disable-output-escaping="no" select="text()"/>
+      </w:t>
+      </w:r>
+      </w:p>
+   </xsl:for-each>
+  </xsl:if>
   <xsl:if test="aaaVersionNumber">
    <w:p>
 	<w:pPr>
@@ -163,7 +204,7 @@
 	</w:pPr>
 	<w:r>
 	 <w:t>
-	  <xsl:text>Referenziertes AAA-Anwendungsschema</xsl:text>
+	  <xsl:value-of select="$fc.AAA-Version" />
 	 </w:t>
 	</w:r>
    </w:p>
@@ -186,7 +227,7 @@
 	</w:pPr>
 	<w:r>
 	 <w:t>
-	  <xsl:text>Verantwortliche Institution</xsl:text>
+	  <xsl:value-of select="$fc.VerantwortlicheInstitution" />
 	 </w:t>
 	</w:r>
    </w:p>
@@ -198,34 +239,9 @@
 	</w:r>
    </w:p>
   </xsl:if>
-  <xsl:if test="producer/CI_ResponsibleParty/responsibility">
-   <w:p>
-	<w:pPr>
-	 <w:pStyle>
-	  <xsl:attribute name="w:val">
-	   <xsl:value-of disable-output-escaping="no" select="$heading2Id"/>
-	  </xsl:attribute>
-	 </w:pStyle>
-	</w:pPr>
-	<w:r>
-	 <w:t>
-	  <xsl:text>Verantwortlichkeiten (siehe ISO 19115)</xsl:text>
-	 </w:t>
-	</w:r>
-   </w:p>
-   <xsl:for-each select="producer/CI_ResponsibleParty/responsibility">
-	<w:p>
-	 <w:r>
-	  <w:t>
-	  <xsl:value-of disable-output-escaping="no" select="."/>
-	  </w:t>
-	 </w:r>
-	</w:p>
-   </xsl:for-each>
-  </xsl:if>
   <xsl:for-each select="AC_Objektartengruppe|AC_Objektbereich">
-   <xsl:sort select="./code"/>
-   <xsl:sort select="./name"/>
+   <xsl:sort select="format-number(number(code), '000000', 'code')" />
+   <xsl:sort select="code" />
    <xsl:apply-templates mode="detail" select="."/>
   </xsl:for-each>
  </xsl:template>
@@ -234,7 +250,7 @@
   <xsl:variable name="package" select="."/>
   <!-- Test if there are any (feature) types or packages that belong to this package. -->
   <xsl:if
-   test="/FC_FeatureCatalogue/AC_FeatureType/Objektartengruppenzugehoerigkeit[attribute::idref=$package/@id]">
+   test="/FC_FeatureCatalogue/AC_FeatureType[Objektartengruppenzugehoerigkeit/@idref=$package/@id]|/FC_FeatureCatalogue/AC_Objektartengruppe[Objektbereichzugehoerigkeit/@idref=$package/@id]">
    <w:p>
     <w:pPr>
      <w:pStyle>
@@ -245,15 +261,10 @@
     </w:pPr>
     <w:r>
      <w:t>
-      <xsl:choose>
-       <xsl:when test="local-name() = 'AC_Objektartengruppe'">
-        <xsl:text>Objektartengruppe: </xsl:text>
-       </xsl:when>
-       <xsl:otherwise>
-        <xsl:text>Objektbereich: </xsl:text>
-       </xsl:otherwise>
-      </xsl:choose>
-      <xsl:value-of disable-output-escaping="no" select="name"/>
+      <xsl:call-template name="paket-name">
+         <xsl:with-param name="paket" select="."/>
+         <xsl:with-param name="name"><xsl:value-of disable-output-escaping="no" select="name"/></xsl:with-param>
+       </xsl:call-template>
      </w:t>
     </w:r>
    </w:p>
@@ -268,7 +279,7 @@
      </w:pPr>
      <w:r>
       <w:t>
-       <xsl:text>Bezeichnung, Definition</xsl:text>
+       <xsl:value-of select="$fc.Definition" />
       </w:t>
      </w:r>
     </w:p>
@@ -282,9 +293,62 @@
      </w:p>
     </xsl:for-each>
    </xsl:if>
+   <xsl:if test="retired">
+      <w:p>
+         <w:pPr>
+          <w:pStyle>
+           <xsl:attribute name="w:val">
+            <xsl:value-of disable-output-escaping="no" select="$heading2Id"/>
+           </xsl:attribute>
+          </w:pStyle>
+         </w:pPr>
+         <w:r>
+          <w:t>
+           <xsl:value-of select="$fc.Stillgelegt" />
+          </w:t>
+         </w:r>
+        </w:p>
+        <w:p>
+         <w:r>
+          <w:t>
+            <xsl:choose>
+               <xsl:when test="taggedValue[@tag='AAA:GueltigBis']">
+                 <xsl:text>Gültig bis GeoInfoDok </xsl:text>
+                 <xsl:value-of select="taggedValue[@tag='AAA:GueltigBis'][1]" />
+               </xsl:when>
+               <xsl:otherwise><xsl:text>Ja</xsl:text></xsl:otherwise>
+             </xsl:choose>
+          </w:t>
+         </w:r>
+      </w:p>
+   </xsl:if>
+   <xsl:if test="nutzungsartkennung">
+      <w:p>
+         <w:pPr>
+            <w:pStyle>
+            <xsl:attribute name="w:val">
+            <xsl:value-of disable-output-escaping="no" select="$heading2Id"/>
+            </xsl:attribute>
+            </w:pStyle>
+         </w:pPr>
+         <w:r>
+            <w:t>
+            <xsl:value-of select="$fc.Nutzungsartkennung" />
+            </w:t>
+         </w:r>
+         </w:p>
+         <w:p>
+         <w:r>
+            <w:t>
+            <xsl:value-of disable-output-escaping="no" select="nutzungsartkennung"/>
+            </w:t>
+         </w:r>
+      </w:p>
+   </xsl:if>
    <xsl:for-each select="/FC_FeatureCatalogue/AC_FeatureType[Objektartengruppenzugehoerigkeit/attribute::idref=$package/@id]">
-    <xsl:sort select="./code"/>
-    <xsl:sort select="./name"/>
+    <xsl:sort select="format-number(number(code), '000000', 'code')" />
+    <xsl:sort select="code" />
+    <xsl:sort select="name"/>
     <xsl:apply-templates mode="detail" select="."/>
    </xsl:for-each>
   </xsl:if>
@@ -350,11 +414,10 @@
       </w:pPr>
       <w:r>
        <w:t>
-        <xsl:if test="$featuretype/bedeutung">
-         <xsl:value-of disable-output-escaping="no" select="$featuretype/bedeutung"/>
-         <xsl:text>: </xsl:text>
-        </xsl:if> 
-        <xsl:value-of disable-output-escaping="no" select="$featuretype/name"/>
+         <xsl:call-template name="klasse-name">
+            <xsl:with-param name="klasse" select="."/>
+            <xsl:with-param name="name"><xsl:value-of disable-output-escaping="no" select="$featuretype/name"/></xsl:with-param>
+          </xsl:call-template>
        </w:t>
       </w:r>
       <w:r>
@@ -362,7 +425,7 @@
       </w:r>
       <w:r>
        <w:t>
-        <xsl:text>Kennung: </xsl:text>
+         <xsl:value-of select="$fc.Kennung" /><xsl:text>: </xsl:text>
         <xsl:value-of disable-output-escaping="no" select="$featuretype/code"/>
        </w:t>
       </w:r>
@@ -370,64 +433,113 @@
     </w:tc>
    </w:tr>
    <xsl:call-template name="entry">
-	<xsl:with-param name="title">Definition:</xsl:with-param>
+	<xsl:with-param name="title"><xsl:value-of select="$fc.Definition" />:</xsl:with-param>
 	<xsl:with-param name="lines" select="$featuretype/definition"/>
    </xsl:call-template>
    <xsl:if test="$featuretype/retired">
     <xsl:choose>
      <xsl:when test="$featuretype/taggedValue[@tag='AAA:GueltigBis']">
       <xsl:call-template name="entry">
-	   <xsl:with-param name="title">Stillgelegt:</xsl:with-param>
+	   <xsl:with-param name="title"><xsl:value-of select="$fc.Stillgelegt" />:</xsl:with-param>
 	   <xsl:with-param name="lines">Gültig bis GeoInfoDok <xsl:value-of select="$featuretype/taggedValue[@tag='AAA:GueltigBis'][1]"/></xsl:with-param>
       </xsl:call-template>
      </xsl:when>
      <xsl:otherwise>
       <xsl:call-template name="entry">
-	   <xsl:with-param name="title">Stillgelegt:</xsl:with-param>
+	   <xsl:with-param name="title"><xsl:value-of select="$fc.Stillgelegt" />:</xsl:with-param>
 	   <xsl:with-param name="lines">Ja</xsl:with-param>
       </xsl:call-template>
      </xsl:otherwise>
     </xsl:choose>
    </xsl:if>
+   <!-- nicht in HTML und DOCX: letzteAenderungRevisionsnummer  -->
+   <xsl:if test="$featuretype/abstrakt">
+      <xsl:call-template name="entry">
+         <xsl:with-param name="title"><xsl:value-of select="$fc.Abstrakt" />:</xsl:with-param>
+         <xsl:with-param name="lines">Ja</xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
    <xsl:call-template name="entry">
-	<xsl:with-param name="title">Abgeleitet aus:</xsl:with-param>
+	<xsl:with-param name="title"><xsl:value-of select="$fc.AbgeleitetAus" />:</xsl:with-param>
 	<xsl:with-param name="lines" select="$featuretype/subtypeOf"/>
    </xsl:call-template>
    <xsl:call-template name="entry">
-	<xsl:with-param name="title">Objekttyp:</xsl:with-param>
+	<xsl:with-param name="title"><xsl:value-of select="$fc.Objekttyp" />:</xsl:with-param>
 	<xsl:with-param name="lines" select="$featuretype/wirdTypisiertDurch"/>
    </xsl:call-template>
    <xsl:call-template name="entry">
-	<xsl:with-param name="title">Modellart:</xsl:with-param>
+	<xsl:with-param name="title"><xsl:value-of select="$fc.Modellarten" />:</xsl:with-param>
 	<xsl:with-param name="lines" select="$featuretype/modellart"/>
    </xsl:call-template>
    <xsl:call-template name="entry">
-	<xsl:with-param name="title">Grunddatenbestand:</xsl:with-param>
+	<xsl:with-param name="title"><xsl:value-of select="$fc.Grunddatenbestand" />:</xsl:with-param>
 	<xsl:with-param name="lines" select="$featuretype/grunddatenbestand"/>
    </xsl:call-template>
+   <xsl:if test="$featuretype/taggedValue[@tag='AAA:Landnutzung']">
+      <xsl:call-template name="entry">
+         <xsl:with-param name="title"><xsl:value-of select="$fc.Landnutzung" />:</xsl:with-param>
+         <xsl:with-param name="lines">Ja</xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
+   <!-- nicht in HTML und DOCX: nutzungsart  -->
    <xsl:call-template name="entry">
-	<xsl:with-param name="title">Bildungsregeln:</xsl:with-param>
-	<xsl:with-param name="lines" select="$featuretype/Bildungsregel"/>
+	<xsl:with-param name="title"><xsl:value-of select="$fc.Nutzungsartkennung" />:</xsl:with-param>
+	<xsl:with-param name="lines" select="$featuretype/nutzungsartkennung"/>
    </xsl:call-template>
-   <xsl:call-template name="entry">
-	<xsl:with-param name="title">Erfassungskriterien:</xsl:with-param>
-	<xsl:with-param name="lines" select="$featuretype/Erfassungskriterium"/>
-   </xsl:call-template>
-   <xsl:call-template name="entry">
-	<xsl:with-param name="title">Konsistenzbedingungen:</xsl:with-param>
-	<xsl:with-param name="lines" select="$featuretype/Konsistenzbedingung"/>
-   </xsl:call-template>
-   <xsl:for-each select="key('modelElement', $featuretype/characterizedBy/@idref)">
+   <!-- nicht in HTML und DOCX: profil  -->
+   <xsl:if test="$featuretype/bildungsregel">
+      <xsl:for-each-group select="$featuretype/bildungsregel" group-by="@modellart">
+        <xsl:sort select="current-grouping-key()" /> 
+        <xsl:call-template name="entry">
+         <xsl:with-param name="title">
+            <xsl:value-of select="$fc.Bildungsregeln" />
+            <xsl:if test="current-grouping-key()!='*'">
+            <xsl:text> </xsl:text><xsl:value-of select="current-grouping-key()" />                
+            </xsl:if>:
+         </xsl:with-param>
+         <xsl:with-param name="lines" select="current-group()"/>
+         </xsl:call-template>
+      </xsl:for-each-group> 
+    </xsl:if>
+    <xsl:if test="$featuretype/erfassungskriterium">
+    <xsl:for-each-group select="$featuretype/erfassungskriterium" group-by="@modellart">
+      <xsl:sort select="current-grouping-key()" /> 
+      <xsl:call-template name="entry">
+       <xsl:with-param name="title">
+          <xsl:value-of select="$fc.Erfassungskriterien" />
+          <xsl:if test="current-grouping-key()!='*'">
+          <xsl:text> </xsl:text><xsl:value-of select="current-grouping-key()" />                
+          </xsl:if>:
+       </xsl:with-param>
+       <xsl:with-param name="lines" select="current-group()"/>
+       </xsl:call-template>
+    </xsl:for-each-group> 
+  </xsl:if>
+  <xsl:if test="$featuretype/konsistenzbedingung">
+  <xsl:for-each-group select="$featuretype/konsistenzbedingung" group-by="@modellart">
+    <xsl:sort select="current-grouping-key()" /> 
+    <xsl:call-template name="entry">
+     <xsl:with-param name="title">
+        <xsl:value-of select="$fc.Konsistenzbedingungen" />
+        <xsl:if test="current-grouping-key()!='*'">
+        <xsl:text> </xsl:text><xsl:value-of select="current-grouping-key()" />                
+        </xsl:if>:
+     </xsl:with-param>
+     <xsl:with-param name="lines" select="current-group()"/>
+     </xsl:call-template>
+  </xsl:for-each-group> 
+  </xsl:if>
+  <xsl:for-each select="key('modelElement', $featuretype/characterizedBy/@idref|/FC_FeatureCatalogue/FC_RelationshipRole[inType/@idref=$featuretype/@id]/@id)">
 	<!-- apply an alphabetical sort of feature type characteristics (attributes, relationships etc) -->
-	<xsl:sort select="local-name(.)"/>
-	<xsl:sort select="./name"/>
+   <xsl:sort select="@sequenceNumber" />
+	<xsl:sort select="name"/>
 	<xsl:apply-templates mode="detail" select="."/>
    </xsl:for-each>
   </w:tbl>
   <w:p/>
  </xsl:template>
 
- <xsl:template match="FC_FeatureAttribute" mode="detail">
+ <xsl:template match="FC_FeatureAttribute|FC_RelationshipRole" mode="detail">
   <xsl:variable name="featureProp" select="."/>
   <w:tr>
    <w:tc>
@@ -442,62 +554,133 @@
 	  <w:rPr>
 	   <w:b/>
 	  </w:rPr>
-	  <w:t>Attributart:</w:t>
+	  <w:t>
+      <xsl:call-template name="eigenschaft-name">
+         <xsl:with-param name="eigenschaft" select="."/>
+       </xsl:call-template>
+     </w:t>
 	 </w:r>
 	</w:p>
    </w:tc>
   </w:tr>  
   <xsl:call-template name="propentry">
-   <xsl:with-param name="title">Bezeichnung:</xsl:with-param>
+   <xsl:with-param name="title"><xsl:value-of select="$fc.Bezeichnung" />:</xsl:with-param>
    <xsl:with-param name="lines" select="$featureProp/name"/>
   </xsl:call-template>
   <xsl:call-template name="propentry">
-   <xsl:with-param name="title">Kennung:</xsl:with-param>
+   <xsl:with-param name="title"><xsl:value-of select="$fc.Kennung" />:</xsl:with-param>
    <xsl:with-param name="lines" select="$featureProp/code"/>
   </xsl:call-template>
+  <xsl:call-template name="propentry">
+   <xsl:with-param name="title">Definition:</xsl:with-param>
+   <xsl:with-param name="lines" select="$featureProp/definition"/>
+  </xsl:call-template>
+  <xsl:if test="$featureProp/auswerteregel">
+   <xsl:call-template name="propentry">
+      <xsl:with-param name="title">
+         <xsl:value-of select="$fc.Auswerteregel" />:
+      </xsl:with-param>
+      <xsl:with-param name="lines" select="$featureProp/auswerteregel"/>
+   </xsl:call-template>
+ </xsl:if>
+  <xsl:if test="$featureProp/bildungsregel">
+   <xsl:call-template name="propentry">
+      <xsl:with-param name="title">
+         <xsl:value-of select="$fc.Bildungsregel" />:
+      </xsl:with-param>
+      <xsl:with-param name="lines" select="$featureProp/bildungsregel"/>
+   </xsl:call-template>
+ </xsl:if>
+
+  <!-- nicht in HTML und DOCX: objektbildend -->
   <xsl:if test="$featureProp/retired">
    <xsl:choose>
     <xsl:when test="$featureProp/taggedValue[@tag='AAA:GueltigBis']">
      <xsl:call-template name="propentry">
-      <xsl:with-param name="title">Stillgelegt:</xsl:with-param>
+      <xsl:with-param name="title"><xsl:value-of select="$fc.Stillgelegt" />:</xsl:with-param>
       <xsl:with-param name="lines">Gültig bis GeoInfoDok <xsl:value-of select="$featureProp/taggedValue[@tag='AAA:GueltigBis'][1]"/></xsl:with-param>
      </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
      <xsl:call-template name="propentry">
-      <xsl:with-param name="title">Stillgelegt:</xsl:with-param>
+      <xsl:with-param name="title"><xsl:value-of select="$fc.Stillgelegt" />:</xsl:with-param>
       <xsl:with-param name="lines">Ja</xsl:with-param>
      </xsl:call-template>
     </xsl:otherwise>
    </xsl:choose>
   </xsl:if>
+  <!-- nicht in HTML und DOCX: letzteAenderungRevisionsnummer -->
   <xsl:call-template name="propentry">
-   <xsl:with-param name="title">Datentyp:</xsl:with-param>
-   <xsl:with-param name="lines" select="$featureProp/ValueDataType"/>
-  </xsl:call-template>
-  <xsl:call-template name="propentry">
-   <xsl:with-param name="title">Kardinalität:</xsl:with-param>
-   <xsl:with-param name="lines" select="$featureProp/cardinality"/>
-  </xsl:call-template>
-  <xsl:call-template name="propentry">
-   <xsl:with-param name="title">Modellart:</xsl:with-param>
+   <xsl:with-param name="title"><xsl:value-of select="$fc.Modellarten" />:</xsl:with-param>
    <xsl:with-param name="lines" select="$featureProp/modellart"/>
   </xsl:call-template>
   <xsl:call-template name="propentry">
-   <xsl:with-param name="title">Grunddatenbestand:</xsl:with-param>
+   <xsl:with-param name="title"><xsl:value-of select="$fc.Grunddatenbestand" />:</xsl:with-param>
    <xsl:with-param name="lines" select="$featureProp/grunddatenbestand"/>
   </xsl:call-template>
+  <xsl:if test="$featureProp/taggedValue[@tag='AAA:Landnutzung']">
   <xsl:call-template name="propentry">
-   <xsl:with-param name="title">Definition:</xsl:with-param>
-   <xsl:with-param name="lines" select="$featureProp/definition"/>
+     <xsl:with-param name="title"><xsl:value-of select="$fc.Landnutzung" />:</xsl:with-param>
+     <xsl:with-param name="lines">Ja</xsl:with-param>
+  </xsl:call-template>
+</xsl:if>
+<!-- nicht in HTML und DOCX: nutzungsart  -->
+<xsl:call-template name="propentry">
+<xsl:with-param name="title"><xsl:value-of select="$fc.Nutzungsartkennung" />:</xsl:with-param>
+<xsl:with-param name="lines" select="$featureProp/nutzungsartkennung"/>
+</xsl:call-template>
+<!-- nicht in HTML und DOCX: profil  -->
+<xsl:if test="$featureProp/inverseRichtung">
+<xsl:call-template name="propentry">
+   <xsl:with-param name="title"><xsl:value-of select="$fc.InverseRichtung" />:</xsl:with-param>
+   <xsl:with-param name="lines">Ja</xsl:with-param>
+</xsl:call-template>
+</xsl:if>
+<xsl:if test="$featureProp/derived">
+<xsl:call-template name="propentry">
+   <xsl:with-param name="title"><xsl:value-of select="$fc.Abgeleitet" />:</xsl:with-param>
+   <xsl:with-param name="lines">Ja</xsl:with-param>
+</xsl:call-template>
+</xsl:if>
+<xsl:if test="$featureProp/initialValue">
+<xsl:call-template name="propentry">
+   <xsl:with-param name="title"><xsl:value-of select="$fc.Defaultwert" />:</xsl:with-param>
+   <xsl:with-param name="lines">
+      <xsl:value-of select="$featureProp/initialValue" />
+      <xsl:if test="readOnly">
+         <xsl:text> (</xsl:text><xsl:value-of select="$fc.NichtÄnderbar" /><xsl:text>)</xsl:text>
+       </xsl:if>
+   </xsl:with-param>
+</xsl:call-template>
+</xsl:if>
+<xsl:call-template name="propentry">
+   <xsl:with-param name="title"><xsl:value-of select="$fc.Multiplizität" />:</xsl:with-param>
+   <xsl:with-param name="lines" select="$featureProp/cardinality"/>
+  </xsl:call-template>
+  <xsl:call-template name="propentry">
+   <xsl:with-param name="title"><xsl:value-of select="$fc.Datentyp" />:</xsl:with-param>
+   <xsl:with-param name="lines" select="$featureProp/ValueDataType"/>
   </xsl:call-template>
   <xsl:if test="$featureProp/ValueDomainType = 1">
    <xsl:call-template name="clentry">
 	<xsl:with-param name="values" select="key('modelElement', $featureProp/enumeratedBy/@idref)"/>
    </xsl:call-template>
   </xsl:if>
- </xsl:template>
+  <xsl:if test="FeatureTypeIncluded">
+   <xsl:call-template name="propentry">
+      <xsl:with-param name="title"><xsl:value-of select="$fc.Zielobjektart" />:</xsl:with-param>
+      <xsl:with-param name="lines" select="$featureProp/FeatureTypeIncluded/@name"/>
+     </xsl:call-template>
+     <xsl:if test="$featureProp/InverseRole">
+      <xsl:call-template name="propentry">
+         <xsl:with-param name="title"><xsl:value-of select="$fc.InverseRelationsart" />:</xsl:with-param>
+         <xsl:with-param name="lines" select="key('modelElement', $featureProp/InverseRole/@idref)/name"/>
+      </xsl:call-template>
+    </xsl:if>
+   </xsl:if>
+</xsl:template>
 
+<!--
  <xsl:template match="FC_RelationshipRole" mode="detail">
   <xsl:variable name="featureProp" select="."/>
   <w:tr>
@@ -567,6 +750,7 @@
    <xsl:with-param name="lines" select="$featureProp/definition"/>
   </xsl:call-template>
  </xsl:template>
+ -->
 
  <xsl:template name="entry">
   <xsl:param name="title"/>
@@ -679,7 +863,7 @@
      </w:tcPr>
      <w:p>
       <w:r>
-       <w:t>Wertearten:</w:t>
+       <w:t><xsl:value-of select="$fc.Wertearten" />:</w:t>
       </w:r>
      </w:p>
     </w:tc>
@@ -690,7 +874,7 @@
      </w:tcPr>
      <w:p>
       <w:r>
-       <w:t>Bezeichner</w:t>
+       <w:t><xsl:value-of select="$fc.Name" /></w:t>
       </w:r>
      </w:p>
     </w:tc>
@@ -701,7 +885,7 @@
      </w:tcPr>
      <w:p>
       <w:r>
-       <w:t>Wert</w:t>
+       <w:t><xsl:value-of select="$fc.Wert" /></w:t>
       </w:r>
      </w:p>
     </w:tc>
@@ -756,14 +940,42 @@
          </w:rPr>
    		 <w:t>
           <xsl:choose>
-           <xsl:when test="$value/taggedValue[@tag='AAA:GueltigBis']">Stillgelegt: Gültig bis GeoInfoDok<xsl:value-of disable-output-escaping="no" select="$value/taggedValue[@tag='AAA:GueltigBis'][1]"/></xsl:when>
-           <xsl:otherwise>Stillgelegt: Ja</xsl:otherwise>
+           <xsl:when test="$value/taggedValue[@tag='AAA:GueltigBis']"><xsl:value-of select="$fc.Stillgelegt" />: Gültig bis GeoInfoDok<xsl:value-of disable-output-escaping="no" select="$value/taggedValue[@tag='AAA:GueltigBis'][1]"/></xsl:when>
+           <xsl:otherwise><xsl:value-of select="$fc.Stillgelegt" />: Ja</xsl:otherwise>
           </xsl:choose>
    		 </w:t>
         </w:r>
        </w:p>
       </xsl:if>
-     </w:tc>
+      <xsl:if test="$value/grunddatenbestand">
+          <w:p>
+           <w:r>
+            <w:rPr>
+             <w:rStyle>
+              <xsl:attribute name="w:val">
+               <xsl:value-of disable-output-escaping="no" select="$smallId"/>
+              </xsl:attribute>
+             </w:rStyle>
+            </w:rPr>
+   		    <w:t><xsl:value-of select="$fc.Grunddatenbestand" /><xsl:text>:</xsl:text><xsl:for-each select="$value/grunddatenbestand"><xsl:text> </xsl:text><xsl:value-of disable-output-escaping="no" select="."/></xsl:for-each></w:t>
+           </w:r>
+          </w:p>
+      </xsl:if>
+      <xsl:if test="$value/nutzungsartkennung">
+          <w:p>
+           <w:r>
+            <w:rPr>
+             <w:rStyle>
+              <xsl:attribute name="w:val">
+               <xsl:value-of disable-output-escaping="no" select="$smallId"/>
+              </xsl:attribute>
+             </w:rStyle>
+            </w:rPr>
+   		    <w:t><xsl:value-of select="$fc.Nutzungsartkennung" /><xsl:text>: </xsl:text><xsl:value-of disable-output-escaping="no" select="$value/nutzungsartkennung"/></w:t>
+           </w:r>
+          </w:p>
+      </xsl:if>
+   </w:tc>
      <w:tc>
       <w:tcPr>
        <w:gridSpan w:val="1"/>

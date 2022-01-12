@@ -47,22 +47,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import org.apache.commons.lang.SystemUtils;
+import org.apache.commons.lang3.SystemUtils;
 
 import de.interactive_instruments.ShapeChange.Converter;
 import de.interactive_instruments.ShapeChange.Options;
@@ -79,8 +69,8 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 	/**
 	 * 
 	 */
-	public static final String VERSION_TEXT = "1.1.0";
-	private static final String title = "AAA-Katalogtool";
+	public static final String VERSION_TEXT = "1.3.0";
+	private static final String TITLE = "AAA-Katalogtool";
 	
 	private static final long serialVersionUID = -2443287559064380497L;
 	
@@ -220,8 +210,6 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
     	targetLabels.add("XML");
     	targetLabels.add("HTML");
     	targetLabels.add("DOCX");
-    	targetLabels.add("Nart-CSV");
-    	targetLabels.add("GFC");
     	targetLabels.add("CSV");
     }
     private StatusBar statusBar;
@@ -230,8 +218,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 	private HashMap<String,TargetGuiElements>  targetGuiElems = new HashMap<String,TargetGuiElements>();
 	
 	JLabel appSchemaFieldLabel;
-	JLabel schemaKennFieldLabel1;
-	JLabel schemaKennFieldLabel2;
+	JLabel schemaKennFieldLabel;
 	JLabel modellartFieldLabel;
 	JLabel xsltpfadFieldLabel;
 	JLabel outDirFieldLabel;
@@ -289,7 +276,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 	private String paramKatalogClass = "de.adv_online.aaa.katalogtool.Katalog";
 	
 	public KatalogDialog(){
-		super(title);
+		super(TITLE);
      	converter = null;
     	result = null;
     	options = null;
@@ -299,7 +286,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 	}
 	
 	public KatalogDialog(Converter c, Options o, ShapeChangeResult r, String xmi) throws ShapeChangeAbortException{
-		super(title);
+		super(TITLE);
      	converter = null;
     	result = null;
     	options = null;
@@ -375,7 +362,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 
         
 		// frame size
-        int height = 760;
+        int height = 800;
         int width = 600;
 
         pack();
@@ -512,7 +499,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
         // Anwendungsschema
 
 		final JPanel appSchemaPanel = new JPanel();
-        final JPanel appSchemaInnerPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 30, 5));
+        final JPanel appSchemaInnerPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 6, 5));
         appSchemaPanel.setLayout(new BoxLayout(appSchemaPanel, BoxLayout.X_AXIS));
         appSchemaPanel.setBorder(BorderFactory.createEmptyBorder(15,20,15,10));
 
@@ -544,14 +531,14 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
        
         Box outOptBox = Box.createVerticalBox();
 
-        final JPanel outOptInnerPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 15, 5));
+        final JPanel outOptInnerPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 10, 5));
         Box skBox = Box.createVerticalBox();
-        schemaKennFieldLabel1 = new JLabel("Liste der zu berücksichtigenden Schema-Kennungen");
-        skBox.add(schemaKennFieldLabel1);
-        schemaKennFieldLabel2 = new JLabel("(nur Klassen mit diesen Kennungen werden exportiert)");
-        skBox.add(schemaKennFieldLabel2);
+        schemaKennFieldLabel = new JLabel("Liste der zu berücksichtigenden Schema-Kennungen");
+        skBox.add(schemaKennFieldLabel);
         schemaKennField = new JTextField(35);
         schemaKennField.setText(schemaKennungenStr);
+        schemaKennField.setToolTipText("Nur Klassen mit diesen Kennungen werden exportiert. '*' dient als Wildcard.");
+
         skBox.add(schemaKennField);
         outOptInnerPanel.add(skBox);
         outOptBox.add(outOptInnerPanel);
@@ -590,12 +577,13 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
         modellartFieldLabel = new JLabel("Ausgewählte Modellarten:");
         modellartField = new JTextField(45);
         modellartField.setText(modellartenStr);
+        modellartField.setToolTipText("Mindestens eine Modellart. Auf richtige Schreibweise achten. Mehrere Modellarten jeweils durch ein Komma ohne Leerzeichen trennen.");
         skBox.add(modellartFieldLabel);
         skBox.add(modellartField);
         modProfInnerPanel1.add(skBox);
         modProfBox.add(modProfInnerPanel1);
         final JPanel grundDatPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 10, 8));
-        grundDatBox = new JCheckBox("Nur Grunddatenbestand exportieren");
+        grundDatBox = new JCheckBox("Nur den Grunddatenbestand exportieren");
         grundDatBox.setSelected(grundDatBool);
         grundDatBox.addItemListener(this);
         grundDatPanel.add(grundDatBox);
@@ -605,15 +593,18 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
         profEinschrBox = new JCheckBox("Eingeschränkt auf folgende Profilkennung(en) im Modell:");
         profEinschrBox.setSelected(profEinschrBool);
         profEinschrBox.addItemListener(this);
+		profEinschrBox.setToolTipText("Die Profilkennung ist der Name der 3ap-Datei ohne Dateikennung.");
         profPanel.add(profEinschrBox);
         final JPanel profPanel2 = new JPanel(new FlowLayout(FlowLayout.LEADING, 15, 2));
         profileField = new JTextField(45);
         profileField.setText(profileStr);
-        profPanel2.add(profileField);
-        final JPanel profPanel3 = new JPanel(new FlowLayout(FlowLayout.LEADING, 15, 2));
-        profDateiBox = new JCheckBox("Profil(e) nur aus 3ap-Datei laden und verwenden statt der Profilkennungen aus dem Modell");
+		profileField.setToolTipText("Die Profilkennung ist der Name der 3ap-Datei ohne Dateikennung.");
+		profPanel2.add(profileField);
+        final JPanel profPanel3 = new JPanel(new FlowLayout(FlowLayout.LEADING, 10, 2));
+        profDateiBox = new JCheckBox("Profil(e) nur aus 3ap-Datei laden und verwenden");
         profDateiBox.setSelected(profDateiBool);
         profDateiBox.addItemListener(this);
+        profDateiBox.setToolTipText("Profilangaben im Modell werden ignoriert.");
         profPanel3.add(profDateiBox);
         if(profileStr.length()==0){
         	profileField.setEnabled(false);
@@ -888,8 +879,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			outDirField.setEnabled(false);
 			mdlDirField.setEnabled(false);
 			appSchemaFieldLabel.setEnabled(false);
-			schemaKennFieldLabel1.setEnabled(false);
-			schemaKennFieldLabel2.setEnabled(false);
+			schemaKennFieldLabel.setEnabled(false);
 			modellartFieldLabel.setEnabled(false);
 			xsltpfadFieldLabel.setEnabled(false);
 			outDirFieldLabel.setEnabled(false);
@@ -921,8 +911,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			outDirField.setEnabled(true);
 			mdlDirField.setEnabled(true);
 			appSchemaFieldLabel.setEnabled(true);
-			schemaKennFieldLabel1.setEnabled(true);
-			schemaKennFieldLabel2.setEnabled(true);
+			schemaKennFieldLabel.setEnabled(true);
 			modellartFieldLabel.setEnabled(true);
 			xsltpfadFieldLabel.setEnabled(true);
 			outDirFieldLabel.setEnabled(true);
@@ -1084,16 +1073,6 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			if(targetLabels!=null && targetLabels.size()>=3)
 				msg += " - " + targetLabels.get(2);
 			break;		
-		case Katalog.STATUS_WRITE_NART:
-			msg += "AAA-Katalogtool: Schreiben des Katalogs";
-			if(targetLabels!=null && targetLabels.size()>=4)
-				msg += " - " + targetLabels.get(3);
-			break;
-		case Katalog.STATUS_WRITE_GFC:
-			msg += "AAA-Katalogtool: Schreiben des Katalogs";
-			if(targetLabels!=null && targetLabels.size()>=5)
-				msg += " - " + targetLabels.get(4);
-			break;
 		case Katalog.STATUS_WRITE_CSV:
 			msg += "AAA-Katalogtool: Schreiben des Katalogs";
 			if(targetLabels!=null && targetLabels.size()>=6)

@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -108,6 +107,7 @@ public class ImplementationSchemaTransformerHelper {
 	 * - Alle Attribute werden in die nächsten in der NAS codierten Subtypen kopiert.
 	 * - Alle Relationen zu den Mixin-Klassen werden ebenfalls jeweils auf die nächsten in der NAS codierten Subtypen kopiert. Dabei wird der Rollenname durch Anhängen des Klassennamens geändert, um die Eindeutigkeit der Ei- genschaftsnamen zu gewährleisten.
 	 * - Die <<Type>>-Klassen werden gelöscht.
+	 * @param importedMixins tbd
 	 */
 	protected void resolveMixins(boolean importedMixins) {		
 		List<String> tobedeleted = new ArrayList<String>();
@@ -816,7 +816,7 @@ public class ImplementationSchemaTransformerHelper {
 		        	if (!ei.Update()) {
 		        		result.addError("Fehler beim Setzen der Multiplizität von Attribut '"+cname+"."+name+"': "+ei.GetLastError());
 		    		} else {
-		            	result.addDebug("Multiplizität von Attribut '"+cname+"."+name+"' geändert.");
+		            result.addDebug("Multiplizität von Attribut '"+cname+"."+name+"' geändert.");
 		    		}
 		        	c.Refresh();
 	        		break;

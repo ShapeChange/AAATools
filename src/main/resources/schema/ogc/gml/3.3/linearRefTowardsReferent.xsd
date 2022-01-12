@@ -4,6 +4,7 @@
   </annotation>
   <import namespace="http://www.opengis.net/gml/3.2" schemaLocation="../3.2.1/gml.xsd" />
   <import namespace="http://www.opengis.net/gml/3.3/lr" schemaLocation="linearRef.xsd" />
+	<import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../w3c/xml.xsd"/>
   <complexType name="DualAlongReferentType">
     <complexContent>
       <extension base="gmllr:AlongReferentType">

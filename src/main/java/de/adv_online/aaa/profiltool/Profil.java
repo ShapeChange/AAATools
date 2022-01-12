@@ -117,6 +117,12 @@ public class Profil implements Target {
 		String zielversion = "6.0.1";
 		if (s!=null && !s.isEmpty())
 			zielversion = s;
+		else {
+			// wenn leer, dann handelt es sich um das AAA-Schema und wir verwenden die Version
+			s = p.taggedValue("version");
+			if (s!=null && !s.isEmpty())
+				zielversion = s;			
+		}	
 					
 		if (ziel==null) {
 			result.addError("Der Parameter 'Ziel' fehlt. Die Ausführung des Profiltools wird abgebrochen");

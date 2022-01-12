@@ -117,17 +117,19 @@ public class NasTransformer_7 implements Transformer {
 		helper.changeType( "AU_MehrfachFlaechenObjekt_3D", "position", "GM_Object" );
 		helper.changeType( "AU_UmringObjekt_3D", "position", "GM_MultiCurve" ) ;
 		helper.changeType( "AU_PunkthaufenObjekt_3D", "position", "GM_MultiPoint" );
+		helper.changeType( "AP_TransformationsMatrix_3D", "parameter", "doubleList" );
 		helper.changeType( "AX_DQOhneDatenerhebung", "herkunft", "LI_Lineage" );
 		helper.changeType( "AX_DQMitDatenerhebung", "herkunft", "LI_Lineage" );
-		helper.changeType( "AX_DQPunktort", "herkunft", "LI_Lineage" );
+		helper.changeTypeAndMultiplicity( "AX_DQErhebung3D", "herkunft3D", "LI_Lineage", "0" , "1" );
+		helper.changeTypeAndMultiplicity( "AX_DQPunktort", "herkunft", "LI_Lineage", "0", "1" );
 		helper.changeType( "AX_DQDachhoehe", "herkunft", "LI_Lineage" );
 		helper.changeType( "AX_DQBodenhoehe", "herkunft", "LI_Lineage" );
-		helper.changeType( "AX_DQErhebung3D", "herkunft3D", "LI_ProcessStep" );
-		helper.changeType( "AX_DQSchwere", "genauigkeitswert", "Measure" );
 		helper.changeType( "AX_Schwereanomalie_Schwere", "wert", "Measure" );
+		helper.changeType( "AX_DQSchwere", "genauigkeitswert", "Measure" );
 		helper.changeType( "AX_Schwere", "schwerewert", "Measure" );
 		helper.changeType( "AX_VertikalerSchweregradient", "genauigkeitVertikalerSchweregradient", "Measure" );
 		helper.changeType( "AX_VertikalerSchweregradient", "wertVertikalerSchweregradient", "Measure" );
+		helper.changeType( "AX_Leitung", "spannungsebene", "Measure" );
 		helper.changeType( "AX_Sperrauftrag", "uuidListe", "URI" );
 		helper.changeType( "AX_Entsperrauftrag", "uuidListe", "URI" );
 		helper.changeType( "ExceptionFortfuehrung", "bereitsGesperrteObjekte", "URI" );
@@ -137,7 +139,6 @@ public class NasTransformer_7 implements Transformer {
 		helper.changeType( "ExceptionAAAEntsperren", "uuidListe", "URI" );
 		helper.changeType( "DCP", "HTTP", "URI" );
 		helper.changeType( "DCP", "email", "URI" );		
-		helper.changeType( "AP_TransformationsMatrix_3D", "parameter", "doubleList" );
 		helper.changeType( "AX_Fortfuehrungsergebnis", "fortfuehrungsnachweis", "Any" );
 		
 		/* Verweise in den Projektsteuerungskatalog werden als XLink-href realisiert (Map-Entry mit gml:Referencetype in ShapeChange-Konfiguration):
@@ -178,6 +179,7 @@ public class NasTransformer_7 implements Transformer {
 		helper.deleteClass( "AX_LI_ProcessStep_Bodenhoehe" );
 		helper.deleteClass( "AX_LI_ProcessStep_Dachhoehe" );
 		helper.deleteClass( "AX_LI_ProcessStep3D" );
+		helper.deleteClass( "Voltage" );
 		helper.deleteClass( "Acceleration" );
 		helper.deleteClass( "AccelerationGradient" );
 		helper.deleteClass( "AD_ReferenzierbaresGitter" );
@@ -202,12 +204,12 @@ public class NasTransformer_7 implements Transformer {
 		 * das AAA-Modell verwendet diese jedoch in Mixin-Klassen (z.B. AP_GPO, AX_Katalogeintrag). Die Mixin-Klassen 
 		 * werden aufgelöst:
 		 * - Alle Attribute werden in die nächsten in der NAS codierten Subtypen kopiert.
-		 * - Alle Relationen zu den Mixin-Klassen werden ebenfalls jeweils auf die nächsten in der NAS codierten Subtypen kopiert. Dabei wird der Rollenname durch Anhängen des Klassennamens geändert, um die Eindeutigkeit der Ei- genschaftsnamen zu gewährleisten.
+		 * - Alle Relationen zu den Mixin-Klassen werden ebenfalls jeweils auf die nächsten in der NAS codierten Subtypen kopiert. Dabei wird der Rollenname durch Anhängen des Klassennamens geändert, um die Eindeutigkeit der Eigenschaftsnamen zu gewährleisten.
 		 * - Die <<Type>>-Klassen werden gelöscht.
 		 */
 		helper.resolveMixins(false);
 		
-		/* Die Eigenschaften von AA_PMO und AA_Objekt werden wie bei Mixin- Klassen (siehe oben)
+		/* Die Eigenschaften von AA_PMO und AA_Objekt werden wie bei Mixin-Klassen (siehe oben)
 		 * auf "AD_PunktCoverage" und "AD_GitterCoverage" übertragen, die konzeptuellen Attribute 
 		 * AA_PMO.ausdehnung, AD_PunktCoverage.geometrie und AD_PunktCoverage.werte gelöscht. 
 		 * Zusätzlich werden Vererbungsbeziehungen auf Implementierungen von 

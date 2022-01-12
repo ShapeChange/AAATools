@@ -14,5 +14,8 @@
 # Maven
 target/
 
+# VS Code
+*.code-workspace
+
 # Tests
 testResults/

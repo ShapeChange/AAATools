@@ -1,83 +1,32 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:nas="http://www.adv-online.de/namespaces/adv/gid/6.0" xmlns="http://www.adv-online.de/namespaces/adv/gid/fc/6.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco"  xmlns:xlink="http://www.w3.org/1999/xlink">
-	<!-- 
-
-	Version 0.1 - 25.06.2005
-		erste Version
-		
-	Version 0.2 - 13.07.2005
-		- falscher Templatename "mart" korrigiert
-		- Ausgabe auch von Klassen ohne Stereotype
-		- Typisierung REO/NREO/ZUSO/PMO optional da nicht fï¿½e Klassen festlegbar
-
-	Version 0.3 - 29.07.2005
-		- Bildungsregel und Konsistenzbedinung nach #1172
-		
-	Version 0.4 - 04.12.2005
-		- GeoInfoDok 5.0
-		
-	Version 0.5 - 23.03.2006
-		- Bugfix zur Berï¿½htigung aller Objektartengruppen im Katalog
-		
-	Version 0.6 - 03.04.2006
-		- GeoInfoDok 5.1
-
-	Version 0.7 - 18.04.2006
-		- Bugfix fï¿½ektarten in einem Objektbereich
-
-	Version 1.0 - 22.02.2007
-		- Û¢ernahme von 'code' bei AC_Objektartengruppe/AC_Objektartenbereich
-		- Unterstï¿½ fï¿½uence
-
-	Version 1.1 - 13.07.2007
-		- Namespace von Version 5.1 auf 5.1.1 korrigiert
-		- Liste der Standardmodellarten fortgeschrieben
-		- Bugfix: fehlende valueDataType-Angaben
-		
-	Version 1.2 - 23.11.2007
-		- Bugfix: falsche Kardinalitã² bei Rollen
-
-	Version 1.3 - 12.01.2008
-		- Anpassung an GeoInfoDok 6.0_B, ISO 19136:2007 und ISO/TS 19139
-
-	Version 1.4 - 24.03.2008
-		- Anpassung an GeoInfoDok 6.0
-		
-	Version 1.5 - 24.10.2011
-		- Anpassung an neue AAA-Tools
-		
-	Version 1.6 - 23.01.2013
-		- Unterstützung für 6-stellige Codes
-		
-	Version 1.7 - 11.04.2020
-		- Unterstützung für neue Standardmodellarten in GeoInfoDok NEU
-
-     (c) 2005-2013 interactive instruments GmbH, Bonn
-     im Auftrag der AdV, Arbeitsgemeinschaft der Vermessungsverwaltungen der
-     Lã­¤er der Bundesrepublik Deutschland
-
-	  http://www.adv-online.de/
-
-	  -->
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+(c) 2005-2020 interactive instruments GmbH, Bonn
+im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der LÃ¤nder der Bundesrepublik Deutschland (AdV)
+-->
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:nas="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns="http://www.adv-online.de/namespaces/adv/gid/fc/7.1" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco"  xmlns:xlink="http://www.w3.org/1999/xlink">
 	<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
+	<xsl:include href="aaa-labels.xsl"/>
 	<xsl:variable name="advMA">
-		<xsl:text> DLKM DKKM500 DKKM1000 DKKM2000 DKKM5000 Basis-DLM DLM50 DLM250 DLM1000 DTK10 DTK25 DTK50 DTK100 DTK250 DTK1000 DFGM DGM2 DGM5 DGM25 DGM50 DHM LoD1 LoD2 LoD3 GeoBasis-DE GVM BORIS </xsl:text>
+		<xsl:text> DLKM DKKM500 DKKM1000 DKKM2000 DKKM5000 Basis-DLM DLM50 DLM250 DLM1000 DTK10 DTK25 DTK50 DTK100 DTK250 DTK1000 DFGM DGM2 DGM5 DGM25 DGM50 DHM LoD1 LoD2 LoD3 GeoBasis-DE GVM BRM </xsl:text>
 	</xsl:variable>
 	<xsl:decimal-format name="code" NaN="999999"/>
 	<xsl:template match="/">
+		<!-- namespaces http://www.adv-online.de/namespaces/adv/gid/fc/7.1 und http://www.adv-online.de/namespaces/adv/gid/7.1; schemaLocation  -->
 		<xsl:variable name="version" select="/FC_FeatureCatalogue/versionNumber"/>
-		<AC_FeatureCatalogue xmlns="http://www.adv-online.de/namespaces/adv/gid/fc/6.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:nas="http://www.adv-online.de/namespaces/adv/gid/6.0" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" gml:id="_Objektartenkatalog" xsi:schemaLocation="http://www.adv-online.de/namespaces/adv/gid/fc/6.0 Tools/AAA-Katalogtool/AAA-Katalog.xsd">
-			<gml:description>Definitionen im Objektartenkatalog "<xsl:value-of select="FC_FeatureCatalogue/name"/>"</gml:description>
+		<AC_FeatureCatalogue xmlns="http://www.adv-online.de/namespaces/adv/gid/fc/7.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:nas="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" gml:id="_Objektartenkatalog" xsi:schemaLocation="http://www.adv-online.de/namespaces/adv/gid/fc/7.1 resources/schema/adv/katalogtool/AAA-Katalog.xsd">
+			<gml:description><xsl:value-of select="$fc.Objektartenkatalog" /> '<xsl:value-of select="FC_FeatureCatalogue/name"/>'</gml:description>
 			<gml:identifier>
 				<xsl:attribute name="codeSpace">urn:adv:name</xsl:attribute>
 				<xsl:value-of select="FC_FeatureCatalogue/name"/>
 			</gml:identifier>
 			<xsl:for-each select="FC_FeatureCatalogue/AC_Objektbereich">
-				<xsl:sort select="format-number(code,'000000','code')"/>
+				<xsl:sort select="format-number(number(code), '000000', 'code')"/>
+				<xsl:sort select="code" />
 				<xsl:apply-templates select="." mode="dictionaryEntry"/>
 			</xsl:for-each>
 			<xsl:for-each select="FC_FeatureCatalogue/AC_Objektartengruppe">
-				<xsl:sort select="format-number(code,'000000','code')"/>
+				<xsl:sort select="format-number(number(code), '000000', 'code')"/>
+				<xsl:sort select="code" />
 				<xsl:variable name="obid" select="Objektbereichzugehoerigkeit/@idref"/>
 				<xsl:if test="count(//AC_Objektbereich[@id=$obid])=0">
 					<xsl:apply-templates select="." mode="dictionaryEntry"/>
@@ -86,25 +35,13 @@
 			<xsl:for-each select="FC_FeatureCatalogue/FC_FeatureRelationship">
 				<xsl:apply-templates select="." mode="dictionaryEntry"/>
 			</xsl:for-each>
-			<xsl:for-each select="//AC_FeatureType[bedeutung='Objektart']/themen">
-				<xsl:variable name="thema" select="."/>
-				<xsl:if test="generate-id(//themen[.=$thema][1])=generate-id($thema)">
-					<xsl:apply-templates select="." mode="dictionaryEntry"/>
-				</xsl:if>
+			<xsl:for-each select="FC_FeatureCatalogue/modellart">
+				<scope>
+					<xsl:value-of select="."/>
+				</scope>
 			</xsl:for-each>
-			<xsl:for-each select="//modellart">
-				<xsl:variable name="mart" select="."/>
-				<xsl:if test="generate-id(//modellart[.=$mart][1])=generate-id($mart)">
-					<scope>
-						<xsl:value-of select="."/>
-					</scope>
-				</xsl:if>
-			</xsl:for-each>
-			<fieldOfApplication>
-				<xsl:value-of select="substring-before(FC_FeatureCatalogue/scope,' Berï¿½htigte Modellarten:')"/>
-			</fieldOfApplication>
 			<versionNumber>
-				<xsl:value-of select="$version"/>
+				<xsl:value-of select="FC_FeatureCatalogue/versionNumber"/>
 			</versionNumber>
 			<versionDate>
 				<xsl:variable name="vdate" select="FC_FeatureCatalogue/versionDate"/>
@@ -124,11 +61,8 @@
 					</gmd:role>
 				</gmd:CI_ResponsibleParty>
 			</producer>
-			<xsl:for-each select="//profil">
-				<xsl:variable name="profil" select="."/>
-				<xsl:if test="generate-id(//profil[.=$profil][1])=generate-id($profil)">
-					<xsl:apply-templates select="."/>
-				</xsl:if>
+			<xsl:for-each select="FC_FeatureCatalogue/profil">
+				<xsl:apply-templates select="."/>
 			</xsl:for-each>
 		</AC_FeatureCatalogue>
 	</xsl:template>
@@ -194,167 +128,74 @@
 		</letzteAenderung>
 	</xsl:template>
 	<xsl:template name="Konsistenzbedingung">
-		<xsl:param name="eklist"/>
-		<xsl:param name="mart"/>
-		<xsl:variable name="ek" select="$eklist[1]"/>
-		<xsl:variable name="ekrest" select="$ek/following-sibling::Konsistenzbedingung"/>
-		<xsl:choose>
-			<xsl:when test="contains($advMA,concat(' ',substring-before($ek,':'),' ')) and substring-after($ek,':')=''">
-				<xsl:if test="$ekrest">
-					<xsl:call-template name="Konsistenzbedingung">
-						<xsl:with-param name="eklist" select="$ekrest"/>
-						<xsl:with-param name="mart" select="substring-before($ek,':')"/>
-					</xsl:call-template>
-				</xsl:if>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:apply-templates select="$ek">
-					<xsl:with-param name="mart" select="$mart"/>
-				</xsl:apply-templates>
-				<xsl:if test="$ekrest">
-					<xsl:call-template name="Konsistenzbedingung">
-						<xsl:with-param name="eklist" select="$ekrest"/>
-						<xsl:with-param name="mart" select="$mart"/>
-					</xsl:call-template>
-				</xsl:if>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-	<xsl:template match="Konsistenzbedingung">
+		<xsl:param name="list"/>
 		<xsl:param name="mart"/>
 		<konsistenzbedingung>
 			<AC_Konsistenzbedingung>
 				<bedingung>
-					<xsl:value-of select="."/>
+					<xsl:value-of select="$list" separator="&#xa;"/>
 				</bedingung>
 				<xsl:if test="$mart!='*'">
 					<modellart>
-						<nas:AA_Modellart>
-							<xsl:choose>
-								<xsl:when test="contains($advMA,concat(' ',$mart,' '))">
-									<nas:advStandardModell>
-										<xsl:value-of select="$mart"/>
-									</nas:advStandardModell>
-								</xsl:when>
-								<xsl:otherwise>
-									<nas:sonstigesModell>
-										<xsl:value-of select="$mart"/>
-									</nas:sonstigesModell>
-								</xsl:otherwise>
-							</xsl:choose>
-						</nas:AA_Modellart>
+						<xsl:call-template name="AA_Modellart">
+							<xsl:with-param name="mart" select="$mart"/>				
+						</xsl:call-template>
 					</modellart>
-				</xsl:if>
+				</xsl:if>		
 			</AC_Konsistenzbedingung>
 		</konsistenzbedingung>
 	</xsl:template>
-	<xsl:template name="Bildungsregel">
-		<xsl:param name="eklist"/>
+	<xsl:template name="Auswerteregel">
+		<xsl:param name="list"/>
 		<xsl:param name="mart"/>
-		<xsl:variable name="ek" select="$eklist[1]"/>
-		<xsl:variable name="ekrest" select="$ek/following-sibling::Bildungsregel"/>
-		<xsl:choose>
-			<xsl:when test="contains($advMA,concat(' ',substring-before($ek,':'),' ')) and substring-after($ek,':')=''">
-				<xsl:if test="$ekrest">
-					<xsl:call-template name="Bildungsregel">
-						<xsl:with-param name="eklist" select="$ekrest"/>
-						<xsl:with-param name="mart" select="substring-before($ek,':')"/>
-					</xsl:call-template>
-				</xsl:if>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:apply-templates select="$ek">
-					<xsl:with-param name="mart" select="$mart"/>
-				</xsl:apply-templates>
-				<xsl:if test="$ekrest">
-					<xsl:call-template name="Bildungsregel">
-						<xsl:with-param name="eklist" select="$ekrest"/>
-						<xsl:with-param name="mart" select="$mart"/>
-					</xsl:call-template>
-				</xsl:if>
-			</xsl:otherwise>
-		</xsl:choose>
+		<auswerteregel>
+			<AC_Auswerteregel>
+				<regel>
+					<xsl:value-of select="$list" separator="&#xa;"/>
+				</regel>
+				<xsl:if test="$mart!='*'">
+					<modellart>
+						<xsl:call-template name="AA_Modellart">
+							<xsl:with-param name="mart" select="$mart"/>				
+						</xsl:call-template>
+					</modellart>
+				</xsl:if>		
+			</AC_Auswerteregel>
+		</auswerteregel>
 	</xsl:template>
-	<xsl:template match="Bildungsregel">
+	<xsl:template name="Bildungsregel">
+		<xsl:param name="list"/>
 		<xsl:param name="mart"/>
 		<bildungsregel>
 			<AC_Bildungsregel>
 				<regel>
-					<xsl:value-of select="."/>
+					<xsl:value-of select="$list" separator="&#xa;"/>
 				</regel>
 				<xsl:if test="$mart!='*'">
 					<modellart>
-						<nas:AA_Modellart>
-							<xsl:choose>
-								<xsl:when test="contains($advMA,concat(' ',$mart,' '))">
-									<nas:advStandardModell>
-										<xsl:value-of select="$mart"/>
-									</nas:advStandardModell>
-								</xsl:when>
-								<xsl:otherwise>
-									<nas:sonstigesModell>
-										<xsl:value-of select="$mart"/>
-									</nas:sonstigesModell>
-								</xsl:otherwise>
-							</xsl:choose>
-						</nas:AA_Modellart>
+						<xsl:call-template name="AA_Modellart">
+							<xsl:with-param name="mart" select="$mart"/>				
+						</xsl:call-template>
 					</modellart>
-				</xsl:if>
+				</xsl:if>		
 			</AC_Bildungsregel>
 		</bildungsregel>
 	</xsl:template>
 	<xsl:template name="Erfassungskriterium">
-		<xsl:param name="eklist"/>
-		<xsl:param name="mart"/>
-		<xsl:variable name="ek" select="$eklist[1]"/>
-		<xsl:variable name="ekrest" select="$ek/following-sibling::Erfassungskriterium"/>
-		<xsl:choose>
-			<xsl:when test="contains($advMA,concat(' ',substring-before($ek,':'),' ')) and substring-after($ek,':')=''">
-				<xsl:if test="$ekrest">
-					<xsl:call-template name="Erfassungskriterium">
-						<xsl:with-param name="eklist" select="$ekrest"/>
-						<xsl:with-param name="mart" select="substring-before($ek,':')"/>
-					</xsl:call-template>
-				</xsl:if>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:apply-templates select="$ek">
-					<xsl:with-param name="mart" select="$mart"/>
-				</xsl:apply-templates>
-				<xsl:if test="$ekrest">
-					<xsl:call-template name="Erfassungskriterium">
-						<xsl:with-param name="eklist" select="$ekrest"/>
-						<xsl:with-param name="mart" select="$mart"/>
-					</xsl:call-template>
-				</xsl:if>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-	<xsl:template match="Erfassungskriterium">
+		<xsl:param name="list"/>
 		<xsl:param name="mart"/>
 		<erfassungskriterium>
 			<AC_Erfassungskriterium>
 				<kriterium>
-					<xsl:value-of select="."/>
+					<xsl:value-of select="$list" separator="&#xa;"/>
 				</kriterium>
 				<xsl:if test="$mart!='*'">
 					<modellart>
-						<nas:AA_Modellart>
-							<xsl:choose>
-								<xsl:when test="contains($advMA,concat(' ',$mart,' '))">
-									<nas:advStandardModell>
-										<xsl:value-of select="$mart"/>
-									</nas:advStandardModell>
-								</xsl:when>
-								<xsl:otherwise>
-									<nas:sonstigesModell>
-										<xsl:value-of select="$mart"/>
-									</nas:sonstigesModell>
-								</xsl:otherwise>
-							</xsl:choose>
-						</nas:AA_Modellart>
+						<xsl:call-template name="AA_Modellart">
+							<xsl:with-param name="mart" select="$mart"/>				
+						</xsl:call-template>
 					</modellart>
-				</xsl:if>
+				</xsl:if>		
 			</AC_Erfassungskriterium>
 		</erfassungskriterium>
 	</xsl:template>
@@ -367,11 +208,11 @@
 		<gml:dictionaryEntry>
 			<AC_Objektartenbereich>
 				<xsl:attribute name="gml:id"><xsl:value-of select="@id"/></xsl:attribute>
-				<xsl:if test="count(definition)>0">
+				<xsl:if test="definition">
 					<gml:description>
 						<xsl:for-each select="definition">
 							<xsl:value-of select="."/>
-							<xsl:text>&#xd;</xsl:text>
+							<xsl:text>&#xa;</xsl:text>
 						</xsl:for-each>
 					</gml:description>
 				</xsl:if>
@@ -387,17 +228,37 @@
 				</xsl:if>
 				<xsl:variable name="bid" select="@id"/>
 				<xsl:for-each select="/FC_FeatureCatalogue/AC_Objektartengruppe[Objektbereichzugehoerigkeit/@idref=$bid]">
-					<xsl:sort select="format-number(code,'000000','code')"/>
+					<xsl:sort select="format-number(number(code), '000000', 'code')"/>
+					<xsl:sort select="code" />
 					<xsl:apply-templates select="." mode="dictionaryEntry"/>
 				</xsl:for-each>
 				<xsl:for-each select="/FC_FeatureCatalogue/AC_FeatureType[(count(bedeutung)=0 or bedeutung='Objektart') and Objektartengruppenzugehoerigkeit/@idref=$bid]">
-					<xsl:sort select="format-number(code,'000000','code')"/>
+					<xsl:sort select="format-number(number(code), '000000', 'code')"/>
+					<xsl:sort select="code" />
 					<xsl:apply-templates select="." mode="dictionaryEntryFT"/>
 				</xsl:for-each>
 				<xsl:for-each select="/FC_FeatureCatalogue/AC_FeatureType[bedeutung!='Objektart' and Objektartengruppenzugehoerigkeit/@idref=$bid]">
-					<xsl:sort select="format-number(code,'000000','code')"/>
+					<xsl:sort select="format-number(number(code), '000000', 'code')"/>
+					<xsl:sort select="code" />
 					<xsl:apply-templates select="." mode="dictionaryEntryDT"/>
 				</xsl:for-each>
+				<xsl:if test="count(retired)=1">
+					<isRetired>				
+						<xsl:value-of select="retired"/>
+					</isRetired>
+				</xsl:if>
+				<xsl:if test="count(taggedValue[@tag='AAA:GueltigBis'])=1">
+					<retiredSinceVersion>
+						<xsl:value-of select="taggedValue[@tag='AAA:GueltigBis']"/>
+					</retiredSinceVersion>
+				</xsl:if>
+				<xsl:if test="count(nutzungsartkennung)=1">
+					<xsl:for-each select="tokenize(nutzungsartkennung, ',')">
+						<nutzungsartkennung>				
+							<xsl:value-of select="normalize-space(.)"/>
+						</nutzungsartkennung>
+					</xsl:for-each>
+				</xsl:if>
 				<xsl:apply-templates select="diagram"/>
 			</AC_Objektartenbereich>
 		</gml:dictionaryEntry>
@@ -410,7 +271,7 @@
 					<gml:description>
 						<xsl:for-each select="definition">
 							<xsl:value-of select="."/>
-							<xsl:text>&#xd;</xsl:text>
+							<xsl:text>&#xa;</xsl:text>
 						</xsl:for-each>
 					</gml:description>
 				</xsl:if>
@@ -426,13 +287,32 @@
 				</xsl:if>
 				<xsl:variable name="gid" select="@id"/>
 				<xsl:for-each select="/FC_FeatureCatalogue/AC_FeatureType[(count(bedeutung)=0 or bedeutung='Objektart') and Objektartengruppenzugehoerigkeit/@idref=$gid]">
-					<xsl:sort select="format-number(code,'000000','code')"/>
+					<xsl:sort select="format-number(number(code), '000000', 'code')"/>
+					<xsl:sort select="code" />
 					<xsl:apply-templates select="." mode="dictionaryEntryFT"/>
 				</xsl:for-each>
 				<xsl:for-each select="/FC_FeatureCatalogue/AC_FeatureType[bedeutung!='Objektart' and Objektartengruppenzugehoerigkeit/@idref=$gid]">
-					<xsl:sort select="format-number(code,'000000','code')"/>
+					<xsl:sort select="format-number(number(code), '000000', 'code')"/>
+					<xsl:sort select="code" />
 					<xsl:apply-templates select="." mode="dictionaryEntryDT"/>
 				</xsl:for-each>
+				<xsl:if test="count(retired)=1">
+					<isRetired>				
+						<xsl:value-of select="retired"/>
+					</isRetired>
+				</xsl:if>
+				<xsl:if test="count(taggedValue[@tag='AAA:GueltigBis'])=1">
+					<retiredSinceVersion>
+						<xsl:value-of select="taggedValue[@tag='AAA:GueltigBis']"/>
+					</retiredSinceVersion>
+				</xsl:if>
+				<xsl:if test="count(nutzungsartkennung)=1">
+					<xsl:for-each select="tokenize(nutzungsartkennung, ',')">
+						<nutzungsartkennung>				
+							<xsl:value-of select="normalize-space(.)"/>
+						</nutzungsartkennung>
+					</xsl:for-each>
+				</xsl:if>
 				<xsl:apply-templates select="diagram"/>
 			</AC_Objektartengruppe>
 		</gml:dictionaryEntry>
@@ -445,7 +325,7 @@
 					<gml:description>
 						<xsl:for-each select="definition">
 							<xsl:value-of select="."/>
-							<xsl:text>&#xd;</xsl:text>
+							<xsl:text>&#xa;</xsl:text>
 						</xsl:for-each>
 					</gml:description>
 				</xsl:if>
@@ -473,8 +353,8 @@
 					<xsl:apply-templates select="." mode="dictionaryEntry"/>
 				</xsl:for-each>
 				<xsl:choose>
-					<xsl:when test="count(definition[.='Es handelt sich um eine abstrakte Objektart.'])>0">
-						<isAbstract>true</isAbstract>
+					<xsl:when test="abstrakt">
+						<isAbstract><xsl:value-of select="abstrakt" /></isAbstract>
 					</xsl:when>
 					<xsl:otherwise>
 						<isAbstract>false</isAbstract>
@@ -488,49 +368,73 @@
 				<xsl:apply-templates select="modellart"/>
 				<xsl:apply-templates select="grunddatenbestand"/>
 				<xsl:apply-templates select="profil"/>
-				<xsl:if test="count(letzteAenderungVersion)=1">
+				<!-- letzteAenderungVersion wird nie gesetzt ?! -->
+				<xsl:if test="letzteAenderungVersion">
 					<xsl:call-template name="letzteAenderung">
 						<xsl:with-param name="version" select="letzteAenderungVersion"/>
 						<xsl:with-param name="nummer" select="letzteAenderungRevisionsnummer"/>
 					</xsl:call-template>
 				</xsl:if>
-				<xsl:if test="count(wirdTypisiertDurch)=1">
+				<xsl:if test="count(retired)=1">
+					<isRetired>				
+						<xsl:value-of select="retired"/>
+					</isRetired>
+				</xsl:if>
+				<xsl:if test="count(taggedValue[@tag='AAA:GueltigBis'])=1">
+					<retiredSinceVersion>
+						<xsl:value-of select="taggedValue[@tag='AAA:GueltigBis']"/>
+					</retiredSinceVersion>
+				</xsl:if>
+				<xsl:if test="count(taggedValue[@tag='AAA:Landnutzung'])=1">
+					<landnutzung>				
+						<xsl:value-of select="replace(taggedValue[@tag='AAA:Landnutzung'], 'True', 'true')"/>
+					</landnutzung>
+				</xsl:if>
+				<xsl:if test="count(nutzungsart)=1">
+					<nutzungsart>				
+						<xsl:value-of select="nutzungsart"/>
+					</nutzungsart>
+				</xsl:if>
+				<xsl:if test="count(nutzungsartkennung)=1">
+					<xsl:for-each select="tokenize(nutzungsartkennung, ',')">
+						<nutzungsartkennung>				
+							<xsl:value-of select="normalize-space(.)"/>
+						</nutzungsartkennung>
+            	</xsl:for-each>
+				</xsl:if>
+				<xsl:if test="wirdTypisiertDurch">
 					<wirdTypisiertDurch>
-						<xsl:value-of select="wirdTypisiertDurch"/>
+						<xsl:value-of select="wirdTypisiertDurch[1]"/>
 					</wirdTypisiertDurch>
 				</xsl:if>
-				<xsl:if test="count(Erfassungskriterium)>0">
-					<xsl:call-template name="Erfassungskriterium">
-						<xsl:with-param name="eklist" select="Erfassungskriterium"/>
-						<xsl:with-param name="mart">*</xsl:with-param>
-					</xsl:call-template>
+				<xsl:if test="erfassungskriterium">
+					<xsl:for-each-group select="erfassungskriterium" group-by="@modellart">
+						<xsl:sort select="current-grouping-key()" /> 
+						<xsl:call-template name="Erfassungskriterium">
+							<xsl:with-param name="list" select="current-group()"/>
+							<xsl:with-param name="mart" select="current-grouping-key()" />
+						</xsl:call-template>
+					</xsl:for-each-group> 
 				</xsl:if>
-				<xsl:if test="count(Bildungsregel)>0">
-					<xsl:call-template name="Bildungsregel">
-						<xsl:with-param name="eklist" select="Bildungsregel"/>
-						<xsl:with-param name="mart">*</xsl:with-param>
-					</xsl:call-template>
+				<xsl:if test="bildungsregel">
+					<xsl:for-each-group select="bildungsregel" group-by="@modellart">
+						<xsl:sort select="current-grouping-key()" /> 
+						<xsl:call-template name="Bildungsregel">
+							<xsl:with-param name="list" select="current-group()"/>
+							<xsl:with-param name="mart" select="current-grouping-key()" />
+						</xsl:call-template>
+					</xsl:for-each-group> 
 				</xsl:if>
-				<xsl:if test="count(Konsistenzbedingung)>0">
-					<xsl:call-template name="Konsistenzbedingung">
-						<xsl:with-param name="eklist" select="Konsistenzbedingung"/>
-						<xsl:with-param name="mart">*</xsl:with-param>
-					</xsl:call-template>
-				</xsl:if>
-				<xsl:if test="count(Lebenszeitintervall)>0">
-					<lebenszeitintervallbeschreibung>
-						<xsl:for-each select="Lebenszeitintervall">
-							<xsl:value-of select="."/>
-							<xsl:text>&#xd;</xsl:text>
-						</xsl:for-each>
-					</lebenszeitintervallbeschreibung>
+				<xsl:if test="konsistenzbedingung">
+					<xsl:for-each-group select="konsistenzbedingung" group-by="@modellart">
+						<xsl:sort select="current-grouping-key()" /> 
+						<xsl:call-template name="Konsistenzbedingung">
+							<xsl:with-param name="list" select="current-group()"/>
+							<xsl:with-param name="mart" select="current-grouping-key()" />
+						</xsl:call-template>
+					</xsl:for-each-group> 
 				</xsl:if>
 				<xsl:apply-templates select="diagram"/>
-				<xsl:for-each select="themen">
-					<thema>
-						<xsl:attribute name="xlink:href">#___<xsl:value-of select="."/></xsl:attribute>
-					</thema>
-				</xsl:for-each>
 			</AC_FeatureType>
 		</gml:dictionaryEntry>
 	</xsl:template>
@@ -542,7 +446,7 @@
 					<gml:description>
 						<xsl:for-each select="definition">
 							<xsl:value-of select="."/>
-							<xsl:text>&#xd;</xsl:text>
+							<xsl:text>&#xa;</xsl:text>
 						</xsl:for-each>
 					</gml:description>
 				</xsl:if>
@@ -593,11 +497,24 @@
 						<xsl:with-param name="nummer" select="letzteAenderungRevisionsnummer"/>
 					</xsl:call-template>
 				</xsl:if>
-				<xsl:if test="count(Konsistenzbedingung)>0">
-					<xsl:call-template name="Konsistenzbedingung">
-						<xsl:with-param name="eklist" select="Konsistenzbedingung"/>
-						<xsl:with-param name="mart">*</xsl:with-param>
-					</xsl:call-template>
+				<xsl:if test="count(retired)=1">
+					<isRetired>				
+						<xsl:value-of select="retired"/>
+					</isRetired>
+				</xsl:if>
+				<xsl:if test="count(taggedValue[@tag='AAA:GueltigBis'])=1">
+					<retiredSinceVersion>
+						<xsl:value-of select="taggedValue[@tag='AAA:GueltigBis']"/>
+					</retiredSinceVersion>
+				</xsl:if>
+				<xsl:if test="konsistenzbedingung">
+					<xsl:for-each-group select="konsistenzbedingung" group-by="@modellart">
+						<xsl:sort select="current-grouping-key()" /> 
+						<xsl:call-template name="Konsistenzbedingung">
+							<xsl:with-param name="list" select="current-group()"/>
+							<xsl:with-param name="mart" select="current-grouping-key()" />
+						</xsl:call-template>
+					</xsl:for-each-group> 
 				</xsl:if>
 				<xsl:apply-templates select="diagram"/>
 			</AC_DataType>
@@ -625,23 +542,6 @@
 			</FC_InheritanceRelation>
 		</gml:dictionaryEntry>
 	</xsl:template>
-	<xsl:template match="themen" mode="dictionaryEntry">
-		<gml:dictionaryEntry>
-			<AC_Thema>
-				<xsl:attribute name="gml:id">___<xsl:value-of select="."/></xsl:attribute>
-				<gml:identifier>
-					<xsl:attribute name="codeSpace">urn:adv:name</xsl:attribute>
-					<xsl:value-of select="."/>
-				</gml:identifier>
-				<!--<art>???</art>
-				<modellart>
-					<xsl:call-template name="AA_Modellart">
-						<xsl:with-param name="mart" select="???"/>
-					</xsl:call-template>
-				</modellart>-->
-			</AC_Thema>
-		</gml:dictionaryEntry>
-	</xsl:template>
 	<xsl:template match="FC_FeatureAttribute" mode="dictionaryEntry">
 		<gml:dictionaryEntry>
 			<AC_FeatureAttribute>
@@ -650,7 +550,7 @@
 					<gml:description>
 						<xsl:for-each select="definition">
 							<xsl:value-of select="."/>
-							<xsl:text>&#xd;</xsl:text>
+							<xsl:text>&#xa;</xsl:text>
 						</xsl:for-each>
 					</gml:description>
 				</xsl:if>
@@ -726,6 +626,21 @@
 						<xsl:with-param name="nummer" select="letzteAenderungRevisionsnummer"/>
 					</xsl:call-template>
 				</xsl:if>
+				<xsl:if test="count(retired)=1">
+					<isRetired>				
+						<xsl:value-of select="retired"/>
+					</isRetired>
+				</xsl:if>
+				<xsl:if test="count(taggedValue[@tag='AAA:GueltigBis'])=1">
+					<retiredSinceVersion>
+						<xsl:value-of select="taggedValue[@tag='AAA:GueltigBis']"/>
+					</retiredSinceVersion>
+				</xsl:if>
+				<xsl:if test="count(taggedValue[@tag='AAA:Landnutzung'])=1">
+					<landnutzung>				
+						<xsl:value-of select="replace(taggedValue[@tag='AAA:Landnutzung'], 'True', 'true')"/>
+					</landnutzung>
+				</xsl:if>
 				<xsl:choose>
 					<xsl:when test="count(objektbildend)=1 and (objektbildend='true' or objektbildend='-1')">
 						<objektbildend>true</objektbildend>
@@ -734,6 +649,18 @@
 						<objektbildend>false</objektbildend>
 					</xsl:otherwise>
 				</xsl:choose>
+				<xsl:if test="auswerteregel">
+					<xsl:call-template name="Auswerteregel">
+						<xsl:with-param name="list" select="auswerteregel"/>
+						<xsl:with-param name="mart" select="'*'" />
+					</xsl:call-template>
+				</xsl:if>
+				<xsl:if test="bildungsregel">
+					<xsl:call-template name="Bildungsregel">
+						<xsl:with-param name="list" select="bildungsregel"/>
+						<xsl:with-param name="mart" select="'*'" />
+					</xsl:call-template>
+				</xsl:if>
 			</AC_FeatureAttribute>
 		</gml:dictionaryEntry>
 	</xsl:template>
@@ -746,7 +673,7 @@
 					<gml:description>
 						<xsl:for-each select="definition">
 							<xsl:value-of select="."/>
-							<xsl:text>&#xd;</xsl:text>
+							<xsl:text>&#xa;</xsl:text>
 						</xsl:for-each>
 					</gml:description>
 				</xsl:if>
@@ -769,6 +696,28 @@
 						<xsl:with-param name="nummer" select="letzteAenderungRevisionsnummer"/>
 					</xsl:call-template>
 				</xsl:if>
+				<xsl:if test="count(retired)=1">
+					<isRetired>				
+						<xsl:value-of select="retired"/>
+					</isRetired>
+				</xsl:if>
+				<xsl:if test="count(taggedValue[@tag='AAA:GueltigBis'])=1">
+					<retiredSinceVersion>
+						<xsl:value-of select="taggedValue[@tag='AAA:GueltigBis']"/>
+					</retiredSinceVersion>
+				</xsl:if>
+				<xsl:if test="count(taggedValue[@tag='AAA:Landnutzung'])=1">
+					<landnutzung>				
+						<xsl:value-of select="replace(taggedValue[@tag='AAA:Landnutzung'], 'True', 'true')"/>
+					</landnutzung>
+				</xsl:if>
+				<xsl:if test="count(nutzungsartkennung)=1">
+					<xsl:for-each select="tokenize(nutzungsartkennung, ',')">
+						<nutzungsartkennung>				
+							<xsl:value-of select="normalize-space(.)"/>
+						</nutzungsartkennung>
+            	</xsl:for-each>
+				</xsl:if>
 			</AC_ListedValue>
 		</gml:dictionaryEntry>
 	</xsl:template>
@@ -780,7 +729,7 @@
 					<gml:description>
 						<xsl:for-each select="definition">
 							<xsl:value-of select="."/>
-							<xsl:text>&#xd;</xsl:text>
+							<xsl:text>&#xa;</xsl:text>
 						</xsl:for-each>
 					</gml:description>
 				</xsl:if>
@@ -813,7 +762,14 @@
 						<isOrdered>false</isOrdered>
 					</xsl:otherwise>
 				</xsl:choose>
-				<!-- Information kann derzeit nicht ermittelt werden <isNavigable>???</isNavigable>-->
+				<xsl:choose>
+					<xsl:when test="inverseRichtung='true'">
+						<isNavigable>false</isNavigable>
+					</xsl:when>
+					<xsl:otherwise>
+						<isNavigable>true</isNavigable>
+					</xsl:otherwise>
+				</xsl:choose>
 				<relation>
 					<xsl:attribute name="xlink:href">#<xsl:value-of select="relation/@idref"/></xsl:attribute>
 				</relation>
@@ -839,6 +795,16 @@
 						<xsl:with-param name="nummer" select="letzteAenderungRevisionsnummer"/>
 					</xsl:call-template>
 				</xsl:if>
+				<xsl:if test="count(retired)=1">
+					<isRetired>				
+						<xsl:value-of select="retired"/>
+					</isRetired>
+				</xsl:if>
+				<xsl:if test="count(taggedValue[@tag='AAA:GueltigBis'])=1">
+					<retiredSinceVersion>
+						<xsl:value-of select="taggedValue[@tag='AAA:GueltigBis']"/>
+					</retiredSinceVersion>
+				</xsl:if>
 				<xsl:choose>
 					<xsl:when test="count(objektbildend)=1 and (objektbildend='true' or objektbildend='-1')">
 						<objektbildend>true</objektbildend>
@@ -858,7 +824,7 @@
 					<gml:description>
 						<xsl:for-each select="definition">
 							<xsl:value-of select="."/>
-							<xsl:text>&#xd;</xsl:text>
+							<xsl:text>&#xa;</xsl:text>
 						</xsl:for-each>
 					</gml:description>
 				</xsl:if>
@@ -898,7 +864,7 @@
 					<gml:description>
 						<xsl:for-each select="definition">
 							<xsl:value-of select="."/>
-							<xsl:text>&#xd;</xsl:text>
+							<xsl:text>&#xa;</xsl:text>
 						</xsl:for-each>
 					</gml:description>
 				</xsl:if>

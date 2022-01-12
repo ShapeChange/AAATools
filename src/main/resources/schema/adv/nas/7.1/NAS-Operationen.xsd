@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmlexr="http://www.opengis.net/gml/3.3/exr" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:wfs="http://www.opengis.net/wfs/2.0" xmlns:wfsext="http://www.adv-online.de/namespaces/adv/gid/wfsext/2.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/gid/7.1" version="7.1.0">
+<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmlexr="http://www.opengis.net/gml/3.3/exr" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:wfs="http://www.opengis.net/wfs/2.0" xmlns:wfsext="http://www.adv-online.de/namespaces/adv/gid/wfsext/2.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/gid/7.1" version="7.1.1">
   <include schemaLocation="AAA-Fachschema.xsd"/>
   <include schemaLocation="aaa.xsd"/>
   <import namespace="http://www.adv-online.de/namespaces/adv/gid/wfsext/2.0" schemaLocation="../../wfsext/2.0/WFS-Erweiterungen.xsd"/>
@@ -207,9 +207,13 @@
           <element minOccurs="0" name="objekteImFortfuehrungsgebiet" type="adv:AX_BestandsdatenauszugPropertyType"/>
           <element maxOccurs="unbounded" minOccurs="0" name="fortfuehrungsnachweis">
             <complexType>
-              <sequence>
-                <element ref="gml:AbstractObject"/>
-              </sequence>
+              <complexContent>
+                <extension base="gml:AbstractMemberType">
+                  <sequence>
+                    <element ref="gml:AbstractObject"/>
+                  </sequence>
+                </extension>
+              </complexContent>
             </complexType>
           </element>
         </sequence>
@@ -219,6 +223,19 @@
   <complexType name="AX_FortfuehrungsergebnisPropertyType">
     <sequence>
       <element ref="adv:AX_Fortfuehrungsergebnis"/>
+    </sequence>
+  </complexType>
+  <element abstract="true" name="AX_FortfuehrungsnachweisProdukt" substitutionGroup="adv:AX_Benutzungsergebnis" type="adv:AX_FortfuehrungsnachweisProduktType"/>
+  <complexType abstract="true" name="AX_FortfuehrungsnachweisProduktType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence/>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_FortfuehrungsnachweisProduktPropertyType">
+    <sequence>
+      <element ref="adv:AX_FortfuehrungsnachweisProdukt"/>
     </sequence>
   </complexType>
   <simpleType name="AX_ImpliziteLoeschungDerReservierungType">
@@ -327,6 +344,12 @@
       <extension base="adv:AX_BenutzungsergebnisType">
         <sequence>
           <element maxOccurs="unbounded" minOccurs="0" name="koordinatenangaben" type="adv:AA_KoordinatenreferenzsystemangabenPropertyType"/>
+          <element name="auftragsnummer" type="string"/>
+          <element minOccurs="0" name="portionskennung" type="adv:AX_PortionskennungPropertyType"/>
+          <element minOccurs="0" name="letzteAbgabeArt" type="adv:AX_LetzteAbgabeArtType"/>
+          <element name="profilkennung" type="string"/>
+          <element minOccurs="0" name="abgabeintervallBeginn" type="dateTime"/>
+          <element minOccurs="0" name="abgabeintervallEnde" type="dateTime"/>
           <element name="geaenderteObjekte">
             <complexType>
               <sequence>
@@ -334,12 +357,6 @@
               </sequence>
             </complexType>
           </element>
-          <element name="auftragsnummer" type="string"/>
-          <element minOccurs="0" name="portionskennung" type="adv:AX_PortionskennungPropertyType"/>
-          <element minOccurs="0" name="letzteAbgabeArt" type="adv:AX_LetzteAbgabeArtType"/>
-          <element name="profilkennung" type="string"/>
-          <element minOccurs="0" name="abgabeintervallBeginn" type="dateTime"/>
-          <element minOccurs="0" name="abgabeintervallEnde" type="dateTime"/>
         </sequence>
       </extension>
     </complexContent>
