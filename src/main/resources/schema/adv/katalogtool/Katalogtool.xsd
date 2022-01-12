@@ -4,8 +4,16 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element name="name" type="xs:string"/>
-				<xs:element name="scope" type="xs:string"/>
-				<xs:element name="modellart" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="scope" type="xs:string" minOccurs="0"/>
+				<xs:element name="modellart" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="name" type="xs:string"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+				</xs:element>
 				<xs:element name="profil" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="versionNumber" type="xs:string"/>
 				<xs:element name="versionDate" type="xs:string"/>
@@ -61,6 +69,7 @@
 						</xs:simpleContent>
 					</xs:complexType>
 				</xs:element>
+				<xs:element name="nutzungsartkennung" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="id" type="xs:ID" use="required"/>
 		</xs:complexType>
@@ -83,6 +92,7 @@
 				</xs:element>
 				<xs:element name="note" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="Objektbereichzugehoerigkeit" type="ReferenceType" minOccurs="0"/>
+				<xs:element name="nutzungsartkennung" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="id" type="xs:ID" use="required"/>
 		</xs:complexType>
@@ -93,11 +103,10 @@
 				<xs:element name="name" type="xs:string"/>
 				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="code" type="xs:string" minOccurs="0"/>
-				<xs:element name="retired" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="subtypeOf" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="characterizedBy" type="ReferenceType" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="Objektartengruppenzugehoerigkeit" type="ReferenceType" minOccurs="0"/>
-				<xs:element name="Erfassungskriterium" minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="erfassungskriterium" minOccurs="0" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:simpleContent>
 							<xs:extension base="xs:string">
@@ -106,7 +115,7 @@
 						</xs:simpleContent>
 					</xs:complexType>
 				</xs:element>
-				<xs:element name="Konsistenzbedingung" minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="konsistenzbedingung" minOccurs="0" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:simpleContent>
 							<xs:extension base="xs:string">
@@ -115,7 +124,7 @@
 						</xs:simpleContent>
 					</xs:complexType>
 				</xs:element>
-				<xs:element name="Bildungsregel" minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="auswerteregel" minOccurs="0" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:simpleContent>
 							<xs:extension base="xs:string">
@@ -124,7 +133,16 @@
 						</xs:simpleContent>
 					</xs:complexType>
 				</xs:element>
-				<xs:element name="Lebenszeitintervall" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="bildungsregel" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="modellart" type="xs:string"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="abstrakt" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="wirdTypisiertDurch" minOccurs="0">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
@@ -138,6 +156,7 @@
 				<xs:element name="bedeutung" type="xs:string" minOccurs="0"/>
 				<xs:element name="modellart" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="grunddatenbestand" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="retired" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="profil" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="taggedValue" type="TaggedValueType" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="letzteAenderungVersion" type="xs:string" minOccurs="0"/>
@@ -165,11 +184,32 @@
 				<xs:element name="name" type="xs:string"/>
 				<xs:element name="cardinality" type="xs:string" minOccurs="0"/>
 				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="auswerteregel" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="modellart" type="xs:string"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="bildungsregel" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="modellart" type="xs:string"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="derived" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="initialValue" type="xs:string" minOccurs="0"/>
+				<xs:element name="readOnly" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="code" type="xs:string" minOccurs="0"/>
-				<xs:element name="retired" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="objektbildend" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="modellart" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="grunddatenbestand" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="retired" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="profil" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="taggedValue" type="TaggedValueType" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="letzteAenderungVersion" type="xs:string" minOccurs="0"/>
@@ -188,6 +228,7 @@
 				<xs:element name="taggedValue" type="TaggedValueType" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="id" type="xs:ID" use="required"/>
+			<xs:attribute name="sequenceNumber" type="xs:integer"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="FC_FeatureRelationship">
@@ -216,11 +257,14 @@
 				<xs:element name="name" type="xs:string"/>
 				<xs:element name="cardinality" type="xs:string" minOccurs="0"/>
 				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="inverseRichtung" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="derived" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="readOnly" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="code" type="xs:string" minOccurs="0"/>
-				<xs:element name="retired" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="objektbildend" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="modellart" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="grunddatenbestand" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="retired" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="profil" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="taggedValue" type="TaggedValueType" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="letzteAenderungVersion" type="xs:string" minOccurs="0"/>
@@ -240,6 +284,7 @@
 				</xs:element>
 			</xs:sequence>
 			<xs:attribute name="id" type="xs:ID" use="required"/>
+			<xs:attribute name="sequenceNumber" type="xs:integer"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="FC_Value">
@@ -247,10 +292,10 @@
 			<xs:sequence>
 				<xs:element name="label" type="xs:string"/>
 				<xs:element name="code" type="xs:string" minOccurs="0"/>
-				<xs:element name="retired" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="modellart" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="grunddatenbestand" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="retired" type="xs:boolean" minOccurs="0"/>
 				<xs:element name="profil" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="taggedValue" type="TaggedValueType" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="letzteAenderungVersion" type="xs:string" minOccurs="0"/>
