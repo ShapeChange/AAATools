@@ -3,7 +3,7 @@
 (c) 2005-2020 interactive instruments GmbH, Bonn
 im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der Bundesrepublik Deutschland (AdV)
 -->
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:nas="http://www.adv-online.de/namespaces/adv/gid/6.0" xmlns="http://www.adv-online.de/namespaces/adv/gid/fc/6.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco"  xmlns:xlink="http://www.w3.org/1999/xlink">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:nas="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns="http://www.adv-online.de/namespaces/adv/gid/fc/7.1" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco"  xmlns:xlink="http://www.w3.org/1999/xlink">
 	<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
 	<xsl:include href="aaa-labels.xsl"/>
 	<xsl:variable name="advMA">
@@ -11,9 +11,9 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
 	</xsl:variable>
 	<xsl:decimal-format name="code" NaN="999999"/>
 	<xsl:template match="/">
-		<!-- namespaces http://www.adv-online.de/namespaces/adv/gid/fc/6.0 und http://www.adv-online.de/namespaces/adv/gid/6.0; schemaLocation  -->
+		<!-- namespaces http://www.adv-online.de/namespaces/adv/gid/fc/7.1 und http://www.adv-online.de/namespaces/adv/gid/7.1; schemaLocation  -->
 		<xsl:variable name="version" select="/FC_FeatureCatalogue/versionNumber"/>
-		<AC_FeatureCatalogue xmlns="http://www.adv-online.de/namespaces/adv/gid/fc/6.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:nas="http://www.adv-online.de/namespaces/adv/gid/6.0" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" gml:id="_Objektartenkatalog" xsi:schemaLocation="http://www.adv-online.de/namespaces/adv/gid/fc/6.0 Tools/AAA-Katalogtool/AAA-Katalog.xsd">
+		<AC_FeatureCatalogue xmlns="http://www.adv-online.de/namespaces/adv/gid/fc/7.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:nas="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" gml:id="_Objektartenkatalog" xsi:schemaLocation="http://www.adv-online.de/namespaces/adv/gid/fc/7.1 resources/schema/adv/katalogtool/AAA-Katalog.xsd">
 			<gml:description><xsl:value-of select="$fc.Objektartenkatalog" /> '<xsl:value-of select="FC_FeatureCatalogue/name"/>'</gml:description>
 			<gml:identifier>
 				<xsl:attribute name="codeSpace">urn:adv:name</xsl:attribute>
@@ -226,23 +226,6 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
 						<xsl:value-of select="code"/>
 					</gml:name>
 				</xsl:if>
-				<xsl:if test="count(retired)=1">
-					<isRetired>				
-						<xsl:value-of select="retired"/>
-					</isRetired>
-				</xsl:if>
-				<xsl:if test="count(taggedValue[@tag='AAA:GueltigBis'])=1">
-					<retiredSinceVersion>
-						<xsl:value-of select="taggedValue[@tag='AAA:GueltigBis']"/>
-					</retiredSinceVersion>
-				</xsl:if>
-				<xsl:if test="count(nutzungsartkennung)=1">
-					<xsl:for-each select="tokenize(nutzungsartkennung, ',')">
-						<nutzungsartkennung>				
-							<xsl:value-of select="normalize-space(.)"/>
-						</nutzungsartkennung>
-            	</xsl:for-each>
-				</xsl:if>
 				<xsl:variable name="bid" select="@id"/>
 				<xsl:for-each select="/FC_FeatureCatalogue/AC_Objektartengruppe[Objektbereichzugehoerigkeit/@idref=$bid]">
 					<xsl:sort select="format-number(number(code), '000000', 'code')"/>
@@ -259,6 +242,23 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
 					<xsl:sort select="code" />
 					<xsl:apply-templates select="." mode="dictionaryEntryDT"/>
 				</xsl:for-each>
+				<xsl:if test="count(retired)=1">
+					<isRetired>				
+						<xsl:value-of select="retired"/>
+					</isRetired>
+				</xsl:if>
+				<xsl:if test="count(taggedValue[@tag='AAA:GueltigBis'])=1">
+					<retiredSinceVersion>
+						<xsl:value-of select="taggedValue[@tag='AAA:GueltigBis']"/>
+					</retiredSinceVersion>
+				</xsl:if>
+				<xsl:if test="count(nutzungsartkennung)=1">
+					<xsl:for-each select="tokenize(nutzungsartkennung, ',')">
+						<nutzungsartkennung>				
+							<xsl:value-of select="normalize-space(.)"/>
+						</nutzungsartkennung>
+					</xsl:for-each>
+				</xsl:if>
 				<xsl:apply-templates select="diagram"/>
 			</AC_Objektartenbereich>
 		</gml:dictionaryEntry>
@@ -285,6 +285,17 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
 						<xsl:value-of select="code"/>
 					</gml:name>
 				</xsl:if>
+				<xsl:variable name="gid" select="@id"/>
+				<xsl:for-each select="/FC_FeatureCatalogue/AC_FeatureType[(count(bedeutung)=0 or bedeutung='Objektart') and Objektartengruppenzugehoerigkeit/@idref=$gid]">
+					<xsl:sort select="format-number(number(code), '000000', 'code')"/>
+					<xsl:sort select="code" />
+					<xsl:apply-templates select="." mode="dictionaryEntryFT"/>
+				</xsl:for-each>
+				<xsl:for-each select="/FC_FeatureCatalogue/AC_FeatureType[bedeutung!='Objektart' and Objektartengruppenzugehoerigkeit/@idref=$gid]">
+					<xsl:sort select="format-number(number(code), '000000', 'code')"/>
+					<xsl:sort select="code" />
+					<xsl:apply-templates select="." mode="dictionaryEntryDT"/>
+				</xsl:for-each>
 				<xsl:if test="count(retired)=1">
 					<isRetired>				
 						<xsl:value-of select="retired"/>
@@ -300,19 +311,8 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
 						<nutzungsartkennung>				
 							<xsl:value-of select="normalize-space(.)"/>
 						</nutzungsartkennung>
-            	</xsl:for-each>
+					</xsl:for-each>
 				</xsl:if>
-				<xsl:variable name="gid" select="@id"/>
-				<xsl:for-each select="/FC_FeatureCatalogue/AC_FeatureType[(count(bedeutung)=0 or bedeutung='Objektart') and Objektartengruppenzugehoerigkeit/@idref=$gid]">
-					<xsl:sort select="format-number(number(code), '000000', 'code')"/>
-					<xsl:sort select="code" />
-					<xsl:apply-templates select="." mode="dictionaryEntryFT"/>
-				</xsl:for-each>
-				<xsl:for-each select="/FC_FeatureCatalogue/AC_FeatureType[bedeutung!='Objektart' and Objektartengruppenzugehoerigkeit/@idref=$gid]">
-					<xsl:sort select="format-number(number(code), '000000', 'code')"/>
-					<xsl:sort select="code" />
-					<xsl:apply-templates select="." mode="dictionaryEntryDT"/>
-				</xsl:for-each>
 				<xsl:apply-templates select="diagram"/>
 			</AC_Objektartengruppe>
 		</gml:dictionaryEntry>
