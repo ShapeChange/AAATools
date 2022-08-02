@@ -126,12 +126,14 @@ public class Katalog implements Target, MessageSource {
 	private static final String RETIRED = "retired";
 	private static final String SCHEMAKENNUNGEN = "schemakennungen";
 	private static final String STILLGELEGTE_ELEMENTE = "stillgelegteElemente";
+	private static final String REVISIONSNUMMERN = "revisionsnummern";
 	private static final String TRUE = "true";
 	private static final String VERZEICHNIS = "Verzeichnis";
 	public static final int STATUS_WRITE_HTML = 23;
 	public static final int STATUS_WRITE_XML = 24;
 	public static final int STATUS_WRITE_CSV = 26;
 	public static final int STATUS_WRITE_DOCX = 27;
+	public static final int STATUS_WRITE_ADOC = 28;
 
 	/**
 	 * The string used as placeholder in the docx template. The paragraph this
@@ -158,6 +160,7 @@ public class Katalog implements Target, MessageSource {
 	private Boolean OnlyGDB = false;
 	private Boolean OnlyProfile = false;
 	private Boolean Retired = false;
+	private Boolean Revisionsnummern = false;
 	private String[] MAList;
 	private String[] PList;
 	private String PQuelle = MODELL;
@@ -172,6 +175,8 @@ public class Katalog implements Target, MessageSource {
 	private Map<String, String> regelnClass = null; 
 	private Map<String, String> regelnProp = null; 
 	private String OutputFormat  = "";
+	
+	private boolean removeEmptyLines = true;
 	
 	@Override
 	public void registerRulesAndRequirements(RuleRegistry r) {
@@ -220,7 +225,11 @@ public class Katalog implements Target, MessageSource {
 		s = options.parameter(this.getClass().getName(),STILLGELEGTE_ELEMENTE);
 		if (s!=null && s.equals(TRUE))
 			Retired = true;
-
+		
+		s = options.parameter(this.getClass().getName(),REVISIONSNUMMERN);
+		if (s!=null && s.equals(TRUE))
+			Revisionsnummern = true;
+		
 		s = options.parameter(this.getClass().getName(),PROFILE2);
 		if (s==null || s.trim().length()==0)
 			PList = new String[0];
@@ -254,12 +263,18 @@ public class Katalog implements Target, MessageSource {
 			Package = s;
 		else
 			Package = "";
-
+				
 		s = options.parameter(this.getClass().getName(),AUSGABEFORMAT);
 		if (s!=null && s.length()>0)
 			OutputFormat = s;
 		else
 			OutputFormat = "";
+		
+		// Schaltbarkeit per Target-Parameter deaktiviert, da stark abhängig von adoc-Ausgabeformat
+//		removeEmptyLines = options.parameterAsBoolean(this.getClass().getName(),"removeEmptyLines", true);
+		if(OutputFormat.toLowerCase().contains("adoc")) {
+		    removeEmptyLines = false;
+		}
 
 		refModel = getReferenceModel();
 		if (refModel!=null) {
@@ -574,7 +589,7 @@ public class Katalog implements Target, MessageSource {
 		boolean del = false;
 		String[] lines = s.replace("\r\n", "\n").replace("\r", "\n").split("\n");
 		for(String line : lines) {
-			if (line.isEmpty())
+			if (removeEmptyLines && line.isEmpty())
 				continue;
 			Element e2 = document.createElement(ename);
 			if (aname!=null && aval!=null && !aval.isEmpty())
@@ -1882,12 +1897,14 @@ public class Katalog implements Target, MessageSource {
 			}
 		}
 
-		s = i.taggedValue("AAA:Revisionsnummer");
-		if (s!=null && !s.isEmpty()) {
-			e2 = document.createElement("letzteAenderungRevisionsnummer");
-			e2.setTextContent(PrepareToPrint(s));
-			e1.appendChild(e2);
-		} 		
+		if(Revisionsnummern) {
+        		s = i.taggedValue("AAA:Revisionsnummer");
+        		if (s!=null && !s.isEmpty()) {
+        			e2 = document.createElement("letzteAenderungRevisionsnummer");
+        			e2.setTextContent(PrepareToPrint(s));
+        			e1.appendChild(e2);
+        		} 		
+		}
 	}
 
 	/* (non-Javadoc)
@@ -1946,6 +1963,7 @@ public class Katalog implements Target, MessageSource {
 			
 			String outfileBasename = pi.xsdDocument().replace(".xsd", "");
 
+			writeADOC(xmlName, outfileBasename);
 			writeDOCX(xmlName, outfileBasename);
 			writeHTML(xmlName, outfileBasename);
 			writeXML(xmlName, outfileBasename);
@@ -2162,6 +2180,29 @@ public class Katalog implements Target, MessageSource {
             File outDir = new File(outputDirectory);
             File xmlFile = new File(outDir, xmlName);
            	File outFile = new File(outDir, htmlfileName);
+			xsltWrite(xmlFile, xslfofileName, outFile, null);
+		}
+	}
+	
+	private void writeADOC(String xmlName, String outfileBasename){
+
+		if(!OutputFormat.toLowerCase().contains("adoc"))
+			return;
+
+		StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_ADOC);
+		
+		String xslfofileName = options.parameter(this.getClass().getName(),"xslAdocFile");
+		if (xslfofileName==null)
+			xslfofileName = "aaa-adoc.xsl";
+		String adocFileName = outfileBasename+".adoc";
+		
+		if(xmlName!=null && xmlName.length()>0
+				&& xslfofileName!=null && xslfofileName.length()>0
+				&& adocFileName!=null && adocFileName.length()>0){
+        // Setup input and output files
+        File outDir = new File(outputDirectory);
+        File xmlFile = new File(outDir, xmlName);
+       	File outFile = new File(outDir, adocFileName);
 			xsltWrite(xmlFile, xslfofileName, outFile, null);
 		}
 	}

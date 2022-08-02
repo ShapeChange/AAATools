@@ -45,7 +45,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
   <xsl:variable name="fc.Profile">Profile</xsl:variable>
   <xsl:variable name="fc.Referenzversion">Referenzversion</xsl:variable>
   <xsl:variable name="fc.Relationsarten">Relationsarten</xsl:variable>
-  <xsl:variable name="fc.Revisionsnummer">Letzte Änderungen (Revisionsnummer)</xsl:variable>
+  <xsl:variable name="fc.Revisionsnummer">Revisionsnummern</xsl:variable>
   <xsl:variable name="fc.Stillgelegt">Stillgelegt</xsl:variable>
   <xsl:variable name="fc.ÜbersichtObjektarten">Objektartenübersicht</xsl:variable>
   <xsl:variable name="fc.VerantwortlicheInstitution">Verantwortliche Institution</xsl:variable>
