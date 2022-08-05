@@ -128,6 +128,7 @@ public class Katalog implements Target, MessageSource {
 	private static final String STILLGELEGTE_ELEMENTE = "stillgelegteElemente";
 	private static final String REVISIONSNUMMERN = "revisionsnummern";
 	private static final String TRUE = "true";
+	private static final String FALSE = "false";
 	private static final String VERZEICHNIS = "Verzeichnis";
 	public static final int STATUS_WRITE_HTML = 23;
 	public static final int STATUS_WRITE_XML = 24;
@@ -160,7 +161,7 @@ public class Katalog implements Target, MessageSource {
 	private Boolean OnlyGDB = false;
 	private Boolean OnlyProfile = false;
 	private Boolean Retired = false;
-	private Boolean Revisionsnummern = false;
+	private Boolean Revisionsnummern = true;
 	private String[] MAList;
 	private String[] PList;
 	private String PQuelle = MODELL;
@@ -227,8 +228,8 @@ public class Katalog implements Target, MessageSource {
 			Retired = true;
 		
 		s = options.parameter(this.getClass().getName(),REVISIONSNUMMERN);
-		if (s!=null && s.equals(TRUE))
-			Revisionsnummern = true;
+		if (s!=null && s.equals(FALSE))
+			Revisionsnummern = false;
 		
 		s = options.parameter(this.getClass().getName(),PROFILE2);
 		if (s==null || s.trim().length()==0)

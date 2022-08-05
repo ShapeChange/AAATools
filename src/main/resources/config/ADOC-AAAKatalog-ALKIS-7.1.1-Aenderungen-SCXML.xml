@@ -45,7 +45,7 @@
 			<targetParameter name="xslTransformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 			<targetParameter name="referenceModelType" value="SCXML"/>
-			<targetParameter name="referenceModelFile" value="src/main/resources/model/AAA-6.0.1.xml.zip"/>
+			<targetParameter name="referenceModelFile" value="src/main/resources/model/AAA-7.1.0.xml.zip"/>
 			<!-- 
 			-->
 		</Target>
