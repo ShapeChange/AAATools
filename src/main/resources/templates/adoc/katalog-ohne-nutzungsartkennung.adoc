@@ -1,0 +1,549 @@
+:doctype: book
+:encoding: utf-8
+:lang: en
+:toc: macro
+:toc-title: Inhaltsverzeichnis
+:toclevels: 5
+  
+:toc-position: left
+  
+:figure-caption: Abbildung
+:table-caption: Tabelle
+:appendix-caption: Anhang
+  
+:numbered:
+:sectanchors:
+:sectnumlevels: 5
+  
+:source-highlighter: pygments
+  
+// https://docs.asciidoctor.org/asciidoc/latest/macros/xref-text-and-style/
+:xrefstyle: short
+  
+:appendix-refsig: Anhang
+:chapter-refsig: Kapitel
+:section-refsig: Abschnitt
+  
+:stylesdir: resources/styles
+:stylesheet: aaa-stylesheet.css
+  
+// Für PDF-Ableitung relevant:
+// https://docs.asciidoctor.org/asciidoc/latest/sections/chapters/
+:chapter-signifier: 
+  
+:data-uri:
+
+include::attribute.adoc[]
+
+[.text-center]
+image::media/aaa.jpg[]
+
+[.text-center]
+= Dokumentation zur Modellierung der Geoinformationen des amtlichen Vermessungswesens (GeoInfoDok)
+
+[.text-center]
+--
+
+[discrete] 
+== {aaa}-Katalogwerke
+
+[discrete] 
+== Ausleitung des {aaa}-Objektartenkataloges {mat}
+
+*{aaaVersion}*
+
+*{aaaStand}*
+
+---
+
+[discrete] 
+== Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der Bundesrepublik Deutschland (AdV)
+
+[discrete] 
+== {aaa}-Objektartenkatalog
+
+[discrete] 
+=== Teil A: Vorbemerkungen
+--
+
+toc::[]
+
+
+== Allgemeines
+
+In diesem Objektartenkatalog sind die Fachobjekte des {mat_langtext} auf der Grundlage des gemeinsamen
+AFIS-ALKIS-ATKIS-Fachschemas aufgeführt. Das AFIS-ALKIS-ATKIS-Fachschema
+ist Bestandteil des AFIS-ALKIS-ATKIS-Anwendungsschemas, das vollständig
+mit der Unified Modeling Language (UML) beschrieben wurde. #Die
+graphische Beschreibung der Objektartengruppen (Schemadarstellungen)
+entspricht inhaltlich genau dem Objektartenkatalog im DOCX- bzw.
+HTML-Format#. Der Objektartenkatalog wird abhängig von der gewählten
+Modellart mit Hilfe eines Tools direkt aus dem UML-Modell in Enterprise
+Architect abgeleitet.
+
+[role=indented]
+== Aufbau des Objektartenkataloges
+
+Der Objektartenkatalog ist gegliedert nach Objektartenbereichen, die
+wiederum aus Objektartengruppen bestehen. Der Aufbau der
+Objektartengruppen ist einheitlich gestaltet:
+
+* Bezeichnung, Definition der Objektartengruppe; sofern übergreifende
+Hinweise zu den Objektarten der Objektartengruppe existieren, sind sie
+hier aufgeführt
+* Beschreibung der Objektarten, abstrakten Klassen und Datentypen mit
+ihren Kennungen.
+* Werden Objektart, Attributart oder Relationsart im erläuternden Text
+benannt, sind diese in Anführungszeichen gesetzt. Ansonsten werden sie
+mit ihrem Präfix und der Darstellung im sogenannten 'CamelCase'
+verwendet, z. B. das 'Flurstück' als AX_Flurstueck, oder die 'Sport-,
+Freizeit- und Erholungsfläche' als AX_SportFreizeitUndErholungsflaeche.
+Abstrakte Klassen und Datentypen werden trotz der Darstellung im
+'CamelCase' und dem vorangestellten Präfix immer in Anführungszeichen
+gesetzt.
+
+Die Nummerierung der Kapitel erfolgt dabei fortlaufend ohne
+Berücksichtigung der Objektartenkennungen. Jede Objektartengruppe
+enthält im Unterkapitel "Bezeichnung, Definition" die vollständige
+Auflistung *aller* Objektarten und Datentypen des AAA-Fachschemas
+*unabhängig* von der gewählten Modellart. Im Objektartenkatalog selbst
+sind dann aber nur die Objektarten und Datentypen der im Ableitungstool
+ausgewählten Modellart zu finden.
+
+Die Objektarten werden mit folgendem Aufbau
+beschrieben:
+
+* [blue]#Objektart, Klasse, Datentyp#
+** [blue]#Kennung: ( )#
+** [blue]#Definition: ( )#
+** [blue]#Abstrakt: ( )#
+** [blue]#Stillgelegt: ( )#
+** [blue]#Abgeleitet aus: ( )#
+** [blue]#Objekttyp: Bezeichnung#
+** [blue]#Modellarten: Kennungen#
+** [blue]#Grunddatenbestand: Modellarten#
+** [blue]#Landnutzung: Kennzeichnung für das verpflichtende Mapping in die Landnutzung#
+** [blue]#Bildungsregeln: ( )#
+** [blue]#Auswerteregeln (nur im AAA-Ausgabekatalog): ( )#
+** [blue]#Erfassungskriterien: Bezieht sich der Objektartenkatalog auf mehrere Modellarten, so sind die
+Erfassungskriterien modellartenabhängig getrennt beschrieben.#
+** [blue]#Konsistenzbedingungen: Bezieht sich der Objektartenkatalog auf mehrere Modellarten, so sind die
+Konsistenzbedingungen modellartenabhängig getrennt beschrieben.#
+* [blue]#Attributart#
+** [blue]#Bezeichnung: ( )#
+** [blue]#Definition: ( )#
+** [blue]#Bildungsregel: (..)#
+** [blue]#Auswerteregel: ( )#
+** [blue]#Kennung: ( )#
+** [blue]#Stillgelegt: ( )#
+** [blue]#Modellart: ( )#
+** [blue]#Grunddatenb.: ( )#
+** [blue]#Multiplizität: ( )#
+** [blue]#Datentyp: ( )#
+** [blue]#Wertearten (jeweils mit Bezeichnung und Wert)#
+* [blue]#Relationsart#
+** [blue]#Bezeichnung: ( )#
+** [blue]#Definition: ( )#
+** [blue]#Kennung: ( )#
+** [blue]#Stillgelegt: ( )#
+** [blue]#Modellart: ( )#
+** [blue]#Grunddatenb.: ( )#
+** [blue]#Multiplizität: ( )#
+** [blue]#Zielobjektart: ( )#
+** [blue]#Inverse Relationsart: ( )#
+
+
+[discrete] 
+=== Erläuterungen:
+
+[blue]*Objektbereich bzw. Objektartengruppe*
+
+Bezeichnung des Objektartenbereichs und der Objektartengruppe aus dem
+jeweiligen Anwendungsschema. Objektartenbereiche und Objektartengruppen
+dienen der fachlichen Strukturierung des Datenmodells und des
+Objektartenkatalogs.
+
+[blue]*Objektart: Klasse, Datentyp*
+
+Innerhalb des jeweiligen Anwendungsschema eindeutige Bezeichnung der
+Objektart. Die abstrakten Klassen und die definierten Datentypen werden
+wie die Objektarten beschrieben. Das im jeweiligenAnwendungsschema
+verwendete Präfix 'AA_', 'AP_', 'AX_', 'GV_', 'LB_', 'LN_' oder 'BR_'
+steht allen Klassen, Datentypen und Codelisten voran.
+
+[blue]*Kennung:*
+
+Die Kennung der Objektart besteht aus einer Zahlen- bzw.
+Buchstabenkombination, die innerhalb des jeweiligen Objektartenkatalogs
+eindeutig ist.
+
+[blue]*Definition:*
+
+Die Definition enthält die Beschreibung, wie eine Objektart in der
+realen Welt definiert wird. +
+Die Fundstelle der Definition ist durch einen Klammerzusatz angegeben:
+
+[upperalpha]
+. Definition entsprechend FIG-Fachwörterbuch, Band 4: Katastervermessung
+und Liegenschaftskataster, Stand 1995
+. Definition entsprechend FIG-Fachwörterbuch, Benennungen und
+Definitionen im deutschen Vermessungswesen, Heft 6 - Topographie, IfAG
+(Herausgeber), Frankfurt a.M. 1971 (Entwurf des Arbeitskreises
+Topographie der AdV zur Neubearbeitung)
+. Definition entsprechend dem Duden - Großes Wörterbuch der Deutschen
+Sprache, Bibliographisches Institut, Mannheim
+. Definition entsprechend dem Feature Attribute Coding Catalog (FACC)
+(deutsche Fassung des Amtes für Militärisches Geowesen, Euskirchen 1987)
+. Eigendefinition
+. Definition entsprechend dem Verzeichnis der flächenbezogenen
+Nutzungsarten im Liegenschaftskataster und ihrer Begriffsbestimmungen
+(Nutzungsartenverzeichnis), AdV (Herausgeber), Koblenz/Hannover 1983
+. Definition entsprechend dem Glossar
+. Definition entsprechend dem Katalog des Statistischen
+Bodeninformationssystems STABIS (Systematik der Bodennutzung)
+. DIN 4054 'Verkehrswasserbau, Begriffe'; September 1977
+. DIN 4047 'Landwirtschaftlicher Wasserbau, Begriffe'; März 1973
+. Anweisung zur Straßeninformationsbank, ASB-Netzdaten; Januar 2003
+. Bundesfernstraßengesetz, BFStrG; April 1994
+. Bundeswasserstraßengesetz, BWStrG; Juli 1998
+. Bundesnaturschutzgesetz, BNatSchG; Dezember 1996
+. Richtlinie zur Ermittlung von Bodenrichtwerten
+(Bodenrichtwertrichtlinie – BRW-RL)
+
+Die Definitionen sind ansonsten in Anlehnung an die Normungsdokumente
+von ISO gefasst.
+
+Ist kein Klammerzusatz angegeben, erfolgt keine Aussage zur Herkunft der
+Definition.
+
+[blue]*Abstrakt:*
+
+Wenn es sich um eine abstrakte Klasse (*nicht* instanziierbare
+Objektart) handelt, wird hier "Ja" angegeben,
+beispielsweise AX_Festpunkt, AX_Flurstueckskerndaten oder
+AX_TatsaechlicheNutzung.
+
+[blue]*Stillgelegt:*
+
+gibt die Version an, bis zu welcher Version der GeoInfoDok die Vergabe
+der Objektart noch erlaubt war.
+
+[blue]*Abgeleitet aus:*
+
+In dieser Zeile wird angegeben, aus welchen Objektarten oder Klassen die
+Objektart Eigenschaften erbt. Auch geometrische und topologische
+Eigenschaften aus dem AFIS-ALKIS-ATKIS-Basisschema werden grundsätzlich
+vererbt und hier angegeben. Nur die im Basisschema angegebenen
+Raumbezugselemente sind zulässig, die wiederum aus dem Normdokument "ISO
+DIS 19107 Geographic Information: Spatial Schema" abgeleitet wurden.
+
+Mehrere Raumbezugsarten für eine Objektart sind zulässig.
+
+[blue]*Objekttyp:*
+
+Der Objekttyp gibt an, wie die Objektart modelliert ist. Es sind
+folgende Objekttypen zulässig:
+
+[cols="1,4,16",frame=none,grid=none,options="noheader"]
+|===
+| | [blue]#Bezeichnung:# 
+a|
+* Raumbezogenes Elementarobjekt (REO)
+* Nicht raumbezogenes Elementarobjekt (NREO)
+* Zusammengesetztes Objekt (ZUSO)
+|===
+
+REO, NREO und ZUSO sind Abkürzungen der Bezeichnung.
+
+[blue]*Modellarten:*
+
+Die Modellart regelt, zu welchem Modell oder zu welchen Modellen eine
+Objektart gehört.
+
+[blue]*Grunddatenbestand:*
+
+Der Grunddatenbestand ist der von allen Vermessungsverwaltungen der
+Länder der Bundesrepublik Deutschland in der GeoInfoDok
+bundeseinheitlich zu führende und einem Nutzer länderübergreifend zur
+Verfügung stehende Datenbestand. Es wird die Modellart angegeben, in der
+eine Objektart, Klasse oder Datentyp als Grunddatenbestand zu führen
+ist.
+
+Soweit eine Objektart nicht als Grunddatenbestand gekennzeichnet ist,
+entfällt im Katalog eine besondere Aussage.
+
+[blue]*Landnutzung:*
+
+Wird die Objektart für das verpflichtende Mapping in die Landnutzung
+benötigt, dann ist dies durch "Ja" angegeben.
+
+Soweit eine Objektart nicht für das Mapping in die Landnutzung benötigt
+wird, entfällt im Katalog eine besondere Aussage.
+
+[blue]*Bildungsregeln:*
+
+NOTE: Entspricht Festlegungen in AC_FeatureType in
+AAA_Objektartenkatalog.
+
+Die Bildungsregel ist notwendig, um die Kriterien festzulegen, die
+Objekte gleicher Objektart voneinander trennen. Es müssen die
+Eigenschaften (Attributarten und/oder Relationsarten) aufgeführt werden,
+deren Änderung zum Untergang des bisherigen Objekts bzw. zur Entstehung
+eines neuen Objekts führen. Die Bildungsregeln können darüber hinaus
+beschreiben:
+
+* Lebenszeitintervall: Es sind die Bedingungen anzugeben, wann ein
+Objekt entsteht und wann es untergeht.
+* Attribut: Aufgeführt werden Attribute, die vorhanden sein müssen,
+Bedingungen, die an Muss-Attribute geknüpft sind.
+* Relation: Relationen, die vorhanden sein müssen, werden aufgeführt.
+
+Soweit für eine Objektart keine Bildungsregeln vorgesehen sind, entfällt
+im Katalog eine besondere Aussage.
+
+[blue]*Auswerteregeln:*
+
+Die Auswerteregel ist notwendig, um im AAA-Ausgabekatalog die Regeln
+festzuhalten, wie die Bestandsdaten in Ausgabedaten (komplexe
+Datentypen) überführt werden.
+
+[blue]*Erfassungskriterien:*
+
+Das Erfassungskriterium gibt in Abhängigkeit der Modellart an, mit
+welcher Vollständigkeit und welchem Abstraktionsgrad Objekte modelliert
+sind. Im jeweiligen Anwendungsschema sind die Erfassungskriterien in der
+Regel modellartenabhängig. Daher ist die Modellart im Objektartenkatalog
+stets mit angegeben.
+
+Soweit für eine Objektart keine Erfassungskriterien vorgesehen sind,
+entfällt im Katalog eine besondere Aussage.
+
+[blue]*Konsistenzbedingungen:*
+
+NOTE: Entspricht Festlegungen in
+AC_FeatureType in AAA_Objektartenkatalog.
+
+Die Konsistenzbedingungen regeln die Vollständigkeit und die Beziehung
+zwischen den Objekten. Es wird insbesondere angegeben:
+
+* Flächendeckung, Überschneidungsfreiheit,
+* Identität zwischen Objekten verschiedener Objektarten hinsichtlich
+Topologie/Geometrie
+* ZUSO-Bildung
+
+Soweit für eine Objektart keine Konsistenzbedingung vorgesehen ist,
+entfällt im Katalog eine besondere Aussage.
+
+[blue]*Attributart:*
+
+Die Attributart enthält die selbstbezogenen Eigenschaften des Objektes.
+
+Zur Attributart sind angegeben:
+
+[cols="1,4,16",frame=none,grid=none,options="noheader"]
+|===
+| | [blue]#Bezeichnung:# a| Innerhalb der Objektart eindeutige Bezeichnung der
+Attributart.
+ 
+| | [blue]#Kennung:# a| Die Kennung ist innerhalb der Objektart eindeutig und besteht
+aus einer dreistelligen Buchstaben- und Ziffernkombination; Umlaute und
+der Buchstabe "ß" sind nicht zulässig. Abgeleitete (derived)
+Attributarten erhalten vor der Kennung den Zusatz "(DER)". Die Kennung
+ist redundant zur Bezeichnung und erfolgt daher im Objektartenkatalog
+nur optional.
+
+| | [blue]#Stillgelegt:# a| gibt die Version an, bis zu welcher Version der GeoInfoDok
+die Vergabe der Attributart noch erlaubt war.
+
+| | [blue]#Definition:# a| Die Definition der Attributart erfolgt in Anlehnung an die
+Normungsdokumente von ISO. Bei der Definition der Attributart sind
+angegeben:
+
+* Sachverhalte, die einzuhalten sind
+* Bei Attributarten mit Wertearten ein Hinweis auf die Strukturierung
+der Bezeichner und Werte (z.B. hierarchische Struktur)
+* Feststellung, dass die Attributart übergangsweise im Rahmen der
+Migration aus bestehenden Verfahrenslösungen benötigt wird.
+
+Zusätzlich werden hier Aussagen zu Attributbildungsregeln aufgeführt:
+
+* Qualitätsbeschreibende Elemente werden als Attributarten beschrieben.
+
+| | [blue]#Bildungsregel:# a| Die Bildungsregel gibt an, welche Regel bei der
+Modellierung der jeweiligen Attributart erfüllt sein muss. Die
+Bildungsregel ist angegeben für eine abgeleitete Attributart, die aus
+anderen Attributarten der Objektart entsteht (eine abgeleitete
+Attributart ist innerhalb eines Objekts nicht durch einen Wert physisch
+repräsentiert).
+
+Ist keine Bildungsregel erforderlich, entfällt eine besondere Aussage im
+Katalog.
+
+Auswerrteregel: (gilt nur für den AAA-Ausgabekatalog) Die Auswerteregel
+gibt an, wie die Überführung von den Bestandsdaten in die komplexen
+Datentypen der Ausgabedaten erfolgen soll.
+
+Ist keine Auswerteregel erforderlich, entfällt eine besondere Aussage im
+Katalog.
+
+| | [blue]#Modellart:# a| Im jeweiligen Anwendungsschema sind die Attributarten
+modellartenabhängig. Daher ist die Modellart im Objektartenkatalog stets
+mit angegeben.
+
+| | [blue]#Grunddatenbestand:# a| Der Grunddatenbestand ist der von allen
+Vermessungsverwaltungen der Länder der Bundesrepublik Deutschland in der
+GeoInfoDok bundeseinheitlich zu führende und einem Nutzer
+länderübergreifend zur Verfügung stehende Datenbestand. Es wird die
+Modellart angegeben, in der die Attributart als Grunddatenbestand zu
+führen ist.
+
+| | [blue]#Multiplizität:# a| Die Multiplizität gibt an, wie oft Attribute einer
+Attributart vorkommen können. Die untere und obere Grenze der
+Multiplizität sind angegeben. Liegt die untere Grenze bei '0', bedeutet
+dies, dass die Attributart optional ist. Die gebräuchlichsten
+Multiplizitäten sind:
+
+[cols="1,6",frame=none,grid=none,options="noheader"]
+!===
+!1 !Das Attribut der Attributart kommt genau einmal vor
+
+!1..* !Das Attribut der Attributart kommt ein oder mehrere Male vor
+
+!0..1 !Das Attribut der Attributart kommt kein oder einmal vor
+
+!0..* !Das Attribut der Attributart kommt kein, ein oder mehrere Male vor
+!===
+
+| | [blue]#Datentyp:# a| Folgende Datentypen sind zulässig:
+
+Einfacher Wert
+
+ACCELERATION +
+ACCELERATIONGRADIENT +
+AREA +
+BINARY +
+BOOLEAN +
+CHARACTERSTRING +
+DATE +
+DATETIME +
+DOUBLELIST +
+INTEGER +
+LENGTH +
+NUMBER +
+QUERY +
+REAL +
+STRING +
+VOLTAGE +
+VOLUME +
+URI (Uniform Resource Identifier)
+
+Ferner sind sämtliche im Datenmodell selbst definierten Datentypen, die
+weitere Klassen oder Codelisten repräsentieren können, zugelassen.
+Enthält eine Attributart eine Codelist mit Wertearten und Bezeichner,
+ist als Datentyp der Klassenname der entsprechenden Codelist aufgeführt.
+
+| | [blue]#Werteart:# a| Eine Werteart ist angegeben, wenn für eine Attributart die
+zulässigen Ausprägungen festliegen und deren Bedeutung in diesem Katalog
+aufgeführt werden soll.
+
+Ist keine Werteart angegeben und liegen die zulässigen Ausprägungen und
+deren Bedeutungen fest, so werden die Bezeichner der Werteart in
+besonderen Schlüsselkatalogen geführt.
+
+[cols="10,>8",frame=none,grid=none,options="noheader"]
+!===
+![blue]#Bezeichner# ![blue]#Wert#
+
+!Bezeichner der Werteart +
+(Definition der Werteart)
+
+!Vierstelliger Wert
+
+!===
+
+Bei Wertearten, die den Grunddatenbestand der AdV ausmachen, wird neben
+dem Wert noch der Zusatz '(G)' angegeben, bei Wertearten, die sich zur
+automatisierten Ableitung der Landnutzung qualifizieren, auch ein '(LN)'
+präsentiert. Es können auch beide Angaben vorkommen.
+
+Ist der Hinweis 'stillgelegt: Gültig bis …' angegeben, so gibt dies die
+Version der GeoInfoDok an, bis zu der die Vergabe der Werteart noch
+erlaubt war.
+
+|===
+
+Soweit für eine Objektart keine Attributart vorgesehen ist, entfällt im
+Katalog eine besondere Aussage.
+
+[blue]*Relationsart:*
+
+Die Relationsart bezeichnet fremdbezogene Eigenschaften eines Objektes.
+
+Relationen gehen sowohl in die eine wie auch in die andere, d.h. inverse
+Richtung.
+
+Mit der Aufführung der inversen Relationen im Katalog werden lediglich
+zur bereits existierenden Relation weitere Festlegungen getroffen. Es
+wird damit keine neue Relation aufgebaut.
+
+Zur Relationsart sind angegeben:
+
+[cols="1,4,16",frame=none,grid=none,options="noheader"]
+|===
+| | [blue]#Bezeichnung:# a| Enthält die innerhalb der Objektart eindeutige Bezeichnung
+der Relationsart.
+
+| | [blue]#Definition:# a| Enthält die Definition der Relationsart. Sie erfolgt in
+Anlehnung an die Normungsdokumente von ISO. Bei der Definition der
+Relationsart ist ferner angegeben, welche Sachverhalte einzuhalten sind.
+
+| | [blue]#Kennung:# a| Enthält die beiden Kennungen der beteiligten Objektarten.
+
+| | [blue]#Stillgelegt:# a| gibt die Version an, bis zu welcher Version der GeoInfoDok
+die Vergabe der Relationsart noch erlaubt war.
+
+| | [blue]#Multiplizität:# a| Die Multiplizität gibt an, wie oft Relationen einer
+Relationsart vorkommen. Die untere und obere Grenze der Multiplizität
+sind angegeben. Liegt die untere Grenze bei '0', bedeutet dies, dass die
+Relationsart optional ist. Die gebräuchlichsten Multiplizitäten sind:
+
+[cols="1,6",frame=none,grid=none,options="noheader"]
+!===
+!1 !Die Relation der Relationsart kommt genau einmal vor
+
+!1..* !Die Relation der Relationsart kommt ein oder mehrere Male vor
+
+!0..1 !Die Relation der Relationsart kommt kein oder einmal vor
+
+!0..* !Die Relation der Relationsart kommt kein, ein oder mehrere Male vor
+!===
+
+| | [blue]#Modellart:# a| Im jeweiligen Anwendungsschema sind die Relationsarten
+modellartenabhängig. Daher ist die Modellart im Objektartenkatalog stets
+mit angegeben.
+
+| | [blue]#Grunddatenbestand:# a| Der Grunddatenbestand ist der von allen
+Vermessungsverwaltungen der Länder der Bundesrepublik Deutschland in der
+GeoInfoDok bundeseinheitlich zu führende und einem Nutzer
+länderübergreifend zur Verfügung stehende Datenbestand. Es wird die
+Modellart angegeben, in der die Attributart als Grunddatenbestand zu
+führen ist.
+
+| | [blue]#Zielobjektart:# a| Hier wird der Name der Objektart angegeben, auf welche
+die Relation zeigt.
+
+| | [blue]#Inverse Relationsart:# a| Enthält die Bezeichnung der inversen Relation.
+
+|===
+
+Soweit für eine Objektart keine Relationsart vorgesehen ist, entfällt im
+Katalog eine besondere Aussage.
+
+[discrete]
+== {aaa}-Objektartenkatalog
+
+[discrete] 
+=== Teil B:
+
+
+include::generiert.adoc[]

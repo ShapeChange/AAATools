@@ -1,0 +1,16 @@
+@import url(//fonts.googleapis.com/css?family=Noto+Sans);
+/* Default asciidoc style framework - important */
+@import url(https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor@2.0/data/stylesheets/asciidoctor-default.css); 
+
+/* CUSTOMISATIONS */
+.del {
+  background-color: #ffe6e6;
+  text-decoration: line-through;
+}
+.ins {
+  background-color: #e6ffe6;
+  text-decoration: underline;
+}
+.indented { 
+  margin-left : 10px;
+}

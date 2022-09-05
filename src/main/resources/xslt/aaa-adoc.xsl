@@ -738,7 +738,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
   <xsl:if test="$values">   
    <xsl:value-of select="concat('*', $fc.Wertearten,':*')"/>
    <xsl:value-of select="$newline"/>
-   <xsl:text>[width="99%",cols="1,1",options="header",grid="rows",role=indented]</xsl:text>
+   <xsl:text>[width="99%",cols="3,1",options="header",grid="rows",role=indented]</xsl:text>
    <xsl:value-of select="$newline"/>
    <xsl:text>|===</xsl:text>
    <xsl:value-of select="$newline"/>
@@ -812,7 +812,16 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
     <xsl:value-of disable-output-escaping="no" select="adoc:diff-element($value/code)"/>
     <xsl:if test="$value/grunddatenbestand">
      <xsl:text> </xsl:text>
-     <xsl:value-of select="adoc:diff-text-with-element('(G)', $value/grunddatenbestand)"/>
+     <xsl:choose>
+      <xsl:when test="$value/grunddatenbestand[@mode]">
+       <!-- TBD: Should there be any rule for handling multiple values for grunddatenbestand with different @mode values? -->
+       <xsl:value-of select="adoc:diff-text-with-element('(G)', $value/grunddatenbestand[@mode][1])"/>
+      </xsl:when>
+      <xsl:otherwise>
+       <xsl:value-of select="adoc:text('(G)')"/>
+      </xsl:otherwise>
+     </xsl:choose>
+          
     </xsl:if>
     <xsl:if test="$value/taggedValue[@tag = 'AAA:Landnutzung' and translate(., 'TRUE', 'true') = 'true']">
      <xsl:text> </xsl:text>

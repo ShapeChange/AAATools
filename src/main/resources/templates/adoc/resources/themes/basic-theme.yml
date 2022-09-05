@@ -1,0 +1,43 @@
+extends:
+- default
+role:
+  red:
+    font_color: #ff0000
+  green:
+    font_color: #00aa00
+  blue:
+    font_color: #0000ff
+  cyan:
+    font_color: #00cccc
+  pink:
+    font_color: #cc00cc
+  ins:
+    background-color: #e6ffe6
+    text-decoration: underline
+  del:
+    background-color: #ffe6e6
+    text-decoration: line-through
+running-content:
+  start-at: title
+header:
+  height: $base_line_height_length * 2.5
+  line_height: 1
+  recto:
+    left:
+      content: 'Katalogwerke zur GeoInfoDok'
+    right: 
+      content: '{aaaStand}'
+  verso:
+    left:
+      content: 'Katalogwerke zur GeoInfoDok'
+    right: 
+      content: '{aaaStand}'
+footer:
+  recto:
+    left: 
+      content: '{aaaVersion}'
+  verso:
+    right: 
+      content: '{aaaVersion}'
+#section:
+#  indent: 0.5cm

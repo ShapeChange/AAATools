@@ -122,11 +122,11 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
             onlyInitialise = false;
         }
 
-		public void setOnlyInitialise(boolean o){
+	public void setOnlyInitialise(boolean o){
 			onlyInitialise = o;
 		}
 		
-		public void initialise() throws ShapeChangeAbortException{
+	public void initialise() throws ShapeChangeAbortException{
             if(dialog.model!=null){
             	dialog.model.shutdown();
             	dialog.model = null;
@@ -138,7 +138,6 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 		dialog.model = mp.getModel(imt, modelAbsolutePath, null, null, true, null);
 //            	dialog.model = new EADocument(result, options, modelAbsolutePath);
 				dialog.saveModelMsgText = false;
-                
             if(onlyInitialise)
             	dialog.threadInitialised();
 		}
@@ -212,8 +211,8 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
     static {
     	// Reihenfolge der Einträge sollte stabil bleiben - wird verwendet in statusChanged()!
     	targetLabels.add("XML");
-    	targetLabels.add("HTML");
-    	targetLabels.add("DOCX");
+//    	targetLabels.add("HTML");
+//    	targetLabels.add("DOCX");
     	targetLabels.add("CSV");
     	targetLabels.add("ADOC");
     }
@@ -241,6 +240,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 	private JCheckBox retiredBox;
 	private JCheckBox revisionBox;
 	private JCheckBox grundDatBox;
+	private JCheckBox nutzungsartkennungBox;
 	
 	private JCheckBox profEinschrBox;
 	private JCheckBox profDateiBox;
@@ -440,6 +440,11 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 		s = options.parameter(paramKatalogClass,"revisionsnummern");
 		if (s!=null && s.equals("true"))
 		    revisionBool = true;
+		
+	Boolean nutzungsartkennungBool = true;
+		s = options.parameter("ignoreTaggedValues");
+		if (s!=null && s.contains("AAA:Nutzungsartkennung"))
+		    nutzungsartkennungBool = false;
 
         String modellartenStr;
 		s = options.parameter(paramKatalogClass,"modellarten");
@@ -580,6 +585,13 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
         revisionBox.addItemListener(this);
         revisionPanel.add(revisionBox);
         outOptBox.add(revisionPanel);
+        
+        final JPanel nutzungsartkennungPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 10, 5));
+        nutzungsartkennungBox = new JCheckBox("Nutzungsartkennung ausgeben");
+        nutzungsartkennungBox.setSelected(nutzungsartkennungBool);
+        nutzungsartkennungBox.addItemListener(this);
+        nutzungsartkennungPanel.add(nutzungsartkennungBox);
+        outOptBox.add(nutzungsartkennungPanel);
 
         final JPanel outOptPanel = new JPanel();
         outOptPanel.add(outOptBox);
@@ -766,7 +778,24 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
     }
     
 	private synchronized void startTransformation(){
+	    
    		// finish options
+	    
+	    /*
+		* 2022-09-01 JE: This assumes that input parameter ignoreTaggedValues
+		* is only used to ignore TV AAA:Nutzungsartkennung. If that changed, 
+		* a more elaborate logic would be needed here, to add or remove the tag
+		* from a set of other possibly ignored tags.
+		*/
+	if(nutzungsartkennungBox.isSelected()) {
+	    options.getInputConfig().setParameter("ignoreTaggedValues","");
+	} else {
+	    options.getInputConfig().setParameter("ignoreTaggedValues","AAA:Nutzungsartkennung");
+	}
+	// RESET FIELDS IN ORDER FOR THE INPUT CONFIG CHANGE TO TAKE (PERMANENT) EFFECT
+	options.resetFields();
+	
+	    
         modelTransformed = false;
         transformationRunning = true;
 
@@ -792,6 +821,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			options.setParameter(paramKatalogClass,"revisionsnummern","true");
 		else
 			options.setParameter(paramKatalogClass,"revisionsnummern","false");
+		
 		options.setParameter(paramKatalogClass,"modellarten", modellartField.getText());
 		if(grundDatBox.isSelected())
 			options.setParameter(paramKatalogClass,"nurGrunddatenbestand","true");
@@ -904,6 +934,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			geerbEigBox.setEnabled(false);
 			retiredBox.setEnabled(false);
 			revisionBox.setEnabled(false);
+			nutzungsartkennungBox.setEnabled(false);
 			modellartField.setEnabled(false); 
 			grundDatBox.setEnabled(false);
 			profEinschrBox.setEnabled(false);
@@ -937,6 +968,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			geerbEigBox.setEnabled(true);
 			retiredBox.setEnabled(true);
 			revisionBox.setEnabled(true);
+			nutzungsartkennungBox.setEnabled(true);
 			modellartField.setEnabled(true); 
 			grundDatBox.setEnabled(true);
 			profEinschrBox.setEnabled(true);
@@ -1101,16 +1133,16 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			if(targetLabels!=null && targetLabels.size()>=1)
 				msg += " - " + targetLabels.get(0);
 			break;
-		case Katalog.STATUS_WRITE_HTML:
-			msg += "AAA-Katalogtool: Schreiben des Katalogs";
-			if(targetLabels!=null && targetLabels.size()>=2)
-				msg += " - " + targetLabels.get(1);
-			break;
-		case Katalog.STATUS_WRITE_DOCX:
-			msg += "AAA-Katalogtool: Schreiben des Katalogs";
-			if(targetLabels!=null && targetLabels.size()>=3)
-				msg += " - " + targetLabels.get(2);
-			break;		
+//		case Katalog.STATUS_WRITE_HTML:
+//			msg += "AAA-Katalogtool: Schreiben des Katalogs";
+//			if(targetLabels!=null && targetLabels.size()>=2)
+//				msg += " - " + targetLabels.get(1);
+//			break;
+//		case Katalog.STATUS_WRITE_DOCX:
+//			msg += "AAA-Katalogtool: Schreiben des Katalogs";
+//			if(targetLabels!=null && targetLabels.size()>=3)
+//				msg += " - " + targetLabels.get(2);
+//			break;		
 		case Katalog.STATUS_WRITE_CSV:
 			msg += "AAA-Katalogtool: Schreiben des Katalogs";
 			if(targetLabels!=null && targetLabels.size()>=4)

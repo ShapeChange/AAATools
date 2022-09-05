@@ -5,6 +5,7 @@ java -jar AAATools-${project.version}.jar -c "Konfigurationen/AAAKatalog-LN-1.0.
 java -jar AAATools-${project.version}.jar -c "Konfigurationen/AAAKatalog-LN-1.0.1-Aenderungen-SCXML.xml" 
 java -jar AAATools-${project.version}.jar -c "Konfigurationen/AAAKatalog-AK-1.0.0-SCXML.xml" 
 java -jar AAATools-${project.version}.jar -c "Konfigurationen/AAAKatalog-AS-7.1.1-SCXML.xml" 
+java -jar AAATools-${project.version}.jar -c "Konfigurationen/AAAKatalog-AS-7.1.1_ohne_Nutzungsartkennung-SCXML.xml" 
 java -jar AAATools-${project.version}.jar -c "Konfigurationen/AAAProfil-DLKM-7.1.1-SCXML.xml" 
 java -jar AAATools-${project.version}.jar -c "Konfigurationen/AAAProfil-Basis-DLM-7.1.1-SCXML.xml"
 java -jar AAATools-${project.version}.jar -c "Konfigurationen/NAS-GV-1.0.0.xml" 

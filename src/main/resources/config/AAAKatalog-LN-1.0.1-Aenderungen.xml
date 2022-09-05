@@ -37,7 +37,9 @@
 			<targetParameter name="letzteAenderung" value="true"/>
 			<targetParameter name="geerbteEigenschaften" value="false"/>
 			<targetParameter name="schemakennungen" value="*"/>
-			<targetParameter name="ausgabeformat" value="HTML"/>
+			<targetParameter name="ausgabeformat" value="ADOC"/>
+			<targetParameter name="adocTemplatePath" value="resources/templates/adoc/katalog-mit-nutzungsartkennung.adoc"/>
+			<targetParameter name="adocAttributesPath" value="resources/templates/adoc/attribute.adoc"/>
 			<targetParameter name="xsltPfad" value="resources/xslt"/>
 			<targetParameter name="xslTransformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
 			<targetParameter name="notesRuleMarker" value="-==-"/>

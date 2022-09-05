@@ -41,6 +41,8 @@
 			<targetParameter name="ausgabeformat" value="ADOC"/>
 			<!-- Default für Target-Parameter 'revisionsnummern': true -->
 <!-- 			<targetParameter name="revisionsnummern" value="false"/> -->
+			<targetParameter name="adocTemplatePath" value="resources/templates/adoc/katalog-mit-nutzungsartkennung.adoc"/>
+			<targetParameter name="adocAttributesPath" value="resources/templates/adoc/attribute.adoc"/>
 			<targetParameter name="xsltPfad" value="resources/xslt"/>
 			<targetParameter name="xslTransformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
 			<targetParameter name="notesRuleMarker" value="-==-"/>

@@ -34,6 +34,11 @@
       <artifactId>ShapeChange</artifactId>
       <version>2.12.1-SNAPSHOT</version>
     </dependency>
+    <dependency>
+	  <groupId>org.apache.commons</groupId>
+	  <artifactId>commons-csv</artifactId>
+	  <version>1.9.0</version>
+	</dependency>
   </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -201,6 +206,7 @@
                     <include>AAAKatalog-ALKIS-7.1.1.xml</include>
                     <include>AAAKatalog-AS-6.0.1-SCXML.xml</include>
                     <include>AAAKatalog-AS-7.1.1-SCXML.xml</include>
+                    <include>AAAKatalog-AS-7.1.1_ohne_Nutzungsartkennung-SCXML.xml</include>
                     <include>AAAKatalog-BasisDLM-6.0.1-SCXML.xml</include>
                     <include>AAAKatalog-BasisDLM-6.0.1.xml</include>
                     <include>AAAKatalog-BasisDLM-7.1.1-Aenderungen-SCXML.xml</include>
@@ -231,8 +237,10 @@
                     <include>Export-7.1.1.xml</include>
                     <include>Input-6.0.1.xml</include>
                     <include>Input-7.1.1.xml</include>
+                    <include>Input-7.1.1_ohne_Nutzungsartkennung.xml</include>
                     <include>Input-SCXML-6.0.1.xml</include>
                     <include>Input-SCXML-7.1.1.xml</include>
+                    <include>Input-SCXML-7.1.1_ohne_Nutzungsartkennung.xml</include>
                     <include>NAS-6.0.1.xml</include>
                     <include>NAS-7.1.1.xml</include>
                     <include>NAS-AK-1.0.0.xml</include>
