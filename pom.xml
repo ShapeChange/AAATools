@@ -98,7 +98,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>2.3.1</version>
+        <version>3.2.2</version>
         <executions>
           <execution>
             <id>default-jar</id>
@@ -112,6 +112,11 @@
                   <mainClass>de.interactive_instruments.ShapeChange.Main</mainClass>
                   <addClasspath>true</addClasspath>
                   <classpathPrefix>lib</classpathPrefix>
+                  <!-- Workaround for Maven bug #MJAR-156 (https://issues.apache.org/jira/browse/MJAR-156) -->
+				  <!-- to prevent snapshot file names in manifest classpath (having date suffix), set useUniqueVersions to fals
+                       for further details, see https://stackoverflow.com/questions/45642451/classnotfoundexception-despite-the-manifest-classpath-including-a-jar-which-con/45642898#45642898
+                   -->
+                  <useUniqueVersions>false</useUniqueVersions>
                 </manifest>
               </archive>
             </configuration>
@@ -121,6 +126,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.2.0</version>
         <executions>
           <execution>
             <id>copy-dependencies</id>

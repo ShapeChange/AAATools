@@ -26,15 +26,11 @@
 
 package de.adv_online.aaa.katalogtool;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Collection;
@@ -42,7 +38,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -63,9 +58,6 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.FileUtils;
-import org.apache.xml.serializer.OutputPropertiesFactory;
-import org.apache.xml.serializer.Serializer;
-import org.apache.xml.serializer.SerializerFactory;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -75,6 +67,7 @@ import de.interactive_instruments.ShapeChange.MessageSource;
 import de.interactive_instruments.ShapeChange.Options;
 import de.interactive_instruments.ShapeChange.RuleRegistry;
 import de.interactive_instruments.ShapeChange.ShapeChangeAbortException;
+import de.interactive_instruments.ShapeChange.ShapeChangeException;
 import de.interactive_instruments.ShapeChange.ShapeChangeResult;
 import de.interactive_instruments.ShapeChange.ShapeChangeResult.MessageContext;
 import de.interactive_instruments.ShapeChange.Type;
@@ -90,10 +83,12 @@ import de.interactive_instruments.ShapeChange.ModelDiff.DiffElement.Operation;
 import de.interactive_instruments.ShapeChange.ModelDiff.Differ;
 import de.interactive_instruments.ShapeChange.Target.Target;
 import de.interactive_instruments.ShapeChange.UI.StatusBoard;
+import de.interactive_instruments.ShapeChange.Util.XMLUtil;
 import shadow.org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Clemens Portele (portele <at> interactive-instruments <dot> de)
+ * @author Johannes Echterhoff (echterhoff at interactive-instruments dot de)
  *
  */
 public class Katalog implements Target, MessageSource {
@@ -2012,11 +2007,6 @@ public class Katalog implements Target, MessageSource {
 	    PrintValues(cix, top);
 	}
 
-	Properties outputFormat = OutputPropertiesFactory.getDefaultMethodProperties("xml");
-	outputFormat.setProperty("indent", "yes");
-	outputFormat.setProperty("{http://xml.apache.org/xalan}indent-amount", "2");
-	outputFormat.setProperty("encoding", model.characterEncoding());
-
 	try {
 	    String xmlName = pi.xsdDocument().replace(".xsd", "") + ".tmp.xml";
 
@@ -2025,14 +2015,7 @@ public class Katalog implements Target, MessageSource {
 		FileUtils.forceMkdir(f);
 	    }
 
-	    OutputStream fout = new FileOutputStream(outputDirectory + "/" + xmlName);
-	    OutputStream bout = new BufferedOutputStream(fout);
-	    OutputStreamWriter outputXML = new OutputStreamWriter(bout, outputFormat.getProperty("encoding"));
-
-	    Serializer serializer = SerializerFactory.getSerializer(outputFormat);
-	    serializer.setWriter(outputXML);
-	    serializer.asDOMSerializer().serialize(document);
-	    outputXML.close();
+	    XMLUtil.writeXml(document, new File(outputDirectory, xmlName));
 
 	    String outfileBasename = pi.xsdDocument().replace(".xsd", "");
 
@@ -2065,7 +2048,7 @@ public class Katalog implements Target, MessageSource {
 		}
 	    }
 
-	} catch (Exception e) {
+	} catch (ShapeChangeException | IOException e) {
 	    String m = e.getMessage();
 	    if (m != null) {
 		result.addError(m);
