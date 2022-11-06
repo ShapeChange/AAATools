@@ -98,11 +98,11 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
      <xsl:when test="$href">
        <a>
          <xsl:attribute name="href"><xsl:value-of select="$href"/></xsl:attribute>
-         <xsl:value-of select="$name"/>
+         <xsl:copy-of select="$name"/>
        </a>
      </xsl:when>
      <xsl:otherwise>
-      <xsl:value-of select="$name"/>
+      <xsl:copy-of select="$name"/>
    </xsl:otherwise>
    </xsl:choose>
  </xsl:template>
@@ -123,11 +123,11 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
      <xsl:when test="$href">
        <a>
          <xsl:attribute name="href"><xsl:value-of select="$href"/></xsl:attribute>
-         <xsl:value-of select="$name"/>
+         <xsl:copy-of select="$name"/>
        </a>
      </xsl:when>
      <xsl:otherwise>
-      <xsl:value-of select="$name"/>
+      <xsl:copy-of select="$name"/>
    </xsl:otherwise>
    </xsl:choose>
  </xsl:template>  

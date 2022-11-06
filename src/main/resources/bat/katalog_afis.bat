@@ -1,1 +1,1 @@
-java -jar AAATools-${project.version}.jar -d -c "Konfigurationen/AAAKatalog-AFIS-7.1.1.xml" 
+java -jar AAATools-${project.version}.jar -d -c "Konfigurationen/AAAKatalog-AFIS-7.1.2.xml" 

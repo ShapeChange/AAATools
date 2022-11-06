@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:fes="http://www.opengis.net/fes/2.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmlcov="http://www.opengis.net/gmlcov/1.0" xmlns:gmlexr="http://www.opengis.net/gml/3.3/exr" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/AppInfo" xmlns:wfs="http://www.opengis.net/wfs/2.0" xmlns:wfsext="http://www.adv-online.de/namespaces/adv/gid/wfsext/2.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/gid/7.1" version="7.1.1">
+<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:fes="http://www.opengis.net/fes/2.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmlcov="http://www.opengis.net/gmlcov/1.0" xmlns:gmlexr="http://www.opengis.net/gml/3.3/exr" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/AppInfo" xmlns:wfs="http://www.opengis.net/wfs/2.0" xmlns:wfsext="http://www.adv-online.de/namespaces/adv/gid/wfsext/2.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/gid/7.1" version="7.1.2">
   <include schemaLocation="aaa.xsd"/>
   <import namespace="http://www.adv-online.de/namespaces/adv/gid/wfsext/2.0" schemaLocation="../../wfsext/2.0/WFS-Erweiterungen.xsd"/>
   <import namespace="http://www.interactive-instruments.de/ShapeChange/AppInfo" schemaLocation="../../../ShapeChangeAppinfo.xsd"/>
@@ -765,7 +765,6 @@
           </element>
           <element maxOccurs="unbounded" minOccurs="0" name="zeigtAufExternes" type="adv:AA_FachdatenverbindungPropertyType"/>
           <element minOccurs="0" name="quellobjektID" type="string"/>
-          <element minOccurs="0" name="name" type="string"/>
           <element minOccurs="0" name="beschreibung" type="string"/>
         </sequence>
       </extension>
@@ -787,7 +786,6 @@
           </element>
           <element maxOccurs="unbounded" minOccurs="0" name="zeigtAufExternes" type="adv:AA_FachdatenverbindungPropertyType"/>
           <element minOccurs="0" name="quellobjektID" type="string"/>
-          <element minOccurs="0" name="name" type="string"/>
           <element minOccurs="0" name="beschreibung" type="string"/>
         </sequence>
       </extension>
@@ -1245,8 +1243,8 @@
       </extension>
     </complexContent>
   </complexType>
-  <element name="AU_UmringObjekt_3D" substitutionGroup="adv:AU_ObjektMitUnabhaengigerGeometrie_3D" type="adv:AU_UmringObjekt_3DType"/>
-  <complexType name="AU_UmringObjekt_3DType">
+  <element abstract="true" name="AU_UmringObjekt_3D" substitutionGroup="adv:AU_ObjektMitUnabhaengigerGeometrie_3D" type="adv:AU_UmringObjekt_3DType"/>
+  <complexType abstract="true" name="AU_UmringObjekt_3DType">
     <complexContent>
       <extension base="adv:AU_ObjektMitUnabhaengigerGeometrie_3DType">
         <sequence>

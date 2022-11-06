@@ -187,32 +187,32 @@
                   <includes>
                     <include>AAAKatalog-AFIS-6.0.1-SCXML.xml</include>
                     <include>AAAKatalog-AFIS-6.0.1.xml</include>
-                    <include>AAAKatalog-AFIS-7.1.1-Aenderungen-SCXML.xml</include>
-                    <include>AAAKatalog-AFIS-7.1.1-Aenderungen.xml</include>
-                    <include>AAAKatalog-AFIS-7.1.1-SCXML.xml</include>
-                    <include>AAAKatalog-AFIS-7.1.1.xml</include>
-                    <include>AAAKatalog-AK-1.0.0-SCXML.xml</include>
-                    <include>AAAKatalog-AK-1.0.0.xml</include>
+                    <include>AAAKatalog-AFIS-7.1.2-Aenderungen-SCXML.xml</include>
+                    <include>AAAKatalog-AFIS-7.1.2-Aenderungen.xml</include>
+                    <include>AAAKatalog-AFIS-7.1.2-SCXML.xml</include>
+                    <include>AAAKatalog-AFIS-7.1.2.xml</include>
+                    <include>AAAKatalog-AK-2.0.0-SCXML.xml</include>
+                    <include>AAAKatalog-AK-2.0.0.xml</include>
                     <include>AAAKatalog-ALKIS-6.0.1-SCXML.xml</include>
                     <include>AAAKatalog-ALKIS-6.0.1.xml</include>
-                    <include>AAAKatalog-ALKIS-7.1.1-Aenderungen-SCXML.xml</include>
-                    <include>AAAKatalog-ALKIS-7.1.1-Aenderungen.xml</include>
-                    <include>AAAKatalog-ALKIS-7.1.1-SCXML.xml</include>
-                    <include>AAAKatalog-ALKIS-7.1.1.xml</include>
+                    <include>AAAKatalog-ALKIS-7.1.2-Aenderungen-SCXML.xml</include>
+                    <include>AAAKatalog-ALKIS-7.1.2-Aenderungen.xml</include>
+                    <include>AAAKatalog-ALKIS-7.1.2-SCXML.xml</include>
+                    <include>AAAKatalog-ALKIS-7.1.2.xml</include>
                     <include>AAAKatalog-AS-6.0.1-SCXML.xml</include>
-                    <include>AAAKatalog-AS-7.1.1-SCXML.xml</include>
+                    <include>AAAKatalog-AS-7.1.2-SCXML.xml</include>
                     <include>AAAKatalog-BasisDLM-6.0.1-SCXML.xml</include>
                     <include>AAAKatalog-BasisDLM-6.0.1.xml</include>
-                    <include>AAAKatalog-BasisDLM-7.1.1-Aenderungen-SCXML.xml</include>
-                    <include>AAAKatalog-BasisDLM-7.1.1-Aenderungen.xml</include>
-                    <include>AAAKatalog-BasisDLM-7.1.1-SCXML.xml</include>
-                    <include>AAAKatalog-BasisDLM-7.1.1.xml</include>
+                    <include>AAAKatalog-BasisDLM-7.1.2-Aenderungen-SCXML.xml</include>
+                    <include>AAAKatalog-BasisDLM-7.1.2-Aenderungen.xml</include>
+                    <include>AAAKatalog-BasisDLM-7.1.2-SCXML.xml</include>
+                    <include>AAAKatalog-BasisDLM-7.1.2.xml</include>
                     <include>AAAKatalog-DLM50-6.0.1-SCXML.xml</include>
                     <include>AAAKatalog-DLM50-6.0.1.xml</include>
-                    <include>AAAKatalog-DLM50-7.1.1-Aenderungen-SCXML.xml</include>
-                    <include>AAAKatalog-DLM50-7.1.1-Aenderungen.xml</include>
-                    <include>AAAKatalog-DLM50-7.1.1-SCXML.xml</include>
-                    <include>AAAKatalog-DLM50-7.1.1.xml</include>
+                    <include>AAAKatalog-DLM50-7.1.2-Aenderungen-SCXML.xml</include>
+                    <include>AAAKatalog-DLM50-7.1.2-Aenderungen.xml</include>
+                    <include>AAAKatalog-DLM50-7.1.2-SCXML.xml</include>
+                    <include>AAAKatalog-DLM50-7.1.2.xml</include>
                     <include>AAAKatalog-GV-1.0.0-SCXML.xml</include>
                     <include>AAAKatalog-GV-1.0.0.xml</include>
                     <include>AAAKatalog-LB-1.0.1-Aenderungen-SCXML.xml</include>
@@ -224,18 +224,18 @@
                     <include>AAAKatalog-LN-1.0.1-SCXML.xml</include>
                     <include>AAAKatalog-LN-1.0.1.xml</include>
                     <include>AAAProfil-6.0.1.xml</include>
-                    <include>AAAProfil-7.1.1.xml</include>
-                    <include>AAAProfil-Basis-DLM-7.1.1-SCXML.xml</include>
-                    <include>AAAProfil-DLKM-7.1.1-SCXML.xml</include>
+                    <include>AAAProfil-7.1.2.xml</include>
+                    <include>AAAProfil-Basis-DLM-7.1.2-SCXML.xml</include>
+                    <include>AAAProfil-DLKM-7.1.2-SCXML.xml</include>
                     <include>Export-6.0.1.xml</include>
-                    <include>Export-7.1.1.xml</include>
+                    <include>Export-7.1.2.xml</include>
                     <include>Input-6.0.1.xml</include>
-                    <include>Input-7.1.1.xml</include>
+                    <include>Input-7.1.2.xml</include>
                     <include>Input-SCXML-6.0.1.xml</include>
-                    <include>Input-SCXML-7.1.1.xml</include>
+                    <include>Input-SCXML-7.1.2.xml</include>
                     <include>NAS-6.0.1.xml</include>
-                    <include>NAS-7.1.1.xml</include>
-                    <include>NAS-AK-1.0.0.xml</include>
+                    <include>NAS-7.1.2.xml</include>
+                    <include>NAS-AK-2.0.0.xml</include>
                     <include>NAS-GV-1.0.0.xml</include>
                     <include>NAS-LB-1.0.1.xml</include>
                     <include>NAS-LN-1.0.1.xml</include>
@@ -261,7 +261,7 @@
                     <include>katalog_alkis.bat</include>
                     <include>katalog_basisdlm.bat</include>
                     <include>katalog_dlm50.bat</include>
-                    <include>711.bat</include>
+                    <include>alles.bat</include>
                     <include>profil.bat</include>
                     <include>export_scxml.bat</include>
                   </includes>
@@ -336,9 +336,11 @@
                     <include>AAA-6.0.1.eap</include>
                     <include>AAA-7.1.0.eap</include>
                     <include>AAA-7.1.1.eap</include>
+                    <include>AAA-7.1.2.eap</include>
                     <include>AAA-6.0.1.xml.zip</include>
                     <include>AAA-7.1.0.xml.zip</include>
                     <include>AAA-7.1.1.xml.zip</include>
+                    <include>AAA-7.1.2.xml.zip</include>
                   </includes>
                 </resource>
               </resources>
