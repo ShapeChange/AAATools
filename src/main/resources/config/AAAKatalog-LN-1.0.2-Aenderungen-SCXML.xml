@@ -2,7 +2,7 @@
 <ShapeChangeConfiguration xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1 resources/schema/ShapeChangeConfiguration.xsd">
 	<input xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1">
 		<parameter name="inputModelType" value="SCXML"/>
-		<parameter name="inputFile" value="AAA-7.1.1.xml.zip"/>
+		<parameter name="inputFile" value="AAA-7.1.2.xml.zip"/>
 		<parameter name="appSchemaName" value="LN_Landnutzung"/>
 		<parameter name="excludedPackages" value="ISO/TC 211,OGC,AAA_Ausgabekatalog,AAA_Objektartenkatalog,AAA Versionierungsschema,Web Feature Service Erweiterungen,AAA_Signaturenkatalog"/>
 		<parameter name="publicOnly" value="true"/>
@@ -42,7 +42,7 @@
 			<targetParameter name="xslTransformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 			<targetParameter name="referenceModelType" value="SCXML"/>
-			<targetParameter name="referenceModelFile" value="AAA-7.1.0.xml.zip"/>
+			<targetParameter name="referenceModelFile" value="AAA-7.1.1.xml.zip"/>
 			<!-- 
 			-->
 		</Target>
