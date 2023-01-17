@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ShapeChangeConfiguration xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1 resources/schema/ShapeChangeConfiguration.xsd">
+	<input xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1">
+		<parameter name="inputModelType" value="EA7"/>
+		<parameter name="inputFile" value="AAA-7.1.2.eap"/>
+		<parameter name="appSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
+		<parameter name="publicOnly" value="true"/>
+		<parameter name="checkingConstraints" value="enabled"/>
+		<parameter name="oclConstraintTypeRegex" value=""/>
+		<parameter name="addTaggedValues" value="AAA:Kennung,AAA:Datum,AAA:Organisation,AAA:Modellart,AAA:Profile,AAA:Grunddatenbestand,AAA:Nutzungsart,AAA:Nutzungsartkennung,AAA:objektbildend,AAA:Themen,AAA:AAAVersion,AAA:GueltigBis,AAA:Revisionsnummer,AAA:Landnutzung,AAA:UnitOfMeasure"/>
+		<parameter name="representTaggedValues" value="AAA:GueltigBis,AAA:Landnutzung,AAA:Modellart,AAA:Grunddatenbestand,AAA:Kennung"/>
+		<stereotypeAliases>
+			<StereotypeAlias wellknown="Application Schema" alias="applicationSchema" />
+			<StereotypeAlias wellknown="Application Schema" alias="schema" />
+			<StereotypeAlias wellknown="Application Schema" alias="requirementsClass" />
+			<StereotypeAlias wellknown="Application Schema" alias="ApplicationSchema" />
+			<StereotypeAlias wellknown="Application Schema" alias="Schema" />
+			<StereotypeAlias wellknown="Type" alias="interface" />
+		</stereotypeAliases>
+	</input>
+	<log>
+		<parameter name="reportLevel" value="WARNING"/>
+		<parameter name="logFile" value="AAA-Export-Log.xml"/>
+	</log>
+	<targets>
+		<Target class="de.interactive_instruments.ShapeChange.Target.ModelExport.ModelExport" mode="enabled">
+			<targetParameter name="outputDirectory" value="Ausgaben"/>
+			<targetParameter name="outputFilename" value="AAA-7.1.2"/>
+			<targetParameter name="sortedOutput" value="true"/>
+			<targetParameter name="zipOutput" value="true"/>
+			<targetParameter name="suppressCodeAndEnumCharacteristicsWithoutSemanticMeaning" value="true"/>
+			<targetParameter name="includeConstraintDescriptions" value="true"/>
+			<targetParameter name="defaultEncodingRule" value="export"/>
+			<rules>
+				<EncodingRule name="export">
+					<rule name="rule-exp-all-omitExistingProfiles"/>
+				</EncodingRule>
+			</rules>
+		</Target>
+	</targets>
+</ShapeChangeConfiguration>

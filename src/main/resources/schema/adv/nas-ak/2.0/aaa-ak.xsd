@@ -1,0 +1,1347 @@
+<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:ak="http://www.adv-online.de/namespaces/adv/aaa-ak/2.0" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmlexr="http://www.opengis.net/gml/3.3/exr" xmlns:wfs="http://www.opengis.net/wfs/2.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/aaa-ak/2.0" version="2.0.0">
+  <import namespace="http://www.adv-online.de/namespaces/adv/gid/7.1" schemaLocation="../../nas/7.1/aaa.xsd"/>
+  <import namespace="http://www.opengis.net/gml/3.2" schemaLocation="../../../ogc/gml/3.2.1/gml.xsd"/>
+  <import namespace="http://www.opengis.net/gml/3.3/exr" schemaLocation="../../../ogc/gml/3.3/extdEncRule.xsd"/>
+  <import namespace="http://www.opengis.net/wfs/2.0" schemaLocation="../../../ogc/wfs/2.0/wfs.xsd"/>
+  <!--XML Schema document created by ShapeChange - http://shapechange.net/-->
+  <element name="AX_AbschnittOBG" substitutionGroup="gml:AbstractObject" type="ak:AX_AbschnittOBGType"/>
+  <complexType name="AX_AbschnittOBGType">
+    <sequence>
+      <element name="abschnittsflaecheOBG" type="string"/>
+      <element name="klassifizierung" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_AbschnittOBGPropertyType">
+    <sequence>
+      <element ref="ak:AX_AbschnittOBG"/>
+    </sequence>
+  </complexType>
+  <element name="AX_AbschnittOBS" substitutionGroup="gml:AbstractObject" type="ak:AX_AbschnittOBSType"/>
+  <complexType name="AX_AbschnittOBSType">
+    <sequence>
+      <element name="abschnittsflaecheOBS" type="string"/>
+      <element name="beschrieb" type="string"/>
+      <element name="ertragsmesszahl" type="integer"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_AbschnittOBSPropertyType">
+    <sequence>
+      <element ref="ak:AX_AbschnittOBS"/>
+    </sequence>
+  </complexType>
+  <element name="AX_AbschnittTN" substitutionGroup="gml:AbstractObject" type="ak:AX_AbschnittTNType"/>
+  <complexType name="AX_AbschnittTNType">
+    <sequence>
+      <element name="abschnittsflaecheTN" type="string"/>
+      <element name="nutzung" type="string"/>
+      <element minOccurs="0" name="name" type="string"/>
+      <element minOccurs="0" name="zweitname" type="string"/>
+      <element minOccurs="0" name="zustand" type="string"/>
+      <element minOccurs="0" name="weitereNutzungsangaben" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_AbschnittTNPropertyType">
+    <sequence>
+      <element ref="ak:AX_AbschnittTN"/>
+    </sequence>
+  </complexType>
+  <element name="AX_AmtlicheFlaechenstatistik" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_AmtlicheFlaechenstatistikType"/>
+  <complexType name="AX_AmtlicheFlaechenstatistikType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="ausgabekopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+          <element name="stichtag" type="string"/>
+          <element maxOccurs="unbounded" name="gemeinde" type="ak:AX_Statistik_Gebiet_GemeindePropertyType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_AmtlicheFlaechenstatistikPropertyType">
+    <sequence>
+      <element ref="ak:AX_AmtlicheFlaechenstatistik"/>
+    </sequence>
+  </complexType>
+  <element name="AX_Bestandsnachweis" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_BestandsnachweisType"/>
+  <complexType name="AX_BestandsnachweisType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="ausgabekopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+          <element name="kopf" type="ak:AX_BuchungPropertyType"/>
+          <element maxOccurs="unbounded" name="grundstueck" type="ak:AX_Grundstueck_BestandsnachweisPropertyType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="eigentuemer" type="ak:AX_K_PERS1PropertyType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_BestandsnachweisPropertyType">
+    <sequence>
+      <element ref="ak:AX_Bestandsnachweis"/>
+    </sequence>
+  </complexType>
+  <element name="AX_Buchung" substitutionGroup="gml:AbstractObject" type="ak:AX_BuchungType"/>
+  <complexType name="AX_BuchungType">
+    <sequence>
+      <element minOccurs="0" name="amtsgericht" type="string"/>
+      <element minOccurs="0" name="buchungsblattbezirk" type="string"/>
+      <element name="buchungsblattnummer" type="string"/>
+      <element name="laufendeNummerDerBuchungsstelle" type="string"/>
+      <element minOccurs="0" name="blattart" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_BuchungPropertyType">
+    <sequence>
+      <element ref="ak:AX_Buchung"/>
+    </sequence>
+  </complexType>
+  <element name="AX_EinzelnachweisGrundnetzpunkt" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_EinzelnachweisGrundnetzpunktType"/>
+  <complexType name="AX_EinzelnachweisGrundnetzpunktType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="kopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+          <element name="punktkennung" type="string"/>
+          <element minOccurs="0" name="punktvermarkung" type="string"/>
+          <element minOccurs="0" name="klassifikationOrdnung" type="string"/>
+          <element minOccurs="0" name="klassifikationHierarchiestufe" type="string"/>
+          <element minOccurs="0" name="klassifikationWertigkeit" type="string"/>
+          <element minOccurs="0" name="ueberwachungsdatum" type="string"/>
+          <element minOccurs="0" name="gemeinde" type="string"/>
+          <element minOccurs="0" name="uebersichtsgrafik" type="anyURI"/>
+          <element minOccurs="0" name="position" type="ak:AX_K_PositionssystemPropertyType"/>
+          <element minOccurs="0" name="lage" type="ak:AX_K_LagesystemPropertyType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="hoehe" type="ak:AX_K_HoehensystemPropertyType"/>
+          <element minOccurs="0" name="pfeilerhoeheMessdatum" type="string"/>
+          <element minOccurs="0" name="pfeilerhoeheWert" type="string"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="bemerkungen" type="string"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="skizzen" type="anyURI"/>
+          <element minOccurs="0" name="schwere" type="ak:AX_K_SchweresystemPropertyType"/>
+          <element minOccurs="0" name="nameLagebeschreibung" type="string"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_EinzelnachweisGrundnetzpunktPropertyType">
+    <sequence>
+      <element ref="ak:AX_EinzelnachweisGrundnetzpunkt"/>
+    </sequence>
+  </complexType>
+  <element name="AX_EinzelnachweisHoehenfestpunkt" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_EinzelnachweisHoehenfestpunktType"/>
+  <complexType name="AX_EinzelnachweisHoehenfestpunktType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="kopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+          <element name="punktkennung" type="string"/>
+          <element minOccurs="0" name="punktvermarkung" type="string"/>
+          <element minOccurs="0" name="klassifikationOrdnung" type="string"/>
+          <element minOccurs="0" name="ueberwachungsdatum" type="string"/>
+          <element minOccurs="0" name="gemeinde" type="string"/>
+          <element minOccurs="0" name="uebersichtsgrafik" type="anyURI"/>
+          <element minOccurs="0" name="lage" type="ak:AX_K_LagesystemPropertyType"/>
+          <element minOccurs="0" name="hoehe" type="ak:AX_K_HoehensystemPropertyType"/>
+          <element minOccurs="0" name="nameLagebeschreibung" type="string"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="bemerkungen" type="string"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="skizzen" type="anyURI"/>
+          <element minOccurs="0" name="punktkennungAlsSFP" type="string"/>
+          <element minOccurs="0" name="punktkennungAlsLFP" type="string"/>
+          <element minOccurs="0" name="punktkennungAlsRSP" type="string"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_EinzelnachweisHoehenfestpunktPropertyType">
+    <sequence>
+      <element ref="ak:AX_EinzelnachweisHoehenfestpunkt"/>
+    </sequence>
+  </complexType>
+  <element name="AX_EinzelnachweisLagefestpunkt" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_EinzelnachweisLagefestpunktType"/>
+  <complexType name="AX_EinzelnachweisLagefestpunktType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="kopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+          <element name="punktkennung" type="string"/>
+          <element minOccurs="0" name="punktvermarkung" type="string"/>
+          <element minOccurs="0" name="klassifikationOrdnung" type="string"/>
+          <element minOccurs="0" name="klassifikationHierarchiestufe" type="string"/>
+          <element minOccurs="0" name="klassifikationWertigkeit" type="string"/>
+          <element minOccurs="0" name="ueberwachungsdatum" type="string"/>
+          <element minOccurs="0" name="gemeinde" type="string"/>
+          <element minOccurs="0" name="uebersichtsgrafik" type="anyURI"/>
+          <element minOccurs="0" name="position" type="ak:AX_K_PositionssystemPropertyType"/>
+          <element minOccurs="0" name="lage" type="ak:AX_K_LagesystemPropertyType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="hoehe" type="ak:AX_K_HoehensystemPropertyType"/>
+          <element minOccurs="0" name="pfeilerhoeheMessdatum" type="string"/>
+          <element minOccurs="0" name="pfeilerhoeheWert" type="string"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="bemerkungen" type="string"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="skizzen" type="anyURI"/>
+          <element minOccurs="0" name="punktkennungAlsSFP" type="string"/>
+          <element minOccurs="0" name="punktkennungAlsHFP" type="string"/>
+          <element minOccurs="0" name="punktkennungAlsRSP" type="string"/>
+          <element minOccurs="0" name="nameLagebeschreibung" type="string"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_EinzelnachweisLagefestpunktPropertyType">
+    <sequence>
+      <element ref="ak:AX_EinzelnachweisLagefestpunkt"/>
+    </sequence>
+  </complexType>
+  <element name="AX_EinzelnachweisReferenzstationspunkt" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_EinzelnachweisReferenzstationspunktType"/>
+  <complexType name="AX_EinzelnachweisReferenzstationspunktType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="kopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+          <element name="punktkennung" type="string"/>
+          <element minOccurs="0" name="punktvermarkung" type="string"/>
+          <element minOccurs="0" name="nameLagebeschreibung" type="string"/>
+          <element minOccurs="0" name="punktkennungAlsLFP" type="string"/>
+          <element minOccurs="0" name="uebersichtsgrafik" type="anyURI"/>
+          <element minOccurs="0" name="position" type="ak:AX_K_PositionssystemPropertyType"/>
+          <element minOccurs="0" name="lage" type="ak:AX_K_LagesystemPropertyType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="hoehe" type="ak:AX_K_HoehensystemPropertyType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="bemerkungen" type="string"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="skizzen" type="anyURI"/>
+          <element minOccurs="0" name="punktkennungAlsHFP" type="string"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_EinzelnachweisReferenzstationspunktPropertyType">
+    <sequence>
+      <element ref="ak:AX_EinzelnachweisReferenzstationspunkt"/>
+    </sequence>
+  </complexType>
+  <element name="AX_EinzelnachweisSchwerefestpunkt" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_EinzelnachweisSchwerefestpunktType"/>
+  <complexType name="AX_EinzelnachweisSchwerefestpunktType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="kopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+          <element name="punktkennung" type="string"/>
+          <element minOccurs="0" name="punktvermarkung" type="string"/>
+          <element minOccurs="0" name="klassifikationOrdnung" type="string"/>
+          <element minOccurs="0" name="ueberwachungsdatum" type="string"/>
+          <element minOccurs="0" name="gemeinde" type="string"/>
+          <element minOccurs="0" name="uebersichtsgrafik" type="anyURI"/>
+          <element minOccurs="0" name="lage" type="ak:AX_K_LagesystemPropertyType"/>
+          <element minOccurs="0" name="hoehe" type="ak:AX_K_HoehensystemPropertyType"/>
+          <element minOccurs="0" name="schwere" type="ak:AX_K_SchweresystemPropertyType"/>
+          <element minOccurs="0" name="nameLagebeschreibung" type="string"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="bemerkungen" type="string"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="skizzen" type="anyURI"/>
+          <element minOccurs="0" name="punktkennungAlsLFP" type="string"/>
+          <element minOccurs="0" name="punktkennungAlsHFP" type="string"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_EinzelnachweisSchwerefestpunktPropertyType">
+    <sequence>
+      <element ref="ak:AX_EinzelnachweisSchwerefestpunkt"/>
+    </sequence>
+  </complexType>
+  <element name="AX_FestlegungOSW" substitutionGroup="gml:AbstractObject" type="ak:AX_FestlegungOSWType"/>
+  <complexType name="AX_FestlegungOSWType">
+    <sequence>
+      <element name="klassifizierung" type="string"/>
+      <element minOccurs="0" name="bezeichnung" type="string"/>
+      <element minOccurs="0" name="ausfuehrendeStelle" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_FestlegungOSWPropertyType">
+    <sequence>
+      <element ref="ak:AX_FestlegungOSW"/>
+    </sequence>
+  </complexType>
+  <element name="AX_FestlegungOSZ" substitutionGroup="gml:AbstractObject" type="ak:AX_FestlegungOSZType"/>
+  <complexType name="AX_FestlegungOSZType">
+    <sequence>
+      <element name="art" type="string"/>
+      <element name="zone" type="string"/>
+      <element minOccurs="0" name="name" type="string"/>
+      <element name="nummer" type="string"/>
+      <element minOccurs="0" name="ausfuehrendeStelle" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_FestlegungOSZPropertyType">
+    <sequence>
+      <element ref="ak:AX_FestlegungOSZ"/>
+    </sequence>
+  </complexType>
+  <element name="AX_FestlegungSonstigeORF" substitutionGroup="gml:AbstractObject" type="ak:AX_FestlegungSonstigeORFType"/>
+  <complexType name="AX_FestlegungSonstigeORFType">
+    <sequence>
+      <element name="art" type="string"/>
+      <element minOccurs="0" name="besondereFunktionForst" type="string"/>
+      <element minOccurs="0" name="bezeichnung" type="string"/>
+      <element minOccurs="0" name="name" type="string"/>
+      <element minOccurs="0" name="ausfuehrendeStelle" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_FestlegungSonstigeORFPropertyType">
+    <sequence>
+      <element ref="ak:AX_FestlegungSonstigeORF"/>
+    </sequence>
+  </complexType>
+  <element name="AX_FlurstuecksEigentumsnachweis" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_FlurstuecksEigentumsnachweisType"/>
+  <complexType name="AX_FlurstuecksEigentumsnachweisType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="ausgabekopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+          <element name="kopf" type="ak:AX_Kopf_FlurstueckPropertyType"/>
+          <element name="flurstueck" type="ak:AX_K_FLURSTUECK1PropertyType"/>
+          <element maxOccurs="unbounded" name="eigentum" type="ak:AX_K_EigentumPropertyType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_FlurstuecksEigentumsnachweisPropertyType">
+    <sequence>
+      <element ref="ak:AX_FlurstuecksEigentumsnachweis"/>
+    </sequence>
+  </complexType>
+  <element name="AX_FlurstuecksEigentumsnachweisMitBodenschaetzung" substitutionGroup="ak:AX_FlurstuecksEigentumsnachweis" type="ak:AX_FlurstuecksEigentumsnachweisMitBodenschaetzungType"/>
+  <complexType name="AX_FlurstuecksEigentumsnachweisMitBodenschaetzungType">
+    <complexContent>
+      <extension base="ak:AX_FlurstuecksEigentumsnachweisType">
+        <sequence>
+          <element minOccurs="0" name="abschnitteOBSOBG" type="ak:AX_K_BOWERTPropertyType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_FlurstuecksEigentumsnachweisMitBodenschaetzungPropertyType">
+    <sequence>
+      <element ref="ak:AX_FlurstuecksEigentumsnachweisMitBodenschaetzung"/>
+    </sequence>
+  </complexType>
+  <element name="AX_Flurstuecksnachweis" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_FlurstuecksnachweisType"/>
+  <complexType name="AX_FlurstuecksnachweisType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="ausgabekopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+          <element name="kopf" type="ak:AX_Kopf_FlurstueckPropertyType"/>
+          <element name="flurstueck" type="ak:AX_K_FLURSTUECK1PropertyType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="buchung" type="ak:AX_K_BUCHUNGSANGABENPropertyType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_FlurstuecksnachweisPropertyType">
+    <sequence>
+      <element ref="ak:AX_Flurstuecksnachweis"/>
+    </sequence>
+  </complexType>
+  <element name="AX_FlurstuecksnachweisMitBodenschaetzung" substitutionGroup="ak:AX_Flurstuecksnachweis" type="ak:AX_FlurstuecksnachweisMitBodenschaetzungType"/>
+  <complexType name="AX_FlurstuecksnachweisMitBodenschaetzungType">
+    <complexContent>
+      <extension base="ak:AX_FlurstuecksnachweisType">
+        <sequence>
+          <element minOccurs="0" name="abschnitteOBSOBG" type="ak:AX_K_BOWERTPropertyType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_FlurstuecksnachweisMitBodenschaetzungPropertyType">
+    <sequence>
+      <element ref="ak:AX_FlurstuecksnachweisMitBodenschaetzung"/>
+    </sequence>
+  </complexType>
+  <element name="AX_FortfuehrungsmitteilungAnEigentuemer" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_FortfuehrungsmitteilungAnEigentuemerType"/>
+  <complexType name="AX_FortfuehrungsmitteilungAnEigentuemerType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="titel" type="ak:AX_K_FM_TitelPropertyType"/>
+          <element maxOccurs="unbounded" name="fortfuehrungsfall" type="ak:AX_K_Fortfuehrungsfall_FMPropertyType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_FortfuehrungsmitteilungAnEigentuemerPropertyType">
+    <sequence>
+      <element ref="ak:AX_FortfuehrungsmitteilungAnEigentuemer"/>
+    </sequence>
+  </complexType>
+  <element name="AX_FortfuehrungsmitteilungAnFinanzverwaltung" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_FortfuehrungsmitteilungAnFinanzverwaltungType"/>
+  <complexType name="AX_FortfuehrungsmitteilungAnFinanzverwaltungType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="titel" type="ak:AX_K_FM_TitelPropertyType"/>
+          <element maxOccurs="unbounded" name="fortfuehrungsfall" type="ak:AX_K_Fortfuehrungsfall_FMPropertyType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_FortfuehrungsmitteilungAnFinanzverwaltungPropertyType">
+    <sequence>
+      <element ref="ak:AX_FortfuehrungsmitteilungAnFinanzverwaltung"/>
+    </sequence>
+  </complexType>
+  <element name="AX_FortfuehrungsmitteilungAnJustizverwaltung" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_FortfuehrungsmitteilungAnJustizverwaltungType"/>
+  <complexType name="AX_FortfuehrungsmitteilungAnJustizverwaltungType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="titel" type="ak:AX_K_FM_TitelPropertyType"/>
+          <element maxOccurs="unbounded" name="fortfuehrungsfall" type="ak:AX_K_Fortfuehrungsfall_FMJPropertyType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_FortfuehrungsmitteilungAnJustizverwaltungPropertyType">
+    <sequence>
+      <element ref="ak:AX_FortfuehrungsmitteilungAnJustizverwaltung"/>
+    </sequence>
+  </complexType>
+  <element name="AX_Fortfuehrungsnachweis" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_FortfuehrungsnachweisType"/>
+  <complexType name="AX_FortfuehrungsnachweisType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="deckblatt" type="ak:AX_K_FN_DeckblattPropertyType"/>
+          <element maxOccurs="unbounded" name="fortfuehrungsfall" type="ak:AX_K_Fortfuehrungsfall_AusgabePropertyType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_FortfuehrungsnachweisPropertyType">
+    <sequence>
+      <element ref="ak:AX_Fortfuehrungsnachweis"/>
+    </sequence>
+  </complexType>
+  <element name="AX_Gebaeudenachweis" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_GebaeudenachweisType"/>
+  <complexType name="AX_GebaeudenachweisType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="ausgabekopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="lagebezeichnung" type="ak:AX_Lagebezeichnung_K_GEBAEUDEPropertyType"/>
+          <element name="gebaeudefunktion" type="string"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="weitereGebaeudefunktion" type="string"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="name" type="string"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="nutzung" type="string"/>
+          <element minOccurs="0" name="bauweise" type="string"/>
+          <element minOccurs="0" name="anzahlDerOberirdischenGeschosse" type="integer"/>
+          <element minOccurs="0" name="anzahlDerUnterirdischenGeschosse" type="integer"/>
+          <element minOccurs="0" name="hochhaus" type="string"/>
+          <element minOccurs="0" name="objekthoehe" type="string"/>
+          <element minOccurs="0" name="dachform" type="string"/>
+          <element minOccurs="0" name="dachart" type="string"/>
+          <element minOccurs="0" name="dachgeschossausbau" type="string"/>
+          <element minOccurs="0" name="zustand" type="string"/>
+          <element minOccurs="0" name="geschossflaeche" type="string"/>
+          <element minOccurs="0" name="grundflaeche" type="string"/>
+          <element minOccurs="0" name="umbauterRaum" type="string"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="baujahr" type="integer"/>
+          <element minOccurs="0" name="lageZurErdoberflaeche" type="string"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="flurstueck" type="ak:AX_K_LBHPropertyType"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_GebaeudenachweisPropertyType">
+    <sequence>
+      <element ref="ak:AX_Gebaeudenachweis"/>
+    </sequence>
+  </complexType>
+  <element name="AX_Grundstueck_Bestandsnachweis" substitutionGroup="gml:AbstractObject" type="ak:AX_Grundstueck_BestandsnachweisType"/>
+  <complexType name="AX_Grundstueck_BestandsnachweisType">
+    <sequence>
+      <element name="laufendeNummerDerBuchungsstelle" type="string"/>
+      <element name="buchungsart" type="string"/>
+      <element minOccurs="0" name="buchungstext" type="string"/>
+      <element minOccurs="0" name="anteil" type="adv:AX_AnteilPropertyType"/>
+      <element minOccurs="0" name="aufgeteilterAnteil" type="adv:AX_AnteilPropertyType"/>
+      <element minOccurs="0" name="nummerImAufteilungsplan" type="string"/>
+      <element minOccurs="0" name="beschreibungDesSondereigentums" type="string"/>
+      <element maxOccurs="unbounded" name="flurstueck" type="ak:AX_K_FLURSTUECK2PropertyType"/>
+      <element name="grundstuecksflaeche" type="string"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="grundstuecksgleicheRechte" type="ak:AX_RechtPropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="herrschend" type="ak:AX_K_Buchungsangaben_HDPropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="dienend" type="ak:AX_K_Buchungsangaben_HDPropertyType"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_Grundstueck_BestandsnachweisPropertyType">
+    <sequence>
+      <element ref="ak:AX_Grundstueck_Bestandsnachweis"/>
+    </sequence>
+  </complexType>
+  <element name="AX_Grundstuecksnachweis" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_GrundstuecksnachweisType"/>
+  <complexType name="AX_GrundstuecksnachweisType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="ausgabekopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+          <element name="kopf" type="ak:AX_BuchungPropertyType"/>
+          <element maxOccurs="unbounded" name="flurstueck" type="ak:AX_K_FLURSTUECK2PropertyType"/>
+          <element maxOccurs="unbounded" name="eigentum" type="ak:AX_K_EigentumPropertyType"/>
+          <element name="grundstuecksflaeche" type="string"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_GrundstuecksnachweisPropertyType">
+    <sequence>
+      <element ref="ak:AX_Grundstuecksnachweis"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_Anlieger" substitutionGroup="gml:AbstractObject" type="ak:AX_K_AnliegerType"/>
+  <complexType name="AX_K_AnliegerType">
+    <sequence>
+      <element name="gemarkungsname" type="string"/>
+      <element name="flurstuecksnummer" type="adv:AX_FlurstuecksnummerPropertyType"/>
+      <element minOccurs="0" name="flurnummer" type="string"/>
+      <element minOccurs="0" name="buchungsangaben" type="ak:AX_K_Eigentum_AnliegerPropertyType"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_AnliegerPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_Anlieger"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_Anliegervermerk" substitutionGroup="gml:AbstractObject" type="ak:AX_K_AnliegervermerkType"/>
+  <complexType name="AX_K_AnliegervermerkType">
+    <sequence>
+      <element name="gemarkungsname" type="string"/>
+      <element name="flurstuecksnummer" type="adv:AX_FlurstuecksnummerPropertyType"/>
+      <element minOccurs="0" name="flurnummer" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_AnliegervermerkPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_Anliegervermerk"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_Auszug" substitutionGroup="gml:AbstractObject" type="ak:AX_K_AuszugType"/>
+  <complexType name="AX_K_AuszugType">
+    <sequence>
+      <element name="art" type="string"/>
+      <element name="adressat" type="string"/>
+      <element name="datum" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_AuszugPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_Auszug"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_BOWERT" substitutionGroup="gml:AbstractObject" type="ak:AX_K_BOWERTType"/>
+  <complexType name="AX_K_BOWERTType">
+    <sequence>
+      <element maxOccurs="unbounded" minOccurs="0" name="abschnittOBS" type="ak:AX_AbschnittOBSPropertyType"/>
+      <element minOccurs="0" name="gesamtertragsmesszahl" type="integer"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="abschnittOBG" type="ak:AX_AbschnittOBGPropertyType"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_BOWERTPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_BOWERT"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_BUCHUNGSANGABEN" substitutionGroup="gml:AbstractObject" type="ak:AX_K_BUCHUNGSANGABENType"/>
+  <complexType name="AX_K_BUCHUNGSANGABENType">
+    <sequence>
+      <element name="buchung" type="ak:AX_BuchungPropertyType"/>
+      <element name="buchungsart" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_BUCHUNGSANGABENPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_BUCHUNGSANGABEN"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_Buchungsangaben_HD" substitutionGroup="gml:AbstractObject" type="ak:AX_K_Buchungsangaben_HDType"/>
+  <complexType name="AX_K_Buchungsangaben_HDType">
+    <sequence>
+      <element name="gemarkungsname" type="string"/>
+      <element name="flurstuecksnummer" type="adv:AX_FlurstuecksnummerPropertyType"/>
+      <element minOccurs="0" name="flurnummer" type="string"/>
+      <element name="laufendeNummerDerBuchungsstelle" type="string"/>
+      <element minOccurs="0" name="anteil" type="adv:AX_AnteilPropertyType"/>
+      <element minOccurs="0" name="aufgeteilterAnteil" type="adv:AX_AnteilPropertyType"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_Buchungsangaben_HDPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_Buchungsangaben_HD"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_CRSANGABEN" substitutionGroup="gml:AbstractObject" type="ak:AX_K_CRSANGABENType"/>
+  <complexType name="AX_K_CRSANGABENType">
+    <sequence>
+      <element name="uri" type="anyURI"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_CRSANGABENPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_CRSANGABEN"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_Eigentum" substitutionGroup="gml:AbstractObject" type="ak:AX_K_EigentumType"/>
+  <complexType name="AX_K_EigentumType">
+    <sequence>
+      <element name="buchung" type="ak:AX_BuchungPropertyType"/>
+      <element name="buchungsart" type="string"/>
+      <element minOccurs="0" name="buchungstext" type="string"/>
+      <element minOccurs="0" name="anteil" type="adv:AX_AnteilPropertyType"/>
+      <element minOccurs="0" name="aufgeteilterAnteil" type="adv:AX_AnteilPropertyType"/>
+      <element minOccurs="0" name="nummerImAufteilungsplan" type="string"/>
+      <element minOccurs="0" name="beschreibungDesSondereigentums" type="string"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="eigentuemer" type="ak:AX_K_PERS1PropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="verwalter" type="ak:AX_K_PERS1PropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="grundstuecksgleicheRechte" type="ak:AX_RechtPropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="herrschend" type="ak:AX_K_Buchungsangaben_HDPropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="dienend" type="ak:AX_K_Buchungsangaben_HDPropertyType"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_EigentumPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_Eigentum"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_Eigentum_Anlieger" substitutionGroup="gml:AbstractObject" type="ak:AX_K_Eigentum_AnliegerType"/>
+  <complexType name="AX_K_Eigentum_AnliegerType">
+    <sequence>
+      <element name="buchung" type="ak:AX_BuchungPropertyType"/>
+      <element name="buchungsart" type="string"/>
+      <element maxOccurs="unbounded" name="eigentuemerAnlieger" type="ak:AX_K_PERS1PropertyType"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_Eigentum_AnliegerPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_Eigentum_Anlieger"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_FANALYSE" substitutionGroup="gml:AbstractObject" type="ak:AX_K_FANALYSEType"/>
+  <complexType name="AX_K_FANALYSEType">
+    <sequence>
+      <element name="gesamtflaecheVorher" type="string"/>
+      <element name="flurstueckeVorher" type="integer"/>
+      <element name="gesamtflaecheNachher" type="string"/>
+      <element name="flurstueckeNachher" type="integer"/>
+      <element minOccurs="0" name="flaechenaenderung" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_FANALYSEPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_FANALYSE"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_FLURSTUECK1" substitutionGroup="gml:AbstractObject" type="ak:AX_K_FLURSTUECK1Type"/>
+  <complexType name="AX_K_FLURSTUECK1Type">
+    <sequence>
+      <element minOccurs="0" name="regierungsbezirk" type="string"/>
+      <element minOccurs="0" name="kreis" type="ak:AX_K_KreisPropertyType"/>
+      <element minOccurs="0" name="gemeinde" type="string"/>
+      <element name="amtlicheFlaeche" type="string"/>
+      <element minOccurs="0" name="abweichenderRechtszustand" type="string"/>
+      <element minOccurs="0" name="strittigeGrenze" type="string"/>
+      <element minOccurs="0" name="rechtsbehelfsverfahren" type="string"/>
+      <element minOccurs="0" name="zweifelhafterFlurstuecksnachweis" type="string"/>
+      <element maxOccurs="unbounded" name="lagebezeichnung" type="ak:AX_K_LBEZPropertyType"/>
+      <element minOccurs="0" name="abschnitteORF" type="ak:AX_K_ORFPropertyType"/>
+      <element maxOccurs="unbounded" name="tatsaechlicheNutzung" type="ak:AX_K_NTNPropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="anliegervermerk" type="ak:AX_K_AnliegervermerkPropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="anlieger" type="ak:AX_K_AnliegerPropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="finanzamt" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_FLURSTUECK1PropertyType">
+    <sequence>
+      <element ref="ak:AX_K_FLURSTUECK1"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_FLURSTUECK2" substitutionGroup="gml:AbstractObject" type="ak:AX_K_FLURSTUECK2Type"/>
+  <complexType name="AX_K_FLURSTUECK2Type">
+    <sequence>
+      <element minOccurs="0" name="regierungsbezirk" type="string"/>
+      <element minOccurs="0" name="kreis" type="ak:AX_K_KreisPropertyType"/>
+      <element minOccurs="0" name="gemeinde" type="string"/>
+      <element name="gemarkungsname" type="string"/>
+      <element name="flurstuecksnummer" type="adv:AX_FlurstuecksnummerPropertyType"/>
+      <element minOccurs="0" name="flurnummer" type="string"/>
+      <element name="amtlicheFlaeche" type="string"/>
+      <element maxOccurs="unbounded" name="lagebezeichnung" type="ak:AX_K_LBEZPropertyType"/>
+      <element maxOccurs="unbounded" name="tatsaechlicheNutzung" type="ak:AX_K_NTNPropertyType"/>
+      <element minOccurs="0" name="abschnitteORF" type="ak:AX_K_ORFPropertyType"/>
+      <element minOccurs="0" name="strittigeGrenze" type="string"/>
+      <element minOccurs="0" name="rechtsbehelfsverfahren" type="string"/>
+      <element minOccurs="0" name="zweifelhafterFlurstuecksnachweis" type="string"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="anliegervermerk" type="ak:AX_K_AnliegervermerkPropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="finanzamt" type="string"/>
+      <element minOccurs="0" name="abweichenderRechtszustand" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_FLURSTUECK2PropertyType">
+    <sequence>
+      <element ref="ak:AX_K_FLURSTUECK2"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_FLURST_F" substitutionGroup="gml:AbstractObject" type="ak:AX_K_FLURST_FType"/>
+  <complexType name="AX_K_FLURST_FType">
+    <sequence>
+      <element name="flurstueckskennzeichen" type="string"/>
+      <element name="amtlicheFlaeche" type="string"/>
+      <element maxOccurs="unbounded" name="lagebezeichnung" type="ak:AX_K_LBEZPropertyType"/>
+      <element maxOccurs="unbounded" name="tatsaechlicheNutzung" type="ak:AX_K_NTNPropertyType"/>
+      <element name="gemeindezugehoerigkeit" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_FLURST_FPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_FLURST_F"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_FLURST_F_alt" substitutionGroup="gml:AbstractObject" type="ak:AX_K_FLURST_F_altType"/>
+  <complexType name="AX_K_FLURST_F_altType">
+    <sequence>
+      <element name="flurstueckskennzeichen" type="string"/>
+      <element name="amtlicheFlaeche" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_FLURST_F_altPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_FLURST_F_alt"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_FLURST_F_neu" substitutionGroup="gml:AbstractObject" type="ak:AX_K_FLURST_F_neuType"/>
+  <complexType name="AX_K_FLURST_F_neuType">
+    <sequence>
+      <element name="flurstueckskennzeichen" type="string"/>
+      <element name="amtlicheFlaeche" type="string"/>
+      <element maxOccurs="unbounded" name="lagebezeichnung" type="ak:AX_K_LBEZPropertyType"/>
+      <element maxOccurs="unbounded" name="wirtschaftsart" type="ak:AX_WirtschaftsartType"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_FLURST_F_neuPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_FLURST_F_neu"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_FM_Titel" substitutionGroup="gml:AbstractObject" type="ak:AX_K_FM_TitelType"/>
+  <complexType name="AX_K_FM_TitelType">
+    <sequence>
+      <element name="ausgabekopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+      <element name="inGemarkung" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_FM_TitelPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_FM_Titel"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_FN_Deckblatt" substitutionGroup="gml:AbstractObject" type="ak:AX_K_FN_DeckblattType"/>
+  <complexType name="AX_K_FN_DeckblattType">
+    <sequence>
+      <element name="ausgabekopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+      <element minOccurs="0" name="fortfuehrungsfallNummernbereich" type="string"/>
+      <element name="fNNummer" type="adv:AX_FortfuehrungsnummerPropertyType"/>
+      <element name="titel" type="string"/>
+      <element name="inGemarkung" type="string"/>
+      <element minOccurs="0" name="erstelltAm" type="string"/>
+      <element minOccurs="0" name="eignungspruefungAm" type="string"/>
+      <element minOccurs="0" name="fortfuehrungsentscheidungAm" type="string"/>
+      <element minOccurs="0" name="fortfuehrungsentscheidungVon" type="string"/>
+      <element minOccurs="0" name="eignungspruefungVon" type="string"/>
+      <element minOccurs="0" name="fortfuehrungsmitteilungenErzeugt" type="string"/>
+      <element minOccurs="0" name="bemerkung" type="string"/>
+      <element minOccurs="0" name="verwaltungsaktJN" type="string"/>
+      <element minOccurs="0" name="erstelltVon" type="string"/>
+      <element minOccurs="0" name="bekanntgabeAnBeteiligteAm" type="string"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="auszugFuer" type="ak:AX_K_AuszugPropertyType"/>
+      <element minOccurs="0" name="grundbuchmitteilungFuerFinanzamt" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_FN_DeckblattPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_FN_Deckblatt"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_Fortfuehrungsfall_Ausgabe" substitutionGroup="gml:AbstractObject" type="ak:AX_K_Fortfuehrungsfall_AusgabeType"/>
+  <complexType name="AX_K_Fortfuehrungsfall_AusgabeType">
+    <sequence>
+      <element name="fortfuehrungsfallnummer" type="integer"/>
+      <element name="laufendeNummer" type="string"/>
+      <element maxOccurs="unbounded" name="ueberschriftImFortfuehrungsnachweis" type="string"/>
+      <element minOccurs="0" name="anzahlDerFortfuehrungsmitteilungen" type="integer"/>
+      <element minOccurs="0" name="fortfuehrungsmitteilungAnEigentuemerAntragsteller" type="string"/>
+      <element minOccurs="0" name="anmerkungFuerDenNotar" type="string"/>
+      <element minOccurs="0" name="bemerkung" type="string"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="flurstueck_alt" type="ak:AX_K_FLURST_FPropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="flurstueck_neu" type="ak:AX_K_FLURST_FPropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="buchung" type="ak:AX_K_BUCHUNGSANGABENPropertyType"/>
+      <element minOccurs="0" name="veraenderungsanalyse" type="ak:AX_K_FANALYSEPropertyType"/>
+      <element minOccurs="0" name="verweistAuf" type="adv:AX_FGraphikPropertyType"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_Fortfuehrungsfall_AusgabePropertyType">
+    <sequence>
+      <element ref="ak:AX_K_Fortfuehrungsfall_Ausgabe"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_Fortfuehrungsfall_FM" substitutionGroup="gml:AbstractObject" type="ak:AX_K_Fortfuehrungsfall_FMType"/>
+  <complexType name="AX_K_Fortfuehrungsfall_FMType">
+    <sequence>
+      <element name="fortfuehrungsfallnummer" type="integer"/>
+      <element name="laufendeNummer" type="string"/>
+      <element maxOccurs="unbounded" name="ueberschriftImFortfuehrungsnachweis" type="gml:ReferenceType">
+        <annotation>
+          <appinfo>
+            <targetCodeList xmlns="http://www.opengis.net/gml/3.3/exr">AA_Anlassart</targetCodeList>
+          </appinfo>
+        </annotation>
+      </element>
+      <element minOccurs="0" name="anmerkungFuerDenNotar" type="string"/>
+      <element minOccurs="0" name="bemerkung" type="string"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="flurstueck_alt" type="ak:AX_K_FLURST_FPropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="flurstueck_neu" type="ak:AX_K_FLURST_FPropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="buchung" type="ak:AX_K_BUCHUNGSANGABENPropertyType"/>
+      <element minOccurs="0" name="veraenderungsanalyse" type="ak:AX_K_FANALYSEPropertyType"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_Fortfuehrungsfall_FMPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_Fortfuehrungsfall_FM"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_Fortfuehrungsfall_FMJ" substitutionGroup="gml:AbstractObject" type="ak:AX_K_Fortfuehrungsfall_FMJType"/>
+  <complexType name="AX_K_Fortfuehrungsfall_FMJType">
+    <sequence>
+      <element name="fortfuehrungsfallnummer" type="integer"/>
+      <element name="laufendeNummer" type="string"/>
+      <element maxOccurs="unbounded" name="ueberschriftImFortfuehrungsnachweis" type="gml:ReferenceType">
+        <annotation>
+          <appinfo>
+            <targetCodeList xmlns="http://www.opengis.net/gml/3.3/exr">AA_Anlassart</targetCodeList>
+          </appinfo>
+        </annotation>
+      </element>
+      <element maxOccurs="unbounded" minOccurs="0" name="flurstueck_alt" type="ak:AX_K_FLURST_F_altPropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="flurstueck_neu" type="ak:AX_K_FLURST_F_neuPropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="buchung" type="ak:AX_K_BUCHUNGSANGABENPropertyType"/>
+      <element minOccurs="0" name="strittigeGrenze" type="string"/>
+      <element minOccurs="0" name="veraenderungsanalyse" type="ak:AX_K_FANALYSEPropertyType"/>
+      <element minOccurs="0" name="verweistAuf" type="adv:AX_FGraphikPropertyType"/>
+      <element name="bemerkung" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_Fortfuehrungsfall_FMJPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_Fortfuehrungsfall_FMJ"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_Hoehensystem" substitutionGroup="gml:AbstractObject" type="ak:AX_K_HoehensystemType"/>
+  <complexType name="AX_K_HoehensystemType">
+    <sequence>
+      <element minOccurs="0" name="messjahr" type="string"/>
+      <element minOccurs="0" name="genauigkeitsstufe" type="string"/>
+      <element minOccurs="0" name="hoehe" type="string"/>
+      <element minOccurs="0" name="system" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_HoehensystemPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_Hoehensystem"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_Kreis" substitutionGroup="gml:AbstractObject" type="ak:AX_K_KreisType"/>
+  <complexType name="AX_K_KreisType">
+    <sequence>
+      <element name="bezeichnung" type="string"/>
+      <element minOccurs="0" name="administrativeFunktion" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_KreisPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_Kreis"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_LBEZ" substitutionGroup="gml:AbstractObject" type="ak:AX_K_LBEZType"/>
+  <complexType name="AX_K_LBEZType">
+    <sequence>
+      <element name="lagebezeichnung" type="string"/>
+      <element minOccurs="0" name="hausnummer" type="string"/>
+      <element minOccurs="0" name="ortsteil" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_LBEZPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_LBEZ"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_LBH" substitutionGroup="gml:AbstractObject" type="ak:AX_K_LBHType"/>
+  <complexType name="AX_K_LBHType">
+    <sequence>
+      <element name="kopf" type="ak:AX_Kopf_FlurstueckPropertyType"/>
+      <element maxOccurs="unbounded" name="lagebezeichnung" type="ak:AX_K_LBEZPropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="baublockbezeichnung" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_LBHPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_LBH"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_Lagesystem" substitutionGroup="gml:AbstractObject" type="ak:AX_K_LagesystemType"/>
+  <complexType name="AX_K_LagesystemType">
+    <sequence>
+      <element minOccurs="0" name="messjahr" type="string"/>
+      <element minOccurs="0" name="genauigkeitsstufe" type="string"/>
+      <element minOccurs="0" name="rechtswertOderEast" type="string"/>
+      <element minOccurs="0" name="hochwertOderNorth" type="string"/>
+      <element minOccurs="0" name="system" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_LagesystemPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_Lagesystem"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_NTN" substitutionGroup="gml:AbstractObject" type="ak:AX_K_NTNType"/>
+  <complexType name="AX_K_NTNType">
+    <sequence>
+      <element name="abschnittTN" type="ak:AX_AbschnittTNPropertyType"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_NTNPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_NTN"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_ORF" substitutionGroup="gml:AbstractObject" type="ak:AX_K_ORFType"/>
+  <complexType name="AX_K_ORFType">
+    <sequence>
+      <element maxOccurs="unbounded" minOccurs="0" name="festlegungOSW" type="ak:AX_FestlegungOSWPropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="festlegungSchutzgebietMitZoneneinteilung" type="ak:AX_FestlegungOSZPropertyType"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="festlegungSonstigeORF" type="ak:AX_FestlegungSonstigeORFPropertyType"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_ORFPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_ORF"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_PERS1" substitutionGroup="gml:AbstractObject" type="ak:AX_K_PERS1Type"/>
+  <complexType name="AX_K_PERS1Type">
+    <sequence>
+      <element minOccurs="0" name="namensnummer" type="ak:AX_Namensnummer_K_PERS1PropertyType"/>
+      <element minOccurs="0" name="anteil" type="adv:AX_AnteilPropertyType"/>
+      <element minOccurs="0" name="artDerRechtsgemeinschaft" type="string"/>
+      <element minOccurs="0" name="beschriebDerRechtsgemeinschaft" type="string"/>
+      <element minOccurs="0" name="nachnameOderFirma" type="string"/>
+      <element minOccurs="0" name="vorname" type="string"/>
+      <element minOccurs="0" name="namensbestandteil" type="string"/>
+      <element minOccurs="0" name="akademischerGrad" type="string"/>
+      <element minOccurs="0" name="geburtsname" type="string"/>
+      <element minOccurs="0" name="bestimmungsland" type="string"/>
+      <element minOccurs="0" name="ort_Post" type="string"/>
+      <element minOccurs="0" name="postleitzahlPostzustellung" type="string"/>
+      <element minOccurs="0" name="ortsteil" type="string"/>
+      <element minOccurs="0" name="strasse" type="string"/>
+      <element minOccurs="0" name="hausnummer" type="string"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="weitereAdressen" type="string"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="rechtsverhaeltnis_eigentuemer" type="ak:AX_K_PERS1PropertyType"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_PERS1PropertyType">
+    <sequence>
+      <element ref="ak:AX_K_PERS1"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_Positionssystem" substitutionGroup="gml:AbstractObject" type="ak:AX_K_PositionssystemType"/>
+  <complexType name="AX_K_PositionssystemType">
+    <sequence>
+      <element minOccurs="0" name="messjahr" type="string"/>
+      <element minOccurs="0" name="genauigkeitsstufe" type="string"/>
+      <element minOccurs="0" name="eastOderXWert" type="string"/>
+      <element minOccurs="0" name="northOderYWert" type="string"/>
+      <element minOccurs="0" name="ellipsoidischeHoeheOderZWert" type="string"/>
+      <element minOccurs="0" name="system" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_PositionssystemPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_Positionssystem"/>
+    </sequence>
+  </complexType>
+  <element name="AX_K_Schweresystem" substitutionGroup="gml:AbstractObject" type="ak:AX_K_SchweresystemType"/>
+  <complexType name="AX_K_SchweresystemType">
+    <sequence>
+      <element minOccurs="0" name="messjahr" type="string"/>
+      <element minOccurs="0" name="genauigkeitsstufe" type="string"/>
+      <element minOccurs="0" name="schwere" type="string"/>
+      <element minOccurs="0" name="schweresystem" type="string"/>
+      <element minOccurs="0" name="messjahrVSG" type="string"/>
+      <element minOccurs="0" name="wertVSG" type="string"/>
+      <element minOccurs="0" name="messhoeheVSG" type="string"/>
+      <element minOccurs="0" name="genauigkeitVertikalerSchweregradient" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_K_SchweresystemPropertyType">
+    <sequence>
+      <element ref="ak:AX_K_Schweresystem"/>
+    </sequence>
+  </complexType>
+  <element name="AX_Kopf_Flurstueck" substitutionGroup="gml:AbstractObject" type="ak:AX_Kopf_FlurstueckType"/>
+  <complexType name="AX_Kopf_FlurstueckType">
+    <sequence>
+      <element name="gemarkungsname" type="string"/>
+      <element name="flurstuecksnummer" type="adv:AX_FlurstuecksnummerPropertyType"/>
+      <element minOccurs="0" name="flurnummer" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_Kopf_FlurstueckPropertyType">
+    <sequence>
+      <element ref="ak:AX_Kopf_Flurstueck"/>
+    </sequence>
+  </complexType>
+  <element name="AX_Lagebezeichnung_K_GEBAEUDE" substitutionGroup="gml:AbstractObject" type="ak:AX_Lagebezeichnung_K_GEBAEUDEType"/>
+  <complexType name="AX_Lagebezeichnung_K_GEBAEUDEType">
+    <sequence>
+      <element name="lagebezeichnung" type="string"/>
+      <element minOccurs="0" name="nummer" type="string"/>
+      <element minOccurs="0" name="laufendeNummer" type="string"/>
+      <element minOccurs="0" name="ortsteil" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_Lagebezeichnung_K_GEBAEUDEPropertyType">
+    <sequence>
+      <element ref="ak:AX_Lagebezeichnung_K_GEBAEUDE"/>
+    </sequence>
+  </complexType>
+  <element name="AX_Liegenschaftskarte" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_LiegenschaftskarteType"/>
+  <complexType name="AX_LiegenschaftskarteType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element maxOccurs="unbounded" minOccurs="0" name="koordinatenangaben" type="adv:AA_KoordinatenreferenzsystemangabenPropertyType"/>
+          <element minOccurs="0" name="enthaelt">
+            <complexType>
+              <complexContent>
+                <extension base="gml:AbstractMemberType">
+                  <sequence>
+                    <element ref="wfs:FeatureCollection"/>
+                  </sequence>
+                </extension>
+              </complexContent>
+            </complexType>
+          </element>
+          <element name="ausgabekopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+          <element name="kopf" type="ak:AX_Kopf_FlurstueckPropertyType"/>
+          <element name="gemeinde" type="string"/>
+          <element minOccurs="0" name="kreis" type="ak:AX_K_KreisPropertyType"/>
+          <element minOccurs="0" name="regierungsbezirk" type="string"/>
+          <element name="kartenmassstab" type="string"/>
+          <element name="kartenformat" type="string"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_LiegenschaftskartePropertyType">
+    <sequence>
+      <element ref="ak:AX_Liegenschaftskarte"/>
+    </sequence>
+  </complexType>
+  <element name="AX_LiegenschaftskarteMitBodenschaetzung" substitutionGroup="ak:AX_Liegenschaftskarte" type="ak:AX_LiegenschaftskarteMitBodenschaetzungType"/>
+  <complexType name="AX_LiegenschaftskarteMitBodenschaetzungType">
+    <complexContent>
+      <extension base="ak:AX_LiegenschaftskarteType">
+        <sequence/>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_LiegenschaftskarteMitBodenschaetzungPropertyType">
+    <sequence>
+      <element ref="ak:AX_LiegenschaftskarteMitBodenschaetzung"/>
+    </sequence>
+  </complexType>
+  <element name="AX_Namensnummer_K_PERS1" substitutionGroup="gml:AbstractObject" type="ak:AX_Namensnummer_K_PERS1Type"/>
+  <complexType name="AX_Namensnummer_K_PERS1Type">
+    <sequence>
+      <element name="laufendeNummer" type="string"/>
+      <element minOccurs="0" name="nummer" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_Namensnummer_K_PERS1PropertyType">
+    <sequence>
+      <element ref="ak:AX_Namensnummer_K_PERS1"/>
+    </sequence>
+  </complexType>
+  <element name="AX_PunktlisteGrundnetzpunkt" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_PunktlisteGrundnetzpunktType"/>
+  <complexType name="AX_PunktlisteGrundnetzpunktType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="kopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="punkte" type="ak:AX_PunktlisteGrundnetzpunkt_EintragPropertyType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="system" type="string"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="schweresystem" type="string"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_PunktlisteGrundnetzpunktPropertyType">
+    <sequence>
+      <element ref="ak:AX_PunktlisteGrundnetzpunkt"/>
+    </sequence>
+  </complexType>
+  <element name="AX_PunktlisteGrundnetzpunkt_Eintrag" substitutionGroup="gml:AbstractObject" type="ak:AX_PunktlisteGrundnetzpunkt_EintragType"/>
+  <complexType name="AX_PunktlisteGrundnetzpunkt_EintragType">
+    <sequence>
+      <element name="punktkennung" type="string"/>
+      <element minOccurs="0" name="vermarkungsart" type="string"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="bemerkungen" type="string"/>
+      <element minOccurs="0" name="pfeilerhoehe" type="string"/>
+      <element minOccurs="0" name="eastOderXWert" type="string"/>
+      <element minOccurs="0" name="northOderYWert" type="string"/>
+      <element minOccurs="0" name="ellipsoidischeHoeheOderZWert" type="string"/>
+      <element minOccurs="0" name="hoehe" type="string"/>
+      <element minOccurs="0" name="schwere" type="string"/>
+      <element minOccurs="0" name="vertikalerSchweregradient" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_PunktlisteGrundnetzpunkt_EintragPropertyType">
+    <sequence>
+      <element ref="ak:AX_PunktlisteGrundnetzpunkt_Eintrag"/>
+    </sequence>
+  </complexType>
+  <element name="AX_PunktlisteHoehenfestpunkte" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_PunktlisteHoehenfestpunkteType"/>
+  <complexType name="AX_PunktlisteHoehenfestpunkteType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="kopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="punkte" type="ak:AX_PunktlisteHoehenfestpunkte_EintragPropertyType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="system" type="string"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_PunktlisteHoehenfestpunktePropertyType">
+    <sequence>
+      <element ref="ak:AX_PunktlisteHoehenfestpunkte"/>
+    </sequence>
+  </complexType>
+  <element name="AX_PunktlisteHoehenfestpunkte_Eintrag" substitutionGroup="gml:AbstractObject" type="ak:AX_PunktlisteHoehenfestpunkte_EintragType"/>
+  <complexType name="AX_PunktlisteHoehenfestpunkte_EintragType">
+    <sequence>
+      <element name="punktkennung" type="string"/>
+      <element minOccurs="0" name="vermarkungsart" type="string"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="bemerkungen" type="string"/>
+      <element minOccurs="0" name="rechtswertOderEast" type="string"/>
+      <element minOccurs="0" name="hochwertOderNorth" type="string"/>
+      <element minOccurs="0" name="hoehe" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_PunktlisteHoehenfestpunkte_EintragPropertyType">
+    <sequence>
+      <element ref="ak:AX_PunktlisteHoehenfestpunkte_Eintrag"/>
+    </sequence>
+  </complexType>
+  <element name="AX_PunktlisteLagefestpunkte" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_PunktlisteLagefestpunkteType"/>
+  <complexType name="AX_PunktlisteLagefestpunkteType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="kopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="punkte" type="ak:AX_PunktlisteLagefestpunkte_EintragPropertyType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="system" type="string"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_PunktlisteLagefestpunktePropertyType">
+    <sequence>
+      <element ref="ak:AX_PunktlisteLagefestpunkte"/>
+    </sequence>
+  </complexType>
+  <element name="AX_PunktlisteLagefestpunkte_Eintrag" substitutionGroup="gml:AbstractObject" type="ak:AX_PunktlisteLagefestpunkte_EintragType"/>
+  <complexType name="AX_PunktlisteLagefestpunkte_EintragType">
+    <sequence>
+      <element name="punktkennung" type="string"/>
+      <element minOccurs="0" name="vermarkungsart" type="string"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="bemerkungen" type="string"/>
+      <element minOccurs="0" name="pfeilerhoehe" type="string"/>
+      <element minOccurs="0" name="rechtswertOderEast" type="string"/>
+      <element minOccurs="0" name="hochwertOderNorth" type="string"/>
+      <element minOccurs="0" name="hoehe" type="string"/>
+      <element minOccurs="0" name="ellipsoidischeHoehe" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_PunktlisteLagefestpunkte_EintragPropertyType">
+    <sequence>
+      <element ref="ak:AX_PunktlisteLagefestpunkte_Eintrag"/>
+    </sequence>
+  </complexType>
+  <element name="AX_PunktlisteReferenzstationspunkte" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_PunktlisteReferenzstationspunkteType"/>
+  <complexType name="AX_PunktlisteReferenzstationspunkteType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="kopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="punkte" type="ak:AX_PunktlisteReferenzstationspunkte_EintragPropertyType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="system" type="string"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_PunktlisteReferenzstationspunktePropertyType">
+    <sequence>
+      <element ref="ak:AX_PunktlisteReferenzstationspunkte"/>
+    </sequence>
+  </complexType>
+  <element name="AX_PunktlisteReferenzstationspunkte_Eintrag" substitutionGroup="gml:AbstractObject" type="ak:AX_PunktlisteReferenzstationspunkte_EintragType"/>
+  <complexType name="AX_PunktlisteReferenzstationspunkte_EintragType">
+    <sequence>
+      <element name="punktkennung" type="string"/>
+      <element minOccurs="0" name="name" type="string"/>
+      <element minOccurs="0" name="eastOderXWert" type="string"/>
+      <element minOccurs="0" name="northOderYWert" type="string"/>
+      <element minOccurs="0" name="ellipsoidischeHoeheOderZWert" type="string"/>
+      <element minOccurs="0" name="hoehe" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_PunktlisteReferenzstationspunkte_EintragPropertyType">
+    <sequence>
+      <element ref="ak:AX_PunktlisteReferenzstationspunkte_Eintrag"/>
+    </sequence>
+  </complexType>
+  <element name="AX_PunktlisteSchwerefestpunkte" substitutionGroup="adv:AX_Benutzungsergebnis" type="ak:AX_PunktlisteSchwerefestpunkteType"/>
+  <complexType name="AX_PunktlisteSchwerefestpunkteType">
+    <complexContent>
+      <extension base="adv:AX_BenutzungsergebnisType">
+        <sequence>
+          <element name="kopf" type="adv:AX_K_AUSGKOPF_StandardPropertyType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="punkte" type="ak:AX_PunktlisteSchwerefestpunkte_EintragPropertyType"/>
+          <element maxOccurs="unbounded" minOccurs="0" name="system" type="string"/>
+          <element minOccurs="0" name="schweresystem" type="string"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="AX_PunktlisteSchwerefestpunktePropertyType">
+    <sequence>
+      <element ref="ak:AX_PunktlisteSchwerefestpunkte"/>
+    </sequence>
+  </complexType>
+  <element name="AX_PunktlisteSchwerefestpunkte_Eintrag" substitutionGroup="gml:AbstractObject" type="ak:AX_PunktlisteSchwerefestpunkte_EintragType"/>
+  <complexType name="AX_PunktlisteSchwerefestpunkte_EintragType">
+    <sequence>
+      <element name="punktkennung" type="string"/>
+      <element minOccurs="0" name="vermarkungsart" type="string"/>
+      <element maxOccurs="unbounded" minOccurs="0" name="bemerkungen" type="string"/>
+      <element minOccurs="0" name="rechtswertOderEast" type="string"/>
+      <element minOccurs="0" name="hochwertOderNorth" type="string"/>
+      <element minOccurs="0" name="hoehe" type="string"/>
+      <element minOccurs="0" name="schwere" type="string"/>
+      <element minOccurs="0" name="ellipsoidischeHoehe" type="string"/>
+      <element minOccurs="0" name="vertikalerSchweregradient" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_PunktlisteSchwerefestpunkte_EintragPropertyType">
+    <sequence>
+      <element ref="ak:AX_PunktlisteSchwerefestpunkte_Eintrag"/>
+    </sequence>
+  </complexType>
+  <element name="AX_Recht" substitutionGroup="gml:AbstractObject" type="ak:AX_RechtType"/>
+  <complexType name="AX_RechtType">
+    <sequence>
+      <element name="buchung" type="ak:AX_BuchungPropertyType"/>
+      <element name="buchungsart" type="string"/>
+      <element minOccurs="0" name="anteil" type="adv:AX_AnteilPropertyType"/>
+      <element minOccurs="0" name="aufgeteilterAnteil" type="adv:AX_AnteilPropertyType"/>
+      <element maxOccurs="unbounded" name="rechtsinhaber" type="ak:AX_K_PERS1PropertyType"/>
+      <element minOccurs="0" name="buchungstext" type="string"/>
+      <element minOccurs="0" name="nummerImAufteilungsplan" type="string"/>
+      <element minOccurs="0" name="beschreibungDesSondereigentums" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_RechtPropertyType">
+    <sequence>
+      <element ref="ak:AX_Recht"/>
+    </sequence>
+  </complexType>
+  <element name="AX_Statistik_Gebiet_Gemarkung" substitutionGroup="gml:AbstractObject" type="ak:AX_Statistik_Gebiet_GemarkungType"/>
+  <complexType name="AX_Statistik_Gebiet_GemarkungType">
+    <sequence>
+      <element name="gemarkungsschluessel" type="adv:AX_Gemarkung_SchluesselPropertyType"/>
+      <element name="gemarkungsname" type="string"/>
+      <element name="katasterbehoerde" type="string"/>
+      <element name="geometrieflaecheTN" type="string"/>
+      <element name="geometrieflaecheFlurstueck" type="string"/>
+      <element name="buchflaeche" type="string"/>
+      <element name="anzahlFlurstuecke" type="string"/>
+      <element name="nutzungenTN" type="ak:AX_Statistik_NAK_FlaechenTNPropertyType"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_Statistik_Gebiet_GemarkungPropertyType">
+    <sequence>
+      <element ref="ak:AX_Statistik_Gebiet_Gemarkung"/>
+    </sequence>
+  </complexType>
+  <element name="AX_Statistik_Gebiet_Gemeinde" substitutionGroup="gml:AbstractObject" type="ak:AX_Statistik_Gebiet_GemeindeType"/>
+  <complexType name="AX_Statistik_Gebiet_GemeindeType">
+    <sequence>
+      <element name="gemeindeschluessel" type="adv:AX_GemeindekennzeichenPropertyType"/>
+      <element name="land" type="string"/>
+      <element minOccurs="0" name="regierungsbezirk" type="string"/>
+      <element name="kreis" type="string"/>
+      <element name="gemeindename" type="string"/>
+      <element maxOccurs="unbounded" name="gebiet" type="ak:AX_Statistik_Gebiet_GemarkungPropertyType"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_Statistik_Gebiet_GemeindePropertyType">
+    <sequence>
+      <element ref="ak:AX_Statistik_Gebiet_Gemeinde"/>
+    </sequence>
+  </complexType>
+  <element name="AX_Statistik_NAK_FlaechenTN" substitutionGroup="gml:AbstractObject" type="ak:AX_Statistik_NAK_FlaechenTNType"/>
+  <complexType name="AX_Statistik_NAK_FlaechenTNType">
+    <sequence>
+      <element maxOccurs="unbounded" name="nutzung" type="ak:AX_Statistik_NutzungPropertyType"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_Statistik_NAK_FlaechenTNPropertyType">
+    <sequence>
+      <element ref="ak:AX_Statistik_NAK_FlaechenTN"/>
+    </sequence>
+  </complexType>
+  <element name="AX_Statistik_Nutzung" substitutionGroup="gml:AbstractObject" type="ak:AX_Statistik_NutzungType"/>
+  <complexType name="AX_Statistik_NutzungType">
+    <sequence>
+      <element name="schluesselTN" type="string"/>
+      <element name="bezeichnungTN" type="string"/>
+      <element name="flaecheTN" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="AX_Statistik_NutzungPropertyType">
+    <sequence>
+      <element ref="ak:AX_Statistik_Nutzung"/>
+    </sequence>
+  </complexType>
+  <simpleType name="AX_WirtschaftsartType">
+    <restriction base="string">
+      <enumeration value="Wohnbaufläche"/>
+      <enumeration value="Industrie- und Gewerbefläche"/>
+      <enumeration value="Mischnutzung"/>
+      <enumeration value="Gebäude- und Freifläche Land- und Forstwirtschaft"/>
+      <enumeration value="Erholungsfläche"/>
+      <enumeration value="Friedhof"/>
+      <enumeration value="Verkehrsfläche"/>
+      <enumeration value="Landwirtschaftsfläche"/>
+      <enumeration value="Waldfläche"/>
+      <enumeration value="Sonstige Vegetationsfläche"/>
+      <enumeration value="Unland"/>
+      <enumeration value="Wasserfläche"/>
+    </restriction>
+  </simpleType>
+</schema>

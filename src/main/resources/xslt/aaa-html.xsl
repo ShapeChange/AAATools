@@ -295,7 +295,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
   <xsl:template match="AC_FeatureType" mode="detail">
     <div>
       <xsl:attribute name="class">klasse<xsl:if test="@mode"><xsl:text> </xsl:text><xsl:value-of select="@mode" /></xsl:if></xsl:attribute>
-      <a><xsl:attribute name="name"><xsl:value-of select="name" /></xsl:attribute></a>
+      <a><xsl:attribute name="name"><xsl:call-template name="current"><xsl:with-param name="element" select="name"/></xsl:call-template></xsl:attribute></a>
       <h3 class="highlight">
         <xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
         <xsl:call-template name="klasse-name">
@@ -416,7 +416,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
               <li>
                 <a>
                   <xsl:attribute name="href">#<xsl:value-of select="$objektart/@id" />-<xsl:value-of select="@id" /></xsl:attribute>
-                  <xsl:value-of select="name" />
+                  <xsl:call-template name="diff"><xsl:with-param name="element" select="name"/></xsl:call-template>
                 </a>
                 <xsl:if test="grunddatenbestand"> (<xsl:value-of select="$fc.Grunddatenbestand" />)</xsl:if>
               </li>
@@ -438,7 +438,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
               <li>
                 <a>
                   <xsl:attribute name="href">#<xsl:value-of select="$objektart/@id" />-<xsl:value-of select="@id" /></xsl:attribute>
-                  <xsl:value-of select="name" />
+                  <xsl:call-template name="diff"><xsl:with-param name="element" select="name"/></xsl:call-template>
                 </a>
                 <xsl:if test="grunddatenbestand"> (<xsl:value-of select="$fc.Grunddatenbestand" />)</xsl:if>
               </li>
@@ -464,7 +464,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
   <xsl:template match="FC_FeatureAttribute|FC_RelationshipRole" mode="detail">
     <div>
       <xsl:attribute name="class">attribut<xsl:if test="@mode"><xsl:text> </xsl:text><xsl:value-of select="@mode" /></xsl:if></xsl:attribute>
-      <a><xsl:attribute name="name"><xsl:value-of select="inType/@name" />__<xsl:value-of select="name" /></xsl:attribute></a>
+      <a><xsl:attribute name="name"><xsl:value-of select="inType/@name" />__<xsl:call-template name="current"><xsl:with-param name="element" select="name"/></xsl:call-template></xsl:attribute></a>
       <h4 class="highlight">
         <xsl:attribute name="id"><xsl:value-of select="inType/@idref"/>-<xsl:value-of select="@id"/></xsl:attribute>
         <xsl:call-template name="eigenschaft-name">
@@ -685,7 +685,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
     </li>
   </xsl:template>
 
-  <xsl:template match="definition|code|wirdTypisiertDurch|modellart|grunddatenbestand|profil|konsistenzbedingung|bildungsregel|erfassungskriterium|nutzungsart|nutzungsartkennung|taggedValue[@tag!='AAA:Landnutzung' and @tag!='AAA:GueltigBis']|ValueDataType|cardinality|initialValue|label" mode="absatz">
+  <xsl:template match="definition|code|wirdTypisiertDurch|modellart|grunddatenbestand|profil|konsistenzbedingung|bildungsregel|erfassungskriterium|auswerteregel|nutzungsart|nutzungsartkennung|taggedValue[@tag!='AAA:Landnutzung' and @tag!='AAA:GueltigBis']|ValueDataType|cardinality|initialValue|label" mode="absatz">
     <p class="indent">
       <xsl:call-template name="diff">
         <xsl:with-param name="element" select="." />
@@ -693,7 +693,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
     </p>
   </xsl:template>
 
-  <xsl:template match="definition|code|wirdTypisiertDurch|konsistenzbedingung|bildungsregel|erfassungskriterium|taggedValue[@tag!='AAA:Landnutzung' and @tag!='AAA:GueltigBis']|ValueDataType|cardinality|initialValue|label" mode="inline">
+  <xsl:template match="definition|code|wirdTypisiertDurch|konsistenzbedingung|bildungsregel|erfassungskriterium|auswerteregel|taggedValue[@tag!='AAA:Landnutzung' and @tag!='AAA:GueltigBis']|ValueDataType|cardinality|initialValue|label" mode="inline">
     <xsl:call-template name="diff">
       <xsl:with-param name="element" select="." />
     </xsl:call-template>

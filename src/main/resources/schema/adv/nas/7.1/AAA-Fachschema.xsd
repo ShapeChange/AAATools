@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmlexr="http://www.opengis.net/gml/3.3/exr" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/AppInfo" xmlns:wfs="http://www.opengis.net/wfs/2.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/gid/7.1" version="7.1.1">
+<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:gmlexr="http://www.opengis.net/gml/3.3/exr" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/AppInfo" xmlns:wfs="http://www.opengis.net/wfs/2.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/gid/7.1" version="7.1.2">
   <include schemaLocation="AAA-Basisschema.xsd"/>
   <include schemaLocation="aaa.xsd"/>
   <import namespace="http://www.interactive-instruments.de/ShapeChange/AppInfo" schemaLocation="../../../ShapeChangeAppinfo.xsd"/>
@@ -10,97 +10,577 @@
   <!--XML Schema document created by ShapeChange - http://shapechange.net/-->
   <simpleType name="AX_Abbaugut_BergbaubetriebType">
     <restriction base="string">
-      <enumeration value="1000"/>
-      <enumeration value="1001"/>
-      <enumeration value="1003"/>
-      <enumeration value="1007"/>
-      <enumeration value="2000"/>
-      <enumeration value="2002"/>
-      <enumeration value="2003"/>
-      <enumeration value="2005"/>
-      <enumeration value="2006"/>
-      <enumeration value="2013"/>
-      <enumeration value="2021"/>
-      <enumeration value="3000"/>
-      <enumeration value="3001"/>
-      <enumeration value="3002"/>
-      <enumeration value="3003"/>
-      <enumeration value="3005"/>
-      <enumeration value="3006"/>
-      <enumeration value="3007"/>
-      <enumeration value="3008"/>
-      <enumeration value="3009"/>
-      <enumeration value="3011"/>
-      <enumeration value="4000"/>
-      <enumeration value="4020"/>
-      <enumeration value="4021"/>
-      <enumeration value="4022"/>
-      <enumeration value="4030"/>
-      <enumeration value="5000"/>
-      <enumeration value="5001"/>
-      <enumeration value="5002"/>
-      <enumeration value="5003"/>
-      <enumeration value="5004"/>
-      <enumeration value="5005"/>
-      <enumeration value="5006"/>
-      <enumeration value="5007"/>
-      <enumeration value="5011"/>
+      <enumeration value="1000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14010000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1001">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14010100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1003">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14010200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1007">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14010300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14020000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2002">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14020100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2003">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14020200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2005">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14020300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2006">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14020400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2013">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14020500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2021">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14020600</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14030000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3001">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14030100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3002">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14030200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3003">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14030300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3005">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14030500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3006">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14030600</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3007">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14030700</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3008">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14030800</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3009">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14030900</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3011">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14031100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14040000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4020">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14040100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4021">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14040200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4022">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14040300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4030">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14040400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14050000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5001">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14050100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5002">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14050200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5003">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14050300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5004">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14050400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5005">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14050500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5006">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14050600</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5007">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14050700</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5011">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14050800</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Abbaugut_TagebauGrubeSteinbruchType">
     <restriction base="string">
-      <enumeration value="1000"/>
-      <enumeration value="1001"/>
-      <enumeration value="1002"/>
-      <enumeration value="1003"/>
-      <enumeration value="1004"/>
-      <enumeration value="1005"/>
-      <enumeration value="1007"/>
-      <enumeration value="1008"/>
-      <enumeration value="1009"/>
-      <enumeration value="1011"/>
-      <enumeration value="1012"/>
-      <enumeration value="2000"/>
-      <enumeration value="2001"/>
-      <enumeration value="2002"/>
-      <enumeration value="2003"/>
-      <enumeration value="2004"/>
-      <enumeration value="2005"/>
-      <enumeration value="2006"/>
-      <enumeration value="2007"/>
-      <enumeration value="2008"/>
-      <enumeration value="2009"/>
-      <enumeration value="2010"/>
-      <enumeration value="2012"/>
-      <enumeration value="2013"/>
-      <enumeration value="2015"/>
-      <enumeration value="2016"/>
-      <enumeration value="2017"/>
-      <enumeration value="2018"/>
-      <enumeration value="2019"/>
-      <enumeration value="2020"/>
-      <enumeration value="2021"/>
-      <enumeration value="4000"/>
-      <enumeration value="4010"/>
-      <enumeration value="4020"/>
-      <enumeration value="4021"/>
-      <enumeration value="4022"/>
-      <enumeration value="4030"/>
-      <enumeration value="5000"/>
-      <enumeration value="5001"/>
-      <enumeration value="5002"/>
-      <enumeration value="5005"/>
-      <enumeration value="5008"/>
-      <enumeration value="5009"/>
-      <enumeration value="5010"/>
-      <enumeration value="9999"/>
+      <enumeration value="1000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15010000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1001">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15010100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1002">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15010200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1003">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15010300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1004">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15010400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1005">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15010500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1007">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15010700</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1008">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15010800</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1009">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15010900</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1011">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15011000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1012">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15011100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15020000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2001">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15020100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2002">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15020200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2003">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15020300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2004">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15020400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2005">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15020500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2006">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15020600</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2007">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15020700</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2008">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15020800</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2009">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15020900</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2010">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15021000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2012">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15021200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2013">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15021300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2015">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15031500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2016">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15021600</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2017">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15021700</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2018">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15021800</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2019">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15021900</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2020">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15022000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2021">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15022100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15030000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4010">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15030100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4020">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15030200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4021">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15030300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4022">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15030400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4030">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15030500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15040000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5001">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15040100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5002">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15040200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5005">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15040500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5008">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15040800</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5009">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15040900</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5010">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15041000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="9999">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15050000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_AbgabeversionType">
     <restriction base="string">
       <enumeration value="6.0.0"/>
       <enumeration value="6.0.1"/>
-      <enumeration value="7.1.1"/>
+      <enumeration value="7.1.2"/>
     </restriction>
   </simpleType>
   <element name="AX_AbgeleiteteHoehenlinie" substitutionGroup="adv:AU_Linienobjekt" type="adv:AX_AbgeleiteteHoehenlinieType"/>
@@ -1317,7 +1797,13 @@
       </extension>
     </complexContent>
   </complexType>
-  <element name="AX_Bahnverkehr" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_BahnverkehrType"/>
+  <element name="AX_Bahnverkehr" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_BahnverkehrType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">22000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_BahnverkehrType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -2523,7 +3009,13 @@
       <element ref="adv:AX_BereichZeitlich"/>
     </sequence>
   </complexType>
-  <element name="AX_Bergbaubetrieb" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_BergbaubetriebType"/>
+  <element name="AX_Bergbaubetrieb" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_BergbaubetriebType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">14000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_BergbaubetriebType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -4232,7 +4724,13 @@
       </extension>
     </complexContent>
   </complexType>
-  <element name="AX_FlaecheBesondererFunktionalerPraegung" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_FlaecheBesondererFunktionalerPraegungType"/>
+  <element name="AX_FlaecheBesondererFunktionalerPraegung" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_FlaecheBesondererFunktionalerPraegungType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">17000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_FlaecheBesondererFunktionalerPraegungType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -4245,7 +4743,13 @@
       </extension>
     </complexContent>
   </complexType>
-  <element name="AX_FlaecheGemischterNutzung" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_FlaecheGemischterNutzungType"/>
+  <element name="AX_FlaecheGemischterNutzung" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_FlaecheGemischterNutzungType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">16000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_FlaecheGemischterNutzungType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -4258,7 +4762,13 @@
       </extension>
     </complexContent>
   </complexType>
-  <element name="AX_Fliessgewaesser" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_FliessgewaesserType"/>
+  <element name="AX_Fliessgewaesser" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_FliessgewaesserType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">41000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_FliessgewaesserType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -4271,7 +4781,13 @@
       </extension>
     </complexContent>
   </complexType>
-  <element name="AX_Flugverkehr" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_FlugverkehrType"/>
+  <element name="AX_Flugverkehr" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_FlugverkehrType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">23000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_FlugverkehrType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -4494,11 +5010,41 @@
   </complexType>
   <simpleType name="AX_Foerdergut_IndustrieUndGewerbeflaecheType">
     <restriction base="string">
-      <enumeration value="1000"/>
-      <enumeration value="2000"/>
-      <enumeration value="3000"/>
-      <enumeration value="4000"/>
-      <enumeration value="5000"/>
+      <enumeration value="1000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030101</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030102</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030103</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030104</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030105</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <element name="AX_Forstrecht" substitutionGroup="adv:AU_Flaechenobjekt" type="adv:AX_ForstrechtType"/>
@@ -4619,7 +5165,13 @@
       <element ref="adv:AX_Fortfuehrungsnummer"/>
     </sequence>
   </complexType>
-  <element name="AX_Friedhof" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_FriedhofType"/>
+  <element name="AX_Friedhof" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_FriedhofType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">19000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_FriedhofType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -4633,11 +5185,41 @@
   </complexType>
   <simpleType name="AX_Funktion_BahnverkehrType">
     <restriction base="string">
-      <enumeration value="1200"/>
-      <enumeration value="2321"/>
-      <enumeration value="2322"/>
-      <enumeration value="2323"/>
-      <enumeration value="2324"/>
+      <enumeration value="1200">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">22980000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2321">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">22710000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2322">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">22020000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2323">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">22030000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2324">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">22010000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_BauwerkType">
@@ -4648,7 +5230,13 @@
   </simpleType>
   <simpleType name="AX_Funktion_BergbaubetriebType">
     <restriction base="string">
-      <enumeration value="1200"/>
+      <enumeration value="1200">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">14980000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_DammWallDeichType">
@@ -4672,73 +5260,379 @@
   </simpleType>
   <simpleType name="AX_Funktion_FlaecheBesondererFunktionalerPraegungType">
     <restriction base="string">
-      <enumeration value="1100"/>
-      <enumeration value="1110"/>
-      <enumeration value="1120"/>
-      <enumeration value="1130"/>
-      <enumeration value="1140"/>
-      <enumeration value="1150"/>
-      <enumeration value="1160"/>
-      <enumeration value="1170"/>
-      <enumeration value="1180"/>
-      <enumeration value="1200"/>
-      <enumeration value="1300"/>
-      <enumeration value="1310"/>
-      <enumeration value="1320"/>
+      <enumeration value="1100">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">17010000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1110">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">17010100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1120">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">17010200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1130">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">17010300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1140">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">17010400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1150">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">17010500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1160">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">17010600</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1170">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">17010700</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1180">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">17010800</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1200">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">17980000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1300">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">17020000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1310">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">17020100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1320">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">17020200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_FlaecheGemischterNutzungType">
     <restriction base="string">
-      <enumeration value="1200"/>
-      <enumeration value="2100"/>
-      <enumeration value="2110"/>
-      <enumeration value="2120"/>
-      <enumeration value="2130"/>
-      <enumeration value="2140"/>
-      <enumeration value="2150"/>
-      <enumeration value="2160"/>
-      <enumeration value="2700"/>
-      <enumeration value="2710"/>
-      <enumeration value="2720"/>
-      <enumeration value="2730"/>
-      <enumeration value="3000"/>
-      <enumeration value="3001"/>
-      <enumeration value="3002"/>
-      <enumeration value="3003"/>
-      <enumeration value="6800"/>
-      <enumeration value="6810"/>
-      <enumeration value="6820"/>
-      <enumeration value="6830"/>
-      <enumeration value="7600"/>
+      <enumeration value="1200">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16980000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2100">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16710000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2110">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16710100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2120">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16710200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2130">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16710300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2140">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16710400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2150">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16710500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2160">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16710600</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2700">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16720000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2710">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16720100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2720">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16720200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2730">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16720300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16030000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3001">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16030100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3002">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16030200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3003">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16030300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="6800">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16010000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="6810">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16010100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="6820">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16010200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="6830">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16010300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="7600">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">16020000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_FliessgewaesserType">
     <restriction base="string">
-      <enumeration value="8200"/>
-      <enumeration value="8210"/>
-      <enumeration value="8220"/>
-      <enumeration value="8230"/>
-      <enumeration value="8300"/>
-      <enumeration value="8400"/>
-      <enumeration value="8410"/>
-      <enumeration value="8500"/>
+      <enumeration value="8200">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">41010000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="8210">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">41010100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="8220">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">41010200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="8230">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">41010300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="8300">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">41020000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="8400">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">41030000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="8410">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">41030100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="8500">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">41040000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_FlugverkehrType">
     <restriction base="string">
-      <enumeration value="1200"/>
-      <enumeration value="5501"/>
-      <enumeration value="5502"/>
-      <enumeration value="5503"/>
+      <enumeration value="1200">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">23980000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5501">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">23710000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5502">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">23010000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5503">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">23020000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_FriedhofType">
     <restriction base="string">
-      <enumeration value="1200"/>
-      <enumeration value="9401"/>
-      <enumeration value="9402"/>
-      <enumeration value="9403"/>
-      <enumeration value="9404"/>
+      <enumeration value="1200">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">19980000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="9401">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">19710000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="9402">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">19010000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="9403">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">19020000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="9404">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">19030000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_GebaeudeInstallation3DType">
@@ -4770,81 +5664,507 @@
   </simpleType>
   <simpleType name="AX_Funktion_HafenbeckenType">
     <restriction base="string">
-      <enumeration value="8810"/>
+      <enumeration value="8810">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">42010000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_IndustrieUndGewerbeflaecheType">
     <restriction base="string">
-      <enumeration value="1200"/>
-      <enumeration value="1400"/>
-      <enumeration value="1410"/>
-      <enumeration value="1420"/>
-      <enumeration value="1430"/>
-      <enumeration value="1440"/>
-      <enumeration value="1450"/>
-      <enumeration value="1460"/>
-      <enumeration value="1470"/>
-      <enumeration value="1480"/>
-      <enumeration value="1490"/>
-      <enumeration value="1510"/>
-      <enumeration value="1520"/>
-      <enumeration value="1530"/>
-      <enumeration value="1540"/>
-      <enumeration value="1700"/>
-      <enumeration value="1701"/>
-      <enumeration value="1710"/>
-      <enumeration value="1740"/>
-      <enumeration value="1780"/>
-      <enumeration value="1770"/>
-      <enumeration value="1790"/>
-      <enumeration value="1801"/>
-      <enumeration value="1802"/>
-      <enumeration value="1803"/>
-      <enumeration value="1804"/>
-      <enumeration value="1805"/>
-      <enumeration value="1806"/>
-      <enumeration value="1807"/>
-      <enumeration value="1808"/>
-      <enumeration value="1809"/>
-      <enumeration value="1810"/>
-      <enumeration value="1811"/>
-      <enumeration value="1812"/>
-      <enumeration value="2500"/>
-      <enumeration value="2501"/>
-      <enumeration value="2502"/>
-      <enumeration value="2520"/>
-      <enumeration value="2521"/>
-      <enumeration value="2522"/>
-      <enumeration value="2530"/>
-      <enumeration value="2531"/>
-      <enumeration value="2532"/>
-      <enumeration value="2540"/>
-      <enumeration value="2550"/>
-      <enumeration value="2551"/>
-      <enumeration value="2552"/>
-      <enumeration value="2560"/>
-      <enumeration value="2561"/>
-      <enumeration value="2562"/>
-      <enumeration value="2570"/>
-      <enumeration value="2571"/>
-      <enumeration value="2572"/>
-      <enumeration value="2580"/>
-      <enumeration value="2581"/>
-      <enumeration value="2582"/>
-      <enumeration value="2600"/>
-      <enumeration value="2601"/>
-      <enumeration value="2602"/>
-      <enumeration value="2610"/>
-      <enumeration value="2611"/>
-      <enumeration value="2612"/>
-      <enumeration value="2620"/>
-      <enumeration value="2621"/>
-      <enumeration value="2622"/>
-      <enumeration value="2623"/>
-      <enumeration value="2630"/>
-      <enumeration value="2640"/>
-      <enumeration value="2700"/>
-      <enumeration value="2701"/>
+      <enumeration value="1200">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12980000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1400">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12020000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1410">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12020100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1420">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12020200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1430">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12020300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1440">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12020400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1450">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12020500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1460">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12020600</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1470">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12020700</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1480">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12020800</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1490">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12020900</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1510">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12021000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1520">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12021100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1530">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12021200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1540">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12021300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1700">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1701">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12017100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1710">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1740">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1780">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1770">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1790">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1801">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010101</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1802">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010102</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1803">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010103</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1804">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010104</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1805">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010105</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1806">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010106</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1807">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010107</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1808">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010108</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1809">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010109</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1810">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010110</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1811">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010111</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1812">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010112</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2500">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2501">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12037100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2502">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12038100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2520">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2521">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030271</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2522">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030281</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2530">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030300, 12030301, 12030302, 12030303, 12030304, 12030305, 12030306, 12030307, 12030308, 12030309, 12030310, 12030311, 12030312</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2531">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030371</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2532">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030381</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2540">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2550">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2551">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030571</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2552">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030581</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2560">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030600</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2561">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030671</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2562">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030681</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2570">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030700, 12030702, 12030703, 12030706, 12030707, 12030708, 12030709, 12030710, 12030711, 12030712</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2571">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030771</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2572">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030781</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2580">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030800</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2581">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030871</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2582">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030881</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2600">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12040000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2601">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12047100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2602">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12048100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2610">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12040100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2611">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12040171</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2612">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12040181</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2620">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12040200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2621">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12040271</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2622">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12040281</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2623">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12040282</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2630">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12040300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2640">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12040400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2700">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2701">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030171</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_LagefestpunktType">
@@ -4857,19 +6177,73 @@
   </simpleType>
   <simpleType name="AX_Funktion_MeerType">
     <restriction base="string">
-      <enumeration value="8710"/>
+      <enumeration value="8710">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">44010000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_PlatzType">
     <restriction base="string">
-      <enumeration value="5130"/>
-      <enumeration value="5310"/>
-      <enumeration value="5320"/>
-      <enumeration value="5330"/>
-      <enumeration value="5340"/>
-      <enumeration value="5350"/>
-      <enumeration value="5360"/>
-      <enumeration value="5370"/>
+      <enumeration value="5130">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21030100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5310">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21030200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5320">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21030300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5330">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21030400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5340">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21030500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5350">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21030600</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5360">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21030700</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5370">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21030800</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_PolderType">
@@ -4886,14 +6260,62 @@
   </simpleType>
   <simpleType name="AX_Funktion_SchiffsverkehrType">
     <restriction base="string">
-      <enumeration value="1200"/>
-      <enumeration value="2341"/>
-      <enumeration value="2342"/>
-      <enumeration value="5600"/>
-      <enumeration value="5610"/>
-      <enumeration value="5620"/>
-      <enumeration value="5630"/>
-      <enumeration value="5640"/>
+      <enumeration value="1200">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">24980000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2341">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">24710000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2342">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">24010000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5600">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">24020000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5610">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">24020100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5620">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">24020200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5630">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">24020300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5640">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">24020400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_SchutzgebietNachWasserrechtType">
@@ -4916,68 +6338,392 @@
   </simpleType>
   <simpleType name="AX_Funktion_SportFreizeitUndErholungsflaecheType">
     <restriction base="string">
-      <enumeration value="1200"/>
-      <enumeration value="4100"/>
-      <enumeration value="4001"/>
-      <enumeration value="4101"/>
-      <enumeration value="4110"/>
-      <enumeration value="4120"/>
-      <enumeration value="4130"/>
-      <enumeration value="4140"/>
-      <enumeration value="4150"/>
-      <enumeration value="4160"/>
-      <enumeration value="4170"/>
-      <enumeration value="4200"/>
-      <enumeration value="4210"/>
-      <enumeration value="4211"/>
-      <enumeration value="4220"/>
-      <enumeration value="4230"/>
-      <enumeration value="4235"/>
-      <enumeration value="4240"/>
-      <enumeration value="4250"/>
-      <enumeration value="4260"/>
-      <enumeration value="4270"/>
-      <enumeration value="4275"/>
-      <enumeration value="4280"/>
-      <enumeration value="4290"/>
-      <enumeration value="4295"/>
-      <enumeration value="4300"/>
-      <enumeration value="4301"/>
-      <enumeration value="4310"/>
-      <enumeration value="4320"/>
-      <enumeration value="4321"/>
-      <enumeration value="4330"/>
-      <enumeration value="4331"/>
-      <enumeration value="4400"/>
-      <enumeration value="4410"/>
-      <enumeration value="4420"/>
-      <enumeration value="4430"/>
-      <enumeration value="4431"/>
-      <enumeration value="4440"/>
-      <enumeration value="4450"/>
-      <enumeration value="4460"/>
-      <enumeration value="4470"/>
-      <enumeration value="9999"/>
+      <enumeration value="1200">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18980000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4100">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18010000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4001">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18710000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4101">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18017100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4110">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18010100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4120">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18010200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4130">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18010300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4140">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18010400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4150">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18010500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4160">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18010600</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4170">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18010700</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4200">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18020000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4210">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18020100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4211">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18020171</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4220">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18020200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4230">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18020300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4235">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18020400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4240">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18020500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4250">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18020600</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4260">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18020700</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4270">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18020800</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4275">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18020900</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4280">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18021000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4290">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18021100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4295">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18021200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4300">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18030000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4301">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18037100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4310">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18030100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4320">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18030200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4321">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18030271</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4330">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18030300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4331">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18030371</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4400">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18040000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4410">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18040100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4420">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18040200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4430">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18040300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4431">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18040371</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4440">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18040400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4450">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18040500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4460">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18040600</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4470">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18040700</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="9999">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">18050000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_StehendesGewaesserType">
     <restriction base="string">
-      <enumeration value="8610"/>
-      <enumeration value="8620"/>
-      <enumeration value="8630"/>
-      <enumeration value="8631"/>
-      <enumeration value="8640"/>
-      <enumeration value="9999"/>
+      <enumeration value="8610">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">43010000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="8620">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">43020000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="8630">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">43010100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="8631">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">43010101</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="8640">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">43010200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="9999">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">43030000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_StrasseType">
     <restriction base="string">
-      <enumeration value="2311"/>
-      <enumeration value="2312"/>
-      <enumeration value="2313"/>
-      <enumeration value="2314"/>
-      <enumeration value="2315"/>
-      <enumeration value="5130"/>
+      <enumeration value="2311">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21017100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2312">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21010200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2313">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21010201</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2314">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21010300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2315">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21010100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5130">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21010400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_StrassenachseType">
@@ -4987,17 +6733,59 @@
   </simpleType>
   <simpleType name="AX_Funktion_TagebauGrubeSteinbruchType">
     <restriction base="string">
-      <enumeration value="1200"/>
+      <enumeration value="1200">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">15980000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_UnlandVegetationsloseFlaecheType">
     <restriction base="string">
-      <enumeration value="1000"/>
-      <enumeration value="1100"/>
-      <enumeration value="1110"/>
-      <enumeration value="1120"/>
-      <enumeration value="1200"/>
-      <enumeration value="1300"/>
+      <enumeration value="1000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">37010000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1100">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">37020000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1110">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">37020100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1120">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">37020200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1200">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">37030000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1300">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">37040000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_UntergeordnetesGewaesserType">
@@ -5018,16 +6806,76 @@
   </simpleType>
   <simpleType name="AX_Funktion_WegType">
     <restriction base="string">
-      <enumeration value="5210"/>
-      <enumeration value="5211"/>
-      <enumeration value="5212"/>
-      <enumeration value="5220"/>
-      <enumeration value="5230"/>
-      <enumeration value="5240"/>
-      <enumeration value="5250"/>
-      <enumeration value="5260"/>
-      <enumeration value="5270"/>
-      <enumeration value="9999"/>
+      <enumeration value="5210">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21020100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5211">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21020101</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5212">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21020102</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5220">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21020200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5230">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21020300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5240">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21020400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5250">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21020500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5260">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21020600</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5270">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21020700</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="9999">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">21020800</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Funktion_WegachseType">
@@ -5040,7 +6888,13 @@
   </simpleType>
   <simpleType name="AX_Funktion_WohnbauflaecheType">
     <restriction base="string">
-      <enumeration value="1200"/>
+      <enumeration value="1200">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">11980000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_GNSSTauglichkeitType">
@@ -5520,7 +7374,7 @@
       <extension base="adv:AX_GebietType">
         <sequence>
           <element name="verwaltungsgemeinschaft" type="adv:AX_Verwaltungsgemeinschaft_SchluesselPropertyType"/>
-          <element name="artDerVerbandsgemeinde" type="adv:AX_Art_VerbandsgemeindeType">
+          <element minOccurs="0" name="artDerVerbandsgemeinde" type="adv:AX_Art_VerbandsgemeindeType">
             <annotation>
               <appinfo>
                 <sc:taggedValue tag="AAA:GueltigBis">6.0.1</sc:taggedValue>
@@ -5542,7 +7396,13 @@
       </extension>
     </complexContent>
   </complexType>
-  <element name="AX_Gehoelz" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_GehoelzType"/>
+  <element name="AX_Gehoelz" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_GehoelzType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">33000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_GehoelzType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -6098,7 +7958,13 @@
       </extension>
     </complexContent>
   </complexType>
-  <element name="AX_Hafenbecken" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_HafenbeckenType"/>
+  <element name="AX_Hafenbecken" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_HafenbeckenType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">42000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_HafenbeckenType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -6122,7 +7988,13 @@
       <enumeration value="1070"/>
     </restriction>
   </simpleType>
-  <element name="AX_Halde" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_HaldeType"/>
+  <element name="AX_Halde" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_HaldeType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">13000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_HaldeType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -6134,7 +8006,13 @@
       </extension>
     </complexContent>
   </complexType>
-  <element name="AX_Heide" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_HeideType"/>
+  <element name="AX_Heide" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_HeideType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">34000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_HeideType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -6500,7 +8378,13 @@
       <enumeration value="3000"/>
     </restriction>
   </simpleType>
-  <element name="AX_IndustrieUndGewerbeflaeche" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_IndustrieUndGewerbeflaecheType"/>
+  <element name="AX_IndustrieUndGewerbeflaeche" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_IndustrieUndGewerbeflaecheType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">12000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_IndustrieUndGewerbeflaecheType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -7305,28 +9189,136 @@
   </complexType>
   <simpleType name="AX_Lagergut_HaldeType">
     <restriction base="string">
-      <enumeration value="1000"/>
-      <enumeration value="2000"/>
-      <enumeration value="4000"/>
-      <enumeration value="5000"/>
-      <enumeration value="6000"/>
-      <enumeration value="7000"/>
-      <enumeration value="8000"/>
-      <enumeration value="9999"/>
+      <enumeration value="1000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">13010000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">13020000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">13030000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">13040000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="6000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">13050000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="7000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">13060000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="8000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">13070000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="9999">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">13080000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Lagergut_IndustrieUndGewerbeflaecheType">
     <restriction base="string">
-      <enumeration value="1000"/>
-      <enumeration value="2000"/>
-      <enumeration value="3000"/>
-      <enumeration value="4000"/>
-      <enumeration value="5000"/>
-      <enumeration value="6000"/>
-      <enumeration value="7000"/>
-      <enumeration value="8000"/>
-      <enumeration value="9000"/>
-      <enumeration value="9999"/>
+      <enumeration value="1000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010201</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010202</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010203</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010204</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010205</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="6000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010206</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="7000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010207</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="8000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010208</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="9000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010209</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="9999">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12010210</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <element name="AX_Landeswappen" substitutionGroup="gml:AbstractObject" type="adv:AX_LandeswappenType"/>
@@ -7371,7 +9363,13 @@
       <enumeration value="2500"/>
     </restriction>
   </simpleType>
-  <element name="AX_Landwirtschaft" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_LandwirtschaftType"/>
+  <element name="AX_Landwirtschaft" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_LandwirtschaftType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">31000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_LandwirtschaftType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -7760,7 +9758,13 @@
       <element ref="adv:AX_Materialeigenschaft_Material3D"/>
     </sequence>
   </complexType>
-  <element name="AX_Meer" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_MeerType"/>
+  <element name="AX_Meer" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_MeerType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">44000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_MeerType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -7787,7 +9791,13 @@
       <enumeration value="2000"/>
     </restriction>
   </simpleType>
-  <element name="AX_Moor" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_MoorType"/>
+  <element name="AX_Moor" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_MoorType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">35000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_MoorType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -8065,9 +10075,27 @@
   </simpleType>
   <simpleType name="AX_Nutzung_WaldType">
     <restriction base="string">
-      <enumeration value="1000"/>
-      <enumeration value="2000"/>
-      <enumeration value="3000"/>
+      <enumeration value="1000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">32010000, 32010100, 32010200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">32020000, 32020100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">32030000, 32030100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Nutzungsart_BodenschaetzungType">
@@ -8119,12 +10147,48 @@
   </simpleType>
   <simpleType name="AX_Oberflaechenmaterial_UnlandVegetationsloseFlaecheType">
     <restriction base="string">
-      <enumeration value="1010"/>
-      <enumeration value="1020"/>
-      <enumeration value="1030"/>
-      <enumeration value="1040"/>
-      <enumeration value="1110"/>
-      <enumeration value="1120"/>
+      <enumeration value="1010">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">37010100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1020">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">37010200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1030">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">37010300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1040">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">37010400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1110">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">37010500</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1120">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">37010600</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <element abstract="true" name="AX_Oeffnung3D" substitutionGroup="adv:AU_MehrfachFlaechenObjekt_3D" type="adv:AX_Oeffnung3DType"/>
@@ -8377,7 +10441,13 @@
       <element ref="adv:AX_Pfeilerhoehe_Lagefestpunkt"/>
     </sequence>
   </complexType>
-  <element name="AX_Platz" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_PlatzType"/>
+  <element name="AX_Platz" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_PlatzType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">21030000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_PlatzType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -8451,18 +10521,90 @@
   </complexType>
   <simpleType name="AX_Primaerenergie_IndustrieUndGewerbeflaecheType">
     <restriction base="string">
-      <enumeration value="1000"/>
-      <enumeration value="2000"/>
-      <enumeration value="3000"/>
-      <enumeration value="4000"/>
-      <enumeration value="5000"/>
-      <enumeration value="6000"/>
-      <enumeration value="7000"/>
-      <enumeration value="7100"/>
-      <enumeration value="7200"/>
-      <enumeration value="7300"/>
-      <enumeration value="7400"/>
-      <enumeration value="7500"/>
+      <enumeration value="1000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030301</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="2000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030302, 12030702</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="3000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030303, 12030703</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="4000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030304</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="5000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030305</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="6000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030306,12030706</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="7000">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030307, 12030707</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="7100">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030308, 12030708</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="7200">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030309, 12030709</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="7300">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030310, 12030710</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="7400">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030311, 12030711</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="7500">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">12030312, 12030712</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Produkt_TransportanlageType">
@@ -8861,7 +11003,13 @@
       </extension>
     </complexContent>
   </complexType>
-  <element name="AX_Schiffsverkehr" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_SchiffsverkehrType"/>
+  <element name="AX_Schiffsverkehr" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_SchiffsverkehrType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">24000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_SchiffsverkehrType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -9784,7 +11932,13 @@
       <enumeration value="9999"/>
     </restriction>
   </simpleType>
-  <element name="AX_SportFreizeitUndErholungsflaeche" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_SportFreizeitUndErholungsflaecheType"/>
+  <element name="AX_SportFreizeitUndErholungsflaeche" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_SportFreizeitUndErholungsflaecheType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">18000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_SportFreizeitUndErholungsflaecheType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -9825,7 +11979,13 @@
       <enumeration value="9997"/>
     </restriction>
   </simpleType>
-  <element name="AX_StehendesGewaesser" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_StehendesGewaesserType"/>
+  <element name="AX_StehendesGewaesser" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_StehendesGewaesserType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">43000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_StehendesGewaesserType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -9893,7 +12053,13 @@
       </extension>
     </complexContent>
   </complexType>
-  <element name="AX_Strassenverkehr" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_StrassenverkehrType"/>
+  <element name="AX_Strassenverkehr" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_StrassenverkehrType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">21010000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_StrassenverkehrType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -9970,7 +12136,13 @@
       </extension>
     </complexContent>
   </complexType>
-  <element name="AX_Sumpf" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_SumpfType"/>
+  <element name="AX_Sumpf" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_SumpfType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">36000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_SumpfType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -9980,7 +12152,13 @@
       </extension>
     </complexContent>
   </complexType>
-  <element name="AX_TagebauGrubeSteinbruch" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_TagebauGrubeSteinbruchType"/>
+  <element name="AX_TagebauGrubeSteinbruch" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_TagebauGrubeSteinbruchType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">15000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_TagebauGrubeSteinbruchType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -10207,7 +12385,13 @@
       <enumeration value="2000"/>
     </restriction>
   </simpleType>
-  <element name="AX_UnlandVegetationsloseFlaeche" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_UnlandVegetationsloseFlaecheType"/>
+  <element name="AX_UnlandVegetationsloseFlaeche" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_UnlandVegetationsloseFlaecheType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">37000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_UnlandVegetationsloseFlaecheType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -10314,23 +12498,125 @@
   </simpleType>
   <simpleType name="AX_Vegetationsmerkmal_LandwirtschaftType">
     <restriction base="string">
-      <enumeration value="1010"/>
-      <enumeration value="1011"/>
-      <enumeration value="1012"/>
-      <enumeration value="1013"/>
-      <enumeration value="1014"/>
-      <enumeration value="1020"/>
-      <enumeration value="1021"/>
-      <enumeration value="1022"/>
-      <enumeration value="1030"/>
-      <enumeration value="1031"/>
-      <enumeration value="1040"/>
-      <enumeration value="1050"/>
-      <enumeration value="1051"/>
-      <enumeration value="1052"/>
-      <enumeration value="1060"/>
-      <enumeration value="1100"/>
-      <enumeration value="1200"/>
+      <enumeration value="1010">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">31010000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1011">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">31010100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1012">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">31010200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1013">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">31010300</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1014">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">31010400</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1020">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">31020000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1021">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">31020100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1022">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">31020200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1030">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">31030000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1031">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">31030100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1040">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">31040000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1050">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">31050000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1051">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">31050100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1052">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">31050200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1060">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">31060000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1100">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">31100000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="1200">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">31200000</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Vegetationsmerkmal_WaldType">
@@ -10590,7 +12876,13 @@
       </extension>
     </complexContent>
   </complexType>
-  <element name="AX_Wald" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_WaldType"/>
+  <element name="AX_Wald" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_WaldType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">32000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_WaldType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -10679,7 +12971,13 @@
       <enumeration value="7600"/>
     </restriction>
   </simpleType>
-  <element name="AX_Weg" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_WegType"/>
+  <element name="AX_Weg" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_WegType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">21020000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_WegType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -10823,7 +13121,13 @@
       <enumeration value="Wasserfläche"/>
     </restriction>
   </simpleType>
-  <element name="AX_Wohnbauflaeche" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_WohnbauflaecheType"/>
+  <element name="AX_Wohnbauflaeche" substitutionGroup="adv:AX_TatsaechlicheNutzung" type="adv:AX_WohnbauflaecheType">
+    <annotation>
+      <appinfo>
+        <sc:taggedValue tag="AAA:Nutzungsartkennung">11000000</sc:taggedValue>
+      </appinfo>
+    </annotation>
+  </element>
   <complexType name="AX_WohnbauflaecheType">
     <complexContent>
       <extension base="adv:AX_TatsaechlicheNutzungType">
@@ -11076,8 +13380,20 @@
   </simpleType>
   <simpleType name="AX_Zustand_WaldType">
     <restriction base="string">
-      <enumeration value="6100"/>
-      <enumeration value="7100"/>
+      <enumeration value="6100">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">32010100, 32020100, 32030100</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
+      <enumeration value="7100">
+        <annotation>
+          <appinfo>
+            <sc:taggedValue tag="AAA:Nutzungsartkennung">32010200</sc:taggedValue>
+          </appinfo>
+        </annotation>
+      </enumeration>
     </restriction>
   </simpleType>
   <simpleType name="AX_Zustand_WohnbauflaecheType">
