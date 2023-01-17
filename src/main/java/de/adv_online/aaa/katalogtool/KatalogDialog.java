@@ -44,8 +44,11 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -55,15 +58,16 @@ import javax.swing.border.TitledBorder;
 import org.apache.commons.lang3.SystemUtils;
 
 import de.interactive_instruments.ShapeChange.Converter;
+import de.interactive_instruments.ShapeChange.DefaultModelProvider;
 import de.interactive_instruments.ShapeChange.Options;
 import de.interactive_instruments.ShapeChange.ShapeChangeAbortException;
 import de.interactive_instruments.ShapeChange.ShapeChangeResult;
 import de.interactive_instruments.ShapeChange.TargetConfiguration;
 import de.interactive_instruments.ShapeChange.Model.Model;
-import de.interactive_instruments.ShapeChange.Model.EA.EADocument;
 import de.interactive_instruments.ShapeChange.UI.Dialog;
 import de.interactive_instruments.ShapeChange.UI.StatusBoard;
 import de.interactive_instruments.ShapeChange.UI.StatusReader;
+import shadow.org.apache.commons.lang3.StringUtils;
 
 public class KatalogDialog extends JFrame implements ActionListener, ItemListener, Dialog, StatusReader {
 	/**
@@ -109,7 +113,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 	 	protected Converter converter = null;
 		protected ShapeChangeResult result = null;
 		protected Options options = null;
-		protected String eap = null;
+		protected String modelAbsolutePath = null;
 		protected KatalogDialog dialog = null;
 		protected boolean onlyInitialise; 
 
@@ -117,7 +121,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
             this.converter = c;
             this.options = o;
             this.result = r;
-            this.eap = e;
+            this.modelAbsolutePath = e;
             this.dialog = d;
             onlyInitialise = false;
         }
@@ -132,7 +136,10 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
             	dialog.model = null;
             }
 				dialog.saveModelMsgText = true;
-            	dialog.model = new EADocument(result, options, eap);
+				String imt = options.parameter("inputModelType");
+				DefaultModelProvider mp = new DefaultModelProvider(result, options);
+				dialog.model = mp.getModel(imt, modelAbsolutePath, null, null, true, null);
+				//            	dialog.model = new EADocument(result, options, modelAbsolutePath);
 				dialog.saveModelMsgText = false;
                 
             if(onlyInitialise)
@@ -236,6 +243,8 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 	private JCheckBox retiredBox;
 	private JCheckBox grundDatBox;
 	
+	private JCheckBox nutzungsartkennungBox;
+	
 	private JCheckBox profEinschrBox;
 	private JCheckBox profDateiBox;
 	
@@ -264,7 +273,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
  	protected Converter converter = null;
 	protected ShapeChangeResult result = null;
 	protected Options options = null;
-	protected String eap = null;
+	protected String modelAbsolutePath = null;
 	
 	private Model model = null;
 	private String modelMsgText = "";
@@ -280,7 +289,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
      	converter = null;
     	result = null;
     	options = null;
-    	eap = null;
+    	modelAbsolutePath = null;
     	model = null;
     	blocked = false;
 	}
@@ -290,7 +299,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
      	converter = null;
     	result = null;
     	options = null;
-    	eap = null;
+    	modelAbsolutePath = null;
     	model = null;
     	blocked = false;
 		initialise(c, o, r, xmi);
@@ -314,11 +323,11 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 		
 		options = o;
 
-		File eapFile = new File(mdl);
+		File modelFile = new File(mdl);
         try{
-        	eap = eapFile.getCanonicalFile().getAbsolutePath();
+        	modelAbsolutePath = modelFile.getCanonicalFile().getAbsolutePath();
         } catch(IOException e){
-        	eap = "ERROR.eap";
+        	modelAbsolutePath = "ERROR.model";
         }
 		
 		converter = new Converter(options, r);
@@ -343,7 +352,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
         		targetGuiElems.put(label, t);
             }
             catch(Exception e){
-            	throw new ShapeChangeAbortException("Fatal error while creating dialog elements for target " + label + ".\nMessage: " + eap.toString() + "\nPlease check configuration file.");
+            	throw new ShapeChangeAbortException("Fatal error while creating dialog elements for target " + label + ".\nMessage: " + modelAbsolutePath.toString() + "\nPlease check configuration file.");
             }
     	}
 
@@ -430,6 +439,11 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 		if (s!=null && s.equals("true"))
 			retiredBool = true;
 
+	Boolean nutzungsartkennungBool = true;
+		s = options.parameter("ignoreTaggedValues");
+		if (s!=null && s.contains("AAA:Nutzungsartkennung"))
+		    nutzungsartkennungBool = false;
+
         String modellartenStr;
 		s = options.parameter(paramKatalogClass,"modellarten");
 		if (s==null || s.trim().length()==0)
@@ -494,7 +508,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 				outDirStr = "";
 		}
 
-        String mdlDirStr = eap;
+        String mdlDirStr = modelAbsolutePath;
 
         // Anwendungsschema
 
@@ -562,6 +576,13 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
         retiredBox.addItemListener(this);
         retiredPanel.add(retiredBox);
         outOptBox.add(retiredPanel);
+
+        final JPanel nutzungsartkennungPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 10, 5));
+        nutzungsartkennungBox = new JCheckBox("Nutzungsartkennung ausgeben");
+        nutzungsartkennungBox.setSelected(nutzungsartkennungBool);
+        nutzungsartkennungBox.addItemListener(this);
+        nutzungsartkennungPanel.add(nutzungsartkennungBox);
+        outOptBox.add(nutzungsartkennungPanel);
 
         final JPanel outOptPanel = new JPanel();
         outOptPanel.add(outOptBox);
@@ -666,7 +687,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
         final JPanel startPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 
                 20, 20));
         //startPanel.sets
-        startButton = new JButton("Process EAP");
+        startButton = new JButton("Process Model");
         startButton.setActionCommand("START");
         startButton.addActionListener(this);
         startPanel.add(startButton);
@@ -747,8 +768,28 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
     	}
     }
     
-	private synchronized void startTransformation(){
-   		// finish options
+    private synchronized void startTransformation(){
+	// finish options
+	
+	String ignoreTVsParamValue = StringUtils.stripToEmpty(
+		options.getInputConfig().getParameters().get("ignoreTaggedValues"));
+	SortedSet<String> tagsToIgnore = new TreeSet<>();
+	tagsToIgnore.addAll(Arrays.asList(StringUtils.split(ignoreTVsParamValue, ", ")));
+	
+	if(nutzungsartkennungBox.isSelected()) {	
+	    if(tagsToIgnore.contains("AAA:Nutzungsartkennung")) {
+		tagsToIgnore.remove("AAA:Nutzungsartkennung");		
+	    }
+	} else {
+	    tagsToIgnore.add("AAA:Nutzungsartkennung");
+	}
+	options.getInputConfig().setParameter("ignoreTaggedValues", 
+		tagsToIgnore.isEmpty() ? "" : StringUtils.join(tagsToIgnore, ", "));
+		
+	// RESET FIELDS IN ORDER FOR THE INPUT CONFIG CHANGE TO TAKE (PERMANENT) EFFECT
+	options.resetFields();
+	
+	    
         modelTransformed = false;
         transformationRunning = true;
 
@@ -789,7 +830,16 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			options.setParameter(paramKatalogClass,"paket", "");
 		options.setParameter(paramKatalogClass,"xsltPfad", xsltpfadField.getText());
 		options.setParameter(paramKatalogClass,"Verzeichnis", outDirField.getText());
-		options.setParameter("inputFile", mdlDirField.getText());
+		String mdl = mdlDirField.getText();
+		options.setParameter("inputFile", mdl);
+		
+		if (mdl.toLowerCase().endsWith(".zip")||mdl.toLowerCase().endsWith(".xml"))
+			options.setParameter("inputModelType", "SCXML");
+
+		else if (mdl.toLowerCase().endsWith(".xmi"))
+			options.setParameter("inputModelType", "XMI10");
+		else if (mdl.toLowerCase().endsWith(".eap")||mdl.toLowerCase().endsWith(".eapx"))
+			options.setParameter("inputModelType", "EA7");
 
 		// update target config from dialog also in the target configurations (strictly this is the only place where they need to be updated)
 		for (TargetConfiguration cfg : options.getInputTargetConfigs()) {
@@ -844,7 +894,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
     
     public void startConvertThread(boolean onlyInit){
 		if(ct == null){
-			ct = new ConvertThread(converter, options, result, eap, this);
+			ct = new ConvertThread(converter, options, result, modelAbsolutePath, this);
 			ct.setOnlyInitialise(onlyInit);
 			ct.start();
 		}
@@ -868,6 +918,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			schemaKennField.setEnabled(false); 
 			geerbEigBox.setEnabled(false);
 			retiredBox.setEnabled(false);
+			nutzungsartkennungBox.setEnabled(false);
 			modellartField.setEnabled(false); 
 			grundDatBox.setEnabled(false);
 			profEinschrBox.setEnabled(false);
@@ -900,6 +951,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			schemaKennField.setEnabled(true); 
 			geerbEigBox.setEnabled(true);
 			retiredBox.setEnabled(true);
+			nutzungsartkennungBox.setEnabled(true);
 			modellartField.setEnabled(true); 
 			grundDatBox.setEnabled(true);
 			profEinschrBox.setEnabled(true);
@@ -1036,16 +1088,17 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			msg += "Ready";
 			break;
 			// Model EADocument
-		case EADocument.STATUS_EADOCUMENT_INITSTART:
+		// TODO - Status messages in other model loaders?
+		case Model.STATUS_EADOCUMENT_INITSTART:
 			msg += "Lesen des Modells: Initialisierung";
 			break;
-		case EADocument.STATUS_EADOCUMENT_READMODEL:
+		case Model.STATUS_EADOCUMENT_READMODEL:
 			msg += "Lesen des Modells: Paketinformationen";
 			break;
-		case EADocument.STATUS_EADOCUMENT_ESTABLISHCLASSES:
+		case Model.STATUS_EADOCUMENT_ESTABLISHCLASSES:
 			msg += "Lesen des Modells: Objektarten und deren Eigenschaften";
 			break;
-		case EADocument.STATUS_EADOCUMENT_READCONSTARINTS:
+		case Model.STATUS_EADOCUMENT_READCONSTARINTS:
 			msg += "Lesen des Modells: Konsistenzbedingungen";
 			break;
 		// Targets
