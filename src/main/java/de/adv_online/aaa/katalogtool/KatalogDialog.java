@@ -894,7 +894,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
     
     public void startConvertThread(boolean onlyInit){
 		if(ct == null){
-			ct = new ConvertThread(converter, options, result, modelAbsolutePath, this);
+			ct = new ConvertThread(converter, options, result, mdlDirField.getText(), this);
 			ct.setOnlyInitialise(onlyInit);
 			ct.start();
 		}
