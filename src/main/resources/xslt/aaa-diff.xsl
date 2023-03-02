@@ -86,4 +86,58 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template name="current">
+		<xsl:param name="element"/>
+    <xsl:choose>
+      <xsl:when test="$element/@mode='DELETE'"></xsl:when>
+      <xsl:when test="$element/@mode='INSERT'">
+        <ins>
+          <xsl:call-template name="replace-ins-current">
+            <xsl:with-param name="string" select="$element" />
+          </xsl:call-template>
+        </ins>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="replace-ins-current">
+          <xsl:with-param name="string" select="$element" />
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="replace-ins-current">
+    <xsl:param name="string" />
+    <xsl:choose>
+      <xsl:when test="contains($string,'[[ins]]')">
+        <xsl:call-template name="replace-del-current">
+          <xsl:with-param name="string" select="substring-before($string,'[[ins]]')" />
+        </xsl:call-template>
+        <xsl:value-of select="substring-before(substring-after($string,'[[ins]]'),'[[/ins]]')"/>
+        <xsl:call-template name="replace-ins-current">
+          <xsl:with-param name="string" select="substring-after($string,'[[/ins]]')" />
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="replace-del-current">
+          <xsl:with-param name="string" select="$string" />
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="replace-del-current">
+    <xsl:param name="string" />
+    <xsl:choose>
+      <xsl:when test="contains($string,'[[del]]')">
+        <xsl:value-of select="substring-before($string,'[[del]]')" />
+        <xsl:call-template name="replace-del-current">
+          <xsl:with-param name="string" select="substring-after($string,'[[/del]]')" />
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$string" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
 </xsl:stylesheet>

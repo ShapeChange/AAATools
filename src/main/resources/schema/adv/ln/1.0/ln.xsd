@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:ln="http://www.adv-online.de/namespaces/adv/ln/1.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/ln/1.0" version="1.0.1">
+<?xml version="1.0" encoding="UTF-8"?><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1" xmlns:ln="http://www.adv-online.de/namespaces/adv/ln/1.0" elementFormDefault="qualified" targetNamespace="http://www.adv-online.de/namespaces/adv/ln/1.0" version="1.0.2">
   <import namespace="http://www.adv-online.de/namespaces/adv/gid/7.1" schemaLocation="../../nas/7.1/aaa.xsd"/>
   <!--XML Schema document created by ShapeChange - http://shapechange.net/-->
   <element name="LN_Abbau" substitutionGroup="ln:LN_Landnutzung" type="ln:LN_AbbauType"/>
@@ -29,6 +29,7 @@
     <complexContent>
       <extension base="ln:LN_LandnutzungType">
         <sequence>
+          <element minOccurs="0" name="name" type="string"/>
           <element maxOccurs="2" minOccurs="0" name="art" type="ln:LN_Art_AquakulturUndFischereiwirtschaftType"/>
         </sequence>
       </extension>
@@ -137,11 +138,14 @@
   </simpleType>
   <simpleType name="LN_Art_VersorgungUndEntsorgungType">
     <restriction base="string">
+      <enumeration value="2500"/>
       <enumeration value="2520"/>
       <enumeration value="2530"/>
       <enumeration value="2540"/>
       <enumeration value="2570"/>
+      <enumeration value="2575"/>
       <enumeration value="2580"/>
+      <enumeration value="2600"/>
       <enumeration value="2610"/>
       <enumeration value="2620"/>
     </restriction>
@@ -174,6 +178,7 @@
         <sequence>
           <element minOccurs="0" name="name" type="string"/>
           <element minOccurs="0" name="artDerBestattungsflaeche" type="ln:LN_ArtDerBestattungsflaeche_BestattungType"/>
+          <element maxOccurs="2" minOccurs="0" name="regionalsprache" type="string"/>
         </sequence>
       </extension>
     </complexContent>
@@ -210,6 +215,7 @@
     <complexContent>
       <extension base="ln:LN_LandnutzungType">
         <sequence>
+          <element minOccurs="0" name="name" type="string"/>
           <element minOccurs="0" name="funktion" type="ln:LN_Funktion_FlugverkehrType"/>
           <element maxOccurs="2" minOccurs="0" name="nutzung" type="ln:LN_Nutzung_FlugverkehrType"/>
           <element minOccurs="0" name="zustand" type="ln:LN_Zustand_FlugverkehrType"/>
@@ -233,6 +239,7 @@
         <sequence>
           <element minOccurs="0" name="art" type="ln:LN_Art_ForstwirtschaftType"/>
           <element minOccurs="0" name="name" type="string"/>
+          <element maxOccurs="2" minOccurs="0" name="regionalsprache" type="string"/>
         </sequence>
       </extension>
     </complexContent>
@@ -255,6 +262,7 @@
         <sequence>
           <element minOccurs="0" name="name" type="string"/>
           <element minOccurs="0" name="art" type="ln:LN_Art_FreizeitanlageType"/>
+          <element maxOccurs="2" minOccurs="0" name="regionalsprache" type="string"/>
         </sequence>
       </extension>
     </complexContent>
@@ -489,6 +497,7 @@
       <extension base="ln:LN_LandnutzungType">
         <sequence>
           <element minOccurs="0" name="name" type="string"/>
+          <element maxOccurs="2" minOccurs="0" name="regionalsprache" type="string"/>
         </sequence>
       </extension>
     </complexContent>
@@ -518,6 +527,7 @@
           <element minOccurs="0" name="hafenkategorie" type="ln:LN_Hafenkategorie_SchiffsverkehrType"/>
           <element maxOccurs="2" minOccurs="0" name="nutzung" type="ln:LN_Nutzung_SchiffsverkehrType"/>
           <element minOccurs="0" name="zustand" type="ln:LN_Zustand_SchiffsverkehrType"/>
+          <element maxOccurs="2" minOccurs="0" name="regionalsprache" type="string"/>
         </sequence>
       </extension>
     </complexContent>
@@ -574,6 +584,7 @@
           <element minOccurs="0" name="artDesParkplatzes" type="ln:LN_ArtDesParkplatzes_StrassenUndWegeverkehrType"/>
           <element minOccurs="0" name="fussgaengerzone" type="ln:LN_Fussgaengerzone_StrassenUndWegeverkehrType"/>
           <element minOccurs="0" name="zustand" type="ln:LN_Zustand_StrassenUndWegeverkehrType"/>
+          <element maxOccurs="2" minOccurs="0" name="regionalsprache" type="string"/>
         </sequence>
       </extension>
     </complexContent>

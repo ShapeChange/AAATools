@@ -44,8 +44,11 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -64,6 +67,7 @@ import de.interactive_instruments.ShapeChange.Model.Model;
 import de.interactive_instruments.ShapeChange.UI.Dialog;
 import de.interactive_instruments.ShapeChange.UI.StatusBoard;
 import de.interactive_instruments.ShapeChange.UI.StatusReader;
+import org.apache.commons.lang3.StringUtils;
 
 public class KatalogDialog extends JFrame implements ActionListener, ItemListener, Dialog, StatusReader {
 	/**
@@ -777,21 +781,24 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
     	}
     }
     
-	private synchronized void startTransformation(){
-	    
-   		// finish options
-	    
-	    /*
-		* 2022-09-01 JE: This assumes that input parameter ignoreTaggedValues
-		* is only used to ignore TV AAA:Nutzungsartkennung. If that changed, 
-		* a more elaborate logic would be needed here, to add or remove the tag
-		* from a set of other possibly ignored tags.
-		*/
-	if(nutzungsartkennungBox.isSelected()) {
-	    options.getInputConfig().setParameter("ignoreTaggedValues","");
+    private synchronized void startTransformation(){
+	// finish options
+	
+	String ignoreTVsParamValue = StringUtils.stripToEmpty(
+		options.getInputConfig().getParameters().get("ignoreTaggedValues"));
+	SortedSet<String> tagsToIgnore = new TreeSet<>();
+	tagsToIgnore.addAll(Arrays.asList(StringUtils.split(ignoreTVsParamValue, ", ")));
+	
+	if(nutzungsartkennungBox.isSelected()) {	
+	    if(tagsToIgnore.contains("AAA:Nutzungsartkennung")) {
+		tagsToIgnore.remove("AAA:Nutzungsartkennung");		
+	    }
 	} else {
-	    options.getInputConfig().setParameter("ignoreTaggedValues","AAA:Nutzungsartkennung");
+	    tagsToIgnore.add("AAA:Nutzungsartkennung");
 	}
+	options.getInputConfig().setParameter("ignoreTaggedValues", 
+		tagsToIgnore.isEmpty() ? "" : StringUtils.join(tagsToIgnore, ", "));
+		
 	// RESET FIELDS IN ORDER FOR THE INPUT CONFIG CHANGE TO TAKE (PERMANENT) EFFECT
 	options.resetFields();
 	
@@ -841,12 +848,13 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			options.setParameter(paramKatalogClass,"paket", "");
 		options.setParameter(paramKatalogClass,"xsltPfad", xsltpfadField.getText());
 		options.setParameter(paramKatalogClass,"Verzeichnis", outDirField.getText());
-		
+
 		String mdl = mdlDirField.getText();
 		options.setParameter("inputFile", mdl);
 		
 		if (mdl.toLowerCase().endsWith(".zip")||mdl.toLowerCase().endsWith(".xml"))
 			options.setParameter("inputModelType", "SCXML");
+
 		else if (mdl.toLowerCase().endsWith(".xmi"))
 			options.setParameter("inputModelType", "XMI10");
 		else if (mdl.toLowerCase().endsWith(".eap")||mdl.toLowerCase().endsWith(".eapx"))
@@ -909,7 +917,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
     
     public void startConvertThread(boolean onlyInit){
 		if(ct == null){
-			ct = new ConvertThread(converter, options, result, modelAbsolutePath, this);
+			ct = new ConvertThread(converter, options, result, mdlDirField.getText(), this);
 			ct.setOnlyInitialise(onlyInit);
 			ct.start();
 		}
@@ -1105,7 +1113,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			msg += "Ready";
 			break;
 			// Model EADocument
-			// TODO - Status messages in other model loaders?
+		// TODO - Status messages in other model loaders?
 		case Model.STATUS_EADOCUMENT_INITSTART:
 			msg += "Lesen des Modells: Initialisierung";
 			break;

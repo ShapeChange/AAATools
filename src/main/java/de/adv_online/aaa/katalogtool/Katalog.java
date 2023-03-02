@@ -84,7 +84,7 @@ import de.interactive_instruments.ShapeChange.ModelDiff.Differ;
 import de.interactive_instruments.ShapeChange.Target.Target;
 import de.interactive_instruments.ShapeChange.UI.StatusBoard;
 import de.interactive_instruments.ShapeChange.Util.XMLUtil;
-import shadow.org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Clemens Portele (portele <at> interactive-instruments <dot> de)
