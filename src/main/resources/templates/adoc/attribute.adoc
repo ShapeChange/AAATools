@@ -1,12 +1,12 @@
 :aaa: ATKIS
 :mat: Basis-DLM
 :mat_langtext: Digitalen Basis-Landschaftsmodells (Basis-DLM)
-:aaaVersion: Version 7.1.1
-:aaaStand: Stand 12.11.2021
+:aaaVersion: Version 7.1.2
+:aaaStand: Stand 01.12.2022
 ////
 :aaa: ALKIS
 :mat: DLKM
 :mat_langtext: Digitalen Liegenschaftskataster Modells (DLKM)
-:aaaVersion: Version 7.1.1
-:aaaStand: Stand 12.11.2021
+:aaaVersion: Version 7.1.2
+:aaaStand: Stand 01.12.2022
 ////
