@@ -16,6 +16,7 @@
 			<StereotypeAlias wellknown="Application Schema" alias="ApplicationSchema" />
 			<StereotypeAlias wellknown="Application Schema" alias="Schema" />
 			<StereotypeAlias wellknown="Type" alias="interface" />
+			<StereotypeAlias wellknown="" alias="abstract" />
 		</stereotypeAliases>
 	</input>
 	<log>
