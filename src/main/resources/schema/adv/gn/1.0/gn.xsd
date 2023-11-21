@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1"
+        xmlns:gml="http://www.opengis.net/gml/3.2"
+        xmlns:gmlexr="http://www.opengis.net/gml/3.3/exr"
+        xmlns:gn="http://www.adv-online.de/namespaces/adv/gn/1.0"
+        elementFormDefault="qualified"
+        targetNamespace="http://www.adv-online.de/namespaces/adv/gn/1.0"
+        version="1.0.0">
+   <import namespace="http://www.adv-online.de/namespaces/adv/gid/7.1"
+           schemaLocation="http://repository.gdi-de.org/schemas/adv/nas/7.1/aaa.xsd"/>
+   <import namespace="http://www.opengis.net/gml/3.2"
+           schemaLocation="http://schemas.opengis.net/gml/3.2.1/gml.xsd"/>
+   <import namespace="http://www.opengis.net/gml/3.3/exr"
+           schemaLocation="http://schemas.opengis.net/gml/3.3/extdEncRule.xsd"/>
+   <!--XML Schema document created by ShapeChange - http://shapechange.net/-->
+   <simpleType name="GN_Bedeutung_GeographischesNamensgutType">
+      <restriction base="string">
+         <enumeration value="1000"/>
+         <enumeration value="2000"/>
+         <enumeration value="3000"/>
+      </restriction>
+   </simpleType>
+   <element abstract="true"
+            name="GN_GeographischesNamensgut"
+            substitutionGroup="adv:AU_Objekt"
+            type="gn:GN_GeographischesNamensgutType"/>
+   <complexType abstract="true" name="GN_GeographischesNamensgutType">
+      <complexContent>
+         <extension base="adv:AU_ObjektType">
+            <sequence>
+               <element maxOccurs="unbounded"
+                        name="name"
+                        type="gn:GN_Name_GeographischesNamensgutPropertyType"/>
+               <element maxOccurs="unbounded"
+                        minOccurs="0"
+                        name="namenszusatz"
+                        type="string"/>
+               <element minOccurs="0"
+                        name="bedeutung"
+                        type="gn:GN_Bedeutung_GeographischesNamensgutType"/>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="GN_GewaesserInformation"
+            substitutionGroup="gn:GN_GeographischesNamensgut"
+            type="gn:GN_GewaesserInformationType"/>
+   <complexType name="GN_GewaesserInformationType">
+      <complexContent>
+         <extension base="gn:GN_GeographischesNamensgutType">
+            <sequence>
+               <element name="gewaessertyp" type="gn:GN_Typ_GewaesserinformationType"/>
+               <element minOccurs="0" name="klasseFlaechengroesse" type="integer"/>
+               <element minOccurs="0" name="breite" type="integer"/>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="GN_KulturlandschaftspraegendeInformation"
+            substitutionGroup="gn:GN_GeographischesNamensgut"
+            type="gn:GN_KulturlandschaftspraegendeInformationType"/>
+   <complexType name="GN_KulturlandschaftspraegendeInformationType">
+      <complexContent>
+         <extension base="gn:GN_GeographischesNamensgutType">
+            <sequence>
+               <element name="kulturlandschaftspraegendertyp">
+                  <complexType>
+                     <complexContent>
+                        <extension base="gml:AbstractFeatureMemberType">
+                           <sequence minOccurs="0">
+                              <element ref="gn:GN_KulturlandschaftspraegendeInformation"/>
+                           </sequence>
+                           <attributeGroup ref="gml:AssociationAttributeGroup"/>
+                        </extension>
+                     </complexContent>
+                  </complexType>
+               </element>
+               <element minOccurs="0" name="klasseFlaechengroesse" type="integer"/>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="GN_LandschaftspraegendeInformation"
+            substitutionGroup="gn:GN_GeographischesNamensgut"
+            type="gn:GN_LandschaftspraegendeInformationType"/>
+   <complexType name="GN_LandschaftspraegendeInformationType">
+      <complexContent>
+         <extension base="gn:GN_GeographischesNamensgutType">
+            <sequence>
+               <element name="landschaftstyp"
+                        type="gn:GN_Typ_LandschaftspraegendeInformationType"/>
+               <element minOccurs="0" name="klasseFlaechengroesse" type="integer"/>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="GN_Name_GeographischesNamensgut"
+            substitutionGroup="gml:AbstractObject"
+            type="gn:GN_Name_GeographischesNamensgutType"/>
+   <complexType name="GN_Name_GeographischesNamensgutType">
+      <sequence>
+         <element name="text" type="string"/>
+         <element name="sprachcode" type="gml:ReferenceType">
+            <annotation>
+               <appinfo>
+                  <targetCodeList xmlns="http://www.opengis.net/gml/3.3/exr">GN_Sprachcode_GeographischesNamensgut</targetCodeList>
+               </appinfo>
+            </annotation>
+         </element>
+         <element name="status" type="gn:GN_Status_GeographischesNamensgutType"/>
+      </sequence>
+   </complexType>
+   <complexType name="GN_Name_GeographischesNamensgutPropertyType">
+      <sequence>
+         <element ref="gn:GN_Name_GeographischesNamensgut"/>
+      </sequence>
+   </complexType>
+   <element name="GN_SonstigeInformation"
+            substitutionGroup="gn:GN_GeographischesNamensgut"
+            type="gn:GN_SonstigeInformationType"/>
+   <complexType name="GN_SonstigeInformationType">
+      <complexContent>
+         <extension base="gn:GN_GeographischesNamensgutType">
+            <sequence>
+               <element name="sonstigertyp" type="gml:ReferenceType">
+                  <annotation>
+                     <appinfo>
+                        <targetCodeList xmlns="http://www.opengis.net/gml/3.3/exr">GN_Typ_SonstigeInformation</targetCodeList>
+                     </appinfo>
+                  </annotation>
+               </element>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <simpleType name="GN_Status_GeographischesNamensgutType">
+      <restriction base="string">
+         <enumeration value="1000"/>
+         <enumeration value="2000"/>
+         <enumeration value="3000"/>
+         <enumeration value="4000"/>
+         <enumeration value="5000"/>
+         <enumeration value="6000"/>
+         <enumeration value="7000"/>
+      </restriction>
+   </simpleType>
+   <simpleType name="GN_Typ_GewaesserinformationType">
+      <restriction base="string">
+         <enumeration value="1610"/>
+         <enumeration value="1620"/>
+         <enumeration value="1630"/>
+         <enumeration value="1640"/>
+         <enumeration value="1650"/>
+         <enumeration value="1660"/>
+         <enumeration value="1670"/>
+         <enumeration value="1690"/>
+         <enumeration value="1700"/>
+         <enumeration value="1800"/>
+         <enumeration value="1810"/>
+         <enumeration value="8100"/>
+         <enumeration value="8200"/>
+         <enumeration value="8210"/>
+         <enumeration value="8220"/>
+         <enumeration value="8230"/>
+         <enumeration value="8240"/>
+         <enumeration value="8250"/>
+         <enumeration value="8300"/>
+         <enumeration value="8310"/>
+         <enumeration value="8320"/>
+         <enumeration value="8400"/>
+         <enumeration value="8410"/>
+         <enumeration value="8500"/>
+         <enumeration value="8610"/>
+         <enumeration value="8620"/>
+         <enumeration value="8630"/>
+         <enumeration value="8640"/>
+         <enumeration value="8650"/>
+         <enumeration value="8660"/>
+         <enumeration value="9999"/>
+      </restriction>
+   </simpleType>
+   <simpleType name="GN_Typ_KulturlandschaftspraegendeInformationType">
+      <restriction base="string">
+         <enumeration value="1000"/>
+         <enumeration value="2000"/>
+         <enumeration value="3000"/>
+         <enumeration value="4000"/>
+      </restriction>
+   </simpleType>
+   <simpleType name="GN_Typ_LandschaftspraegendeInformationType">
+      <restriction base="string">
+         <enumeration value="1100"/>
+         <enumeration value="1101"/>
+         <enumeration value="1102"/>
+         <enumeration value="1103"/>
+         <enumeration value="1104"/>
+         <enumeration value="1105"/>
+         <enumeration value="1106"/>
+         <enumeration value="1107"/>
+         <enumeration value="1108"/>
+         <enumeration value="1109"/>
+         <enumeration value="1200"/>
+         <enumeration value="1201"/>
+         <enumeration value="1202"/>
+         <enumeration value="1203"/>
+         <enumeration value="1204"/>
+         <enumeration value="1205"/>
+         <enumeration value="1300"/>
+         <enumeration value="1301"/>
+         <enumeration value="1302"/>
+         <enumeration value="1303"/>
+         <enumeration value="1400"/>
+         <enumeration value="1401"/>
+         <enumeration value="1500"/>
+         <enumeration value="1501"/>
+         <enumeration value="1600"/>
+         <enumeration value="1700"/>
+         <enumeration value="1800"/>
+         <enumeration value="1900"/>
+         <enumeration value="1901"/>
+         <enumeration value="1902"/>
+         <enumeration value="2000"/>
+         <enumeration value="2001"/>
+         <enumeration value="2002"/>
+         <enumeration value="2003"/>
+         <enumeration value="2100"/>
+         <enumeration value="2200"/>
+         <enumeration value="2300"/>
+         <enumeration value="2350"/>
+         <enumeration value="2400"/>
+         <enumeration value="2401"/>
+         <enumeration value="2500"/>
+         <enumeration value="2501"/>
+         <enumeration value="2502"/>
+         <enumeration value="2503"/>
+         <enumeration value="2504"/>
+         <enumeration value="2600"/>
+         <enumeration value="2601"/>
+         <enumeration value="2602"/>
+         <enumeration value="2603"/>
+         <enumeration value="2604"/>
+         <enumeration value="2605"/>
+         <enumeration value="2606"/>
+         <enumeration value="2607"/>
+         <enumeration value="2700"/>
+         <enumeration value="9999"/>
+      </restriction>
+   </simpleType>
+   <element name="GN_VerwaltungsInformation"
+            substitutionGroup="gn:GN_GeographischesNamensgut"
+            type="gn:GN_VerwaltungsInformationType"/>
+   <complexType name="GN_VerwaltungsInformationType">
+      <complexContent>
+         <extension base="gn:GN_GeographischesNamensgutType">
+            <sequence>
+               <element minOccurs="0"
+                        name="gemeindekennzeichen"
+                        type="adv:AX_GemeindekennzeichenPropertyType"/>
+               <element name="verwaltungstyp"
+                        type="gn:GN_Verwaltungtyp_VerwaltungsInformationType"/>
+               <element name="verwaltungstypNamensbildend" type="boolean"/>
+               <element name="klasseEinwohnerzahl" type="integer"/>
+               <element minOccurs="0" name="einwohnerzahl" type="integer"/>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <simpleType name="GN_Verwaltungtyp_VerwaltungsInformationType">
+      <restriction base="string">
+         <enumeration value="1001"/>
+         <enumeration value="2001"/>
+         <enumeration value="2002"/>
+         <enumeration value="2003"/>
+         <enumeration value="3001"/>
+         <enumeration value="3002"/>
+         <enumeration value="3003"/>
+         <enumeration value="3004"/>
+         <enumeration value="3005"/>
+         <enumeration value="4001"/>
+         <enumeration value="4002"/>
+         <enumeration value="4003"/>
+         <enumeration value="4007"/>
+         <enumeration value="4008"/>
+         <enumeration value="4009"/>
+         <enumeration value="5001"/>
+         <enumeration value="5002"/>
+         <enumeration value="5003"/>
+         <enumeration value="5004"/>
+         <enumeration value="5006"/>
+         <enumeration value="5007"/>
+         <enumeration value="5008"/>
+         <enumeration value="5009"/>
+         <enumeration value="5012"/>
+         <enumeration value="5013"/>
+         <enumeration value="5014"/>
+         <enumeration value="6001"/>
+         <enumeration value="6002"/>
+         <enumeration value="6003"/>
+         <enumeration value="6004"/>
+         <enumeration value="6005"/>
+         <enumeration value="6006"/>
+         <enumeration value="6008"/>
+         <enumeration value="6009"/>
+         <enumeration value="6010"/>
+         <enumeration value="6011"/>
+         <enumeration value="6012"/>
+         <enumeration value="6013"/>
+         <enumeration value="6014"/>
+         <enumeration value="6015"/>
+         <enumeration value="6021"/>
+         <enumeration value="6022"/>
+         <enumeration value="7001"/>
+         <enumeration value="7004"/>
+         <enumeration value="7005"/>
+         <enumeration value="7007"/>
+         <enumeration value="8000"/>
+         <enumeration value="8001"/>
+         <enumeration value="9000"/>
+      </restriction>
+   </simpleType>
+</schema>

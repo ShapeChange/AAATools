@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/7.1"
+        xmlns:br="http://www.adv-online.de/namespaces/adv/br/3.0"
+        xmlns:gml="http://www.opengis.net/gml/3.2"
+        xmlns:gmlexr="http://www.opengis.net/gml/3.3/exr"
+        xmlns:sc="http://www.interactive-instruments.de/ShapeChange/AppInfo"
+        elementFormDefault="qualified"
+        targetNamespace="http://www.adv-online.de/namespaces/adv/br/3.0"
+        version="3.0.0">
+   <import namespace="http://www.adv-online.de/namespaces/adv/gid/7.1"
+           schemaLocation="http://repository.gdi-de.org/schemas/adv/nas/7.1/aaa.xsd"/>
+   <import namespace="http://www.interactive-instruments.de/ShapeChange/AppInfo"/>
+   <import namespace="http://www.opengis.net/gml/3.2"
+           schemaLocation="http://schemas.opengis.net/gml/3.2.1/gml.xsd"/>
+   <import namespace="http://www.opengis.net/gml/3.3/exr"
+           schemaLocation="http://schemas.opengis.net/gml/3.3/extdEncRule.xsd"/>
+   <!--XML Schema document created by ShapeChange - http://shapechange.net/-->
+   <simpleType name="BR_Aufwuchs_BodenrichtwertType">
+      <restriction base="string">
+         <enumeration value="mA"/>
+      </restriction>
+   </simpleType>
+   <element name="BR_Basiskarte_Bodenrichtwert"
+            substitutionGroup="gml:AbstractObject"
+            type="br:BR_Basiskarte_BodenrichtwertType"/>
+   <complexType name="BR_Basiskarte_BodenrichtwertType">
+      <sequence>
+         <element minOccurs="0" name="bezeichnung" type="string"/>
+         <element minOccurs="0" name="massstabszahl" type="integer"/>
+      </sequence>
+   </complexType>
+   <complexType name="BR_Basiskarte_BodenrichtwertPropertyType">
+      <sequence>
+         <element ref="br:BR_Basiskarte_Bodenrichtwert"/>
+      </sequence>
+   </complexType>
+   <simpleType name="BR_Bauweise_BodenrichtwertType">
+      <restriction base="string">
+         <enumeration value="1100"/>
+         <enumeration value="1200"/>
+         <enumeration value="1300"/>
+         <enumeration value="2100"/>
+         <enumeration value="2200"/>
+         <enumeration value="2300"/>
+         <enumeration value="2400"/>
+         <enumeration value="2500"/>
+         <enumeration value="2600"/>
+      </restriction>
+   </simpleType>
+   <simpleType name="BR_BeitragsrechtlicherZustand_BodenrichtwertType">
+      <restriction base="string">
+         <enumeration value="1000"/>
+         <enumeration value="2000"/>
+         <enumeration value="3000"/>
+      </restriction>
+   </simpleType>
+   <simpleType name="BR_Bodenart_BodenrichtwertType">
+      <restriction base="string">
+         <enumeration value="1100"/>
+         <enumeration value="1200"/>
+         <enumeration value="2100"/>
+         <enumeration value="2200"/>
+         <enumeration value="3100"/>
+         <enumeration value="3200"/>
+         <enumeration value="4100"/>
+         <enumeration value="4200"/>
+         <enumeration value="5000"/>
+      </restriction>
+   </simpleType>
+   <element name="BR_Bodenrichtwert"
+            substitutionGroup="gml:AbstractFeature"
+            type="br:BR_BodenrichtwertType"/>
+   <complexType name="BR_BodenrichtwertType">
+      <complexContent>
+         <extension base="gml:AbstractFeatureType">
+            <sequence>
+               <element maxOccurs="2" minOccurs="0" name="ackerzahl" type="integer"/>
+               <element minOccurs="0"
+                        name="basiskarte"
+                        type="br:BR_Basiskarte_BodenrichtwertPropertyType"/>
+               <element maxOccurs="2" minOccurs="0" name="baumassenzahl" type="double"/>
+               <element minOccurs="0"
+                        name="bauweise"
+                        type="br:BR_Bauweise_BodenrichtwertType"/>
+               <element minOccurs="0"
+                        name="beitragsrechtlicherZustand"
+                        type="br:BR_BeitragsrechtlicherZustand_BodenrichtwertType"/>
+               <element minOccurs="0" name="bemerkungen" type="string"/>
+               <element name="bodenrichtwert" type="double"/>
+               <element name="bodenrichtwertKlassifikation"
+                        type="br:BR_BodenrichtwertKlassifikation_BodenrichtwertType"/>
+               <element name="bodenrichtwertNummer" type="string"/>
+               <element minOccurs="0" name="bodenrichtwertzoneName" type="string"/>
+               <element maxOccurs="2" minOccurs="0" name="breite" type="integer"/>
+               <element minOccurs="0"
+                        name="entwicklungsSanierungsZusatz"
+                        type="br:BR_EntwicklungsSanierungsZusatz_BodenrichtwertType"/>
+               <element name="entwicklungszustand"
+                        type="br:BR_Entwicklungszustand_BodenrichtwertType"/>
+               <element maxOccurs="2" minOccurs="0" name="flaeche" type="integer"/>
+               <element minOccurs="0"
+                        name="fruehereEigenschaften"
+                        type="br:BR_FruehereEigenschaften_BodenrichtwertPropertyType"/>
+               <element maxOccurs="unbounded"
+                        minOccurs="0"
+                        name="gemarkung"
+                        type="adv:AX_Gemarkung_SchluesselPropertyType"/>
+               <element maxOccurs="unbounded"
+                        name="gemeinde"
+                        type="adv:AX_GemeindekennzeichenPropertyType"/>
+               <element maxOccurs="2"
+                        minOccurs="0"
+                        name="geschossflaechenzahl"
+                        type="double"/>
+               <element maxOccurs="2" minOccurs="0" name="gruenlandzahl" type="integer"/>
+               <element maxOccurs="2"
+                        minOccurs="0"
+                        name="grundflaechenzahl"
+                        type="double"/>
+               <element name="gutachterausschuss"
+                        type="adv:AX_Dienststelle_SchluesselPropertyType"/>
+               <element maxOccurs="unbounded"
+                        minOccurs="0"
+                        name="korrektur"
+                        type="br:BR_Korrektur_BodenrichtwertPropertyType"/>
+               <element maxOccurs="unbounded"
+                        minOccurs="0"
+                        name="landesspezifischeAngaben"
+                        type="string"/>
+               <element name="nutzung" type="br:BR_Nutzung_BodenrichtwertPropertyType"/>
+               <element maxOccurs="2"
+                        minOccurs="0"
+                        name="obergeschosszahl"
+                        type="integer"/>
+               <element minOccurs="0" name="ortsteilName" type="string"/>
+               <element minOccurs="0" name="postleitzahl" type="string"/>
+               <element minOccurs="0" name="qualitaetsstichtag" type="date"/>
+               <element name="stichtag" type="date"/>
+               <element maxOccurs="2" minOccurs="0" name="tiefe" type="integer"/>
+               <element maxOccurs="2"
+                        minOccurs="0"
+                        name="vollgeschosszahl"
+                        type="integer"/>
+               <element maxOccurs="2"
+                        minOccurs="0"
+                        name="wertrelevanteGeschossflaechenzahl"
+                        type="double"/>
+               <element name="gehoertZu" type="gml:ReferenceType">
+                  <annotation>
+                     <appinfo>
+                        <targetElement xmlns="http://www.opengis.net/gml/3.2">br:BR_BodenrichtwertFlaeche</targetElement>
+                        <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">br:inversZu_gehoertZu</reversePropertyName>
+                     </appinfo>
+                  </annotation>
+               </element>
+               <element maxOccurs="unbounded"
+                        minOccurs="0"
+                        name="umrechnung"
+                        type="gml:ReferenceType">
+                  <annotation>
+                     <appinfo>
+                        <targetElement xmlns="http://www.opengis.net/gml/3.2">br:BR_Umrechnungstabelle</targetElement>
+                        <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">br:inversZu_umrechnung</reversePropertyName>
+                        <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
+                     </appinfo>
+                  </annotation>
+               </element>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="BR_BodenrichtwertFlaeche"
+            substitutionGroup="adv:AU_Flaechenobjekt"
+            type="br:BR_BodenrichtwertFlaecheType"/>
+   <complexType name="BR_BodenrichtwertFlaecheType">
+      <complexContent>
+         <extension base="adv:AU_FlaechenobjektType">
+            <sequence>
+               <element maxOccurs="unbounded"
+                        minOccurs="0"
+                        name="inversZu_gehoertZu"
+                        type="gml:ReferenceType">
+                  <annotation>
+                     <appinfo>
+                        <targetElement xmlns="http://www.opengis.net/gml/3.2">br:BR_Bodenrichtwert</targetElement>
+                        <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">br:gehoertZu</reversePropertyName>
+                        <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
+                     </appinfo>
+                  </annotation>
+               </element>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <simpleType name="BR_BodenrichtwertKlassifikation_BodenrichtwertType">
+      <restriction base="string">
+         <enumeration value="1000"/>
+         <enumeration value="2000"/>
+         <enumeration value="3000"/>
+         <enumeration value="4000"/>
+      </restriction>
+   </simpleType>
+   <simpleType name="BR_Bodenrichtwertart_BodenrichtwertType">
+      <restriction base="string">
+         <enumeration value="1"/>
+         <enumeration value="2"/>
+      </restriction>
+   </simpleType>
+   <simpleType name="BR_EntwicklungsSanierungsZusatz_BodenrichtwertType">
+      <restriction base="string">
+         <enumeration value="1100"/>
+         <enumeration value="1200"/>
+         <enumeration value="2100"/>
+         <enumeration value="2200"/>
+      </restriction>
+   </simpleType>
+   <simpleType name="BR_Entwicklungszustand_BodenrichtwertType">
+      <restriction base="string">
+         <enumeration value="1000"/>
+         <enumeration value="2000"/>
+         <enumeration value="3000"/>
+         <enumeration value="4000"/>
+         <enumeration value="5000"/>
+      </restriction>
+   </simpleType>
+   <simpleType name="BR_Erschliessungsverhaeltnisse_BodenrichtwertType">
+      <restriction base="string">
+         <enumeration value="1000"/>
+         <enumeration value="2000"/>
+      </restriction>
+   </simpleType>
+   <element name="BR_FruehereEigenschaften_Bodenrichtwert"
+            substitutionGroup="gml:AbstractObject"
+            type="br:BR_FruehereEigenschaften_BodenrichtwertType"/>
+   <complexType name="BR_FruehereEigenschaften_BodenrichtwertType">
+      <sequence>
+         <element minOccurs="0" name="aufwuchs" type="boolean"/>
+         <element minOccurs="0" name="bedarfswert" type="double"/>
+         <element minOccurs="0"
+                  name="bodenart"
+                  type="br:BR_Bodenart_BodenrichtwertType"/>
+         <element minOccurs="0"
+                  name="erschliessungsverhaeltnisse"
+                  type="br:BR_Erschliessungsverhaeltnisse_BodenrichtwertType"/>
+         <element maxOccurs="unbounded"
+                  minOccurs="0"
+                  name="landesspezifischeEinflussgröße"
+                  type="string"/>
+         <element maxOccurs="unbounded"
+                  minOccurs="0"
+                  name="landesspezifischeErgaenzungNutzung"
+                  type="string"/>
+         <element maxOccurs="unbounded"
+                  minOccurs="0"
+                  name="landesspezifischeNutzungsart"
+                  type="string"/>
+         <element minOccurs="0" name="lagetypischerbodenrichtwert" type="boolean"/>
+         <element minOccurs="0"
+                  name="verfahrensart"
+                  type="br:BR_Verfahrensart_BodenrichtwertType"/>
+         <element minOccurs="0" name="wegeerschliessung" type="boolean"/>
+      </sequence>
+   </complexType>
+   <complexType name="BR_FruehereEigenschaften_BodenrichtwertPropertyType">
+      <sequence>
+         <element ref="br:BR_FruehereEigenschaften_Bodenrichtwert"/>
+      </sequence>
+   </complexType>
+   <simpleType name="BR_Interpolierbarkeit_UmrechnungstabelleType">
+      <restriction base="string">
+         <enumeration value="1000"/>
+         <enumeration value="2000"/>
+         <enumeration value="3000"/>
+         <enumeration value="4000"/>
+      </restriction>
+   </simpleType>
+   <element name="BR_Korrektur_Bodenrichtwert"
+            substitutionGroup="gml:AbstractObject"
+            type="br:BR_Korrektur_BodenrichtwertType"/>
+   <complexType name="BR_Korrektur_BodenrichtwertType">
+      <sequence>
+         <element minOccurs="0" name="bemerkungKorrektur" type="string"/>
+         <element minOccurs="0" name="grundstuecksmerkmale" type="boolean"/>
+         <element name="korrekturanlass" type="br:BR_Korrekturanlass_BodenrichtwertType"/>
+         <element name="korrekturdatum" type="date"/>
+         <element minOccurs="0" name="sonstigeAttríbute" type="boolean"/>
+         <element minOccurs="0" name="wert" type="boolean"/>
+         <element minOccurs="0" name="zonengrenze" type="boolean"/>
+      </sequence>
+   </complexType>
+   <complexType name="BR_Korrektur_BodenrichtwertPropertyType">
+      <sequence>
+         <element ref="br:BR_Korrektur_Bodenrichtwert"/>
+      </sequence>
+   </complexType>
+   <simpleType name="BR_Korrekturanlass_BodenrichtwertType">
+      <restriction base="string">
+         <enumeration value="1000"/>
+         <enumeration value="2000"/>
+         <enumeration value="3000"/>
+      </restriction>
+   </simpleType>
+   <element name="BR_Nutzung_Bodenrichtwert"
+            substitutionGroup="gml:AbstractObject"
+            type="br:BR_Nutzung_BodenrichtwertType"/>
+   <complexType name="BR_Nutzung_BodenrichtwertType">
+      <sequence>
+         <element name="art" type="gml:ReferenceType">
+            <annotation>
+               <appinfo>
+                  <targetCodeList xmlns="http://www.opengis.net/gml/3.3/exr">BR_Art_Nutzung</targetCodeList>
+               </appinfo>
+            </annotation>
+         </element>
+         <element minOccurs="0" name="ergaenzung" type="gml:ReferenceType">
+            <annotation>
+               <appinfo>
+                  <targetCodeList xmlns="http://www.opengis.net/gml/3.3/exr">BR_Ergaenzung_Nutzung</targetCodeList>
+               </appinfo>
+            </annotation>
+         </element>
+      </sequence>
+   </complexType>
+   <complexType name="BR_Nutzung_BodenrichtwertPropertyType">
+      <sequence>
+         <element ref="br:BR_Nutzung_Bodenrichtwert"/>
+      </sequence>
+   </complexType>
+   <simpleType name="BR_Umrechnungsart_UmrechnungstabelleType">
+      <restriction base="string">
+         <enumeration value="1000"/>
+         <enumeration value="2000"/>
+      </restriction>
+   </simpleType>
+   <element name="BR_Umrechnungskoeffizient_Umrechnungstabelle"
+            substitutionGroup="gml:AbstractObject"
+            type="br:BR_Umrechnungskoeffizient_UmrechnungstabelleType"/>
+   <complexType name="BR_Umrechnungskoeffizient_UmrechnungstabelleType">
+      <sequence>
+         <element name="bezugswert" type="double"/>
+         <element name="koeffizient" type="double"/>
+      </sequence>
+   </complexType>
+   <complexType name="BR_Umrechnungskoeffizient_UmrechnungstabellePropertyType">
+      <sequence>
+         <element ref="br:BR_Umrechnungskoeffizient_Umrechnungstabelle"/>
+      </sequence>
+   </complexType>
+   <element abstract="true"
+            name="BR_Umrechnungstabelle"
+            substitutionGroup="adv:AA_NREO"
+            type="br:BR_UmrechnungstabelleType"/>
+   <complexType abstract="true" name="BR_UmrechnungstabelleType">
+      <complexContent>
+         <extension base="adv:AA_NREOType">
+            <sequence>
+               <element name="einflussgroesse" type="gml:ReferenceType">
+                  <annotation>
+                     <appinfo>
+                        <targetCodeList xmlns="http://www.opengis.net/gml/3.3/exr">BR_Einflussgroesse_Umrechnungstabelle</targetCodeList>
+                     </appinfo>
+                  </annotation>
+               </element>
+               <element name="gutachterausschusskennziffer"
+                        type="adv:AX_Dienststelle_SchluesselPropertyType"/>
+               <element name="umrechnungstabellenummer" type="string"/>
+               <element maxOccurs="unbounded"
+                        minOccurs="0"
+                        name="inversZu_umrechnung"
+                        type="gml:ReferenceType">
+                  <annotation>
+                     <appinfo>
+                        <targetElement xmlns="http://www.opengis.net/gml/3.2">br:BR_Bodenrichtwert</targetElement>
+                        <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">br:umrechnung</reversePropertyName>
+                        <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
+                     </appinfo>
+                  </annotation>
+               </element>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="BR_UmrechnungstabelleDatei"
+            substitutionGroup="br:BR_Umrechnungstabelle"
+            type="br:BR_UmrechnungstabelleDateiType"/>
+   <complexType name="BR_UmrechnungstabelleDateiType">
+      <complexContent>
+         <extension base="br:BR_UmrechnungstabelleType">
+            <sequence>
+               <element name="dateiname" type="string"/>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="BR_UmrechnungstabelleFormel"
+            substitutionGroup="br:BR_Umrechnungstabelle"
+            type="br:BR_UmrechnungstabelleFormelType"/>
+   <complexType name="BR_UmrechnungstabelleFormelType">
+      <complexContent>
+         <extension base="br:BR_UmrechnungstabelleType">
+            <sequence>
+               <element name="bezugswertMaximum" type="double"/>
+               <element name="bezugswertMinimum" type="double"/>
+               <element name="polynomkoeffizientExponent0" type="double"/>
+               <element minOccurs="0" name="polynomkoeffizientExponent1" type="double"/>
+               <element minOccurs="0" name="polynomkoeffizientExponent2" type="double"/>
+               <element minOccurs="0" name="polynomkoeffizientExponent3" type="double"/>
+               <element maxOccurs="unbounded"
+                        minOccurs="0"
+                        name="inversZu_umrechnungsformel"
+                        type="gml:ReferenceType">
+                  <annotation>
+                     <appinfo>
+                        <targetElement xmlns="http://www.opengis.net/gml/3.2">br:BR_UmrechnungstabelleWerte</targetElement>
+                        <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">br:umrechnungsformel</reversePropertyName>
+                        <sc:taggedValue tag="reverseRoleNAS">true</sc:taggedValue>
+                     </appinfo>
+                  </annotation>
+               </element>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="BR_UmrechnungstabelleWerte"
+            substitutionGroup="br:BR_Umrechnungstabelle"
+            type="br:BR_UmrechnungstabelleWerteType"/>
+   <complexType name="BR_UmrechnungstabelleWerteType">
+      <complexContent>
+         <extension base="br:BR_UmrechnungstabelleType">
+            <sequence>
+               <element name="stetigkeit"
+                        type="br:BR_Interpolierbarkeit_UmrechnungstabelleType"/>
+               <element name="umrechnungsart"
+                        type="br:BR_Umrechnungsart_UmrechnungstabelleType"/>
+               <element maxOccurs="unbounded"
+                        name="werteliste"
+                        type="br:BR_Umrechnungskoeffizient_UmrechnungstabellePropertyType"/>
+               <element minOccurs="0" name="umrechnungsformel" type="gml:ReferenceType">
+                  <annotation>
+                     <appinfo>
+                        <targetElement xmlns="http://www.opengis.net/gml/3.2">br:BR_UmrechnungstabelleFormel</targetElement>
+                        <reversePropertyName xmlns="http://www.opengis.net/gml/3.2">br:inversZu_umrechnungsformel</reversePropertyName>
+                     </appinfo>
+                  </annotation>
+               </element>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <simpleType name="BR_Verfahrensart_BodenrichtwertType">
+      <restriction base="string">
+         <enumeration value="1000"/>
+         <enumeration value="2000"/>
+         <enumeration value="3000"/>
+         <enumeration value="4000"/>
+      </restriction>
+   </simpleType>
+   <simpleType name="BR_Wegerschliessung_BodenrichtwertType">
+      <restriction base="string">
+         <enumeration value="0"/>
+         <enumeration value="1"/>
+      </restriction>
+   </simpleType>
+</schema>

@@ -56,7 +56,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
 			<xsl:choose>
 				<xsl:when test="/FC_FeatureCatalogue/FC_FeatureAttribute[@id=$objektart/characterizedBy/@idref]|/FC_FeatureCatalogue/FC_RelationshipRole[inType/@idref=$objektart/@id]">
 					<xsl:for-each select="/FC_FeatureCatalogue/FC_FeatureAttribute[@id=$objektart/characterizedBy/@idref]|/FC_FeatureCatalogue/FC_RelationshipRole[inType/@idref=$objektart/@id]">
-						<xsl:sort select="@sequenceNumber" />
+						<xsl:sort select="@sequenceNumber" data-type="number"/>
 						<xsl:sort select="name" />
 						<xsl:variable name="eigenschaft" select="."/>
 						<xsl:choose>

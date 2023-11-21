@@ -411,7 +411,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
         <xsl:when test="/FC_FeatureCatalogue/FC_FeatureAttribute[@id=$objektart/characterizedBy/@idref]">
           <ul>
             <xsl:for-each select="/FC_FeatureCatalogue/FC_FeatureAttribute[@id=$objektart/characterizedBy/@idref]">
-              <xsl:sort select="@sequenceNumber" />
+              <xsl:sort select="@sequenceNumber" data-type="number"/>
               <xsl:sort select="name" />
               <li>
                 <a>
@@ -433,7 +433,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
         <xsl:when test="/FC_FeatureCatalogue/FC_RelationshipRole[inType/@idref=$objektart/@id]">
           <ul>
             <xsl:for-each select="/FC_FeatureCatalogue/FC_RelationshipRole[inType/@idref=$objektart/@id]">
-              <xsl:sort select="@sequenceNumber" />
+              <xsl:sort select="@sequenceNumber" data-type="number"/>
               <xsl:sort select="name" />
               <li>
                 <a>
@@ -453,7 +453,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
       <xsl:call-template name="backlink" />
 
       <xsl:for-each select="/FC_FeatureCatalogue/FC_FeatureAttribute[@id=$objektart/characterizedBy/@idref]|/FC_FeatureCatalogue/FC_RelationshipRole[inType/@idref=$objektart/@id]">
-        <xsl:sort select="@sequenceNumber" />
+        <xsl:sort select="@sequenceNumber" data-type="number"/>
         <xsl:sort select="name" />
         <xsl:apply-templates select="." mode="detail" />
       </xsl:for-each>
