@@ -3,7 +3,7 @@
   <groupId>net.shapechange</groupId>
   <artifactId>AAATools</artifactId>
   <name>AAA Tools</name>
-  <version>1.3.2-SNAPSHOT</version>
+  <version>1.3.3-SNAPSHOT</version>
   <scm>
     <url>https://github.com/ShapeChange/AAATools</url>
     <connection>scm:git:https://github.com/ShapeChange/AAATools.git</connection>
