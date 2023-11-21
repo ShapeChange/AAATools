@@ -214,12 +214,16 @@
                     <include>AAAKatalog-BasisDLM-7.1.2-Aenderungen.xml</include>
                     <include>AAAKatalog-BasisDLM-7.1.2-SCXML.xml</include>
                     <include>AAAKatalog-BasisDLM-7.1.2.xml</include>
+                    <include>AAAKatalog-BR-3.0.0-SCXML.xml</include>
+                    <include>AAAKatalog-BR-3.0.0.xml</include>
                     <include>AAAKatalog-DLM50-6.0.1-SCXML.xml</include>
                     <include>AAAKatalog-DLM50-6.0.1.xml</include>
                     <include>AAAKatalog-DLM50-7.1.2-Aenderungen-SCXML.xml</include>
                     <include>AAAKatalog-DLM50-7.1.2-Aenderungen.xml</include>
                     <include>AAAKatalog-DLM50-7.1.2-SCXML.xml</include>
                     <include>AAAKatalog-DLM50-7.1.2.xml</include>
+                    <include>AAAKatalog-GN-1.0.0-SCXML.xml</include>
+                    <include>AAAKatalog-GN-1.0.0.xml</include>
                     <include>AAAKatalog-GV-1.0.0-SCXML.xml</include>
                     <include>AAAKatalog-GV-1.0.0.xml</include>
                     <include>AAAKatalog-LB-1.0.1-Aenderungen-SCXML.xml</include>
@@ -245,6 +249,8 @@
                     <include>NAS-6.0.1.xml</include>
                     <include>NAS-7.1.2.xml</include>
                     <include>NAS-AK-2.0.0.xml</include>
+                    <include>NAS-BR-3.0.0.xml</include>
+                    <include>NAS-GN-1.0.0.xml</include>
                     <include>NAS-GV-1.0.0.xml</include>
                     <include>NAS-LB-1.0.1.xml</include>
                     <include>NAS-LN-1.0.2.xml</include>
