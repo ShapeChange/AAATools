@@ -838,7 +838,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 
 		else if (mdl.toLowerCase().endsWith(".xmi"))
 			options.setParameter("inputModelType", "XMI10");
-		else if (mdl.toLowerCase().endsWith(".eap")||mdl.toLowerCase().endsWith(".eapx"))
+		else if (mdl.toLowerCase().endsWith(".qea")||mdl.toLowerCase().endsWith(".qeax"))
 			options.setParameter("inputModelType", "EA7");
 
 		// update target config from dialog also in the target configurations (strictly this is the only place where they need to be updated)

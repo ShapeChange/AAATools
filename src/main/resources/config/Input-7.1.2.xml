@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <input xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1">
 	<parameter name="inputModelType" value="EA7"/>
-	<parameter name="inputFile" value="AAA-7.1.2.eap"/>
+	<parameter name="inputFile" value="AAA-7.1.2.qea"/>
 	<parameter name="appSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
 	<parameter name="excludedPackages" value="ISO 19103 Edition 1,ISO 19107 Spatial schema,ISO 19108 Temporal schema,ISO/CD 19110 Rev 1 Feature Catalog,ISO 19109 Rules for application schema,ISO 19111 Referencing by coordinates,ISO 19115 Metadata,ISO 19123 Schema for coverage geometry and functions,ISO 19136 Edition 1,Informative,ISO 19157 Data quality,OGC,AAA_Ausgabekatalog,AAA_Objektartenkatalog,AAA Versionierungsschema,Web Feature Service Erweiterungen,AAA_Signaturenkatalog"/>
 	<parameter name="publicOnly" value="true"/>

@@ -67,8 +67,8 @@ public class NasTransformer implements Transformer {
 		boolean ex = true;
 		if(!repfile.exists()) {
 			ex = false;
-			if(!repositoryFileName.toLowerCase().endsWith(".eap")) {
-				repositoryFileName += ".eap";
+			if(!repositoryFileName.toLowerCase().endsWith(".qea")) {
+				repositoryFileName += ".qea";
 				repfile = new java.io.File(repositoryFileName);
 				ex = repfile.exists();
 			}

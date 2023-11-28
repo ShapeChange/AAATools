@@ -2,7 +2,7 @@
 <ShapeChangeConfiguration xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1 resources/schema/ShapeChangeConfiguration.xsd">
 	<input xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1">
 		<parameter name="inputModelType" value="EA7"/>
-		<parameter name="inputFile" value="AAA-7.1.2.eap"/>
+		<parameter name="inputFile" value="AAA-7.1.2.qea"/>
 		<parameter name="appSchemaName" value="AAA_Ausgabekatalog"/>
 		<parameter name="excludedPackages" value="ISO/TC 211,OGC,GV_Geometrische Verbesserungen,LB_Landbedeckung,LN_Landnutzung,AAA_Objektartenkatalog,AAA Versionierungsschema,Web Feature Service Erweiterungen,AAA_Signaturenkatalog"/>
 		<parameter name="publicOnly" value="true"/>

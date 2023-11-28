@@ -32,7 +32,7 @@
     <dependency>
       <groupId>net.shapechange</groupId>
       <artifactId>ShapeChange</artifactId>
-      <version>2.13.0</version>
+      <version>2.13.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <properties>
@@ -348,10 +348,10 @@
                 <resource>
                   <directory>${project.basedir}/src/main/resources/model</directory>
                   <includes>
-                    <include>AAA-6.0.1.eap</include>
-                    <include>AAA-7.1.0.eap</include>
-                    <include>AAA-7.1.1.eap</include>
-                    <include>AAA-7.1.2.eap</include>
+                    <include>AAA-6.0.1.qea</include>
+                    <include>AAA-7.1.0.qea</include>
+                    <include>AAA-7.1.1.qea</include>
+                    <include>AAA-7.1.2.qea</include>
                     <include>AAA-6.0.1.xml.zip</include>
                     <include>AAA-7.1.0.xml.zip</include>
                     <include>AAA-7.1.1.xml.zip</include>
@@ -407,7 +407,7 @@
                   <directory>${project.basedir}/src/main/resources/uml-profile</directory>
                   <includes>
                     <include>AAA-Diagram.xml</include>
-                    <include>AAA-MDG.eap</include>
+                    <include>AAA-MDG.qea</include>
                     <include>AAA-MDG.xml</include>
                     <include>AAA-Profile.xml</include>
                     <include>AAA-Toolbox.xml</include>

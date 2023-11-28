@@ -125,7 +125,7 @@ public class ProfilDialog extends JFrame implements ActionListener, ItemListener
 	 	protected Converter converter = null;
 		protected ShapeChangeResult result = null;
 		protected Options options = null;
-		protected String eap = null;
+		protected String eaRepositoryPath = null;
 		protected ProfilDialog dialog = null;
 		protected boolean onlyInitialise; 
 
@@ -133,7 +133,7 @@ public class ProfilDialog extends JFrame implements ActionListener, ItemListener
             this.converter = c;
             this.options = o;
             this.result = r;
-            this.eap = e;
+            this.eaRepositoryPath = e;
             this.dialog = d;
             onlyInitialise = false;
         }
@@ -148,7 +148,7 @@ public class ProfilDialog extends JFrame implements ActionListener, ItemListener
             	dialog.model = null;
             }
 				dialog.saveModelMsgText = true;
-            	dialog.model = new EADocument(result, options, eap);
+            	dialog.model = new EADocument(result, options, eaRepositoryPath);
 				dialog.saveModelMsgText = false;
                 
             if(onlyInitialise)
@@ -230,7 +230,7 @@ public class ProfilDialog extends JFrame implements ActionListener, ItemListener
  	protected Converter converter = null;
 	protected ShapeChangeResult result = null;
 	protected Options options = null;
-	protected String eap = null;
+	protected String eaRepositoryPath = null;
 	
 	private Model model = null;
 	private String modelMsgText = "";
@@ -256,7 +256,7 @@ public class ProfilDialog extends JFrame implements ActionListener, ItemListener
      	converter = null;
     	result = null;
     	options = null;
-    	eap = null;
+    	eaRepositoryPath = null;
     	model = null;
     	blocked = false;
 	}
@@ -266,7 +266,7 @@ public class ProfilDialog extends JFrame implements ActionListener, ItemListener
      	converter = null;
     	result = null;
     	options = null;
-    	eap = null;
+    	eaRepositoryPath = null;
     	model = null;
     	blocked = false;
 		initialise(c, o, r, xmi);
@@ -290,11 +290,11 @@ public class ProfilDialog extends JFrame implements ActionListener, ItemListener
 		
 		options = o;
 
-		File eapFile = new File(xmi);
+		File eaRepositoryFile = new File(xmi);
         try{
-        	eap = eapFile.getCanonicalFile().getAbsolutePath();
+        	eaRepositoryPath = eaRepositoryFile.getCanonicalFile().getAbsolutePath();
         } catch(IOException e){
-        	eap = "ERROR.eap";
+        	eaRepositoryPath = "ERROR.qea";
         }
 		
 		converter = new Converter(options, r);
@@ -409,7 +409,7 @@ public class ProfilDialog extends JFrame implements ActionListener, ItemListener
 				pfadStr = "";
 		}
 
-        String mdlDirStr = eap;
+        String mdlDirStr = eaRepositoryPath;
 
 		final JPanel topPanel = new JPanel();
         final JPanel topInnerPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 30, 5));
@@ -605,7 +605,7 @@ public class ProfilDialog extends JFrame implements ActionListener, ItemListener
         final JPanel startPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 
                 20, 20));
         //startPanel.sets
-        startButton = new JButton("Process EAP");
+        startButton = new JButton("Process Model");
         startButton.setActionCommand("START");
         startButton.addActionListener(this);
         startPanel.add(startButton);
@@ -730,7 +730,7 @@ public class ProfilDialog extends JFrame implements ActionListener, ItemListener
     
     public void startConvertThread(boolean onlyInit){
 		if(ct == null){
-			ct = new ConvertThread(converter, options, result, eap, this);
+			ct = new ConvertThread(converter, options, result, eaRepositoryPath, this);
 			ct.setOnlyInitialise(onlyInit);
 			ct.start();
 		}
