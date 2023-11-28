@@ -32,7 +32,7 @@
     <dependency>
       <groupId>net.shapechange</groupId>
       <artifactId>ShapeChange</artifactId>
-      <version>2.13.1-SNAPSHOT</version>
+      <version>3.0.0</version>
     </dependency>
   </dependencies>
   <properties>
