@@ -64,18 +64,8 @@
       <complexContent>
          <extension base="gn:GN_GeographischesNamensgutType">
             <sequence>
-               <element name="kulturlandschaftspraegendertyp">
-                  <complexType>
-                     <complexContent>
-                        <extension base="gml:AbstractFeatureMemberType">
-                           <sequence minOccurs="0">
-                              <element ref="gn:GN_KulturlandschaftspraegendeInformation"/>
-                           </sequence>
-                           <attributeGroup ref="gml:AssociationAttributeGroup"/>
-                        </extension>
-                     </complexContent>
-                  </complexType>
-               </element>
+               <element name="kulturlandschaftspraegendertyp"
+                        type="gn:GN_Typ_KulturlandschaftspraegendeInformationType"/>
                <element minOccurs="0" name="klasseFlaechengroesse" type="integer"/>
             </sequence>
          </extension>

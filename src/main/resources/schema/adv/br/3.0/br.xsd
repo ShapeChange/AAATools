@@ -69,11 +69,11 @@
       </restriction>
    </simpleType>
    <element name="BR_Bodenrichtwert"
-            substitutionGroup="gml:AbstractFeature"
+            substitutionGroup="adv:AA_NREO"
             type="br:BR_BodenrichtwertType"/>
    <complexType name="BR_BodenrichtwertType">
       <complexContent>
-         <extension base="gml:AbstractFeatureType">
+         <extension base="adv:AA_NREOType">
             <sequence>
                <element maxOccurs="2" minOccurs="0" name="ackerzahl" type="integer"/>
                <element minOccurs="0"
