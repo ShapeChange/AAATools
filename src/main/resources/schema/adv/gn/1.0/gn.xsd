@@ -53,6 +53,7 @@
                <element name="gewaessertyp" type="gn:GN_Typ_GewaesserinformationType"/>
                <element minOccurs="0" name="klasseFlaechengroesse" type="integer"/>
                <element minOccurs="0" name="breite" type="integer"/>
+               <element minOccurs="0" name="hoehe" type="gml:LengthType"/>
             </sequence>
          </extension>
       </complexContent>
@@ -81,6 +82,7 @@
                <element name="landschaftstyp"
                         type="gn:GN_Typ_LandschaftspraegendeInformationType"/>
                <element minOccurs="0" name="klasseFlaechengroesse" type="integer"/>
+               <element minOccurs="0" name="hoehe" type="gml:LengthType"/>
             </sequence>
          </extension>
       </complexContent>
@@ -207,6 +209,7 @@
          <enumeration value="1600"/>
          <enumeration value="1700"/>
          <enumeration value="1800"/>
+         <enumeration value="1801"/>
          <enumeration value="1900"/>
          <enumeration value="1901"/>
          <enumeration value="1902"/>
@@ -217,6 +220,7 @@
          <enumeration value="2100"/>
          <enumeration value="2200"/>
          <enumeration value="2300"/>
+         <enumeration value="2301"/>
          <enumeration value="2350"/>
          <enumeration value="2400"/>
          <enumeration value="2401"/>
