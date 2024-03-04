@@ -1,10 +1,7 @@
 /**
  * NAS-Tool (schema transformer)
  *
- * The class in this file implements the ShapeChange Target interface to 
- * generate and load the 3AP files.
- *
- * (c) 2009-2012 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
+ * (c) 2009-2024 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
  * Länder der Bundesrepublik Deutschland (AdV)
  *
  * This program is free software: you can redistribute it and/or modify
