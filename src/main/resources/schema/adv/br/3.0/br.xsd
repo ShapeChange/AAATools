@@ -7,7 +7,7 @@
         xmlns:sc="http://www.interactive-instruments.de/ShapeChange/AppInfo"
         elementFormDefault="qualified"
         targetNamespace="http://www.adv-online.de/namespaces/adv/br/3.0"
-        version="3.0.0">
+        version="3.0.1">
    <import namespace="http://www.adv-online.de/namespaces/adv/gid/7.1"
            schemaLocation="http://repository.gdi-de.org/schemas/adv/nas/7.1/aaa.xsd"/>
    <import namespace="http://www.interactive-instruments.de/ShapeChange/AppInfo"/>
@@ -245,7 +245,7 @@
                   type="br:BR_Erschliessungsverhaeltnisse_BodenrichtwertType"/>
          <element maxOccurs="unbounded"
                   minOccurs="0"
-                  name="landesspezifischeEinflussgröße"
+                  name="landesspezifischeEinflussgroesse"
                   type="string"/>
          <element maxOccurs="unbounded"
                   minOccurs="0"
@@ -284,7 +284,7 @@
          <element minOccurs="0" name="grundstuecksmerkmale" type="boolean"/>
          <element name="korrekturanlass" type="br:BR_Korrekturanlass_BodenrichtwertType"/>
          <element name="korrekturdatum" type="date"/>
-         <element minOccurs="0" name="sonstigeAttríbute" type="boolean"/>
+         <element minOccurs="0" name="sonstigeAttribute" type="boolean"/>
          <element minOccurs="0" name="wert" type="boolean"/>
          <element minOccurs="0" name="zonengrenze" type="boolean"/>
       </sequence>
