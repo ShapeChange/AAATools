@@ -57,16 +57,16 @@ import javax.swing.border.TitledBorder;
 
 import org.apache.commons.lang3.SystemUtils;
 
-import de.interactive_instruments.ShapeChange.Converter;
-import de.interactive_instruments.ShapeChange.DefaultModelProvider;
-import de.interactive_instruments.ShapeChange.Options;
-import de.interactive_instruments.ShapeChange.ShapeChangeAbortException;
-import de.interactive_instruments.ShapeChange.ShapeChangeResult;
-import de.interactive_instruments.ShapeChange.TargetConfiguration;
-import de.interactive_instruments.ShapeChange.Model.Model;
-import de.interactive_instruments.ShapeChange.UI.Dialog;
-import de.interactive_instruments.ShapeChange.UI.StatusBoard;
-import de.interactive_instruments.ShapeChange.UI.StatusReader;
+import de.interactive_instruments.shapechange.core.Converter;
+import de.interactive_instruments.shapechange.core.DefaultModelProvider;
+import de.interactive_instruments.shapechange.core.Options;
+import de.interactive_instruments.shapechange.core.ShapeChangeAbortException;
+import de.interactive_instruments.shapechange.core.ShapeChangeResult;
+import de.interactive_instruments.shapechange.core.TargetConfiguration;
+import de.interactive_instruments.shapechange.core.model.Model;
+import de.interactive_instruments.shapechange.core.ui.Dialog;
+import de.interactive_instruments.shapechange.core.ui.StatusBoard;
+import de.interactive_instruments.shapechange.core.ui.StatusReader;
 import shadow.org.apache.commons.lang3.StringUtils;
 
 public class KatalogDialog extends JFrame implements ActionListener, ItemListener, Dialog, StatusReader {

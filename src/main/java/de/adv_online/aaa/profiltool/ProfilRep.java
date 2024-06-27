@@ -45,16 +45,16 @@ import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
 
-import de.interactive_instruments.ShapeChange.Options;
-import de.interactive_instruments.ShapeChange.ShapeChangeResult;
-import de.interactive_instruments.ShapeChange.Model.ClassInfo;
-import de.interactive_instruments.ShapeChange.Model.Info;
-import de.interactive_instruments.ShapeChange.Model.Model;
-import de.interactive_instruments.ShapeChange.Model.PackageInfo;
-import de.interactive_instruments.ShapeChange.Model.PropertyInfo;
-import de.interactive_instruments.ShapeChange.Model.EA.ClassInfoEA;
-import de.interactive_instruments.ShapeChange.Model.EA.PackageInfoEA;
-import de.interactive_instruments.ShapeChange.Model.EA.PropertyInfoEA;
+import de.interactive_instruments.shapechange.core.Options;
+import de.interactive_instruments.shapechange.core.ShapeChangeResult;
+import de.interactive_instruments.shapechange.core.model.ClassInfo;
+import de.interactive_instruments.shapechange.core.model.Info;
+import de.interactive_instruments.shapechange.core.model.Model;
+import de.interactive_instruments.shapechange.core.model.PackageInfo;
+import de.interactive_instruments.shapechange.core.model.PropertyInfo;
+import de.interactive_instruments.shapechange.ea.model.ClassInfoEA;
+import de.interactive_instruments.shapechange.ea.model.PackageInfoEA;
+import de.interactive_instruments.shapechange.ea.model.PropertyInfoEA;
 
 public class ProfilRep {
 
@@ -189,15 +189,15 @@ public class ProfilRep {
 	    // only add to AAA:Profile, for AAA:Modellart a blank value means all
 	    // Modellarten are included
 	    if (!setModellartOnly()) {
-		if (i.getClass().getName().equals("de.interactive_instruments.ShapeChange.Model.EA.PackageInfoEA")) {
+		if (i.getClass().getName().equals("de.interactive_instruments.shapechange.ea.model.PackageInfoEA")) {
 		    PackageInfoEA iea = (PackageInfoEA) i;
 		    iea.taggedValue(tag(), name());
 		} else if (i.getClass().getName()
-			.equals("de.interactive_instruments.ShapeChange.Model.EA.ClassInfoEA")) {
+			.equals("de.interactive_instruments.shapechange.ea.model.ClassInfoEA")) {
 		    ClassInfoEA iea = (ClassInfoEA) i;
 		    iea.taggedValue(tag(), name());
 		} else if (i.getClass().getName()
-			.equals("de.interactive_instruments.ShapeChange.Model.EA.PropertyInfoEA")) {
+			.equals("de.interactive_instruments.shapechange.ea.model.PropertyInfoEA")) {
 		    PropertyInfoEA iea = (PropertyInfoEA) i;
 		    iea.taggedValue(tag(), name());
 		} else {
@@ -211,13 +211,13 @@ public class ProfilRep {
 	    if (s2.trim().equals(name()))
 		return;
 	}
-	if (i.getClass().getName().equals("de.interactive_instruments.ShapeChange.Model.EA.PackageInfoEA")) {
+	if (i.getClass().getName().equals("de.interactive_instruments.shapechange.ea.model.PackageInfoEA")) {
 	    PackageInfoEA iea = (PackageInfoEA) i;
 	    iea.taggedValue(tag(), s1 + "," + name());
-	} else if (i.getClass().getName().equals("de.interactive_instruments.ShapeChange.Model.EA.ClassInfoEA")) {
+	} else if (i.getClass().getName().equals("de.interactive_instruments.shapechange.ea.model.ClassInfoEA")) {
 	    ClassInfoEA iea = (ClassInfoEA) i;
 	    iea.taggedValue(tag(), s1 + "," + name());
-	} else if (i.getClass().getName().equals("de.interactive_instruments.ShapeChange.Model.EA.PropertyInfoEA")) {
+	} else if (i.getClass().getName().equals("de.interactive_instruments.shapechange.ea.model.PropertyInfoEA")) {
 	    PropertyInfoEA iea = (PropertyInfoEA) i;
 	    iea.taggedValue(tag(), s1 + "," + name());
 	} else {
@@ -243,13 +243,13 @@ public class ProfilRep {
 	}
 	if (!found)
 	    return; // nothing to do
-	if (i.getClass().getName().equals("de.interactive_instruments.ShapeChange.Model.EA.PackageInfoEA")) {
+	if (i.getClass().getName().equals("de.interactive_instruments.shapechange.ea.model.PackageInfoEA")) {
 	    PackageInfoEA iea = (PackageInfoEA) i;
 	    iea.taggedValue(tag(), s1);
-	} else if (i.getClass().getName().equals("de.interactive_instruments.ShapeChange.Model.EA.ClassInfoEA")) {
+	} else if (i.getClass().getName().equals("de.interactive_instruments.shapechange.ea.model.ClassInfoEA")) {
 	    ClassInfoEA iea = (ClassInfoEA) i;
 	    iea.taggedValue(tag(), s1);
-	} else if (i.getClass().getName().equals("de.interactive_instruments.ShapeChange.Model.EA.PropertyInfoEA")) {
+	} else if (i.getClass().getName().equals("de.interactive_instruments.shapechange.ea.model.PropertyInfoEA")) {
 	    PropertyInfoEA iea = (PropertyInfoEA) i;
 	    iea.taggedValue(tag(), s1);
 	} else {

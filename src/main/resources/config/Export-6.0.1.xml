@@ -22,7 +22,7 @@
 		<parameter name="logFile" value="AAA-Export-Log.xml"/>
 	</log>
 	<targets>
-		<Target class="de.interactive_instruments.ShapeChange.Target.ModelExport.ModelExport" mode="enabled">
+		<Target class="de.interactive_instruments.shapechange.core.target.modelexport.ModelExport" mode="enabled">
 			<targetParameter name="outputDirectory" value="Ausgaben"/>
 			<targetParameter name="outputFilename" value="AAA-6.0.1"/>
 			<targetParameter name="sortedOutput" value="true"/>

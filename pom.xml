@@ -21,7 +21,7 @@
 	<dependency>
 		<groupId>net.sf.saxon</groupId>
 		<artifactId>Saxon-HE</artifactId>
-		<version>10.2</version>
+		<version>12.4</version>
 	</dependency>
     <dependency>
       <groupId>commons-beanutils</groupId>
@@ -31,8 +31,13 @@
     </dependency>
     <dependency>
       <groupId>net.shapechange</groupId>
-      <artifactId>ShapeChange</artifactId>
-      <version>3.0.0</version>
+      <artifactId>shapechange-core</artifactId>
+      <version>4.0.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>net.shapechange</groupId>
+      <artifactId>shapechange-app</artifactId>
+      <version>4.0.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <properties>
@@ -55,16 +60,39 @@
     </resources>  
     <plugins>
       <plugin>
+		<groupId>pl.project13.maven</groupId>
+		<artifactId>git-commit-id-plugin</artifactId>
+		<version>4.9.10</version>
+		<!-- new project home is https://github.com/git-commit-id/git-commit-id-maven-plugin ... time to upgrade -->
+		<executions>
+			<execution>
+				<id>get-the-git-infos</id>
+				<goals>
+					<goal>revision</goal>
+				</goals>
+				<phase>validate</phase>
+			</execution>
+		</executions>
+		<configuration>
+			<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+			<dateFormatTimeZone>${user.timezone}</dateFormatTimeZone>
+			<skipPoms>false</skipPoms>
+			<verbose>false</verbose>
+		</configuration>
+	</plugin>
+      <plugin>
 	    <artifactId>maven-compiler-plugin</artifactId>
-	    <version>3.1</version>
-	    <configuration>
-	      <source>11</source>
-	      <target>11</target>
-	    </configuration>
+		<version>3.13.0</version>
+		<configuration>
+			<source>11</source>
+			<target>11</target>
+			<showWarnings>true</showWarnings>
+			<showDeprecation>true</showDeprecation>
+		</configuration>
       </plugin>
       <plugin>
 	    <artifactId>maven-clean-plugin</artifactId>
-	    <version>2.5</version>
+	    <version>3.4.0</version>
 	    <configuration>
 	      <filesets>
 	        <fileset>
@@ -77,7 +105,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>2.1.2</version>
+        <version>3.3.1</version>
         <executions>
           <execution>
             <id>attach-sources</id>
@@ -93,7 +121,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.2.2</version>
+        <version>3.4.2</version>
         <executions>
           <execution>
             <id>default-jar</id>
@@ -104,7 +132,7 @@
             <configuration>
               <archive>
                 <manifest>
-                  <mainClass>de.interactive_instruments.ShapeChange.Main</mainClass>
+                  <mainClass>de.interactive_instruments.shapechange.app.Main</mainClass>
                   <addClasspath>true</addClasspath>
                   <classpathPrefix>lib</classpathPrefix>
                   <!-- Workaround for Maven bug #MJAR-156 (https://issues.apache.org/jira/browse/MJAR-156) -->
@@ -113,6 +141,12 @@
                    -->
                   <useUniqueVersions>false</useUniqueVersions>
                 </manifest>
+                <manifestEntries>
+					<Project-Version>${project.version}</Project-Version>
+					<Git-Revision>${git.commit.id}</Git-Revision>
+					<Build-Timestamp>${build.timestamp}</Build-Timestamp>
+					<Build-Branch>${git.branch}</Build-Branch>
+				</manifestEntries>
               </archive>
             </configuration>
           </execution>
@@ -121,9 +155,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.2.0</version>
+        <version>3.7.1</version>
         <executions>
           <execution>
+            <?m2e ignore?>
             <id>copy-dependencies</id>
             <phase>package</phase>
             <goals>
@@ -137,6 +172,7 @@
             </configuration>
           </execution>
 			<execution>
+			  <?m2e ignore?>
 			  <id>resource-dependencies-1</id>
 			  <phase>package</phase>
 			  <goals>
@@ -146,8 +182,8 @@
 			    <artifactItems>
             	<artifactItem>
                  <groupId>net.shapechange</groupId>
-				 	  <artifactId>ShapeChange</artifactId>
-				     <type>jar</type>
+				 <artifactId>shapechange-core</artifactId>
+				 <type>jar</type>
             	</artifactItem>
 			    </artifactItems>
 				 <includes>**/StandardMapEntries_iso19136_2007.xml,**/StandardMapEntries_iso19139_2007.xml,**/StandardMapEntries_iso19107.xml,**/StandardMapEntries_iso19108.xml,**/StandardMapEntries_iso19111.xml,**/StandardMapEntries_iso19115.xml,**/StandardMapEntries_iso19123.xml,**/StandardMapEntries_gmlcov.xml</includes>
@@ -155,6 +191,7 @@
 			  </configuration>
 			</execution>
 			<execution>
+			  <?m2e ignore?>
 			  <id>resource-dependencies-2</id>
 			  <phase>package</phase>
 			  <goals>
@@ -164,7 +201,7 @@
 			    <artifactItems>
             	<artifactItem>
                  <groupId>net.shapechange</groupId>
-				 	  <artifactId>ShapeChange</artifactId>
+				 	  <artifactId>shapechange-core</artifactId>
 				     <type>jar</type>
             	</artifactItem>
 			    </artifactItems>
@@ -176,7 +213,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>2.5</version>
+        <version>3.3.1</version>
         <executions>
           <execution>
             <id>copy-resources1</id>
@@ -422,12 +459,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2</version>
-        <configuration>
-          <descriptors>
-            <descriptor>assembly.xml</descriptor>
-          </descriptors>
-        </configuration>
+        <version>3.7.1</version>
         <executions>
           <execution>
             <id>create-zip</id>
@@ -436,6 +468,9 @@
               <goal>single</goal>
             </goals>
             <configuration>
+              <descriptors>
+	            <descriptor>assembly.xml</descriptor>
+	          </descriptors>
               <appendAssemblyId>false</appendAssemblyId>
             </configuration>
           </execution>
@@ -444,48 +479,19 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.7</version>
+        <version>3.1.2</version>
       </plugin>
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-release-plugin</artifactId>
-			<version>2.5.3</version>
+			<version>3.1.0</version>
 		</plugin>
     </plugins>
-    <pluginManagement>
-      <plugins>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <versionRange>[2.1,)</versionRange>
-                    <goals>
-                      <goal>copy-dependencies</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore />
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
     <extensions>
 		<extension>
 			<groupId>org.apache.maven.wagon</groupId>
 			<artifactId>wagon-ssh-external</artifactId>
-			<version>3.1.0</version>
+			<version>3.5.3</version>
 		</extension>
     </extensions>
   </build>

@@ -25,7 +25,7 @@
 		<parameter name="logFile" value="NAS-Log.xml"/>
 	</log>
 	<targets>
-		<TargetXmlSchema class="de.interactive_instruments.ShapeChange.Target.XmlSchema.XmlSchema" mode="enabled">
+		<TargetXmlSchema class="de.interactive_instruments.shapechange.core.target.xmlschema.XmlSchema" mode="enabled">
 			<targetParameter name="outputDirectory" value="Ausgaben/NAS"/>
 			<targetParameter name="defaultEncodingRule" value="NAS"/>
 			<rules>

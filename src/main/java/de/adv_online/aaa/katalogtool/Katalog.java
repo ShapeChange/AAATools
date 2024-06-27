@@ -29,6 +29,7 @@ package de.adv_online.aaa.katalogtool;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Collection;
@@ -58,27 +59,27 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import de.adv_online.aaa.profiltool.ProfilRep;
-import de.interactive_instruments.ShapeChange.MessageSource;
-import de.interactive_instruments.ShapeChange.Options;
-import de.interactive_instruments.ShapeChange.RuleRegistry;
-import de.interactive_instruments.ShapeChange.ShapeChangeAbortException;
-import de.interactive_instruments.ShapeChange.ShapeChangeResult;
-import de.interactive_instruments.ShapeChange.ShapeChangeResult.MessageContext;
-import de.interactive_instruments.ShapeChange.Type;
-import de.interactive_instruments.ShapeChange.Model.ClassInfo;
-import de.interactive_instruments.ShapeChange.Model.Constraint;
-import de.interactive_instruments.ShapeChange.Model.Info;
-import de.interactive_instruments.ShapeChange.Model.Model;
-import de.interactive_instruments.ShapeChange.Model.PackageInfo;
-import de.interactive_instruments.ShapeChange.Model.PropertyInfo;
-import de.interactive_instruments.ShapeChange.ModelDiff.DiffElement;
-import de.interactive_instruments.ShapeChange.ModelDiff.DiffElement.ElementType;
-import de.interactive_instruments.ShapeChange.ModelDiff.DiffElement.Operation;
-import de.interactive_instruments.ShapeChange.ModelDiff.Differ;
-import de.interactive_instruments.ShapeChange.Target.Target;
-import de.interactive_instruments.ShapeChange.UI.StatusBoard;
-import de.interactive_instruments.ShapeChange.Util.XMLUtil;
-import de.interactive_instruments.ShapeChange.Util.ZipHandler;
+import de.interactive_instruments.shapechange.core.MessageSource;
+import de.interactive_instruments.shapechange.core.Options;
+import de.interactive_instruments.shapechange.core.RuleRegistry;
+import de.interactive_instruments.shapechange.core.ShapeChangeAbortException;
+import de.interactive_instruments.shapechange.core.ShapeChangeResult;
+import de.interactive_instruments.shapechange.core.ShapeChangeResult.MessageContext;
+import de.interactive_instruments.shapechange.core.Type;
+import de.interactive_instruments.shapechange.core.model.ClassInfo;
+import de.interactive_instruments.shapechange.core.model.Constraint;
+import de.interactive_instruments.shapechange.core.model.Info;
+import de.interactive_instruments.shapechange.core.model.Model;
+import de.interactive_instruments.shapechange.core.model.PackageInfo;
+import de.interactive_instruments.shapechange.core.model.PropertyInfo;
+import de.interactive_instruments.shapechange.core.modeldiff.DiffElement;
+import de.interactive_instruments.shapechange.core.modeldiff.DiffElement.ElementType;
+import de.interactive_instruments.shapechange.core.modeldiff.DiffElement.Operation;
+import de.interactive_instruments.shapechange.core.modeldiff.Differ;
+import de.interactive_instruments.shapechange.core.target.Target;
+import de.interactive_instruments.shapechange.core.ui.StatusBoard;
+import de.interactive_instruments.shapechange.core.util.XMLUtil;
+import de.interactive_instruments.shapechange.core.util.ZipHandler;
 
 /**
  * @author Clemens Portele (portele <at> interactive-instruments <dot> de)
@@ -396,19 +397,18 @@ public class Katalog implements Target, MessageSource {
 		
 		// Support original model type codes
 		if (imt.equalsIgnoreCase("ea7"))
-			imt = "de.interactive_instruments.ShapeChange.Model.EA.EADocument";
+			imt = "de.interactive_instruments.shapechange.ea.model.EADocument";
 		else if (imt.equalsIgnoreCase("xmi10"))
-			imt = "de.interactive_instruments.ShapeChange.Model.Xmi10.Xmi10Document";
+			imt = "de.interactive_instruments.shapechange.core.model.xmi10.Xmi10Document";
 		else if (imt.equalsIgnoreCase("gsip"))
 			imt = "us.mitre.ShapeChange.Model.GSIP.GSIPDocument";
 		else if (imt.equalsIgnoreCase("scxml"))
-			imt = "de.interactive_instruments.ShapeChange.Model.Generic.GenericModel";
+			imt = "de.interactive_instruments.shapechange.core.model.generic.GenericModel";
 		
 		Model m = null;
 		
 		// Get model object from reflection API
-		@SuppressWarnings("rawtypes")
-		Class theClass;
+		Class<?> theClass;
 		try {
 			theClass = Class.forName(imt);
 			if (theClass==null) {
@@ -416,7 +416,7 @@ public class Katalog implements Target, MessageSource {
 				result.addError(null, 22, mdl); 
 				return null;
 			}
-			m = (Model)theClass.newInstance();
+			m = (Model)theClass.getConstructor().newInstance();
 			if (m != null) {
 				m.initialise(result, options, mdl);
 			} else {
@@ -425,11 +425,12 @@ public class Katalog implements Target, MessageSource {
 				return null;
 			}
 		} catch (ClassNotFoundException e) {
-			result.addError(null, 17, imt); 
+			result.addError(this, 11, imt); 
 			result.addError(null, 22, mdl); 
-		} catch (InstantiationException e) {
-			result.addError(null, 19, imt); 
-			result.addError(null, 22, mdl); 
+		} catch (IllegalArgumentException | InstantiationException
+			| InvocationTargetException | NoSuchMethodException e) {
+        		result.addError(this, 14, imt);
+        		result.addError(null, 22, mdl); 
 		} catch (IllegalAccessException e) {
 			result.addError(null, 20, imt); 
 			result.addError(null, 22, mdl); 
@@ -437,6 +438,7 @@ public class Katalog implements Target, MessageSource {
 			result.addError(null, 22, mdl); 
 			m = null;
 		}
+		
 		return m;		
 	}
 
@@ -648,9 +650,7 @@ public class Katalog implements Target, MessageSource {
 		return packageInPackage(pi.owner());
 	}
 
-	/* (non-Javadoc)
-	 * @see de.interactive_instruments.ShapeChange.Target.Target#process(de.interactive_instruments.ShapeChange.Model.ClassInfo)
-	 */
+	@Override
 	public void process(ClassInfo ci) {
 		if (error)
 			return;
@@ -1883,9 +1883,7 @@ public class Katalog implements Target, MessageSource {
 		} 		
 	}
 
-	/* (non-Javadoc)
-	 * @see de.interactive_instruments.ShapeChange.Target.Target#write()
-	 */
+	@Override
 	public void write() {
 		if (error || printed)
 			return;
@@ -2200,7 +2198,7 @@ public class Katalog implements Target, MessageSource {
 				try {
 					System.setProperty("javax.xml.transform.TransformerFactory",
 							xslTransformerFactory);
-					@SuppressWarnings("unused")
+					
 					TransformerFactory factory = TransformerFactory.newInstance();
 					
 					if (factory.getClass().getName().equalsIgnoreCase("net.sf.saxon.TransformerFactoryImpl")) {
@@ -2290,10 +2288,14 @@ public class Katalog implements Target, MessageSource {
 	 */
 	protected String messageText(int mnr) {
 		switch (mnr) {
+		case 11:
+			return "Unknown model type: '$1$'.";
 		case 12:
 			return "Directory named '$1$' does not exist or is not accessible.";
 		case 13:
 			return "File '$1$' does not exist or is not accessible.";
+		case 14:
+			return "Reference model object could not be instantiated: '$1$'.";
 		case 17:
 			return "No value provided for configuration parameter '$1$', defaulting to: '$2$'.";
 		case 18:

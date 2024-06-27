@@ -47,9 +47,9 @@ import org.sparx.Repository;
 import org.sparx.RoleTag;
 import org.sparx.TaggedValue;
 
-import de.interactive_instruments.ShapeChange.Options;
-import de.interactive_instruments.ShapeChange.ShapeChangeAbortException;
-import de.interactive_instruments.ShapeChange.ShapeChangeResult;
+import de.interactive_instruments.shapechange.core.Options;
+import de.interactive_instruments.shapechange.core.ShapeChangeAbortException;
+import de.interactive_instruments.shapechange.core.ShapeChangeResult;
 
 public class ImplementationSchemaTransformerHelper {
 
@@ -293,7 +293,7 @@ public class ImplementationSchemaTransformerHelper {
 			    if (ei2.GetRole().equals("")) {
 				ei2.SetRole("inversZu_" + ei1.GetRole());
 				setTaggedValueRole(ei2.GetTaggedValues(), "sequenceNumber",
-					new Integer(SeqNo++).toString(), false);
+					Integer.valueOf(SeqNo++).toString(), false);
 				ei2.GetTaggedValues().Refresh();
 			    }
 			    if (!ei2.Update()) {
@@ -544,11 +544,11 @@ public class ImplementationSchemaTransformerHelper {
 	    r2s.GetTaggedValues().Refresh();
 	}
 	if (r1.GetClientID() == e1.GetElementID()) {
-	    setTaggedValueRole(r2c.GetTaggedValues(), "sequenceNumber", new Integer(SeqNo++).toString(), true);
-	    setTaggedValueRole(r2s.GetTaggedValues(), "sequenceNumber", new Integer(SeqNo++).toString(), false);
+	    setTaggedValueRole(r2c.GetTaggedValues(), "sequenceNumber", Integer.valueOf(SeqNo++).toString(), true);
+	    setTaggedValueRole(r2s.GetTaggedValues(), "sequenceNumber", Integer.valueOf(SeqNo++).toString(), false);
 	} else {
-	    setTaggedValueRole(r2c.GetTaggedValues(), "sequenceNumber", new Integer(SeqNo++).toString(), false);
-	    setTaggedValueRole(r2s.GetTaggedValues(), "sequenceNumber", new Integer(SeqNo++).toString(), true);
+	    setTaggedValueRole(r2c.GetTaggedValues(), "sequenceNumber", Integer.valueOf(SeqNo++).toString(), false);
+	    setTaggedValueRole(r2s.GetTaggedValues(), "sequenceNumber", Integer.valueOf(SeqNo++).toString(), true);
 	}
     }
 
