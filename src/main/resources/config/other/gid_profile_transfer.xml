@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ShapeChangeConfiguration xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1 C:\REPOSITORIES\ii\extern\GitHub\ShapeChange\ShapeChange\shapechange-core\src\main\resources\schema\ShapeChangeConfiguration.xsd">
+	<input>
+		<parameter name="inputModelType" value="EA7"/>
+	<!--	<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\KONF\Analyse Umstellung UML-Profil\testprojekt_type_fix.qea"/>-->
+<!--		<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\KONF\Analyse Umstellung UML-Profil\Test_AAA-7.1.2.qea"/>-->
+<!--		<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\KONF\Analyse Umstellung UML-Profil\issue_setting_association_stereotype.qea"/>-->
+		<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\KONF\Analyse Umstellung UML-Profil\20240815_GeoInfoDok.qea"/>
+		<parameter name="appSchemaName" value="TestSchema"/>
+		<parameter name="publicOnly" value="true"/>
+		<parameter name="addTaggedValues" value="*"/>
+		<parameter name="transformer" value="de.adv_online.aaa.uml.GidProfileTransformer"/>
+		<parameter name="transformerTargetPath" value="http://repository.gdi-de.org/schemas/adv/"/>
+		<parameter name="checkingConstraints" value="disabled"/>
+		<parameter name="oclConstraintTypeRegex" value=""/>
+		<stereotypeAliases>
+			<StereotypeAlias wellknown="Application Schema" alias="applicationSchema" />
+			<StereotypeAlias wellknown="Application Schema" alias="schema" />
+			<StereotypeAlias wellknown="Application Schema" alias="requirementsClass" />
+			<StereotypeAlias wellknown="Application Schema" alias="ApplicationSchema" />
+			<StereotypeAlias wellknown="Application Schema" alias="Schema" />
+			<StereotypeAlias wellknown="Type" alias="interface" />
+			
+			<StereotypeAlias wellknown="Application Schema" alias="GID_ApplicationSchema" />
+		<!--	<StereotypeAlias wellknown="" alias="GID_Package" />	-->
+			<StereotypeAlias wellknown="CodeList" alias="GID_CodeSet" />
+			<StereotypeAlias wellknown="DataType" alias="GID_DataType" />
+			<StereotypeAlias wellknown="FeatureType" alias="GID_FeatureType" />	
+			<StereotypeAlias wellknown="Type" alias="GID_Mixin" />
+			<StereotypeAlias wellknown="Enumeration" alias="GID_Enumeration" />
+			<StereotypeAlias wellknown="property" alias="GID_Property" />
+			<StereotypeAlias wellknown="enum" alias="GID_EnumerationLiteral" />
+			<StereotypeAlias wellknown="retired" alias="GID_Retired" />
+		</stereotypeAliases>
+	</input>
+	<log>
+		<parameter name="reportLevel" value="INFO"/>
+		<parameter name="logFile" value="gid_profile_transfer_log.xml"/>
+	</log>
+</ShapeChangeConfiguration>
