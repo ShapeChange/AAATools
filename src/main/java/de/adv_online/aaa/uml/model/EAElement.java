@@ -1,5 +1,4 @@
 /**
- * GID Profile Transformer (schema transformer)
  *
  * (c) 2009-2024 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
  * Länder der Bundesrepublik Deutschland (AdV)
@@ -23,11 +22,32 @@
  * 53115 Bonn
  * Germany
  */
-package de.adv_online.aaa.uml;
 
-public enum MetaType {
+package de.adv_online.aaa.uml.model;
 
-    ABSTRACT, ASSOCIATION_CLASS, PACKAGE, CLASS, DATATYPE, ENUMERATION, PROPERTY, ENUMERATIONLITERAL, INTERFACE, OBJECT,
-    ANY, UNKNOWN, IGNORED, METACLASS, ARTIFACT, STEREOTYPE
+import org.sparx.Element;
+
+public class EAElement extends AbstractEAModelElement {
+
+    private int elementId;
+    private String metaType;
+
+    public EAElement(Element elmt, String pathToElement) {
+
+	super(elmt.GetName(), pathToElement + elmt.GetName());
+	this.elementId = elmt.GetElementID();
+	this.metaType = elmt.GetMetaType();
+    }
+
+    /**
+     * @return the elementId
+     */
+    public int getElementId() {
+	return elementId;
+    }
+
+    public String getMetaType() {
+	return metaType;
+    }
 
 }

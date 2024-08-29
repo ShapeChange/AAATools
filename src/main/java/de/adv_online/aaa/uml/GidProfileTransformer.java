@@ -1,5 +1,5 @@
 /**
- * GID Profile Transformer (schema transformer)
+ * GID Profile Transformer (input transformer)
  *
  * (c) 2009-2024 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
  * Länder der Bundesrepublik Deutschland (AdV)
@@ -53,6 +53,7 @@ import org.sparx.Repository;
 import org.sparx.RoleTag;
 import org.sparx.TaggedValue;
 
+import de.adv_online.aaa.uml.model.EAConnector;
 import de.interactive_instruments.shapechange.core.MessageSource;
 import de.interactive_instruments.shapechange.core.Options;
 import de.interactive_instruments.shapechange.core.ShapeChangeAbortException;
@@ -105,6 +106,8 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 
     protected Set<StereotypeMappingInfo> stereotypeMappingInfos = new HashSet<>();
     protected List<String> targetValuesForTagMapping = null;
+
+    protected SortedMap<String, Integer> numberOfNonBlankValuesBySourceTaggedValueFQName = new TreeMap<>();
 
     public void initialise(Options o, ShapeChangeResult r, String repositoryFileName) throws ShapeChangeAbortException {
 
@@ -404,7 +407,7 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::xsdEncodingRule", "GID::GID_DataType::xsdEncodingRule");
 
 	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::dataType", "GID::GID_DataType",
-		    dtTVNameToSourceFQNameMap, dtTVSourceToTargetFQNameMap, MetaType.DATATYPE, false);
+		    dtTVNameToSourceFQNameMap, dtTVSourceToTargetFQNameMap, MetaType.DATATYPE, true);
 	    this.stereotypeMappingInfos.add(smi);
 	}
 
@@ -502,7 +505,10 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 
 	    propTVNameToSourceFQNameMap.put("AAA:Landnutzung", "AAA::property::AAA:Landnutzung");
 	    propTVNameToSourceFQNameMap.put("allowedTypesNAS", "AAA::property::allowedTypesNAS");
+
+	    propTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::property::AAA:Nutzungsart");
 	    propTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::property::AAA:Nutzungsartkennung");
+
 	    propTVNameToSourceFQNameMap.put("inlineOrByReference", "AAA::property::inlineOrByReference");
 	    propTVNameToSourceFQNameMap.put("AAA:objektbildend", "AAA::property::AAA:objektbildend");
 	    propTVNameToSourceFQNameMap.put("reverseRoleNAS", "AAA::property::reverseRoleNAS");
@@ -516,16 +522,20 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 		    "GID::GID_LogicalElement::GID:LetzteAenderung");
 	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Revisionsnummer",
 		    "GID::GID_Element::GID:Revisionsnummer");
+	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Nutzungsart",
+		    "GID::AAA_NutzungsartElement::AAA:Nutzungsart");
+	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Nutzungsartkennung",
+		    "GID::AAA_NutzungsartElement::AAA:Nutzungsartkennung");
 	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
 
 	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Landnutzung", "GID::GID_Property::AAA:Landnutzung");
 	    propTVSourceToTargetFQNameMap.put("AAA::property::allowedTypesNAS", "GID::GID_Property::allowedTypesNAS");
-	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Nutzungsartkennung",
-		    "GID::GID_Property::AAA:Nutzungsartkennung");
+//	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Nutzungsartkennung",
+//		    "GID::GID_Property::AAA:Nutzungsartkennung");
 	    propTVSourceToTargetFQNameMap.put("AAA::property::inlineOrByReference",
 		    "GID::GID_Property::inlineOrByReference");
 	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:objektbildend",
-		    "GID::GID_Property::AAA:objektbildend");
+		    "GID::GID_Property::GID:objektbildend");
 	    propTVSourceToTargetFQNameMap.put("AAA::property::reverseRoleNAS", "GID::GID_Property::reverseRoleNAS");
 	    propTVSourceToTargetFQNameMap.put("AAA::property::sequenceNumber", "GID::GID_Property::sequenceNumber");
 
@@ -545,6 +555,8 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    elTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::enum::AAA:Grunddatenbestand");
 	    elTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::enum::AAA:LetzteAenderung");
 	    elTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::enum::AAA:Revisionsnummer");
+	    elTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::enum::AAA:Nutzungsart");
+	    elTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::enum::AAA:Nutzungsartkennung");
 	    elTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::enum::AAA:Profile");
 
 	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Kennung", "GID::GID_Element::GID:Kennung");
@@ -554,6 +566,10 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:LetzteAenderung",
 		    "GID::GID_LogicalElement::GID:LetzteAenderung");
 	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Revisionsnummer", "GID::GID_Element::GID:Revisionsnummer");
+	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Nutzungsart",
+		    "GID::AAA_NutzungsartElement::AAA:Nutzungsart");
+	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Nutzungsartkennung",
+		    "GID::AAA_NutzungsartElement::AAA:Nutzungsartkennung");
 	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
 
 	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::enum", "GID::GID_EnumerationLiteral",
@@ -561,6 +577,11 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    this.stereotypeMappingInfos.add(smi);
 	}
 
+	for (StereotypeMappingInfo smi : this.stereotypeMappingInfos) {
+	    for (String sourceTVFQName : smi.getTvNameToSourceFQNameMap().values()) {
+		this.numberOfNonBlankValuesBySourceTaggedValueFQName.put(sourceTVFQName, 0);
+	    }
+	}
     }
 
     public void shutdown() {
@@ -700,6 +721,59 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 //		    }
 		}
 	    }
+
+	    logProfileUpdateStatistics();
+	}
+    }
+
+    private void logProfileUpdateStatistics() {
+
+	result.addInfo(this, 1002);
+
+	SortedMap<String, Integer> totalNumberOfNonBlankValuesByTVName = new TreeMap<>();
+	SortedMap<String, SortedMap<String, Integer>> numberOfNonBlankValuesBySourceTaggedValueFQNameByTVName = new TreeMap<>();
+
+	for (Entry<String, Integer> e : numberOfNonBlankValuesBySourceTaggedValueFQName.entrySet()) {
+
+	    String sourceTVFQName = e.getKey();
+	    String tvName = sourceTVFQName.contains("::") ? StringUtils.substringAfterLast(sourceTVFQName, "::")
+		    : sourceTVFQName;
+	    Integer numberOfNonBlankValues = e.getValue();
+
+	    // logging per stereotype
+	    result.addInfo(this, 1003, sourceTVFQName, "" + e.getValue());
+
+	    // update total
+	    int total = 0;
+	    if (totalNumberOfNonBlankValuesByTVName.containsKey(tvName)) {
+		total = totalNumberOfNonBlankValuesByTVName.get(tvName);
+	    }
+	    total = total + numberOfNonBlankValues;
+	    totalNumberOfNonBlankValuesByTVName.put(tvName, total);
+
+	    SortedMap<String, Integer> map2;
+	    if (numberOfNonBlankValuesBySourceTaggedValueFQNameByTVName.containsKey(tvName)) {
+		map2 = numberOfNonBlankValuesBySourceTaggedValueFQNameByTVName.get(tvName);
+	    } else {
+		map2 = new TreeMap<>();
+		numberOfNonBlankValuesBySourceTaggedValueFQNameByTVName.put(tvName, map2);
+	    }
+	    map2.put(sourceTVFQName, numberOfNonBlankValues);
+	}
+
+	result.addInfo("--------------------------");
+	for (String tvName : totalNumberOfNonBlankValuesByTVName.keySet()) {
+	    result.addInfo(this, 1004, tvName, "" + totalNumberOfNonBlankValuesByTVName.get(tvName));
+	}
+	result.addInfo("--------------------------");
+	for (String tvName : totalNumberOfNonBlankValuesByTVName.keySet()) {
+	    result.addInfo(this, 1004, tvName, "" + totalNumberOfNonBlankValuesByTVName.get(tvName));
+	    if (numberOfNonBlankValuesBySourceTaggedValueFQNameByTVName.containsKey(tvName)) {
+		SortedMap<String, Integer> map = numberOfNonBlankValuesBySourceTaggedValueFQNameByTVName.get(tvName);
+		for (Entry<String, Integer> e : map.entrySet()) {
+		    result.addInfo(this, 1003, e.getKey(), "" + e.getValue());
+		}
+	    }
 	}
     }
 
@@ -713,7 +787,7 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    result.addInfo(this, 120, pkgName);
 	} else {
 
-	    result.addDebug(this, 102, pkgName);
+	    result.addInfo(this, 123, pkgName);
 
 //	printElementTypeInfo(pkgElmt);
 
@@ -873,7 +947,7 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    int supplierId = pkgConn.GetSupplierID();
 
 	    if (!idOfGeoInfoDok(clientId) || !idOfGeoInfoDok(supplierId)) {
-		result.addInfo(this, 121, connectorInfo(pkgConn));
+		result.addInfo(this, 121, EAConnector.connectorInfo(pkgConn, rep));
 	    }
 	}
 
@@ -906,7 +980,7 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 
 		    if (!type.equalsIgnoreCase("Association") && !type.equalsIgnoreCase("Aggregation")) {
 
-			result.addInfo(this, 122, connectorInfo(conn));
+			result.addInfo(this, 122, EAConnector.connectorInfo(conn, rep));
 
 		    } else {
 
@@ -940,32 +1014,6 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 
     private boolean isIgnored(Connector conn) {
 	return conn.GetMetaType().equalsIgnoreCase("NoteLink");
-    }
-
-    private String connectorInfo(Connector conn) {
-
-	String sourceElementName = rep.GetElementByID(conn.GetClientID()).GetName();
-	String targetElementName = rep.GetElementByID(conn.GetSupplierID()).GetName();
-
-	String connMetaType = StringUtils.defaultIfBlank(conn.GetMetaType(), "NA");
-	String connType = StringUtils.defaultIfBlank(conn.GetType(), "NA");
-	String connSubtype = StringUtils.defaultIfBlank(conn.GetSubtype(), "NA");
-
-	String connectorInfo = "(";
-
-	if (!connMetaType.equals(connType)) {
-	    connectorInfo += "meta type: " + connMetaType + ", ";
-	}
-
-	connectorInfo += "type: " + connType;
-
-	if (!connSubtype.equals("NA")) {
-	    connectorInfo += ", subtype: " + connSubtype;
-	}
-
-	connectorInfo += ") " + sourceElementName + "---" + targetElementName;
-
-	return connectorInfo;
     }
 
     private boolean idOfGeoInfoDok(int id) {
@@ -1041,26 +1089,26 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 
 	SortedSet<String> remainingStereotypes = new TreeSet<>();
 
-	String[] stereotypes = oldStereotypeEx.split("\\s*,\\s*");
+	String[] oldStereotypes = oldStereotypeEx.split("\\s*,\\s*");
 
-	outer: for (String st : stereotypes) {
+	outer: for (String stOld : oldStereotypes) {
 
 	    boolean notFoundAsSourceStereotype = true;
 
 	    inner: for (StereotypeMappingInfo smi : smis) {
-		if (StringUtils.substringAfterLast(smi.getTargetStereotypeFQName(), "::").equals(st)) {
+		if (StringUtils.substringAfterLast(smi.getTargetStereotypeFQName(), "::").equals(stOld)) {
 		    remainingStereotypes.add(smi.getTargetStereotypeFQName());
 		    continue outer;
 		}
 
-		if (StringUtils.substringAfterLast(smi.getSourceStereotypeFQName(), "::").equals(st)) {
+		if (StringUtils.substringAfterLast(smi.getSourceStereotypeFQName(), "::").equalsIgnoreCase(stOld)) {
 		    notFoundAsSourceStereotype = false;
 		    break inner;
 		}
 	    }
 
 	    if (notFoundAsSourceStereotype) {
-		remainingStereotypes.add(st);
+		remainingStereotypes.add(stOld);
 	    }
 	}
 
@@ -1193,6 +1241,26 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    removeOldProfile(att, smis);
 	}
 
+    }
+
+    private void addStatisticsFromSourceTVs(SortedMap<String, List<String>> sourceTVs) {
+
+	for (Entry<String, List<String>> e : sourceTVs.entrySet()) {
+	    String sourceTaggedValueFQName = e.getKey();
+	    for (String v : e.getValue()) {
+		if (StringUtils.isNotBlank(v)) {
+
+		    int counter = 0;
+		    if (numberOfNonBlankValuesBySourceTaggedValueFQName.containsKey(sourceTaggedValueFQName)) {
+			counter = numberOfNonBlankValuesBySourceTaggedValueFQName.get(sourceTaggedValueFQName);
+		    }
+		    counter++;
+		    numberOfNonBlankValuesBySourceTaggedValueFQName.put(sourceTaggedValueFQName, counter);
+
+		    continue;
+		}
+	    }
+	}
     }
 
     private void removeOldProfile(Attribute att, List<StereotypeMappingInfo> smis) throws EAException {
@@ -1465,11 +1533,9 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    String sourceStereotypeFQName = smi.getSourceStereotypeFQName();
 	    List<String> sourceStereotypeFQNameLookupList = createFQNameLookupList(sourceStereotypeFQName);
 
-	    for (String stereotype : sourceStereotypeFQNameLookupList) {
-		if (elmt.HasStereotype(stereotype)) {
-		    res.add(smi);
-		    break;
-		}
+	    if (EAElementUtil.hasStereotype(elmt,
+		    sourceStereotypeFQNameLookupList.toArray(new String[sourceStereotypeFQNameLookupList.size()]))) {
+		res.add(smi);
 	    }
 	}
 
@@ -1500,11 +1566,9 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 		String sourceStereotypeFQName = smi.getSourceStereotypeFQName();
 		List<String> sourceStereotypeFQNameLookupList = createFQNameLookupList(sourceStereotypeFQName);
 
-		for (String stereotype : sourceStereotypeFQNameLookupList) {
-		    if (elmt.HasStereotype(stereotype)) {
-			res.add(smi);
-			break;
-		    }
+		if (EAElementUtil.hasStereotype(elmt, sourceStereotypeFQNameLookupList
+			.toArray(new String[sourceStereotypeFQNameLookupList.size()]))) {
+		    res.add(smi);
 		}
 	    }
 	}
@@ -1518,8 +1582,8 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 
 	List<StereotypeMappingInfo> res = new ArrayList<>();
 
-	String fqStereotype = att.GetFQStereotype();
-	String stereotypeEx = att.GetStereotypeEx();
+//	String fqStereotype = att.GetFQStereotype();
+//	String stereotypeEx = att.GetStereotypeEx();
 
 	for (StereotypeMappingInfo smi : this.stereotypeMappingInfos) {
 
@@ -1531,12 +1595,17 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    String sourceStereotypeFQName = smi.getSourceStereotypeFQName();
 	    List<String> sourceStereotypeFQNameLookupList = createFQNameLookupList(sourceStereotypeFQName);
 
-	    for (String stereotype : sourceStereotypeFQNameLookupList) {
-		if (fqStereotype.contains(stereotype) || stereotypeEx.contains(stereotype)) {
-		    res.add(smi);
-		    break;
-		}
+	    if (EAAttributeUtil.hasStereotype(att,
+		    sourceStereotypeFQNameLookupList.toArray(new String[sourceStereotypeFQNameLookupList.size()]))) {
+		res.add(smi);
 	    }
+
+//	    for (String stereotype : sourceStereotypeFQNameLookupList) {
+//		if (fqStereotype.contains(stereotype) || stereotypeEx.contains(stereotype)) {
+//		    res.add(smi);
+//		    break;
+//		}
+//	    }
 	}
 
 	if (res.isEmpty()) {
@@ -1561,12 +1630,17 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 		String sourceStereotypeFQName = smi.getSourceStereotypeFQName();
 		List<String> sourceStereotypeFQNameLookupList = createFQNameLookupList(sourceStereotypeFQName);
 
-		for (String stereotype : sourceStereotypeFQNameLookupList) {
-		    if (fqStereotype.contains(stereotype) || stereotypeEx.contains(stereotype)) {
-			res.add(smi);
-			break;
-		    }
+		if (EAAttributeUtil.hasStereotype(att, sourceStereotypeFQNameLookupList
+			.toArray(new String[sourceStereotypeFQNameLookupList.size()]))) {
+		    res.add(smi);
 		}
+
+//		for (String stereotype : sourceStereotypeFQNameLookupList) {
+//		    if (fqStereotype.contains(stereotype) || stereotypeEx.contains(stereotype)) {
+//			res.add(smi);
+//			break;
+//		    }
+//		}
 	    }
 	}
 
@@ -1715,6 +1789,8 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 //	    System.out.println(e.getKey());
 //	}
 
+	addStatisticsFromSourceTVs(res);
+
 	return res;
     }
 
@@ -1831,11 +1907,19 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    return "??GeoInfoDok package connector to/from external element: $1$";
 	case 122:
 	    return "??GeoInfoDok classifier connector to/from external element: $1$";
+	case 123:
+	    return "Updating profile for package '$1$'.";
 
 	case 1000:
 	    return "Analyzing original GeoInfoDok package";
 	case 1001:
 	    return "Transforming UML profile";
+	case 1002:
+	    return "Statistics - occurrences of source tag with actual value(s):";
+	case 1003:
+	    return "- $1$: $2$";
+	case 1004:
+	    return "tag '$1$', total number of actual values: $2$";
 
 	default:
 	    return "(" + GidProfileTransformer.class.getName() + ") Unknown message with number: " + mnr;

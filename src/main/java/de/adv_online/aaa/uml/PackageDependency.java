@@ -1,5 +1,4 @@
 /**
- * GID Profile Transformer (schema transformer)
  *
  * (c) 2009-2024 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
  * Länder der Bundesrepublik Deutschland (AdV)
@@ -23,11 +22,38 @@
  * 53115 Bonn
  * Germany
  */
+
 package de.adv_online.aaa.uml;
 
-public enum MetaType {
+public class PackageDependency {
 
-    ABSTRACT, ASSOCIATION_CLASS, PACKAGE, CLASS, DATATYPE, ENUMERATION, PROPERTY, ENUMERATIONLITERAL, INTERFACE, OBJECT,
-    ANY, UNKNOWN, IGNORED, METACLASS, ARTIFACT, STEREOTYPE
+    private String caseInfo;
+    private String schemaFullName;
+    private String externalFullName;
+    private boolean externalAllowed;
+
+    public PackageDependency(String caseInfo, String schemaFullName, String externalFullName, boolean externalAllowed) {
+	super();
+	this.caseInfo = caseInfo;
+	this.schemaFullName = schemaFullName;
+	this.externalFullName = externalFullName;
+	this.externalAllowed = externalAllowed;
+    }
+
+    public String getCaseInfo() {
+	return caseInfo;
+    }
+
+    public String getSchemaFullName() {
+	return schemaFullName;
+    }
+
+    public String getExternalFullName() {
+	return externalFullName;
+    }
+
+    public boolean getExternalAllowed() {
+	return externalAllowed;
+    }
 
 }
