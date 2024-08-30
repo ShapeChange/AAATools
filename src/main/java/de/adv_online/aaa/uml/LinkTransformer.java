@@ -49,6 +49,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.sparx.Attribute;
 import org.sparx.Collection;
 import org.sparx.Connector;
+import org.sparx.Constraint;
 import org.sparx.Diagram;
 import org.sparx.DiagramObject;
 import org.sparx.Element;
@@ -69,6 +70,8 @@ import de.interactive_instruments.shapechange.core.ShapeChangeResult;
 import de.interactive_instruments.shapechange.core.ShapeChangeResult.MessageContext;
 import de.interactive_instruments.shapechange.core.model.Transformer;
 import de.interactive_instruments.shapechange.ea.util.EAAttributeUtil;
+import de.interactive_instruments.shapechange.ea.util.EAConstraintUtil;
+import de.interactive_instruments.shapechange.ea.util.EAElementUtil;
 import de.interactive_instruments.shapechange.ea.util.EAException;
 import de.interactive_instruments.shapechange.ea.util.EAPackageUtil;
 
@@ -85,6 +88,7 @@ public class LinkTransformer implements Transformer, MessageSource {
     public static final String FULL_NAME_FOR_MISSING_ELEMENT = "<element_missing>";
 
     public static final String AAA_SCHEMA_FULL_NAME = "Model::GeoInfoDok::AFIS-ALKIS-ATKIS Anwendungsschema";
+    public static final String GEOINFODOK_PKG_FULL_NAME = "Model::GeoInfoDok";
 
     private ShapeChangeResult result = null;
 
@@ -298,18 +302,114 @@ public class LinkTransformer implements Transformer, MessageSource {
 
 	    // 2. explicit model transformations
 	    // a) measure types in AAA schema
-	    transformAaaMeasureTypes();
+	    aaaMeasureTypeTransformation();
 	    // b) unions
 	    transformAaaUnions();
 
 	    // 3. actual processing of schema dependencies
 	    processSchemaDependencies();
 
-	    // 4. update model structure
-	    // TODO
+	    /*
+	     * LAST (BECAUSE THIS WILL SCREW UP FULL NAMES OF MODEL ELEMENTS): update model
+	     * structure
+	     */
+	    updateModelStructure();
 
 	} catch (Exception e) {
 	    e.printStackTrace(System.err);
+	}
+    }
+
+    private void updateModelStructure() {
+
+	result.addInfo(this, 1000);
+
+	// NOTE: This will screw up a lot of full names and thus should be done as last
+	// transformation
+
+	// GeoInfoDok
+
+	relocatePackage("Model::GeoInfoDok::AAA_Ausgabekatalog", "AAA_Ausgabekatalog 2.0", "Model::GeoInfoDok",
+		"AAA Ausgabekatalog");
+
+	relocatePackage("Model::GeoInfoDok::AAA_Objektartenkatalog", "AAA_Objektartenkatalog 1.0", "Model::GeoInfoDok",
+		"AAA Objektartenkatalog");
+
+	relocatePackage("Model::GeoInfoDok::AFIS-ALKIS-ATKIS Anwendungsschema", "AFIS-ALKIS-ATKIS Anwendungsschema 7.1",
+		"Model::GeoInfoDok", "AFIS-ALKIS-ATKIS Anwendungsschema");
+
+	relocatePackage("Model::GeoInfoDok::BR_Bodenrichtwerte", "BR_Bodenrichtwerte 3.0", "Model::GeoInfoDok",
+		"Bodenrichtwerte");
+
+	relocatePackage("Model::GeoInfoDok::GN_Geographische Informationen", "GN_Geographische Informationen 1.0",
+		"Model::GeoInfoDok", "Geographische Informationen");
+
+	relocatePackage("Model::GeoInfoDok::GV_Geometrische Verbesserungen", "GV_Geometrische Verbesserungen 1.0",
+		"Model::GeoInfoDok", "Geometrische Verbesserungen");
+
+	relocatePackage("Model::GeoInfoDok::LB_Landbedeckung", "LB_Landbedeckung 1.0", "Model::GeoInfoDok",
+		"Landbedeckung");
+
+	relocatePackage("Model::GeoInfoDok::LN_Landnutzung", "LN_Landnutzung 1.0", "Model::GeoInfoDok", "Landnutzung");
+
+	relocatePackage("Model::GeoInfoDok::Web Feature Service Erweiterungen", "Web Feature Service Erweiterungen 2.0",
+		"Model::GeoInfoDok", "Web Feature Service Erweiterungen");
+
+	relocatePackage("Model::GeoInfoDok::AAA_Signaturenkatalog", "AAA_Signaturenkatalog 1.1", "Model::GeoInfoDok",
+		"AAA Signaturenkatalog");
+
+	// OGC
+
+	relocatePackage("Model::OGC::Filter Encoding 2.0", null, "Model::OGC", "Filter Encoding");
+
+	relocatePackage("Model::OGC::OWS Common 1.1", null, "Model::OGC", "OWS Common");
+
+	relocatePackage("Model::OGC::Web Feature Service 2.0", null, "Model::OGC", "Web Feature Service");
+    }
+
+    private void relocatePackage(String pkgToRelocateFullName, String newNameForPkgToRelocate,
+	    String targetPkgParentFullName, String nameOfNewTargetPkg) {
+
+	// find pkg to relocate and parent of target package (to be created)
+	Optional<EAPackage> pkgToRelocateOpt = eaRepo.lookupPackage(pkgToRelocateFullName);
+	Optional<EAPackage> targetPkgParentOpt = eaRepo.lookupPackage(targetPkgParentFullName);
+
+	if (pkgToRelocateOpt.isPresent() && targetPkgParentOpt.isPresent()) {
+
+	    Package pkgToRelocate = rep.GetPackageByID(pkgToRelocateOpt.get().getPkgId());
+	    Package targetPkgParent = rep.GetPackageByID(targetPkgParentOpt.get().getPkgId());
+
+	    if (StringUtils.isNotBlank(newNameForPkgToRelocate)) {
+		try {
+		    EAPackageUtil.setEAName(pkgToRelocate, newNameForPkgToRelocate);
+		} catch (EAException e) {
+		    result.addError(this, 1004, pkgToRelocateFullName, newNameForPkgToRelocate, e.getMessage());
+		    return;
+		}
+	    }
+
+	    try {
+		Package newTargetPkg = EAPackageUtil.addPackage(targetPkgParent, nameOfNewTargetPkg, "");
+
+		try {
+		    EAPackageUtil.setEAParentID(pkgToRelocate, newTargetPkg.GetPackageID());
+		} catch (EAException e) {
+		    result.addError(this, 1005, pkgToRelocateFullName, nameOfNewTargetPkg, e.getMessage());
+		    return;
+		}
+
+	    } catch (EAException e) {
+		result.addError(this, 1001, nameOfNewTargetPkg, targetPkgParentFullName, e.getMessage());
+	    }
+
+	} else {
+
+	    if (pkgToRelocateOpt.isEmpty()) {
+		result.addError(this, 1002, pkgToRelocateFullName);
+	    }
+	    if (targetPkgParentOpt.isEmpty()) {
+		result.addError(this, 1003, pkgToRelocateFullName, targetPkgParentFullName);
+	    }
 	}
     }
 
@@ -317,89 +417,220 @@ public class LinkTransformer implements Transformer, MessageSource {
 
 	result.addInfo(this, 900);
 
-	SortedSet<String> aaaUnionsPropertyChoice = new TreeSet<>(
-		Arrays.asList("AA_Modellart", "AA_Fachdatenobjekt", "AX_Reservierungsauftrag_Gebietskennung",
-			"AA_Empfaenger", "DCP", "AX_Lagebezeichnung", "AX_Listenelement3D"));
-
-	SortedSet<String> aaaUnionsSubtypesGMObject = new TreeSet<>(Arrays.asList("AA_Punktgeometrie",
-		"AA_Liniengeometrie", "AA_Flaechengeometrie", "AU_Geometrie", "AG_Geometrie", "AA_PunktGeometrie_3D",
-		"AA_MehrfachLinienGeometrie_3D", "AA_MehrfachFlaechenGeometrie_3D", "AA_Geometrie_3D"));
-
-	SortedSet<String> aaaUnionsToReplaceWithCharacterString = new TreeSet<>(Arrays.asList("AA_UUID"));
-
 	if (dependenciesBySchema.containsKey(AAA_SCHEMA_FULL_NAME)) {
 
-	    EAPackage schemaPkg = eaRepo.lookupPackage(AAA_SCHEMA_FULL_NAME).get();
+	    EAPackage aaaSchemaPkg = eaRepo.lookupPackage(AAA_SCHEMA_FULL_NAME).get();
+	    EAPackage gidSchemaPkg = eaRepo.lookupPackage(GEOINFODOK_PKG_FULL_NAME).get();
 
-	    result.addInfo(this,903);
-	    mapAaaTypes(aaaUnionsToReplaceWithCharacterString, "CharacterString", schemaPkg);
+	    result.addInfo(this, 901);
+	    SortedSet<String> aaaUnionsPropertyChoice = new TreeSet<>(
+		    Arrays.asList("AA_Modellart", "AA_Fachdatenobjekt", "AX_Reservierungsauftrag_Gebietskennung",
+			    "AA_Empfaenger", "DCP", "AX_Lagebezeichnung", "AX_Listenelement3D"));
+	    aaaPropertyChoiceUnionTransformation(aaaUnionsPropertyChoice, aaaSchemaPkg);
 
-//	    // lookup Measure type
-//	    Optional<EAElement> measureElmtOpt = lookupAllowedElement("Measure", allowedElements(schemaPkg));
-//
-//	    if (measureElmtOpt.isPresent()) {
-//
-//		EAElement measureElmt = measureElmtOpt.get();
-//
-//		List<EAElement> aaaElmtsToTransform = schemaElements.stream()
-//			.filter(elmt -> aaaMeasureTypesToTransform.contains(elmt.getName()))
-//			.collect(Collectors.toList());
-//
-//		/*
-//		 * update attributes in schema elements: if a AAA measure type is set (as
-//		 * classifier ID and/or type), use Measure
-//		 */
-//		for (EAElement eaElmt : schemaElements) {
-//		    if (StringUtils.equalsAnyIgnoreCase(eaElmt.getMetaType(), "class", "datatype")) {
-//			Element elmt = rep.GetElementByID(eaElmt.getElementId());
-//			Collection<Attribute> atts = elmt.GetAttributes();
-//			atts.Refresh();
-//			for (Attribute att : atts) {
-//			    int attClassifierId = att.GetClassifierID();
-//			    String attType = att.GetType();
-//			    if (aaaElmtsToTransform.stream().anyMatch(
-//				    e -> e.getElementId() == attClassifierId || e.getName().equals(attType))) {
-//				String attFullName = attFullName(eaElmt, att.GetName());
-//				try {
-//				    EAAttributeUtil.setEAClassifierID(att, measureElmt.getElementId());
-//				    EAAttributeUtil.setEAType(att, measureElmt.getName());
-//				    MessageContext mc = result.addInfo(this, 802);
-//				    if (mc != null) {
-//					mc.addDetail(this, 3, attFullName);
-//				    }
-//				} catch (EAException ex) {
-//				    MessageContext mc = result.addError(this, 800, ex.getMessage());
-//				    if (mc != null) {
-//					mc.addDetail(this, 3, attFullName);
-//				    }
-//				}
-//			    }
-//			}
-//		    }
-//		}
-//
-//		// delete aaaElmtsToTransform in the actual repository
-//		for (EAElement eaElmt : aaaElmtsToTransform) {
-//		    Element elmt = rep.GetElementByID(eaElmt.getElementId());
-//		    Package pkg = rep.GetPackageByID(elmt.GetPackageID());
-//		    EAPackageUtil.deleteElement(pkg, eaElmt.getElementId());
-//		}
-//
-//		/*
-//		 * finally, delete the aaaElmtsToTransform in relevant places
-//		 */
-//		eaRepo.deleteElements(aaaElmtsToTransform);
-//
-//	    } else {
-//		// TBD
-//	    }
+	    result.addInfo(this, 902);
+	    SortedSet<String> aaaUnionsGeometryChoices = new TreeSet<>(
+		    Arrays.asList("AA_Punktgeometrie", "AA_Liniengeometrie", "AA_Flaechengeometrie", "AU_Geometrie",
+			    "AG_Geometrie", "AA_Punktgeometrie_3D", "AA_MehrfachLinienGeometrie_3D",
+			    "AA_MehrfachFlaechenGeometrie_3D", "AU_Geometrie_3D"));
+	    aaaGeometryUnionTransformation(aaaUnionsGeometryChoices, aaaSchemaPkg, gidSchemaPkg);
+
+	    result.addInfo(this, 903);
+	    SortedSet<String> aaaUnionsToReplaceWithCharacterString = new TreeSet<>(Arrays.asList("AA_UUID"));
+	    aaaTypeMapping(aaaUnionsToReplaceWithCharacterString, "CharacterString", aaaSchemaPkg, gidSchemaPkg);
 
 	} else {
 	    // TBD
 	}
     }
 
-    private void transformAaaMeasureTypes() {
+    private void aaaGeometryUnionTransformation(SortedSet<String> namesOfGeometryChoiceUnions, EAPackage aaaSchemaPkg,
+	    EAPackage gidSchemaPkg) {
+
+	java.util.Collection<EAElement> aaaSchemaElements = eaRepo.elementsAll(aaaSchemaPkg).values();
+	java.util.Collection<EAElement> gidSchemaElements = eaRepo.elementsAll(gidSchemaPkg).values();
+
+	// identify direct geometry type choices
+	SortedMap<String, SortedSet<String>> directGeometryTypeChoicesByUnionName = new TreeMap<>();
+	for (String unionName : namesOfGeometryChoiceUnions) {
+
+	    List<EAElement> unionElements = aaaSchemaElements.stream().filter(elmt -> elmt.getName().equals(unionName))
+		    .collect(Collectors.toList());
+
+	    if (unionElements.size() > 1) {
+		result.addError(this, 908, unionName);
+	    } else if (unionElements.size() == 0) {
+		result.addWarning(this, 909, unionName);
+	    } else {
+
+		EAElement unionEaElmt = unionElements.get(0);
+		Element unionElmt = rep.GetElementByID(unionEaElmt.getElementId());
+
+		Collection<Attribute> atts = unionElmt.GetAttributes();
+		atts.Refresh();
+
+		SortedSet<String> directGeometryTypeChoices = new TreeSet<>();
+		for (Attribute att : atts) {
+		    directGeometryTypeChoices.add(att.GetType());
+		}
+		directGeometryTypeChoicesByUnionName.put(unionName, directGeometryTypeChoices);
+	    }
+	}
+
+	// now evaluate which GM type choices there really are per geometry union
+	SortedMap<String, SortedSet<String>> allGMGeometryTypeChoicesByUnionName = new TreeMap<>();
+	for (String geometryUnionName : directGeometryTypeChoicesByUnionName.keySet()) {
+	    SortedSet<String> gmGeometryTypeChoices = identifyAllGMGeometryTypeChoices(geometryUnionName,
+		    directGeometryTypeChoicesByUnionName, new HashSet<String>());
+	    allGMGeometryTypeChoicesByUnionName.put(geometryUnionName, gmGeometryTypeChoices);
+	}
+
+	/*
+	 * look up elements (classes and data types) in all GeoInfoDok elements, which
+	 * have attributes with one of the geometry unions as type - ignore elements
+	 * that are these unions
+	 */
+
+	for (EAElement eaElmt : gidSchemaElements) {
+
+	    if (StringUtils.equalsAnyIgnoreCase(eaElmt.getMetaType(), "class", "datatype")
+		    && !namesOfGeometryChoiceUnions.contains(eaElmt.getName())) {
+
+		Element elmt = rep.GetElementByID(eaElmt.getElementId());
+
+		Collection<Attribute> atts = elmt.GetAttributes();
+		atts.Refresh();
+
+		for (Attribute att : atts) {
+		    String attType = att.GetType();
+		    if (namesOfGeometryChoiceUnions.contains(attType)) {
+			String attName = att.GetName();
+			/*
+			 * add constraint to owning element, which defines the allowed geometry types
+			 * for this attribute
+			 */
+			SortedSet<String> allowedGMGeometryTypes = allGMGeometryTypeChoicesByUnionName.get(attType);
+			String conTextLine = allowedGMGeometryTypes.size() > 1
+				? "/*Attribut " + attName + " darf nur Werte der folgenden Typen enthalten: "
+					+ StringUtils.join(allowedGMGeometryTypes, ", ") + "*/"
+				: "/*Attribut " + attName + " darf nur Werte des folgenden Typs enthalten: "
+					+ StringUtils.join(allowedGMGeometryTypes, ", ") + "*/";
+			try {
+			    aaaAddToAlleConstraint(elmt, conTextLine);
+			} catch (EAException ex) {
+			    result.addError(this, 911, "Alle", attName, elmt.GetName(), ex.getMessage());
+			}
+		    }
+		}
+	    } else {
+		// ignore other element types
+	    }
+	}
+
+	// finally, map the geometry type choice unions to GM_Object
+	aaaTypeMapping(namesOfGeometryChoiceUnions, "GM_Object", aaaSchemaPkg, gidSchemaPkg);
+    }
+
+    private SortedSet<String> identifyAllGMGeometryTypeChoices(String geometryUnionName,
+	    SortedMap<String, SortedSet<String>> directGeometryTypeChoicesByUnionName,
+	    Set<String> evaluatedGeometryUnions) {
+
+	evaluatedGeometryUnions.add(geometryUnionName);
+
+	SortedSet<String> res = new TreeSet<>();
+
+	if (directGeometryTypeChoicesByUnionName.containsKey(geometryUnionName)) {
+
+	    SortedSet<String> directGeometryTypeChoices = directGeometryTypeChoicesByUnionName.get(geometryUnionName);
+
+	    for (String choice : directGeometryTypeChoices) {
+		if (choice.startsWith("GM")) {
+		    res.add(choice);
+		} else if (!evaluatedGeometryUnions.contains(choice)) {
+		    res.addAll(identifyAllGMGeometryTypeChoices(choice, directGeometryTypeChoicesByUnionName,
+			    evaluatedGeometryUnions));
+		}
+	    }
+	} else {
+	    result.addError(this, 910, geometryUnionName);
+	}
+
+	return res;
+    }
+
+    private void aaaPropertyChoiceUnionTransformation(SortedSet<String> namesOfPropertyChoiceUnions,
+	    EAPackage aaaSchemaPkg) {
+
+	/*
+	 * Assumptions:
+	 * 
+	 * - union meta type is DataType
+	 * 
+	 * - union stereotype already correct
+	 */
+
+	java.util.Collection<EAElement> schemaElements = eaRepo.elementsAll(aaaSchemaPkg).values();
+
+	for (String unionName : namesOfPropertyChoiceUnions) {
+
+	    List<EAElement> unionDataTypes = schemaElements.stream()
+		    .filter(elmt -> elmt.getMetaType().equalsIgnoreCase("datatype") && elmt.getName().equals(unionName))
+		    .collect(Collectors.toList());
+
+	    if (unionDataTypes.size() > 1) {
+		result.addError(this, 904, unionName);
+	    } else if (unionDataTypes.size() == 0) {
+		result.addWarning(this, 905, unionName);
+	    } else {
+
+		EAElement eaElmt = unionDataTypes.get(0);
+		Element elmt = rep.GetElementByID(eaElmt.getElementId());
+		Collection<Attribute> atts = elmt.GetAttributes();
+		atts.Refresh();
+
+		for (Attribute att : atts) {
+		    try {
+			EAAttributeUtil.setEALowerBound(att, "0");
+		    } catch (EAException ex) {
+			result.addError(this, 906, att.GetName(), unionName, ex.getMessage());
+		    }
+		}
+
+		String conTextLine = "/*Genau ein Attribut muss einen oder ggfs. mehrere Werte enthalten. Alle anderen Attribute dürfen keine Werte enthalten.*/";
+		try {
+		    aaaAddToAlleConstraint(elmt, conTextLine);
+		} catch (EAException ex) {
+		    result.addError(this, 907, "Alle", unionName, ex.getMessage());
+		}
+
+//		Collection<Constraint> constraints = elmt.GetConstraints();
+//		constraints.Refresh();
+//		String constraintName = "Alle";
+//		Constraint propertyChoiceConstraint = constraints.AddNew(constraintName, "OCL");
+//		try {
+//		    EAConstraintUtil.setEANotes(propertyChoiceConstraint,
+//			    );
+//		} catch (EAException ex) {
+//		    result.addError(this, 907, constraintName, unionName, ex.getMessage());
+//		}
+//		constraints.Refresh();
+	    }
+	}
+    }
+
+    private void aaaAddToAlleConstraint(Element elmt, String conTextLine) throws EAException {
+	Optional<Constraint> conOpt = EAElementUtil.getConstraint(elmt, "Alle");
+	if (conOpt.isPresent()) {
+	    Constraint con = conOpt.get();
+	    String conNotes = con.GetNotes();
+	    String newConNotes = conNotes + "\n\n" + conTextLine;
+	    EAConstraintUtil.setEANotes(con, newConNotes);
+	} else {
+	    EAElementUtil.addConstraint(elmt, "Alle", "OCL", conTextLine);
+	}
+    }
+
+    private void aaaMeasureTypeTransformation() {
 
 	result.addInfo(this, 801);
 
@@ -408,43 +639,52 @@ public class LinkTransformer implements Transformer, MessageSource {
 
 	if (dependenciesBySchema.containsKey(AAA_SCHEMA_FULL_NAME)) {
 
-	    EAPackage schemaPkg = eaRepo.lookupPackage(AAA_SCHEMA_FULL_NAME).get();
+	    EAPackage aaaSchemaPkg = eaRepo.lookupPackage(AAA_SCHEMA_FULL_NAME).get();
+	    EAPackage gidSchemaPkg = eaRepo.lookupPackage(GEOINFODOK_PKG_FULL_NAME).get();
 
-	    mapAaaTypes(aaaMeasureTypesToTransform, "Measure", schemaPkg);
+	    aaaTypeMapping(aaaMeasureTypesToTransform, "Measure", aaaSchemaPkg, gidSchemaPkg);
 
 	} else {
 	    // TBD
 	}
     }
 
-    private void mapAaaTypes(SortedSet<String> typesToMap, String targetTypeName, EAPackage schemaPkg) {
+    private void aaaTypeMapping(SortedSet<String> typesToMap, String targetTypeName, EAPackage aaaSchemaPkg,
+	    EAPackage gidSchemaPkg) {
 
-	java.util.Collection<EAElement> schemaElements = eaRepo.elementsAll(schemaPkg).values();
+	java.util.Collection<EAElement> aaaSchemaElements = eaRepo.elementsAll(aaaSchemaPkg).values();
+	java.util.Collection<EAElement> gidSchemaElements = eaRepo.elementsAll(gidSchemaPkg).values();
 
 	// lookup target type
-	Optional<EAElement> targetElmtOpt = lookupAllowedElement(targetTypeName, allowedElements(schemaPkg));
+	Optional<EAElement> targetElmtOpt = lookupAllowedElement(targetTypeName, allowedElements(aaaSchemaPkg));
 
 	if (targetElmtOpt.isPresent()) {
 
 	    EAElement targetElmt = targetElmtOpt.get();
 
-	    List<EAElement> aaaElmtsToTransform = schemaElements.stream()
+	    List<EAElement> aaaElmtsToTransform = aaaSchemaElements.stream()
 		    .filter(elmt -> typesToMap.contains(elmt.getName())).collect(Collectors.toList());
 
 	    /*
-	     * update attributes in schema elements: if a AAA type is set (as classifier ID
-	     * and/or type), use the target type
+	     * update attributes in all GeoInfoDok schema elements: if a AAA type is set (as
+	     * classifier ID and/or type), use the target type
 	     */
-	    for (EAElement eaElmt : schemaElements) {
+	    for (EAElement eaElmt : gidSchemaElements) {
+
 		if (StringUtils.equalsAnyIgnoreCase(eaElmt.getMetaType(), "class", "datatype")) {
+
 		    Element elmt = rep.GetElementByID(eaElmt.getElementId());
 		    Collection<Attribute> atts = elmt.GetAttributes();
 		    atts.Refresh();
+
 		    for (Attribute att : atts) {
+
 			int attClassifierId = att.GetClassifierID();
 			String attType = att.GetType();
+
 			if (aaaElmtsToTransform.stream()
 				.anyMatch(e -> e.getElementId() == attClassifierId || e.getName().equals(attType))) {
+
 			    String attFullName = attFullName(eaElmt, att.GetName());
 			    try {
 				EAAttributeUtil.setEAClassifierID(att, targetElmt.getElementId());
@@ -959,18 +1199,6 @@ public class LinkTransformer implements Transformer, MessageSource {
 		    }
 		}
 
-//		// further checks regarding relevance
-//		Element externalElement = rep.GetElementByID(externalElementId);
-//		String externalElementMetaType = externalElement.GetMetaType();
-//		if (externalElementMetaType.equalsIgnoreCase("boundary")) {
-//		    // TBD ignore (log this on debug?)
-//		    isIllegalDependency = false;
-//
-//		} else {
-
-//		 TODO   WEITERMACHEN - WAS MUSS HIER GEMACHT WERDEN? CONNECTOR SOLLTE UMGEBOGEN WERDEN; WENN 
-//		    PASSENDES ELEMENT IN ALLOWED ELEMENTS ENTHALTEN IST
-
 		// first, switch source and target of association/aggregation, if necessary
 		if (connectorSourceAndTargetNeedToBeSwitched) {
 
@@ -985,7 +1213,10 @@ public class LinkTransformer implements Transformer, MessageSource {
 		    }
 		}
 
-		// second, handle an illegal dependency (TODO fix, if possible)
+		/*
+		 * second, handle an illegal dependency (TODO fix, if possible - for now, just
+		 * report it)
+		 */
 		if (isIllegalDependency) {
 
 		    if (externalElementInfo.equalsIgnoreCase("target")) {
@@ -1620,8 +1851,42 @@ public class LinkTransformer implements Transformer, MessageSource {
 	// 900 AAA union transformation
 	case 900:
 	    return "=== === === TRANSFORMING AAA UNIONS === === ===";
+	case 901:
+	    return "--- --- --- Now transforming unions with property choice to data types";
+	case 902:
+	    return "--- --- --- Now transforming geometry unions";
 	case 903:
 	    return "--- --- --- Now applying mapping to CharacterString";
+	case 904:
+	    return "Multiple data types with name '$1$' found in the model, where at most one is expected. Union property choice transformation is not applied for that type.";
+	case 905:
+	    return "No data type with name '$1$' found in the model. Union property choice transformation cannot be applied for that type.";
+	case 906:
+	    return "Exception occurred while updating lower bound of attribute '$1$' in union '$2$'. Exception message is: $3$";
+	case 907:
+	    return "Exception occurred while adding new property choice constraint '$1$' in union '$2$'. Exception message is: $3$";
+	case 908:
+	    return "??Multiple unions with name '$1$' found in the model, where at most one is expected. Transformation for union with geometry type choice is not applied for that type.";
+	case 909:
+	    return "??No union with name '$1$' found in the model. Transformation for union with geometry type choice cannot be applied for that type.";
+	case 910:
+	    return "??Type '$1$' is not one of the defined unions with geometry type choices! It will be ignored. Have all such unions been configured or is the type missing?";
+	case 911:
+	    return "Exception occurred while adding new geometry type choice constraint for attribute '$1$' in element '$2$'. Exception message is: $3$";
+
+	// 1000 model structur transformation
+	case 1000:
+	    return "=== === === TRANSFORMING MODEL STRUCTURE === === ===";
+	case 1001:
+	    return "Exception occurred while trying to create new package '$1$' in package '$2$'. Exception message is: $3$";
+	case 1002:
+	    return "Cannot relocate package '$1$, because it was not found.";
+	case 1003:
+	    return "Cannot relocate package '$1$, because the parent package ('$2$') of the designated target package was not found.";
+	case 1004:
+	    return "Exception occurred while trying to rename package '$1$' to '$2$'. Exception message is: $3$";
+	case 1005:
+	    return "Exception occurred while trying to move package '$1$' to new package '$2$'. Exception message is: $3$";
 
 	default:
 	    return "(" + LinkTransformer.class.getName() + ") Unknown message with number: " + mnr;

@@ -411,7 +411,45 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    this.stereotypeMappingInfos.add(smi);
 	}
 
-	// TODO union -> requires case specific model transformation (which is TBD)
+	{
+	    // union
+
+	    SortedMap<String, String> unionTVNameToSourceFQNameMap = new TreeMap<>();
+	    SortedMap<String, String> unionTVSourceToTargetFQNameMap = new TreeMap<>();
+
+	    unionTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::union::AAA:Grunddatenbestand");
+	    unionTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::union::AAA:Kennung");
+	    unionTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::union::AAA:LetzteAenderung");
+	    unionTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::union::AAA:Modellart");
+	    unionTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::union::AAA:Nutzungsart");
+	    unionTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::union::AAA:Nutzungsartkennung");
+	    unionTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::union::AAA:Profile");
+	    unionTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::union::AAA:Revisionsnummer");
+	    unionTVNameToSourceFQNameMap.put("isCollection", "AAA::union::isCollection");
+	    unionTVNameToSourceFQNameMap.put("noPropertyType", "AAA::union::noPropertyType");
+	    unionTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::union::xsdEncodingRule");
+
+	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Grunddatenbestand",
+		    "GID::GID_LogicalElement::GID:Grunddatenbestand");
+	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Kennung", "GID::GID_Element::GID:Kennung");
+	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:LetzteAenderung",
+		    "GID::GID_LogicalElement::GID:LetzteAenderung");
+	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Modellart", "GID::GID_Element::GID:Modellart");
+	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Nutzungsart",
+		    "GID::AAA_NutzungsartElement::AAA:Nutzungsart");
+	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Nutzungsartkennung",
+		    "GID::AAA_NutzungsartElement::AAA:Nutzungsartkennung");
+	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
+	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Revisionsnummer",
+		    "GID::GID_Element::GID:Revisionsnummer");
+	    unionTVSourceToTargetFQNameMap.put("AAA::union::isCollection", "GID::GID_DataType::isCollection");
+	    unionTVSourceToTargetFQNameMap.put("AAA::union::noPropertyType", "GID::GID_DataType::noPropertyType");
+	    unionTVSourceToTargetFQNameMap.put("AAA::union::xsdEncodingRule", "GID::GID_DataType::xsdEncodingRule");
+
+	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::union", "GID::GID_DataType",
+		    unionTVNameToSourceFQNameMap, unionTVSourceToTargetFQNameMap, MetaType.DATATYPE, false);
+	    this.stereotypeMappingInfos.add(smi);
+	}
 
 	{
 	    // code list

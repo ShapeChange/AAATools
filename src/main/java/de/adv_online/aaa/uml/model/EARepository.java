@@ -31,6 +31,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import org.sparx.Collection;
 import org.sparx.Element;
@@ -174,6 +175,14 @@ public class EARepository {
 
     public void deleteElements(List<EAElement> elmts) {
 	this.elements.removeAll(elmts);
+    }
+
+    /**
+     * @param elementName simple name of the element (not its full name)
+     * @return can be empty but not <code>null</code>
+     */
+    public List<EAElement> lookupElementByName(String elementName) {
+	return this.elements.stream().filter(elmt -> elmt.getName().equals(elementName)).collect(Collectors.toList());
     }
 
 }
