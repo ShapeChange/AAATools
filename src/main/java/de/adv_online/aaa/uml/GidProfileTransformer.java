@@ -1,5 +1,5 @@
 /**
- * GID Profile Transformer (input transformer)
+ * GeoInfoDok Transformations (Profile Transformer)
  *
  * (c) 2009-2024 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
  * Länder der Bundesrepublik Deutschland (AdV)
@@ -53,7 +53,6 @@ import org.sparx.Repository;
 import org.sparx.RoleTag;
 import org.sparx.TaggedValue;
 
-import de.adv_online.aaa.uml.model.EAConnector;
 import de.interactive_instruments.shapechange.core.MessageSource;
 import de.interactive_instruments.shapechange.core.Options;
 import de.interactive_instruments.shapechange.core.ShapeChangeAbortException;
@@ -62,6 +61,7 @@ import de.interactive_instruments.shapechange.core.ShapeChangeResult.MessageCont
 import de.interactive_instruments.shapechange.core.model.Transformer;
 import de.interactive_instruments.shapechange.ea.util.EAAttributeUtil;
 import de.interactive_instruments.shapechange.ea.util.EAConnectorEndUtil;
+import de.interactive_instruments.shapechange.ea.util.EAConnectorUtil;
 import de.interactive_instruments.shapechange.ea.util.EAElementUtil;
 import de.interactive_instruments.shapechange.ea.util.EAException;
 import de.interactive_instruments.shapechange.ea.util.EAPackageUtil;
@@ -568,8 +568,6 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 
 	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Landnutzung", "GID::GID_Property::AAA:Landnutzung");
 	    propTVSourceToTargetFQNameMap.put("AAA::property::allowedTypesNAS", "GID::GID_Property::allowedTypesNAS");
-//	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Nutzungsartkennung",
-//		    "GID::GID_Property::AAA:Nutzungsartkennung");
 	    propTVSourceToTargetFQNameMap.put("AAA::property::inlineOrByReference",
 		    "GID::GID_Property::inlineOrByReference");
 	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:objektbildend",
@@ -985,7 +983,7 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    int supplierId = pkgConn.GetSupplierID();
 
 	    if (!idOfGeoInfoDok(clientId) || !idOfGeoInfoDok(supplierId)) {
-		result.addInfo(this, 121, EAConnector.connectorInfo(pkgConn, rep));
+		result.addInfo(this, 121, EAConnectorUtil.connectorInfo(pkgConn, rep));
 	    }
 	}
 
@@ -1018,7 +1016,7 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 
 		    if (!type.equalsIgnoreCase("Association") && !type.equalsIgnoreCase("Aggregation")) {
 
-			result.addInfo(this, 122, EAConnector.connectorInfo(conn, rep));
+			result.addInfo(this, 122, EAConnectorUtil.connectorInfo(conn, rep));
 
 		    } else {
 
@@ -1075,11 +1073,11 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 
 	ConnectorEnd sourceEnd = conn.GetClientEnd();
 	String sourceEndName = StringUtils.defaultIfBlank(sourceEnd.GetRole(), ID_FOR_ASSOCIATION_ROLE_WITHOUT_NAME);
-	boolean sourceIsNavigable = EAConnectorEndUtil.isNavigable(sourceEnd, conn);
+	boolean sourceIsNavigable = EAConnectorEndUtil.isNavigable(sourceEnd, conn, true);
 
 	ConnectorEnd targetEnd = conn.GetSupplierEnd();
 	String targetEndName = StringUtils.defaultIfBlank(targetEnd.GetRole(), ID_FOR_ASSOCIATION_ROLE_WITHOUT_NAME);
-	boolean targetIsNavigable = EAConnectorEndUtil.isNavigable(targetEnd, conn);
+	boolean targetIsNavigable = EAConnectorEndUtil.isNavigable(targetEnd, conn, true);
 
 	return sourceClassName + "|" + sourceEndName + (sourceIsNavigable ? "<" : "") + "---"
 		+ (targetIsNavigable ? ">" : "") + targetEndName + "|" + targetClassName;
@@ -1620,9 +1618,6 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 
 	List<StereotypeMappingInfo> res = new ArrayList<>();
 
-//	String fqStereotype = att.GetFQStereotype();
-//	String stereotypeEx = att.GetStereotypeEx();
-
 	for (StereotypeMappingInfo smi : this.stereotypeMappingInfos) {
 
 	    if (!((isEnumerationLiteral && smi.getApplicableMetaType() == MetaType.ENUMERATIONLITERAL)
@@ -1637,13 +1632,6 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 		    sourceStereotypeFQNameLookupList.toArray(new String[sourceStereotypeFQNameLookupList.size()]))) {
 		res.add(smi);
 	    }
-
-//	    for (String stereotype : sourceStereotypeFQNameLookupList) {
-//		if (fqStereotype.contains(stereotype) || stereotypeEx.contains(stereotype)) {
-//		    res.add(smi);
-//		    break;
-//		}
-//	    }
 	}
 
 	if (res.isEmpty()) {
@@ -1672,13 +1660,6 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 			.toArray(new String[sourceStereotypeFQNameLookupList.size()]))) {
 		    res.add(smi);
 		}
-
-//		for (String stereotype : sourceStereotypeFQNameLookupList) {
-//		    if (fqStereotype.contains(stereotype) || stereotypeEx.contains(stereotype)) {
-//			res.add(smi);
-//			break;
-//		    }
-//		}
 	    }
 	}
 

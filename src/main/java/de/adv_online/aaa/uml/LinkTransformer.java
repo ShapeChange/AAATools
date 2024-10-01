@@ -1,5 +1,5 @@
 /**
- * Link Transformer (input transformer)
+ * GeoInfoDok Transformations (Link Transformer)
  *
  * (c) 2009-2024 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
  * Länder der Bundesrepublik Deutschland (AdV)
@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -58,11 +59,6 @@ import org.sparx.Package;
 import org.sparx.Parameter;
 import org.sparx.Repository;
 
-import de.adv_online.aaa.uml.model.AbstractEAModelElement;
-import de.adv_online.aaa.uml.model.EAConnector;
-import de.adv_online.aaa.uml.model.EAElement;
-import de.adv_online.aaa.uml.model.EAPackage;
-import de.adv_online.aaa.uml.model.EARepository;
 import de.interactive_instruments.shapechange.core.MessageSource;
 import de.interactive_instruments.shapechange.core.Options;
 import de.interactive_instruments.shapechange.core.ShapeChangeAbortException;
@@ -70,19 +66,46 @@ import de.interactive_instruments.shapechange.core.ShapeChangeResult;
 import de.interactive_instruments.shapechange.core.ShapeChangeResult.MessageContext;
 import de.interactive_instruments.shapechange.core.model.Transformer;
 import de.interactive_instruments.shapechange.ea.util.EAAttributeUtil;
+import de.interactive_instruments.shapechange.ea.util.EAConnectorEndUtil;
+import de.interactive_instruments.shapechange.ea.util.EAConnectorUtil;
 import de.interactive_instruments.shapechange.ea.util.EAConstraintUtil;
 import de.interactive_instruments.shapechange.ea.util.EAElementUtil;
 import de.interactive_instruments.shapechange.ea.util.EAException;
 import de.interactive_instruments.shapechange.ea.util.EAPackageUtil;
+import de.interactive_instruments.shapechange.ea.util.modelhelper.AbstractEAModelElement;
+import de.interactive_instruments.shapechange.ea.util.modelhelper.EAElement;
+import de.interactive_instruments.shapechange.ea.util.modelhelper.EAPackage;
+import de.interactive_instruments.shapechange.ea.util.modelhelper.EARepository;
 
 public class LinkTransformer implements Transformer, MessageSource {
 
-    public static final boolean ONLY_LINK_ANALYSIS = false;
+    // for dependency checks only
+//    public static final boolean DUPLICATE_ELEMENTS_CHECK = true;
+//    public static final boolean IDENTIFY_PACKAGE_DEPENDENCIES = true;
+//    public static final boolean APPLY_TRANSFORMATIONS = false;
+//    public static final boolean ONLY_LINK_ANALYSIS = true;
+//    public static final boolean PROCESS_CONNECTORS = true;
+//    public static final boolean PROCESS_ATTRIBUTES = true;
+//    public static final boolean COPY_REPOSITORY = false;
 
+    // dependency checks AND model transformations
+    public static final boolean DUPLICATE_ELEMENTS_CHECK = true;
+    public static final boolean IDENTIFY_PACKAGE_DEPENDENCIES = true;
+    public static final boolean APPLY_TRANSFORMATIONS = true;
+    public static final boolean ONLY_LINK_ANALYSIS = false;
     public static final boolean PROCESS_CONNECTORS = true;
     public static final boolean PROCESS_ATTRIBUTES = true;
-
     public static final boolean COPY_REPOSITORY = true;
+
+    /**
+     * If <code>true</code>, the package structure of the GeoInfoDok will be
+     * updated. This will be the last processing step. If that model update is not
+     * desired, for example to achieve a model with transformed links but original
+     * package structure for subsequent dependency and link checking, set the
+     * parameter value to <code>false</code>.
+     */
+    public static final boolean UPDATE_MODEL_STRUCTURE = true;
+
     public static final String REPO_COPY_NAME_SUFFIX = "_modified";
 
     public static final String FULL_NAME_FOR_MISSING_ELEMENT = "<element_missing>";
@@ -111,7 +134,11 @@ public class LinkTransformer implements Transformer, MessageSource {
      */
     protected SortedMap<String, String> classMappings = new TreeMap<>();
 
+    protected SortedSet<String> aaaMeasureTypesToTransform = new TreeSet<>();
+
     protected SortedMap<String, List<PackageDependency>> packageDependenciesBySchema = new TreeMap<>();
+
+    protected List<String> metaTypesToIgnoreInDuplicateElementCheck = new ArrayList<>();
 
     public void initialise(Options o, ShapeChangeResult r, String repositoryFileName) throws ShapeChangeAbortException {
 
@@ -154,10 +181,18 @@ public class LinkTransformer implements Transformer, MessageSource {
 	    throw new ShapeChangeAbortException();
 	}
 
+	metaTypesToIgnoreInDuplicateElementCheck = Arrays.asList("Boundary", "Note", "ReportSpecification",
+		"StandardChart", "Pseudostate", "Text", "InterruptibleActivityRegion", "DecisionNode", "Actor",
+		"Activity", "Object", "Metaclass", "Stereotype");
+	Collections.sort(metaTypesToIgnoreInDuplicateElementCheck);
+
 	dependenciesBySchemaIn.put("Model::GeoInfoDok::AAA_Ausgabekatalog", Arrays.asList(AAA_SCHEMA_FULL_NAME,
 		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 1"));
 
-	dependenciesBySchemaIn.put("Model::GeoInfoDok::AAA_Objektartenkatalog", Arrays.asList());
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::AAA_Objektartenkatalog",
+		Arrays.asList(AAA_SCHEMA_FULL_NAME,
+			"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 1",
+			"Model::ISO/TC 211::ISO 19110 Methodology for feature cataloguing::ISO 19110 Edition 2"));
 
 	dependenciesBySchemaIn.put(AAA_SCHEMA_FULL_NAME, Arrays.asList(/*
 								        * "Model::GeoInfoDok::AAA_Ausgabekatalog",
@@ -175,37 +210,38 @@ public class LinkTransformer implements Transformer, MessageSource {
 		"Model::GeoInfoDok::Web Feature Service Erweiterungen", "Model::OGC::Web Feature Service 2.0",
 		"Model::OGC::OWS Common 1.1"));
 
-//	dependenciesBySchemaIn.put("Model::GeoInfoDok::BR_Bodenrichtwerte",
-//		Arrays.asList(AAA_SCHEMA_FULL_NAME,
-//			"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 1"));
-//
-//	dependenciesBySchemaIn.put("Model::GeoInfoDok::GN_Geographische Informationen",
-//		Arrays.asList(AAA_SCHEMA_FULL_NAME,
-//			"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 1"));
-//
-//	dependenciesBySchemaIn.put("Model::GeoInfoDok::GV_Geometrische Verbesserungen",
-//		Arrays.asList(AAA_SCHEMA_FULL_NAME,
-//			"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 1",
-//			"Model::ISO/TC 211::ISO 19107 Spatial schema::ISO 19107 Edition 1"));
-//
-//	dependenciesBySchemaIn.put("Model::GeoInfoDok::LB_Landbedeckung",
-//		Arrays.asList(AAA_SCHEMA_FULL_NAME,
-//			"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 1"));
-//
-//	dependenciesBySchemaIn.put("Model::GeoInfoDok::LN_Landnutzung",
-//		Arrays.asList(AAA_SCHEMA_FULL_NAME,
-//			"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 1"));
-//
-//	dependenciesBySchemaIn.put("Model::GeoInfoDok::Web Feature Service Erweiterungen", Arrays.asList());
-//
-//	dependenciesBySchemaIn.put("Model::GeoInfoDok::AAA_Signaturenkatalog", Arrays.asList());
-//
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::BR_Bodenrichtwerte", Arrays.asList(AAA_SCHEMA_FULL_NAME,
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 1"));
+
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::GN_Geographische Informationen", Arrays.asList(
+		AAA_SCHEMA_FULL_NAME, "Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 1"));
+
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::GV_Geometrische Verbesserungen",
+		Arrays.asList(AAA_SCHEMA_FULL_NAME,
+			"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 1",
+			"Model::ISO/TC 211::ISO 19107 Spatial schema::ISO 19107 Edition 1"));
+
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::LB_Landbedeckung", Arrays.asList(AAA_SCHEMA_FULL_NAME,
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 1"));
+
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::LN_Landnutzung", Arrays.asList(AAA_SCHEMA_FULL_NAME,
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 1"));
+
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::Web Feature Service Erweiterungen",
+		Arrays.asList("Model::OGC::Web Feature Service 2.0"));
+
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::AAA_Signaturenkatalog", Arrays.asList());
+
+	/*
+	 * 2024-09-26 JE: ISO schemas are not transformed.
+	 */
+
 //	dependenciesBySchemaIn.put("Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 1",
 //		Arrays.asList());
-
+//
 //	dependenciesBySchemaIn.put("Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO/TS 19103 Edition 1",
 //		Arrays.asList());
-
+//
 //	dependenciesBySchemaIn.put("Model::ISO/TC 211::ISO 19107 Spatial schema::ISO 19107 Edition 2", Arrays.asList());
 //	dependenciesBySchemaIn.put("Model::ISO/TC 211::ISO 19107 Spatial schema::ISO 19107 Edition 1", Arrays.asList());
 //
@@ -216,21 +252,21 @@ public class LinkTransformer implements Transformer, MessageSource {
 //		Arrays.asList());
 //	dependenciesBySchemaIn.put("Model::ISO/TC 211::ISO 19109 Rules for application schema::ISO 19109 Edition 1",
 //		Arrays.asList());
-
+//
 //	dependenciesBySchemaIn.put(
 //		"Model::ISO/TC 211::ISO 19110 Methodology for feature cataloguing::ISO 19110 Edition 2",
 //		Arrays.asList());
 //	dependenciesBySchemaIn.put(
 //		"Model::ISO/TC 211::ISO 19110 Methodology for feature cataloguing::ISO 19110 Edition 1",
 //		Arrays.asList());
-
+//
 //	dependenciesBySchemaIn.put("Model::ISO/TC 211::ISO 19111 Referencing by coordinates::ISO 19111 Edition 3",
 //		Arrays.asList());
 //	dependenciesBySchemaIn.put("Model::ISO/TC 211::ISO 19111 Referencing by coordinates::ISO 19111 Edition 2",
 //		Arrays.asList());
 //	dependenciesBySchemaIn.put("Model::ISO/TC 211::ISO 19111 Referencing by coordinates::ISO 19111-2 Edition 1",
 //		Arrays.asList());
-
+//
 //	dependenciesBySchemaIn.put("Model::ISO/TC 211::ISO 19115 Metadata::ISO DAMD 19115-1 Edition 1 (Amendment 2)",
 //		Arrays.asList());
 //	dependenciesBySchemaIn.put("Model::ISO/TC 211::ISO 19115 Metadata::ISO DAMD 19115-1 Edition 1 (Amendment 1)",
@@ -248,7 +284,7 @@ public class LinkTransformer implements Transformer, MessageSource {
 //			"Model::ISO/TC 211::ISO 19111 Referencing by coordinates::ISO 19111 Edition 2",
 //			"Model::ISO/TC 211::Informative::Extended Metadata from 19115"));
 //	dependenciesBySchemaIn.put("Model::ISO/TC 211::ISO 19115 Metadata::ISO 19115 Edition 1", Arrays.asList());
-
+//
 //	dependenciesBySchemaIn.put(
 //		"Model::ISO/TC 211::ISO 19123 Schema for coverage geometry and functions::ISO 19123-1 Edition 1",
 //		Arrays.asList());
@@ -258,10 +294,10 @@ public class LinkTransformer implements Transformer, MessageSource {
 //	dependenciesBySchemaIn.put(
 //		"Model::ISO/TC 211::ISO 19123 Schema for coverage geometry and functions::ISO 19123 Edition 1",
 //		Arrays.asList());
-
+//
 //	dependenciesBySchemaIn.put("Model::ISO/TC 211::ISO 19136 Geography Markup Language (GML)::ISO 19136 Edition 1",
 //		Arrays.asList());
-
+//
 //	dependenciesBySchemaIn.put("Model::ISO/TC 211::ISO 19157 Data quality::ISO 19157-1 Edition 1", Arrays.asList());
 //	dependenciesBySchemaIn.put("Model::ISO/TC 211::ISO 19157 Data quality::ISO 19157 Edition 1", Arrays.asList());
 //	dependenciesBySchemaIn.put("Model::ISO/TC 211::ISO 19157 Data quality::ISO 19157 Edition 1 (Amendment 1)",
@@ -274,6 +310,13 @@ public class LinkTransformer implements Transformer, MessageSource {
 	classMappings.put("Length", "Measure");
 	classMappings.put("Area", "Measure");
 	classMappings.put("SC_CRS", "CRS");
+	classMappings.put("AA_UUID", "CharacterString"); // union mapping, for cases where AA_UUID is contained in Set<>
+							 // or Sequence<>
+	classMappings.put("vector", "Vector"); // correct typo
+
+	aaaMeasureTypesToTransform.add("Acceleration");
+	aaaMeasureTypesToTransform.add("AccelerationGradient");
+	aaaMeasureTypesToTransform.add("Voltage");
     }
 
     public void shutdown() {
@@ -295,25 +338,34 @@ public class LinkTransformer implements Transformer, MessageSource {
 		result.addError(this, 104);
 	    }
 
-	    checkForDuplicateElementsInSchemasAndDependencies();
+	    if (DUPLICATE_ELEMENTS_CHECK) {
+		checkForDuplicateElementsInSchemasAndDependencies();
+	    }
 
 	    // 1. analysis of existing package dependencies (to see all the gory details)
-	    identifyPackageDependencies();
+	    if (IDENTIFY_PACKAGE_DEPENDENCIES) {
+		identifyPackageDependencies();
+	    }
 
-	    // 2. explicit model transformations
-	    // a) measure types in AAA schema
-	    aaaMeasureTypeTransformation();
-	    // b) unions
-	    transformAaaUnions();
+	    if (APPLY_TRANSFORMATIONS) {
+		// 2. explicit model transformations
+		// a) measure types in AAA schema
+		aaaMeasureTypeTransformation();
 
-	    // 3. actual processing of schema dependencies
-	    processSchemaDependencies();
+		// b) unions
+		transformAaaUnions();
 
-	    /*
-	     * LAST (BECAUSE THIS WILL SCREW UP FULL NAMES OF MODEL ELEMENTS): update model
-	     * structure
-	     */
-	    updateModelStructure();
+		// 3. actual processing of schema dependencies
+		processSchemaDependencies();
+
+		/*
+		 * LAST (BECAUSE THIS WILL SCREW UP FULL NAMES OF MODEL ELEMENTS): update model
+		 * structure
+		 */
+		if (UPDATE_MODEL_STRUCTURE) {
+		    updateModelStructure();
+		}
+	    }
 
 	} catch (Exception e) {
 	    e.printStackTrace(System.err);
@@ -602,18 +654,6 @@ public class LinkTransformer implements Transformer, MessageSource {
 		} catch (EAException ex) {
 		    result.addError(this, 907, "Alle", unionName, ex.getMessage());
 		}
-
-//		Collection<Constraint> constraints = elmt.GetConstraints();
-//		constraints.Refresh();
-//		String constraintName = "Alle";
-//		Constraint propertyChoiceConstraint = constraints.AddNew(constraintName, "OCL");
-//		try {
-//		    EAConstraintUtil.setEANotes(propertyChoiceConstraint,
-//			    );
-//		} catch (EAException ex) {
-//		    result.addError(this, 907, constraintName, unionName, ex.getMessage());
-//		}
-//		constraints.Refresh();
 	    }
 	}
     }
@@ -633,9 +673,6 @@ public class LinkTransformer implements Transformer, MessageSource {
     private void aaaMeasureTypeTransformation() {
 
 	result.addInfo(this, 801);
-
-	SortedSet<String> aaaMeasureTypesToTransform = new TreeSet<>(
-		Arrays.asList("Acceleration", "AccelerationGradient", "Voltage"));
 
 	if (dependenciesBySchema.containsKey(AAA_SCHEMA_FULL_NAME)) {
 
@@ -743,6 +780,7 @@ public class LinkTransformer implements Transformer, MessageSource {
     private void checkForDuplicateElementsInSchemasAndDependencies() {
 
 	result.addInfo(this, 106);
+	result.addInfo(this, 122, StringUtils.join(metaTypesToIgnoreInDuplicateElementCheck, ", "));
 
 	for (String schemaFullName : dependenciesBySchema.keySet()) {
 
@@ -756,13 +794,26 @@ public class LinkTransformer implements Transformer, MessageSource {
 
 		Set<EAElement> allowedElements = allowedElements(schemaPkg);
 
-		Set<String> tmp = new HashSet<>();
-		List<EAElement> duplicates = allowedElements.stream()
-			.filter(elmt -> StringUtils.isNotBlank(elmt.getName()))
-			.filter(elmt -> !StringUtils.equalsAnyIgnoreCase(elmt.getMetaType(), "Boundary", "Note",
-				"ReportSpecification", "StandardChart", "Pseudostate", "Text",
-				"InterruptibleActivityRegion", "DecisionNode", "Actor", "Activity"))
-			.filter(elmt -> !tmp.add(elmt.getName())).collect(Collectors.toList());
+		Set<EAElement> tmp = new HashSet<>();
+		Set<EAElement> duplicates = new HashSet<>();
+
+		for (EAElement elmt : allowedElements) {
+
+		    if (StringUtils.isNotBlank(elmt.getName())
+			    && !hasMetatypeToIgnore(elmt, metaTypesToIgnoreInDuplicateElementCheck)) {
+
+			Optional<EAElement> existingElmt = tmp.stream()
+				.filter(e -> e.getName().equals(elmt.getName())
+					&& !hasMetatypeToIgnore(elmt, metaTypesToIgnoreInDuplicateElementCheck))
+				.findAny();
+			if (existingElmt.isPresent()) {
+			    duplicates.add(existingElmt.get());
+			    duplicates.add(elmt);
+			} else {
+			    tmp.add(elmt);
+			}
+		    }
+		}
 
 		SortedMap<String, List<EAElement>> duplicateElementsByName = duplicates.stream()
 			.collect(Collectors.groupingBy(EAElement::getName, TreeMap::new, Collectors.toList()));
@@ -781,6 +832,11 @@ public class LinkTransformer implements Transformer, MessageSource {
 		}
 	    }
 	}
+    }
+
+    private boolean hasMetatypeToIgnore(EAElement elmt, List<String> metaTypesToIgnore) {
+	return StringUtils.equalsAnyIgnoreCase(elmt.getMetaType(),
+		metaTypesToIgnore.toArray(new String[metaTypesToIgnore.size()]));
     }
 
     private void identifyPackageDependencies() {
@@ -1026,9 +1082,42 @@ public class LinkTransformer implements Transformer, MessageSource {
 			processAttributes(elmt, allowedPackages, allowedElements);
 		    }
 		}
+		
+//		if (PROCESS_OPERATIONS) {
+//		    
+//		    result.addInfo(this, 123, schemaFullName);
+//
+//		    for (EAElement elmt : schemaElements) {
+//			processOperations(elmt, allowedPackages, allowedElements);
+//		    }
+//		}
 	    }
 	}
     }
+
+//    private void processOperations(EAElement eaElmt, Set<EAPackage> allowedPackages, Set<EAElement> allowedElements) {
+//
+//	Element elmt = rep.GetElementByID(eaElmt.getElementId());
+//
+//	Collection<Method> operations = elmt.GetMethods();
+//	operations.Refresh();
+//	
+//	for (Method op : operations) {
+//	    
+//	    // check and, if relevant, update the return type
+//	    String returnType = op.GetReturnType();
+//	    String returnClassifierId = op.GetClassifierID();
+//	    
+//	    Collection<Parameter> parameters = op.GetParameters();
+//	    parameters.Refresh();
+//	    
+//	    for(Parameter param : parameters) {
+//		
+//		String paramType = param.GetType();
+//		String paramClassifierId = param.GetClassifierID();
+//	    }
+//	}
+//    }
 
     private void ensureSchemaDependenciesModeled(String schemaFullName) {
 
@@ -1152,8 +1241,8 @@ public class LinkTransformer implements Transformer, MessageSource {
 		    String metaType = conn.GetMetaType();
 
 		    if (StringUtils.equalsAnyIgnoreCase(metaType, "association", "aggregation")
-			    && EAConnector.isNavigable(conn.GetClientEnd(), conn)
-			    && !EAConnector.isNavigable(conn.GetSupplierEnd(), conn)) {
+			    && EAConnectorEndUtil.isNavigable(conn.GetClientEnd(), conn, true)
+			    && !EAConnectorEndUtil.isNavigable(conn.GetSupplierEnd(), conn, true)) {
 			connectorSourceAndTargetNeedToBeSwitched = true;
 		    }
 
@@ -1179,8 +1268,8 @@ public class LinkTransformer implements Transformer, MessageSource {
 		    String metaType = conn.GetMetaType();
 
 		    if (StringUtils.equalsAnyIgnoreCase(metaType, "association", "aggregation")
-			    && EAConnector.isNavigable(conn.GetClientEnd(), conn)
-			    && !EAConnector.isNavigable(conn.GetSupplierEnd(), conn)) {
+			    && EAConnectorEndUtil.isNavigable(conn.GetClientEnd(), conn, true)
+			    && !EAConnectorEndUtil.isNavigable(conn.GetSupplierEnd(), conn, true)) {
 
 			connectorSourceAndTargetNeedToBeSwitched = true;
 
@@ -1205,7 +1294,7 @@ public class LinkTransformer implements Transformer, MessageSource {
 		    Optional<String> externalFullNameOpt = eaRepo.getFullName(externalElementId);
 
 		    MessageContext mc = result.addError(this, 701, externalElementInfo,
-			    EAConnector.connectorInfo(conn, rep));
+			    EAConnectorUtil.connectorInfo(conn, rep));
 		    if (mc != null) {
 			mc.addDetail(this, isCheckForPackageConnectors ? 5 : 2, fullNameOfContext);
 			mc.addDetail(this, 6,
@@ -1231,7 +1320,7 @@ public class LinkTransformer implements Transformer, MessageSource {
 			    Optional<String> externalFullNameOpt = eaRepo.getFullName(externalElementId);
 
 			    MessageContext mc = result.addError(this, 700, externalElementInfo,
-				    EAConnector.connectorInfo(conn, rep));
+				    EAConnectorUtil.connectorInfo(conn, rep));
 			    if (mc != null) {
 				mc.addDetail(this, isCheckForPackageConnectors ? 5 : 2, fullNameOfContext);
 				mc.addDetail(this, 6, externalFullNameOpt.isPresent() ? externalFullNameOpt.get()
@@ -1294,7 +1383,7 @@ public class LinkTransformer implements Transformer, MessageSource {
 		     * an incorrect package dependency.
 		     */
 
-		    String caseInfo = "Connector - " + EAConnector.connectorInfo(conn, rep);
+		    String caseInfo = "Connector - " + EAConnectorUtil.connectorInfo(conn, rep);
 		    String schemaElementFullName = fullNameOfContext;
 		    String externalElementFullName = eaRepo.getFullName(externalElementId)
 			    .orElse(FULL_NAME_FOR_MISSING_ELEMENT);
@@ -1646,100 +1735,6 @@ public class LinkTransformer implements Transformer, MessageSource {
 	return allSchemasAndDependenciesFound;
     }
 
-    private MetaType metaType(Element elmt) {
-
-	switch (elmt.GetMetaType()) {
-	case "Package":
-	    return MetaType.PACKAGE;
-	case "Class":
-	    return MetaType.CLASS;
-	case "Interface":
-	    return MetaType.INTERFACE;
-	case "DataType":
-	    return MetaType.DATATYPE;
-	case "Enumeration":
-	    return MetaType.ENUMERATION;
-	case "Object":
-	    return MetaType.OBJECT;
-	case "AssociationClass":
-	    return MetaType.ASSOCIATION_CLASS;
-	case "Metaclass":
-	    return MetaType.METACLASS;
-	case "Artifact":
-	    return MetaType.ARTIFACT;
-	case "Stereotype":
-	    return MetaType.STEREOTYPE;
-	case "Abstract":
-	    return MetaType.ABSTRACT;
-	case "Boundary":
-	case "Note":
-	case "ReportSpecification":
-	case "StandardChart":
-	case "Pseudostate":
-	case "Text":
-	case "InterruptibleActivityRegion":
-	case "DecisionNode":
-	case "Actor":
-	case "Activity":
-	    return MetaType.IGNORED;
-	default:
-	    result.addWarning(this, 103, elmt.GetName(), elmt.GetMetaType());
-	    return MetaType.UNKNOWN;
-	}
-    }
-
-//    private void identifyOwnedElements(String owningSchemaFullName, Package ownedPkg, String pathToOwnedPackage) {
-//
-//	String ownedPkgFullName = fullName(ownedPkg, pathToOwnedPackage);
-//	String pathToOwnedElements = ownedPkgFullName + "::";
-//
-//	Collection<Element> c = ownedPkg.GetElements();
-//	c.Refresh();
-//	for (Element elmt : c) {
-//
-//	    if (StringUtils.isNotBlank(elmt.GetName())) {
-//
-//		MetaType elmtMetaType = metaType(elmt);
-//		if (elmtMetaType == MetaType.CLASS || elmtMetaType == MetaType.DATATYPE
-//			|| elmtMetaType == MetaType.ENUMERATION || elmtMetaType == MetaType.INTERFACE) {
-//
-//		    int elmtId = elmt.GetElementID();
-//		    String elmtFullName = fullName(elmt, pathToOwnedElements);
-//
-//		    if (elementFullNameByElementId.containsValue(elmtFullName)) {
-//			duplicateElementFullNameByElementId.put(elmtId, elmtFullName);
-//			result.addWarning(this, 100, elmtFullName);
-//		    } else {
-//			elementFullNameByElementId.put(elmtId, elmtFullName);
-//			fullNameOfOwningSchemaByElementId.put(elmtId, owningSchemaFullName);
-//
-//			elementIdsOfOwnedElementsBySchemaFullName.get(owningSchemaFullName).add(elmtId);
-//		    }
-//
-//		}
-//	    }
-//	}
-//
-//	Collection<Package> childPackages = ownedPkg.GetPackages();
-//	childPackages.Refresh();
-//	for (Package cp : childPackages) {
-//
-//	    if (StringUtils.isNotBlank(cp.GetName())) {
-//
-//		int pkgElmtId = cp.GetElement().GetElementID();
-//		String cpFullName = fullName(cp, pathToOwnedElements);
-//
-//		packageFullNameByPackageElementId.put(pkgElmtId, cpFullName);
-//		fullNameOfOwningSchemaByPackageElementId.put(pkgElmtId, owningSchemaFullName);
-//
-//		elementIdsOfOwnedPackagesBySchemaFullName.get(owningSchemaFullName).add(pkgElmtId);
-//	    }
-//
-//	    identifyOwnedElements(owningSchemaFullName, cp, pathToOwnedElements);
-//	}
-//
-//    }
-
     @Override
     public String message(int mnr) {
 
@@ -1804,7 +1799,11 @@ public class LinkTransformer implements Transformer, MessageSource {
 	    return "--- --- --- Now analyzing diagrams in schema: $1$";
 	case 121:
 	    return "Package dependency, case: $1$";
-
+	case 122:
+	    return "--- --- Elements with the following meta types will be ignored: $1$";
+	case 123:
+	    return "--- --- --- Now processing operations of elements in schema: $1$";
+	    
 	// element messages: 2xx
 
 	// attribute messages: 3xx

@@ -1,5 +1,5 @@
 /**
- * GID Profile Transformer (schema transformer)
+ * GeoInfoDok Transformations (Profile Transformer)
  *
  * (c) 2009-2024 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
  * Länder der Bundesrepublik Deutschland (AdV)
