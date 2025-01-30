@@ -363,7 +363,7 @@ public class ProfilDialog extends JFrame implements ActionListener, ItemListener
     	String s;
     	
     	String appSchemaStr;
-		s = options.parameter("appSchemaName");
+		s = options.parameter("RELEVANT_PACKAGE_NAME");
 		if (s!=null && s.trim().length()>0)
 			appSchemaStr = s.trim();
 		else
@@ -691,7 +691,7 @@ public class ProfilDialog extends JFrame implements ActionListener, ItemListener
         modelTransformed = false;
         transformationRunning = true;
 
-		options.setParameter("appSchemaName", appSchemaField.getText());
+		options.setParameter("RELEVANT_PACKAGE_NAME", appSchemaField.getText());
 		
 		options.setParameter(paramProfilClass, "Modellart", modellartField.getText());
 		options.setParameter(paramProfilClass, "Profil", profilField.getText());

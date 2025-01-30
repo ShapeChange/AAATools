@@ -415,7 +415,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
     	String s = "";
     	
     	String appSchemaStr;
-		s = options.parameter("appSchemaName");
+		s = options.parameter("RELEVANT_PACKAGE_NAME");
 		if (s!=null && s.trim().length()>0)
 			appSchemaStr = s.trim();
 		else
@@ -801,7 +801,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 		}
 		options.setParameter(paramKatalogClass,"ausgabeformat", opt);
 		
-		options.setParameter("appSchemaName", appSchemaField.getText());
+		options.setParameter("RELEVANT_PACKAGE_NAME", appSchemaField.getText());
 		options.setParameter(paramKatalogClass,"schemakennungen", schemaKennField.getText());
 		if(geerbEigBox.isSelected())
 			options.setParameter(paramKatalogClass,"geerbteEigenschaften","true");
