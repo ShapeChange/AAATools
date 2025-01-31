@@ -77,6 +77,7 @@ import de.interactive_instruments.shapechange.core.ShapeChangeResult;
 import de.interactive_instruments.shapechange.core.TargetConfiguration;
 import de.interactive_instruments.shapechange.core.model.Model;
 import de.interactive_instruments.shapechange.ea.model.EADocument;
+import org.apache.commons.lang3.StringUtils;
 import de.interactive_instruments.shapechange.core.ui.Dialog;
 import de.interactive_instruments.shapechange.core.ui.StatusBoard;
 import de.interactive_instruments.shapechange.core.ui.StatusReader;
@@ -363,7 +364,7 @@ public class ProfilDialog extends JFrame implements ActionListener, ItemListener
     	String s;
     	
     	String appSchemaStr;
-		s = options.parameter("RELEVANT_PACKAGE_NAME");
+		s = StringUtils.defaultIfBlank(options.parameter("RELEVANT_PACKAGE_NAME"), options.parameter("appSchemaName")) ;
 		if (s!=null && s.trim().length()>0)
 			appSchemaStr = s.trim();
 		else

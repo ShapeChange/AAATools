@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ShapeChangeConfiguration xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1 resources/schema/ShapeChangeConfiguration.xsd">
+<ShapeChangeConfiguration xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1 ../resources/schema/ShapeChangeConfiguration.xsd">
 	<input xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1">
 		<parameter name="inputModelType" value="SCXML"/>
 		<parameter name="inputFile" value="AAA-7.1.2.xml.zip"/>
@@ -17,6 +17,7 @@
 			<StereotypeAlias wellknown="Application Schema" alias="ApplicationSchema" />
 			<StereotypeAlias wellknown="Application Schema" alias="Schema" />
 			<StereotypeAlias wellknown="Type" alias="interface" />
+			<StereotypeAlias wellknown="" alias="abstract" />
 		</stereotypeAliases>
 	</input>
 	<log>
