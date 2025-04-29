@@ -106,6 +106,7 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 
     protected Set<StereotypeMappingInfo> stereotypeMappingInfos = new HashSet<>();
     protected List<String> targetValuesForTagMapping = null;
+    protected SortedMap<String, String> tagsWithFixedValue = new TreeMap<>();
 
     protected SortedMap<String, Integer> numberOfNonBlankValuesBySourceTaggedValueFQName = new TreeMap<>();
 
@@ -145,9 +146,20 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 
 	targetValuesForTagMapping = Arrays.asList("true", "false", "inline", "byReference", "inlineOrByReference");
 
+	tagsWithFixedValue.put("byValuePropertyType", "");
+	tagsWithFixedValue.put("asDictionary", "true");
+	tagsWithFixedValue.put("isCollection", "");
+	tagsWithFixedValue.put("noPropertyType", "");
+	tagsWithFixedValue.put("reverseRoleNAS", "");
+	tagsWithFixedValue.put("xsdEncodingRule", "");
+
 	{
 	    // retired
 
+	    /*
+	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+	     */
 	    SortedMap<String, String> retTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> retTVSourceToTargetFQNameMap = new TreeMap<>();
 
@@ -163,6 +175,10 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	{
 	    // applicationSchema
 
+	    /*
+	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+	     */
 	    SortedMap<String, String> pkgTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> pkgTVSourceToTargetFQNameMap = new TreeMap<>();
 
@@ -181,11 +197,12 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    pkgTVNameToSourceFQNameMap.put("xsdDocument", "AAA::applicationSchema::xsdDocument");
 	    pkgTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::applicationSchema::xsdEncodingRule");
 
-	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::AAA:Kennung", "GID::GID_Element::GID:Kennung");
+	    // -------------
+
 	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::AAA:Modellart",
-		    "GID::GID_Element::GID:Modellart");
+		    "GID::GID_ElementMitModellart::GID:Modellart");
 	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::AAA:Revisionsnummer",
-		    "GID::GID_Element::GID:Revisionsnummer");
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
 
 	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::version", "GID::ApplicationSchema::version");
 
@@ -214,6 +231,10 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	{
 	    // schema
 
+	    /*
+	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+	     */
 	    SortedMap<String, String> pkgTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> pkgTVSourceToTargetFQNameMap = new TreeMap<>();
 
@@ -232,10 +253,12 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    pkgTVNameToSourceFQNameMap.put("xsdDocument", "AAA::schema::xsdDocument");
 	    pkgTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::schema::xsdEncodingRule");
 
-	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::AAA:Kennung", "GID::GID_Element::GID:Kennung");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::AAA:Modellart", "GID::GID_Element::GID:Modellart");
+	    // -------------
+
+	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::AAA:Modellart",
+		    "GID::GID_ElementMitModellart::GID:Modellart");
 	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::AAA:Revisionsnummer",
-		    "GID::GID_Element::GID:Revisionsnummer");
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
 
 	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::version", "GID::ApplicationSchema::version");
 
@@ -261,6 +284,10 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	{
 	    // package (without stereotype)
 
+	    /*
+	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+	     */
 	    SortedMap<String, String> pkgTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> pkgTVSourceToTargetFQNameMap = new TreeMap<>();
 
@@ -271,10 +298,13 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    pkgTVNameToSourceFQNameMap.put("xsdDocument", "AAA::package::xsdDocument");
 	    pkgTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::package::xsdEncodingRule");
 
-	    pkgTVSourceToTargetFQNameMap.put("AAA::package::AAA:Kennung", "GID::GID_Element::GID:Kennung");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::package::AAA:Modellart", "GID::GID_Element::GID:Modellart");
+	    // -------------
+
+	    pkgTVSourceToTargetFQNameMap.put("AAA::package::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
+	    pkgTVSourceToTargetFQNameMap.put("AAA::package::AAA:Modellart",
+		    "GID::GID_ElementMitModellart::GID:Modellart");
 	    pkgTVSourceToTargetFQNameMap.put("AAA::package::AAA:Revisionsnummer",
-		    "GID::GID_Element::GID:Revisionsnummer");
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
 
 	    pkgTVSourceToTargetFQNameMap.put("AAA::package::xsdDocument", "GID::GID_Package::xsdDocument");
 	    pkgTVSourceToTargetFQNameMap.put("AAA::package::xsdEncodingRule", "GID::GID_Package::xsdEncodingRule");
@@ -287,6 +317,10 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	{
 	    // type
 
+	    /*
+	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+	     */
 	    SortedMap<String, String> tTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> tTVSourceToTargetFQNameMap = new TreeMap<>();
 
@@ -298,24 +332,22 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    tTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::type::AAA:Nutzungsartkennung");
 	    tTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::type::AAA:Profile");
 	    tTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::type::AAA:Revisionsnummer");
+	    tTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
 	    tTVNameToSourceFQNameMap.put("byValuePropertyType", "AAA::type::byValuePropertyType");
 	    tTVNameToSourceFQNameMap.put("isCollection", "AAA::type::isCollection");
 	    tTVNameToSourceFQNameMap.put("noPropertyType", "AAA::type::noPropertyType");
 	    tTVNameToSourceFQNameMap.put("xmlSchemaType", "AAA::type::xmlSchemaType");
 	    tTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::type::xsdEncodingRule");
 
+	    // -------------
+
 	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Grunddatenbestand",
-		    "GID::GID_LogicalElement::GID:Grunddatenbestand");
-	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Kennung", "GID::GID_Element::GID:Kennung");
-	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:LetzteAenderung",
-		    "GID::GID_LogicalElement::GID:LetzteAenderung");
-	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Modellart", "GID::GID_Element::GID:Modellart");
-	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Nutzungsart",
-		    "GID::AAA_NutzungsartElement::AAA:Nutzungsart");
-	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Nutzungsartkennung",
-		    "GID::AAA_NutzungsartElement::AAA:Nutzungsartkennung");
+		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
+	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Modellart", "GID::GID_ElementMitModellart::GID:Modellart");
 	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
-	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Revisionsnummer", "GID::GID_Element::GID:Revisionsnummer");
+	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Revisionsnummer",
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
 	    tTVSourceToTargetFQNameMap.put("AAA::type::byValuePropertyType", "GID::GID_Mixin::byValuePropertyType");
 	    tTVSourceToTargetFQNameMap.put("AAA::type::isCollection", "GID::GID_Mixin::isCollection");
 	    tTVSourceToTargetFQNameMap.put("AAA::type::noPropertyType", "GID::GID_Mixin::noPropertyType");
@@ -330,6 +362,10 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	{
 	    // featureType
 
+	    /*
+	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+	     */
 	    SortedMap<String, String> ftTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> ftTVSourceToTargetFQNameMap = new TreeMap<>();
 
@@ -341,24 +377,26 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    ftTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::featureType::AAA:Nutzungsartkennung");
 	    ftTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::featureType::AAA:Profile");
 	    ftTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::featureType::AAA:Revisionsnummer");
+	    ftTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
 	    ftTVNameToSourceFQNameMap.put("byValuePropertyType", "AAA::featureType::byValuePropertyType");
 	    ftTVNameToSourceFQNameMap.put("isCollection", "AAA::featureType::isCollection");
 	    ftTVNameToSourceFQNameMap.put("noPropertyType", "AAA::featureType::noPropertyType");
 	    ftTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::featureType::xsdEncodingRule");
 
+	    // -------------
+
 	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Grunddatenbestand",
-		    "GID::GID_LogicalElement::GID:Grunddatenbestand");
-	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Kennung", "GID::GID_Element::GID:Kennung");
-	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:LetzteAenderung",
-		    "GID::GID_LogicalElement::GID:LetzteAenderung");
-	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Modellart", "GID::GID_Element::GID:Modellart");
+		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
+	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Modellart",
+		    "GID::GID_ElementMitModellart::GID:Modellart");
 	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Nutzungsart",
-		    "GID::AAA_NutzungsartElement::AAA:Nutzungsart");
+		    "GID::GID_FeatureType::AAA:Nutzungsart");
 	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Nutzungsartkennung",
-		    "GID::AAA_NutzungsartElement::AAA:Nutzungsartkennung");
+		    "GID::AAA_NutzungsartkennungElement::AAA:Nutzungsartkennung");
 	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
 	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Revisionsnummer",
-		    "GID::GID_Element::GID:Revisionsnummer");
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
 	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::byValuePropertyType",
 		    "GID::GID_FeatureType::byValuePropertyType");
 	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::isCollection", "GID::GID_FeatureType::isCollection");
@@ -374,6 +412,10 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	{
 	    // dataType
 
+	    /*
+	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+	     */
 	    SortedMap<String, String> dtTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> dtTVSourceToTargetFQNameMap = new TreeMap<>();
 
@@ -385,23 +427,21 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    dtTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::dataType::AAA:Nutzungsartkennung");
 	    dtTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::dataType::AAA:Profile");
 	    dtTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::dataType::AAA:Revisionsnummer");
+	    dtTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
 	    dtTVNameToSourceFQNameMap.put("isCollection", "AAA::dataType::isCollection");
 	    dtTVNameToSourceFQNameMap.put("noPropertyType", "AAA::dataType::noPropertyType");
 	    dtTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::dataType::xsdEncodingRule");
 
+	    // -------------
+
 	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Grunddatenbestand",
-		    "GID::GID_LogicalElement::GID:Grunddatenbestand");
-	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Kennung", "GID::GID_Element::GID:Kennung");
-	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:LetzteAenderung",
-		    "GID::GID_LogicalElement::GID:LetzteAenderung");
-	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Modellart", "GID::GID_Element::GID:Modellart");
-	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Nutzungsart",
-		    "GID::AAA_NutzungsartElement::AAA:Nutzungsart");
-	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Nutzungsartkennung",
-		    "GID::AAA_NutzungsartElement::AAA:Nutzungsartkennung");
+		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
+	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Modellart",
+		    "GID::GID_ElementMitModellart::GID:Modellart");
 	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
 	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Revisionsnummer",
-		    "GID::GID_Element::GID:Revisionsnummer");
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
 	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::isCollection", "GID::GID_DataType::isCollection");
 	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::noPropertyType", "GID::GID_DataType::noPropertyType");
 	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::xsdEncodingRule", "GID::GID_DataType::xsdEncodingRule");
@@ -412,8 +452,12 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	}
 
 	{
-	    // union
+	    // union (wird umgewandelt)
 
+	    /*
+	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+	     */
 	    SortedMap<String, String> unionTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> unionTVSourceToTargetFQNameMap = new TreeMap<>();
 
@@ -425,23 +469,21 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    unionTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::union::AAA:Nutzungsartkennung");
 	    unionTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::union::AAA:Profile");
 	    unionTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::union::AAA:Revisionsnummer");
+	    unionTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
 	    unionTVNameToSourceFQNameMap.put("isCollection", "AAA::union::isCollection");
 	    unionTVNameToSourceFQNameMap.put("noPropertyType", "AAA::union::noPropertyType");
 	    unionTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::union::xsdEncodingRule");
 
+	    // -------------
+
 	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Grunddatenbestand",
-		    "GID::GID_LogicalElement::GID:Grunddatenbestand");
-	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Kennung", "GID::GID_Element::GID:Kennung");
-	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:LetzteAenderung",
-		    "GID::GID_LogicalElement::GID:LetzteAenderung");
-	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Modellart", "GID::GID_Element::GID:Modellart");
-	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Nutzungsart",
-		    "GID::AAA_NutzungsartElement::AAA:Nutzungsart");
-	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Nutzungsartkennung",
-		    "GID::AAA_NutzungsartElement::AAA:Nutzungsartkennung");
+		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
+	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Modellart",
+		    "GID::GID_ElementMitModellart::GID:Modellart");
 	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
 	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Revisionsnummer",
-		    "GID::GID_Element::GID:Revisionsnummer");
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
 	    unionTVSourceToTargetFQNameMap.put("AAA::union::isCollection", "GID::GID_DataType::isCollection");
 	    unionTVSourceToTargetFQNameMap.put("AAA::union::noPropertyType", "GID::GID_DataType::noPropertyType");
 	    unionTVSourceToTargetFQNameMap.put("AAA::union::xsdEncodingRule", "GID::GID_DataType::xsdEncodingRule");
@@ -454,6 +496,10 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	{
 	    // code list
 
+	    /*
+	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+	     */
 	    SortedMap<String, String> clTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> clTVSourceToTargetFQNameMap = new TreeMap<>();
 
@@ -465,23 +511,16 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    clTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::codeList::AAA:Nutzungsartkennung");
 	    clTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::codeList::AAA:Profile");
 	    clTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::codeList::AAA:Revisionsnummer");
+	    clTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
 	    clTVNameToSourceFQNameMap.put("asDictionary", "AAA::codeList::asDictionary");
 	    clTVNameToSourceFQNameMap.put("codeList", "AAA::codeList::codeList");
 	    clTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::codeList::xsdEncodingRule");
 
-	    clTVSourceToTargetFQNameMap.put("AAA::codeList::AAA:Grunddatenbestand",
-		    "GID::GID_LogicalElement::GID:Grunddatenbestand");
-	    clTVSourceToTargetFQNameMap.put("AAA::codeList::AAA:Kennung", "GID::GID_Element::GID:Kennung");
-	    clTVSourceToTargetFQNameMap.put("AAA::codeList::AAA:LetzteAenderung",
-		    "GID::GID_LogicalElement::GID:LetzteAenderung");
-	    clTVSourceToTargetFQNameMap.put("AAA::codeList::AAA:Modellart", "GID::GID_Element::GID:Modellart");
-	    clTVSourceToTargetFQNameMap.put("AAA::codeList::AAA:Nutzungsart",
-		    "GID::AAA_NutzungsartElement::AAA:Nutzungsart");
-	    clTVSourceToTargetFQNameMap.put("AAA::codeList::AAA:Nutzungsartkennung",
-		    "GID::AAA_NutzungsartElement::AAA:Nutzungsartkennung");
+	    // -------------
+
+	    clTVSourceToTargetFQNameMap.put("AAA::codeList::AAA:Modellart",
+		    "GID::GID_ElementMitModellart::GID:Modellart");
 	    clTVSourceToTargetFQNameMap.put("AAA::codeList::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
-	    clTVSourceToTargetFQNameMap.put("AAA::codeList::AAA:Revisionsnummer",
-		    "GID::GID_Element::GID:Revisionsnummer");
 	    clTVSourceToTargetFQNameMap.put("AAA::codeList::asDictionary", "GID::GID_CodeSet::asDictionary");
 	    clTVSourceToTargetFQNameMap.put("AAA::codeList::codeList", "GID::GID_CodeSet::codeList");
 	    clTVSourceToTargetFQNameMap.put("AAA::codeList::xsdEncodingRule", "GID::GID_CodeSet::xsdEncodingRule");
@@ -494,6 +533,10 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	{
 	    // enumeration
 
+	    /*
+	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+	     */
 	    SortedMap<String, String> eTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> eTVSourceToTargetFQNameMap = new TreeMap<>();
 
@@ -505,21 +548,18 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    eTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::enumeration::AAA:Nutzungsartkennung");
 	    eTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::enumeration::AAA:Profile");
 	    eTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::enumeration::AAA:Revisionsnummer");
+	    eTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
 	    eTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::enumeration::xsdEncodingRule");
 
+	    // -------------
+
 	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::AAA:Grunddatenbestand",
-		    "GID::GID_LogicalElement::GID:Grunddatenbestand");
-	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::AAA:Kennung", "GID::GID_Element::GID:Kennung");
-	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::AAA:LetzteAenderung",
-		    "GID::GID_LogicalElement::GID:LetzteAenderung");
-	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::AAA:Modellart", "GID::GID_Element::GID:Modellart");
-	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::AAA:Nutzungsart",
-		    "GID::AAA_NutzungsartElement::AAA:Nutzungsart");
-	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::AAA:Nutzungsartkennung",
-		    "GID::AAA_NutzungsartElement::AAA:Nutzungsartkennung");
+		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::AAA:Modellart",
+		    "GID::GID_ElementMitModellart::GID:Modellart");
 	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
 	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::AAA:Revisionsnummer",
-		    "GID::GID_Element::GID:Revisionsnummer");
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
 	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::xsdEncodingRule",
 		    "GID::GID_Enumeration::xsdEncodingRule");
 
@@ -531,6 +571,10 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	{
 	    // property (for attributes and association roles)
 
+	    /*
+	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+	     */
 	    SortedMap<String, String> propTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> propTVSourceToTargetFQNameMap = new TreeMap<>();
 
@@ -552,22 +596,18 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    propTVNameToSourceFQNameMap.put("reverseRoleNAS", "AAA::property::reverseRoleNAS");
 	    propTVNameToSourceFQNameMap.put("sequenceNumber", "AAA::property::sequenceNumber");
 
-	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Kennung", "GID::GID_Element::GID:Kennung");
-	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Modellart", "GID::GID_Element::GID:Modellart");
+	    // -------------
+
+	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
+	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Modellart",
+		    "GID::GID_ElementMitModellart::GID:Modellart");
 	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Grunddatenbestand",
-		    "GID::GID_LogicalElement::GID:Grunddatenbestand");
-	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:LetzteAenderung",
-		    "GID::GID_LogicalElement::GID:LetzteAenderung");
+		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
 	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Revisionsnummer",
-		    "GID::GID_Element::GID:Revisionsnummer");
-	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Nutzungsart",
-		    "GID::AAA_NutzungsartElement::AAA:Nutzungsart");
-	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Nutzungsartkennung",
-		    "GID::AAA_NutzungsartElement::AAA:Nutzungsartkennung");
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
 	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
 
 	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Landnutzung", "GID::GID_Property::AAA:Landnutzung");
-	    propTVSourceToTargetFQNameMap.put("AAA::property::allowedTypesNAS", "GID::GID_Property::allowedTypesNAS");
 	    propTVSourceToTargetFQNameMap.put("AAA::property::inlineOrByReference",
 		    "GID::GID_Property::inlineOrByReference");
 	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:objektbildend",
@@ -583,6 +623,10 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	{
 	    // enumeration literal
 
+	    /*
+	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+	     */
 	    SortedMap<String, String> elTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> elTVSourceToTargetFQNameMap = new TreeMap<>();
 
@@ -595,17 +639,15 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    elTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::enum::AAA:Nutzungsartkennung");
 	    elTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::enum::AAA:Profile");
 
-	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Kennung", "GID::GID_Element::GID:Kennung");
-	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Modellart", "GID::GID_Element::GID:Modellart");
+	    // -------------
+
+	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Modellart", "GID::GID_ElementMitModellart::GID:Modellart");
 	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Grunddatenbestand",
-		    "GID::GID_LogicalElement::GID:Grunddatenbestand");
-	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:LetzteAenderung",
-		    "GID::GID_LogicalElement::GID:LetzteAenderung");
-	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Revisionsnummer", "GID::GID_Element::GID:Revisionsnummer");
-	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Nutzungsart",
-		    "GID::AAA_NutzungsartElement::AAA:Nutzungsart");
+		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Revisionsnummer",
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
 	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Nutzungsartkennung",
-		    "GID::AAA_NutzungsartElement::AAA:Nutzungsartkennung");
+		    "GID::AAA_NutzungsartkennungElement::AAA:Nutzungsartkennung");
 	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
 
 	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::enum", "GID::GID_EnumerationLiteral",
@@ -818,6 +860,11 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	Element pkgElmt = p.GetElement();
 
 	String pkgName = pkgElmt.GetName();
+
+//	if (!StringUtils.containsAnyIgnoreCase(pkgName, "NAS", "AFIS-ALKIS-ATKIS Anwendungsschema", "AAA Basisschema",
+//		"AAA_Basisklassen")) {
+//	    return;
+//	}
 
 	if (PACKAGES_TO_EXCLUDE_IN_UML_PROFILE_UPDATE.contains(pkgName)) {
 	    result.addInfo(this, 120, pkgName);
@@ -1353,7 +1400,7 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 		    continue;
 		}
 
-		List<String> sourceValues = sourceTVs.get(sourceFQName);
+		List<String> sourceValues = determineSourceValuesForTag(sourceFQName, sourceTVs);
 
 		String targetFQName = elmtTVSourceToTargetFQNameMap.get(sourceFQName);
 
@@ -1364,7 +1411,11 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 		    if (tvs.containsKey(targetLookupKey)) {
 
 			for (String sourceValue : sourceValues) {
-			    if (StringUtils.isNotBlank(sourceValue)) {
+
+			    /*
+			     * Ensure that fixed value is set, even if it is the empty string.
+			     */
+			    if (StringUtils.isNotBlank(sourceValue) || isTagWithFixedValue(sourceFQName)) {
 				EAElementUtil.updateTaggedValue(elmt, targetFQName, applyTargetTagMapping(sourceValue),
 					false);
 			    }
@@ -1417,7 +1468,7 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 		    continue;
 		}
 
-		List<String> sourceValues = sourceTVs.get(sourceFQName);
+		List<String> sourceValues = determineSourceValuesForTag(sourceFQName, sourceTVs);
 
 		String targetFQName = elmtTVSourceToTargetFQNameMap.get(sourceFQName);
 
@@ -1428,7 +1479,11 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 		    if (tvs.containsKey(targetLookupKey)) {
 
 			for (String sourceValue : sourceValues) {
-			    if (StringUtils.isNotBlank(sourceValue)) {
+
+			    /*
+			     * Ensure that fixed value is set, even if it is the empty string.
+			     */
+			    if (StringUtils.isNotBlank(sourceValue) || isTagWithFixedValue(sourceFQName)) {
 				EAAttributeUtil.updateTaggedValue(att, targetFQName, applyTargetTagMapping(sourceValue),
 					false);
 			    }
@@ -1448,6 +1503,21 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	printTaggedValues(tvs);
     }
 
+    private boolean isTagWithFixedValue(String sourceTagFQName) {
+	return StringUtils.containsAnyIgnoreCase(sourceTagFQName, tagsWithFixedValue.keySet().toArray(new String[0]));
+    }
+
+    private Optional<String> getFixedValue(String sourceTagFQName) {
+
+	for (Entry<String, String> e : tagsWithFixedValue.entrySet()) {
+	    if (StringUtils.containsIgnoreCase(sourceTagFQName, e.getKey())) {
+		return Optional.of(e.getValue());
+	    }
+	}
+
+	return Optional.empty();
+    }
+
     private void setTargetTVs(ConnectorEnd ce, Connector conn, List<StereotypeMappingInfo> smis,
 	    SortedMap<String, List<String>> sourceTVs) throws EAException {
 
@@ -1463,7 +1533,7 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 		    continue;
 		}
 
-		List<String> sourceValues = sourceTVs.get(sourceFQName);
+		List<String> sourceValues = determineSourceValuesForTag(sourceFQName, sourceTVs);
 
 		String targetFQName = elmtTVSourceToTargetFQNameMap.get(sourceFQName);
 
@@ -1474,7 +1544,11 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 		    if (tvs.containsKey(targetLookupKey)) {
 
 			for (String sourceValue : sourceValues) {
-			    if (StringUtils.isNotBlank(sourceValue)) {
+
+			    /*
+			     * Ensure that fixed value is set, even if it is the empty string.
+			     */
+			    if (StringUtils.isNotBlank(sourceValue) || isTagWithFixedValue(sourceFQName)) {
 				EAConnectorEndUtil.updateTaggedValue(ce, targetFQName,
 					applyTargetTagMapping(sourceValue), false);
 			    }
@@ -1494,6 +1568,22 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 
 	// JE: for development only
 	printTaggedValues(tvs);
+    }
+
+    private List<String> determineSourceValuesForTag(String sourceFQName, SortedMap<String, List<String>> sourceTVs) {
+
+	List<String> sourceValues;
+
+	Optional<String> fixedValueOpt = getFixedValue(sourceFQName);
+
+	if (fixedValueOpt.isPresent()) {
+	    sourceValues = new ArrayList<>();
+	    sourceValues.add(fixedValueOpt.get());
+	} else {
+	    sourceValues = sourceTVs.get(sourceFQName);
+	}
+
+	return sourceValues;
     }
 
     private void updateStereotypes(Element elmt, List<StereotypeMappingInfo> smis) throws EAException {
@@ -1747,6 +1837,13 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	return res;
     }
 
+    /**
+     * @param tvs  tbd
+     * @param smis tbd
+     * @return Map with key: source tag fqname, value: list of values found for this
+     *         tag
+     * @throws EAException
+     */
     private SortedMap<String, List<String>> getSourceTVs(SortedMap<String, EATaggedValue> tvs,
 	    List<StereotypeMappingInfo> smis) throws EAException {
 
