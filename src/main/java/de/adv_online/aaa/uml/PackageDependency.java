@@ -26,6 +26,10 @@
 
 package de.adv_online.aaa.uml;
 
+/**
+ * @author Johannes Echterhoff (echterhoff at interactive-instruments dot de)
+ *
+ */
 public class PackageDependency {
 
     private String caseInfo;

@@ -25,6 +25,10 @@
  */
 package de.adv_online.aaa.uml;
 
+/**
+ * @author Johannes Echterhoff (echterhoff at interactive-instruments dot de)
+ *
+ */
 public enum MetaType {
 
     ABSTRACT, ASSOCIATION_CLASS, PACKAGE, CLASS, DATATYPE, ENUMERATION, PROPERTY, ENUMERATIONLITERAL, INTERFACE, OBJECT,

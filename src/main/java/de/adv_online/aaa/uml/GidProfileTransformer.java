@@ -67,6 +67,10 @@ import de.interactive_instruments.shapechange.ea.util.EAException;
 import de.interactive_instruments.shapechange.ea.util.EAPackageUtil;
 import de.interactive_instruments.shapechange.ea.util.EATaggedValue;
 
+/**
+ * @author Johannes Echterhoff (echterhoff at interactive-instruments dot de)
+ *
+ */
 public class GidProfileTransformer implements Transformer, MessageSource {
 
 //    public static final String RELEVANT_PACKAGE_NAME = "TestSchema";
@@ -584,6 +588,7 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    propTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::property::AAA:LetzteAenderung");
 	    propTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::property::AAA:Revisionsnummer");
 	    propTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::property::AAA:Profile");
+	    propTVNameToSourceFQNameMap.put("AAA:UnitOfMeasure", "AAA::property::AAA:UnitOfMeasure");
 
 	    propTVNameToSourceFQNameMap.put("AAA:Landnutzung", "AAA::property::AAA:Landnutzung");
 	    propTVNameToSourceFQNameMap.put("allowedTypesNAS", "AAA::property::allowedTypesNAS");
@@ -608,6 +613,7 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
 
 	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Landnutzung", "GID::GID_Property::AAA:Landnutzung");
+	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:UnitOfMeasure", "GID::GID_Property::GID:UnitOfMeasure");
 	    propTVSourceToTargetFQNameMap.put("AAA::property::inlineOrByReference",
 		    "GID::GID_Property::inlineOrByReference");
 	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:objektbildend",

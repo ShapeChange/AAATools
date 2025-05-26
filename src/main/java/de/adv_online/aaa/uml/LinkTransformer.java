@@ -77,6 +77,10 @@ import de.interactive_instruments.shapechange.ea.util.modelhelper.EAElement;
 import de.interactive_instruments.shapechange.ea.util.modelhelper.EAPackage;
 import de.interactive_instruments.shapechange.ea.util.modelhelper.EARepository;
 
+/**
+ * @author Johannes Echterhoff (echterhoff at interactive-instruments dot de)
+ *
+ */
 public class LinkTransformer implements Transformer, MessageSource {
 
     // for dependency checks only
@@ -115,6 +119,7 @@ public class LinkTransformer implements Transformer, MessageSource {
 
     public static final String AAA_SCHEMA_FULL_NAME = "Model::GeoInfoDok::AFIS-ALKIS-ATKIS Anwendungsschema";
     public static final String AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE = "Model::GeoInfoDok::AFIS-ALKIS-ATKIS Anwendungsschema::AFIS-ALKIS-ATKIS Anwendungsschema 7.1";
+    public static final String AAA_SCHEMA_DEV_FULL_NAME_NEW_STRUCTURE = "Model::GeoInfoDok::AFIS-ALKIS-ATKIS Anwendungsschema::AFIS-ALKIS-ATKIS Anwendungsschema DEV";
     public static final String GEOINFODOK_PKG_FULL_NAME = "Model::GeoInfoDok";
 
     private ShapeChangeResult result = null;
@@ -218,7 +223,7 @@ public class LinkTransformer implements Transformer, MessageSource {
 //		"Model::ISO/TC 211::ISO 19110 Methodology for feature cataloguing::ISO 19110 Edition 2",
 //		"Model::ISO/TC 211::ISO 19111 Referencing by coordinates::ISO 19111 Edition 3",
 //		"Model::ISO/TC 211::ISO 19115 Metadata::ISO 19115-1 Edition 1",
-//		"Model::ISO/TC 211::ISO 19123 Schema for coverage geometry and functions::ISO 19123-1 Edition 1",
+//		"Model::ISO/TC 211::ISO 19123 Schema for coverage geometry and functions::ISO 19123 Edition 1",
 //		"Model::ISO/TC 211::ISO 19157 Data quality::ISO 19157-1 Edition 1", "Model::OGC::Filter Encoding 2.0",
 //		"Model::GeoInfoDok::Web Feature Service Erweiterungen", "Model::OGC::Web Feature Service 2.0",
 //		"Model::OGC::OWS Common 1.1"));
@@ -227,7 +232,8 @@ public class LinkTransformer implements Transformer, MessageSource {
 //		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
 //
 //	dependenciesBySchemaIn.put("Model::GeoInfoDok::GN_Geographische Informationen", Arrays.asList(
-//		AAA_SCHEMA_FULL_NAME, "Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
+//		AAA_SCHEMA_FULL_NAME,
+//		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
 //
 //	dependenciesBySchemaIn.put("Model::GeoInfoDok::GV_Geometrische Verbesserungen",
 //		Arrays.asList(AAA_SCHEMA_FULL_NAME,
@@ -253,9 +259,9 @@ public class LinkTransformer implements Transformer, MessageSource {
 	 * Dependencies for new model structure
 	 */
 
-	dependenciesBySchemaIn.put("Model::GeoInfoDok::AAA Ausgabekatalog::AAA_Ausgabekatalog 2.0",
-		Arrays.asList(AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE,
-			"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::AAA Ausgabekatalog::AAA_Ausgabekatalog 2.0", Arrays.asList(
+		AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE,
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
 
 	dependenciesBySchemaIn.put("Model::GeoInfoDok::AAA Objektartenkatalog::AAA_Objektartenkatalog 1.0",
 		Arrays.asList(AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE,
@@ -268,6 +274,24 @@ public class LinkTransformer implements Transformer, MessageSource {
 											  */
 		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types",
 		"Model::ISO/TC 211::ISO 19107 Spatial schema::ISO 19107 Edition 1",
+		"Model::ISO/TC 211::Informative::Spatial Examples from ISO 19107::Application Schema::Topology Simple::Simple Topology",
+		"Model::ISO/TC 211::ISO 19108 Temporal schema::ISO 19108 Edition 1",
+		"Model::ISO/TC 211::ISO 19109 Rules for application schema::ISO 19109 Edition 2",
+		"Model::ISO/TC 211::ISO 19110 Methodology for feature cataloguing::ISO 19110 Edition 2",
+		"Model::ISO/TC 211::ISO 19111 Referencing by coordinates::ISO 19111 Edition 3",
+		"Model::ISO/TC 211::ISO 19115 Metadata::ISO 19115-1 Edition 1",
+		"Model::ISO/TC 211::ISO 19123 Schema for coverage geometry and functions::ISO 19123 Edition 1",
+		"Model::ISO/TC 211::ISO 19157 Data quality::ISO 19157-1 Edition 1",
+		"Model::OGC::Filter Encoding::Filter Encoding 2.0",
+		"Model::GeoInfoDok::Web Feature Service Erweiterungen::Web Feature Service Erweiterungen 2.0",
+		"Model::OGC::Web Feature Service::Web Feature Service 2.0", "Model::OGC::OWS Common::OWS Common 1.1"));
+
+	dependenciesBySchemaIn.put(AAA_SCHEMA_DEV_FULL_NAME_NEW_STRUCTURE, Arrays.asList(/*
+											  * "Model::GeoInfoDok::AAA_Ausgabekatalog",
+											  * "Model::GeoInfoDok::AAA_Objektartenkatalog".
+											  */
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types",
+		"Model::ISO/TC 211::ISO 19107 Spatial schema::ISO 19107 Edition 2",
 		"Model::ISO/TC 211::ISO 19108 Temporal schema::ISO 19108 Edition 1",
 		"Model::ISO/TC 211::ISO 19109 Rules for application schema::ISO 19109 Edition 2",
 		"Model::ISO/TC 211::ISO 19110 Methodology for feature cataloguing::ISO 19110 Edition 2",
@@ -279,9 +303,9 @@ public class LinkTransformer implements Transformer, MessageSource {
 		"Model::GeoInfoDok::Web Feature Service Erweiterungen::Web Feature Service Erweiterungen 2.0",
 		"Model::OGC::Web Feature Service::Web Feature Service 2.0", "Model::OGC::OWS Common::OWS Common 1.1"));
 
-	dependenciesBySchemaIn.put("Model::GeoInfoDok::Bodenrichtwerte::BR_Bodenrichtwerte 3.0",
-		Arrays.asList(AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE,
-			"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::Bodenrichtwerte::BR_Bodenrichtwerte 3.0", Arrays.asList(
+		AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE,
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
 
 	dependenciesBySchemaIn.put("Model::GeoInfoDok::Geographische Informationen::GN_Geographische Informationen 1.0",
 		Arrays.asList(AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE,
@@ -292,13 +316,13 @@ public class LinkTransformer implements Transformer, MessageSource {
 			"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types",
 			"Model::ISO/TC 211::ISO 19107 Spatial schema::ISO 19107 Edition 1"));
 
-	dependenciesBySchemaIn.put("Model::GeoInfoDok::Landbedeckung::LB_Landbedeckung 1.0",
-		Arrays.asList(AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE,
-			"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::Landbedeckung::LB_Landbedeckung 1.0", Arrays.asList(
+		AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE,
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
 
-	dependenciesBySchemaIn.put("Model::GeoInfoDok::Landnutzung::LN_Landnutzung 1.0",
-		Arrays.asList(AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE,
-			"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::Landnutzung::LN_Landnutzung 1.0", Arrays.asList(
+		AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE,
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
 
 	dependenciesBySchemaIn.put(
 		"Model::GeoInfoDok::Web Feature Service Erweiterungen::Web Feature Service Erweiterungen 2.0",
@@ -315,7 +339,8 @@ public class LinkTransformer implements Transformer, MessageSource {
 	 * 2024-09-26 JE: ISO schemas are not transformed.
 	 */
 
-	dependenciesBySchemaIn.put("Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types",
+	dependenciesBySchemaIn.put(
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types",
 		Arrays.asList());
 
 	dependenciesBySchemaIn.put("Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO/TS 19103 Edition 1",
@@ -527,6 +552,7 @@ public class LinkTransformer implements Transformer, MessageSource {
 
 	classMappings.put("Length", "Measure");
 	classMappings.put("Area", "Measure");
+	classMappings.put("Volume", "Measure");
 	classMappings.put("SC_CRS", "CRS");
 	classMappings.put("AA_UUID", "CharacterString"); // union mapping, for cases where AA_UUID is contained in Set<>
 							 // or Sequence<>
@@ -2022,8 +2048,10 @@ public class LinkTransformer implements Transformer, MessageSource {
 	    tmp.addAll(eaRepo.elementsAll(dependency).values());
 	}
 
-	Set<EAElement> res = tmp.stream()
-		.filter(elmt -> !StringUtils.containsAnyIgnoreCase(elmt.getFullName(), "informative", "example"))
+	Set<EAElement> res = tmp.stream().filter(elmt -> !StringUtils.containsAnyIgnoreCase(elmt.getFullName(),
+		"informative", "example")
+		|| StringUtils.containsIgnoreCase(elmt.getFullName(),
+			"Spatial Examples from ISO 19107::Application Schema::Topology Simple::Simple Topology"))
 		.collect(Collectors.toSet());
 
 	return res;

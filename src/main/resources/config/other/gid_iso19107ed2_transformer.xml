@@ -2,15 +2,12 @@
 <ShapeChangeConfiguration xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1 C:\ShapeChange\shapechange-core\src\main\resources\schema\ShapeChangeConfiguration.xsd">
 	<input>
 		<parameter name="inputModelType" value="EA7"/>
-<!--		<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\KONF\Anpassung der Links\20250505_GeoInfoDok.qea"/>-->
-<!--		<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\KONF\Anpassung der Links\20250505_GeoInfoDok_modified.qea"/>-->
-<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\KONF\Anpassung ISO 19107\20250508_GeoInfoDok.qea"/>
-<!--		<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\GIDREF\Refactoring AAA Anwendungsschema\20240823_GeoInfoDok.qea"/>-->
-		<parameter name="transformer" value="de.adv_online.aaa.uml.LinkTransformer"/>
+		<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\KONF\Anpassung ISO 19107\20250507_GeoInfoDok.qea"/>
+		<parameter name="transformer" value="de.adv_online.aaa.uml.Iso19107Edition2Transformer"/>
 		<parameter name="skipModelLoadingIfProcessingIsOnlyInputTransformations" value="true"/>
 	</input>
 	<log>
 		<parameter name="reportLevel" value="INFO"/>
-		<parameter name="logFile" value="20250508_gid_link_transformer_log.xml"/>
+		<parameter name="logFile" value="20250507_gid_iso19107ed2_transformer_log.xml"/>
 	</log>
 </ShapeChangeConfiguration>

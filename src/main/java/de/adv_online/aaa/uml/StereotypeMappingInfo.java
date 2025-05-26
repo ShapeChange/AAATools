@@ -28,6 +28,10 @@ package de.adv_online.aaa.uml;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+/**
+ * @author Johannes Echterhoff (echterhoff at interactive-instruments dot de)
+ *
+ */
 public class StereotypeMappingInfo {
 
     protected String sourceStereotypeFQName = null;
