@@ -368,7 +368,8 @@ public class ProfilRep {
     private void SetProperty(PropertyInfo propi, boolean force, boolean codedValue) {
 	boolean export = (force || (ExportItem(propi) && !setModellartOnly()));
 	if (!codedValue)
-	    export = export || propi.cardinality().minOccurs > 0;
+	    export = export || propi.cardinality().minOccurs > 0 || (propi.inClass().category() == Options.DATATYPE
+		    && "true".equalsIgnoreCase(propi.inClass().taggedValue("isPropertyChoiceUnion")));
 	export = export && propi.name().length() > 0;
 	if (export) {
 	    Members.add(propi);
