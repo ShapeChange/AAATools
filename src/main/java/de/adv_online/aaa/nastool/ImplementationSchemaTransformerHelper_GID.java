@@ -59,6 +59,7 @@ import de.interactive_instruments.shapechange.ea.util.EAElementUtil;
 import de.interactive_instruments.shapechange.ea.util.EAException;
 import de.interactive_instruments.shapechange.ea.util.EAPackageUtil;
 import de.interactive_instruments.shapechange.ea.util.EATaggedValue;
+import de.interactive_instruments.shapechange.ea.util.modelhelper.EAElement;
 import de.interactive_instruments.shapechange.ea.util.modelhelper.EAPackage;
 import de.interactive_instruments.shapechange.ea.util.modelhelper.EARepository;
 import shadow.org.apache.commons.lang3.StringUtils;
@@ -114,6 +115,20 @@ public class ImplementationSchemaTransformerHelper_GID {
 	rep.CloseFile();
 	rep.Exit();
 	rep = null;
+    }
+
+    public Optional<Element> getElement(String schemaPkgFullName, String nameOfContainedElement) {
+
+	List<EAElement> elmts = eaRepo.lookupElementByName(nameOfContainedElement);
+
+	for (EAElement elmt : elmts) {
+	    if (elmt.getFullName().startsWith(schemaPkgFullName)) {
+		Element e = rep.GetElementByID(elmt.getElementId());
+		return Optional.of(e);
+	    }
+	}
+
+	return Optional.empty();
     }
 
     /**

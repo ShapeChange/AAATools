@@ -227,62 +227,34 @@
                 <resource>
                   <directory>${project.basedir}/src/main/resources/config</directory>
                   <includes>
-                    <include>AAAKatalog-AFIS-6.0.1-SCXML.xml</include>
-                    <include>AAAKatalog-AFIS-6.0.1.xml</include>
                     <include>AAAKatalog-AFIS-7.1.2-Aenderungen-SCXML.xml</include>
-                    <include>AAAKatalog-AFIS-7.1.2-Aenderungen.xml</include>
                     <include>AAAKatalog-AFIS-7.1.2-SCXML.xml</include>
-                    <include>AAAKatalog-AFIS-7.1.2.xml</include>
                     <include>AAAKatalog-AK-2.0.0-SCXML.xml</include>
-                    <include>AAAKatalog-AK-2.0.0.xml</include>
-                    <include>AAAKatalog-ALKIS-6.0.1-SCXML.xml</include>
-                    <include>AAAKatalog-ALKIS-6.0.1.xml</include>
                     <include>AAAKatalog-ALKIS-7.1.2-Aenderungen-SCXML.xml</include>
-                    <include>AAAKatalog-ALKIS-7.1.2-Aenderungen.xml</include>
                     <include>AAAKatalog-ALKIS-7.1.2-SCXML.xml</include>
-                    <include>AAAKatalog-ALKIS-7.1.2.xml</include>
-                    <include>AAAKatalog-AS-6.0.1-SCXML.xml</include>
+                    <include>AAAKatalog-ALKIS-Basis-DLM-7.1.2-SCXML.xml</include>
                     <include>AAAKatalog-AS-7.1.2-SCXML.xml</include>
                     <include>AAAKatalog-AS-7.1.2_ohne_Nutzungsartkennung-SCXML.xml</include>
-                    <include>AAAKatalog-BasisDLM-6.0.1-SCXML.xml</include>
-                    <include>AAAKatalog-BasisDLM-6.0.1.xml</include>
                     <include>AAAKatalog-BasisDLM-7.1.2-Aenderungen-SCXML.xml</include>
-                    <include>AAAKatalog-BasisDLM-7.1.2-Aenderungen.xml</include>
                     <include>AAAKatalog-BasisDLM-7.1.2-SCXML.xml</include>
-                    <include>AAAKatalog-BasisDLM-7.1.2.xml</include>
                     <include>AAAKatalog-BR-3.0.1-SCXML.xml</include>
-                    <include>AAAKatalog-BR-3.0.1.xml</include>
-                    <include>AAAKatalog-DLM50-6.0.1-SCXML.xml</include>
-                    <include>AAAKatalog-DLM50-6.0.1.xml</include>
                     <include>AAAKatalog-DLM50-7.1.2-Aenderungen-SCXML.xml</include>
-                    <include>AAAKatalog-DLM50-7.1.2-Aenderungen.xml</include>
                     <include>AAAKatalog-DLM50-7.1.2-SCXML.xml</include>
-                    <include>AAAKatalog-DLM50-7.1.2.xml</include>
                     <include>AAAKatalog-GN-1.0.0-SCXML.xml</include>
-                    <include>AAAKatalog-GN-1.0.0.xml</include>
                     <include>AAAKatalog-GV-1.0.0-SCXML.xml</include>
-                    <include>AAAKatalog-GV-1.0.0.xml</include>
                     <include>AAAKatalog-LB-1.0.1-Aenderungen-SCXML.xml</include>
-                    <include>AAAKatalog-LB-1.0.1-Aenderungen.xml</include>
                     <include>AAAKatalog-LB-1.0.1-SCXML.xml</include>
-                    <include>AAAKatalog-LB-1.0.1.xml</include>
                     <include>AAAKatalog-LN-1.0.2-Aenderungen-SCXML.xml</include>
-                    <include>AAAKatalog-LN-1.0.2-Aenderungen.xml</include>
                     <include>AAAKatalog-LN-1.0.2-SCXML.xml</include>
-                    <include>AAAKatalog-LN-1.0.2.xml</include>
-                    <include>AAAProfil-6.0.1.xml</include>
                     <include>AAAProfil-7.1.2.xml</include>
                     <include>AAAProfil-Basis-DLM-7.1.2-SCXML.xml</include>
                     <include>AAAProfil-DLKM-7.1.2-SCXML.xml</include>
                     <include>Export-6.0.1.xml</include>
                     <include>Export-7.1.2.xml</include>
-                    <include>Input-6.0.1.xml</include>
-                    <include>Input-7.1.2.xml</include>
-                    <include>Input-7.1.2_ohne_Nutzungsartkennung.xml</include>
-                    <include>Input-SCXML-6.0.1.xml</include>
+                    <include>GIDUmlProfile-StereotypeAliases.xml</include>
+                    <include>GIDUmlProfile-TagAliases.xml</include>
                     <include>Input-SCXML-7.1.2.xml</include>
                     <include>Input-SCXML-7.1.2_ohne_Nutzungsartkennung.xml</include>
-                    <include>NAS-6.0.1.xml</include>
                     <include>NAS-7.1.2.xml</include>
                     <include>NAS-AK-2.0.0.xml</include>
                     <include>NAS-BR-3.0.1.xml</include>
@@ -388,10 +360,12 @@
                     <include>AAA-7.1.0.qea</include>
                     <include>AAA-7.1.1.qea</include>
                     <include>AAA-7.1.2.qea</include>
+                    <include>GeoInfoDok.qea</include>
                     <include>AAA-6.0.1.xml.zip</include>
                     <include>AAA-7.1.0.xml.zip</include>
                     <include>AAA-7.1.1.xml.zip</include>
                     <include>AAA-7.1.2.xml.zip</include>
+                    <include>GeoInfoDok.zip</include>
                   </includes>
                 </resource>
               </resources>

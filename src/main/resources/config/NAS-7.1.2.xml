@@ -2,25 +2,16 @@
 <ShapeChangeConfiguration xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:sc="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1 ../resources/schema/ShapeChangeConfiguration.xsd">
 	<input id="nas712">
 		<parameter name="inputModelType" value="EA7"/>
-		<parameter name="inputFile" value="AAA-7.1.2.qea"/>
+		<parameter name="inputFile" value="GeoInfoDok.qea"/>
 		<parameter name="appSchemaName" value="NAS"/>
 		<parameter name="publicOnly" value="true"/>
 		<parameter name="checkingConstraints" value="disabled"/>
 		<parameter name="oclConstraintTypeRegex" value=""/>
 		<parameter name="sortedOutput" value="true"/>
 		<parameter name="representTaggedValues" value="AAA:GueltigBis,AAA:UnitOfMeasure,AAA:Nutzungsartkennung,reverseRoleNAS"/>
-		<parameter name="transformer" value="de.adv_online.aaa.nastool.NasTransformer_7"/>
-		<parameter name="transformerTargetPath" value="http://repository.gdi-de.org/schemas/adv/"/>
-		<stereotypeAliases>
-			<StereotypeAlias wellknown="Application Schema" alias="applicationSchema" />
-			<StereotypeAlias wellknown="Application Schema" alias="schema" />
-			<StereotypeAlias wellknown="Application Schema" alias="requirementsClass" />
-			<StereotypeAlias wellknown="Application Schema" alias="ApplicationSchema" />
-			<StereotypeAlias wellknown="Application Schema" alias="Schema" />
-			<StereotypeAlias wellknown="Type" alias="interface" />
-			<StereotypeAlias wellknown="" alias="abstract" />
-			<StereotypeAlias wellknown="" alias="Estimated" />
-		</stereotypeAliases>
+		<parameter name="transformer" value="de.adv_online.aaa.nastool.NasTransformer_7_GID"/>
+		<xi:include href="./Konfigurationen/GIDUmlProfile-StereotypeAliases.xml"/>
+		<xi:include href="./Konfigurationen/GIDUmlProfile-TagAliases.xml"/>
 	</input>
 	<log>
 		<parameter name="reportLevel" value="WARNING"/>
@@ -35,6 +26,7 @@
 					<rule name="rule-xsd-all-no-documentation"/>
 					<rule name="rule-xsd-all-tagged-values"/>
 					<rule name="req-all-prop-sequenceNumber"/>
+					<rule name="rule-xsd-cls-datatype-withPropertyChoice"/>
 				</EncodingRule>
 			</rules>
 			<xmlNamespaces>
@@ -79,6 +71,8 @@
 				<XsdMapEntry type="CI_Responsibility" xsdEncodingRules="NAS" xmlType="gmd:CI_ResponsibleParty_Type" xmlElement="gmd:CI_ResponsibleParty" xmlPropertyType="_MP_" />				
 				<XsdMapEntry type="LI_ProcessStep" xsdEncodingRules="NAS" xmlElement="gmd:LI_ProcessStep" xmlPropertyType="_MP_" />
 				<XsdMapEntry type="AX_Fortfuehrungsnachweis" xsdEncodingRules="NAS" xmlElement="gml:AbstractObject" xmlPropertyType="_P_" />
+				<XsdMapEntry type="CRS" xsdEncodingRules="iso19136_2007 gml33" xmlElement="gml:AbstractCRS" xmlType="gml:AbstractCRSType" xmlPropertyType="gml:CRSPropertyType" />
+				<XsdMapEntry type="CRS" xsdEncodingRules="iso19139_2007" xmlPropertyType="gsr:SC_CRS_PropertyType" />
 			</xsdMapEntries>
 		</TargetXmlSchema>
 	</targets>

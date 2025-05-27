@@ -256,8 +256,9 @@ public class Katalog implements Target, MessageSource {
 			OutputFormat = "";
 
 		refModel = getReferenceModel();
+		String refSchemaName = options.parameterAsString(this.getClass().getName(), "referenceSchemaName", p.name(), false, true);
 		if (refModel!=null) {
-			SortedSet<PackageInfo> set = refModel.schemas(p.name());
+			SortedSet<PackageInfo> set = refModel.schemas(refSchemaName);
 			if (set.size()==1) {
 				differ = new Differ(true, MAList, model, refModel);
 				refPackage = set.iterator().next();

@@ -29,6 +29,7 @@ package de.adv_online.aaa.nastool;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -298,8 +299,25 @@ public class NasTransformer_7_GID implements Transformer {
 			    helper.cloneAttribute(a, e3);
 			    helper.cloneAttribute(a, e4);
 			}
-			helper.addGeneralization(e3, helper.allClasses.get("MultiPointCoverage"));
-			helper.addGeneralization(e4, helper.allClasses.get("RectifiedGridCoverage"));
+
+			/*
+			 * Für die Erzeugung des NAS-Implementierungsschemas werden die Classifier aus
+			 * 19123-2 benötigt.
+			 */
+			String iso19123_2_fullName = "Model::ISO/TC 211::ISO 19123 Schema for coverage geometry and functions::ISO 19123-2 Edition 1";
+			Optional<Element> mpcElmtOpt = helper.getElement(iso19123_2_fullName, "MultiPointCoverage");
+			Optional<Element> rgcElmtOpt = helper.getElement(iso19123_2_fullName, "RectifiedGridCoverage");
+
+			if (mpcElmtOpt.isEmpty()) {
+			    result.addError("Could not find 'MultiPointCoverage' in package '" + iso19123_2_fullName
+				    + "'. Ensure that the package exists in the model, and that it contains a classifier with that name.");
+			} else if (mpcElmtOpt.isEmpty()) {
+			    result.addError("Could not find 'RectifiedGridCoverage' in package '" + iso19123_2_fullName
+				    + "'. Ensure that the package exists in the model, and that it contains a classifier with that name.");
+			} else {
+			    helper.addGeneralization(e3, mpcElmtOpt.get());
+			    helper.addGeneralization(e4, rgcElmtOpt.get());
+			}
 		    }
 		}
 	    }

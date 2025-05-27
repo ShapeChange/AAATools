@@ -39,6 +39,7 @@
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 			<targetParameter name="referenceModelType" value="SCXML"/>
 			<targetParameter name="referenceModelFile" value="AAA-7.1.1.xml.zip"/>
+			<targetParameter name="referenceSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
 		</Target>
 		<Target class="de.adv_online.aaa.katalogtool.Katalog" mode="enabled">
 			<targetParameter name="Verzeichnis" value="Ausgaben/Kataloge/Basis-DLM-diffv6"/>
@@ -57,6 +58,7 @@
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 			<targetParameter name="referenceModelType" value="SCXML"/>
 			<targetParameter name="referenceModelFile" value="AAA-6.0.1.xml.zip"/>
+			<targetParameter name="referenceSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
 		</Target>
 		<Target class="de.adv_online.aaa.katalogtool.Katalog" mode="enabled">
 			<targetParameter name="Verzeichnis" value="Ausgaben/Kataloge/DLM50"/>
@@ -91,6 +93,7 @@
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 			<targetParameter name="referenceModelType" value="SCXML"/>
 			<targetParameter name="referenceModelFile" value="AAA-7.1.1.xml.zip"/>
+			<targetParameter name="referenceSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
 		</Target>
 		<Target class="de.adv_online.aaa.katalogtool.Katalog" mode="enabled">
 			<targetParameter name="Verzeichnis" value="Ausgaben/Kataloge/DLM50-diffv6"/>
@@ -109,6 +112,7 @@
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 			<targetParameter name="referenceModelType" value="SCXML"/>
 			<targetParameter name="referenceModelFile" value="AAA-6.0.1.xml.zip"/>
+			<targetParameter name="referenceSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
 		</Target>
 		<Target class="de.adv_online.aaa.katalogtool.Katalog" mode="enabled">
 			<targetParameter name="Verzeichnis" value="Ausgaben/Kataloge/DFGM"/>
@@ -143,6 +147,7 @@
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 			<targetParameter name="referenceModelType" value="SCXML"/>
 			<targetParameter name="referenceModelFile" value="AAA-7.1.1.xml.zip"/>
+			<targetParameter name="referenceSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
 		</Target>
 		<Target class="de.adv_online.aaa.katalogtool.Katalog" mode="enabled">
 			<targetParameter name="Verzeichnis" value="Ausgaben/Kataloge/DFGM-diffv6"/>
@@ -161,6 +166,7 @@
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 			<targetParameter name="referenceModelType" value="SCXML"/>
 			<targetParameter name="referenceModelFile" value="AAA-6.0.1.xml.zip"/>
+			<targetParameter name="referenceSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
 		</Target>
 		<Target class="de.adv_online.aaa.katalogtool.Katalog" mode="enabled">
 			<targetParameter name="Verzeichnis" value="Ausgaben/Kataloge/DLM250"/>
@@ -195,6 +201,7 @@
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 			<targetParameter name="referenceModelType" value="SCXML"/>
 			<targetParameter name="referenceModelFile" value="AAA-7.1.1.xml.zip"/>
+			<targetParameter name="referenceSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
 		</Target>
 		<Target class="de.adv_online.aaa.katalogtool.Katalog" mode="enabled">
 			<targetParameter name="Verzeichnis" value="Ausgaben/Kataloge/DLM250-diffv6"/>
@@ -213,6 +220,7 @@
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 			<targetParameter name="referenceModelType" value="SCXML"/>
 			<targetParameter name="referenceModelFile" value="AAA-6.0.1.xml.zip"/>
+			<targetParameter name="referenceSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
 		</Target>
 		<Target class="de.adv_online.aaa.katalogtool.Katalog" mode="enabled">
 			<targetParameter name="Verzeichnis" value="Ausgaben/Kataloge/DLM1000"/>
@@ -247,6 +255,7 @@
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 			<targetParameter name="referenceModelType" value="SCXML"/>
 			<targetParameter name="referenceModelFile" value="AAA-7.1.1.xml.zip"/>
+			<targetParameter name="referenceSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
 		</Target>
 		<Target class="de.adv_online.aaa.katalogtool.Katalog" mode="enabled">
 			<targetParameter name="Verzeichnis" value="Ausgaben/Kataloge/DLM1000-diffv6"/>
@@ -265,6 +274,7 @@
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 			<targetParameter name="referenceModelType" value="SCXML"/>
 			<targetParameter name="referenceModelFile" value="AAA-6.0.1.xml.zip"/>
+			<targetParameter name="referenceSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
 		</Target>
 		<Target class="de.adv_online.aaa.katalogtool.Katalog" mode="enabled">
 			<targetParameter name="Verzeichnis" value="Ausgaben/Kataloge/DHM"/>
@@ -299,6 +309,7 @@
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 			<targetParameter name="referenceModelType" value="SCXML"/>
 			<targetParameter name="referenceModelFile" value="AAA-7.1.1.xml.zip"/>
+			<targetParameter name="referenceSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
 		</Target>
 		<Target class="de.adv_online.aaa.katalogtool.Katalog" mode="enabled">
 			<targetParameter name="Verzeichnis" value="Ausgaben/Kataloge/DHM-diffv6"/>
@@ -317,6 +328,7 @@
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 			<targetParameter name="referenceModelType" value="SCXML"/>
 			<targetParameter name="referenceModelFile" value="AAA-6.0.1.xml.zip"/>
+			<targetParameter name="referenceSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
 		</Target>
 		<Target class="de.adv_online.aaa.katalogtool.Katalog" mode="enabled">
 			<targetParameter name="Verzeichnis" value="Ausgaben/Kataloge/LoD"/>
@@ -351,6 +363,7 @@
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 			<targetParameter name="referenceModelType" value="SCXML"/>
 			<targetParameter name="referenceModelFile" value="AAA-7.1.1.xml.zip"/>
+			<targetParameter name="referenceSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
 		</Target>
 	</targets>
 </ShapeChangeConfiguration>

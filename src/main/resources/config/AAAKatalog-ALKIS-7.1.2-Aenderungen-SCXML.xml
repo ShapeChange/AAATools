@@ -26,6 +26,7 @@
 			<targetParameter name="notesRuleMarker" value="-==-"/>
 			<targetParameter name="referenceModelType" value="SCXML"/>
 			<targetParameter name="referenceModelFile" value="AAA-7.1.1.xml.zip"/>
+			<targetParameter name="referenceSchemaName" value="AFIS-ALKIS-ATKIS Anwendungsschema"/>
 			<!-- 
 			-->
 		</Target>
