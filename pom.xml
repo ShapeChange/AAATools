@@ -11,6 +11,16 @@
     <tag>HEAD</tag>
   </scm>
   <repositories>
+  	<!-- first, search on Maven Central -->
+    <repository>
+        <id>central</id>
+        <name>Central Repository</name>
+        <url>https://repo.maven.apache.org/maven2</url>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+    </repository>
+    <!-- Search in ShapeChange-repository last -->
     <repository>
       <id>ShapeChange</id>
       <name>ShapeChange repository</name>
@@ -26,7 +36,7 @@
     <dependency>
       <groupId>commons-beanutils</groupId>
       <artifactId>commons-beanutils</artifactId>
-      <version>1.9.4</version>
+      <version>1.11.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
