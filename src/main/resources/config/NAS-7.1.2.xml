@@ -9,7 +9,7 @@
 		<parameter name="oclConstraintTypeRegex" value=""/>
 		<parameter name="sortedOutput" value="true"/>
 		<parameter name="representTaggedValues" value="AAA:GueltigBis,AAA:UnitOfMeasure,AAA:Nutzungsartkennung,reverseRoleNAS"/>
-		<parameter name="transformer" value="de.adv_online.aaa.nastool.NasTransformer_7_GID"/>
+		<parameter name="transformer" value="de.adv_online.gid.nastool.NasTransformer_7_GID"/>
 		<xi:include href="./Konfigurationen/GIDUmlProfile-StereotypeAliases.xml"/>
 		<xi:include href="./Konfigurationen/GIDUmlProfile-TagAliases.xml"/>
 	</input>

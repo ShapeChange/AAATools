@@ -1,7 +1,7 @@
 /**
  * GeoInfoDok Transformations (Profile Transformer)
  *
- * (c) 2009-2024 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
+ * (c) 2009-2025 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
  * Länder der Bundesrepublik Deutschland (AdV)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -91,7 +91,7 @@ public class GidProfileTransformer implements Transformer, MessageSource {
     public static final EnumSet<MetaType> WARN_ON_FALLBACK_ASSIGNMENT = EnumSet.noneOf(MetaType.class);
 
     public static final SortedSet<String> PACKAGES_TO_EXCLUDE_IN_UML_PROFILE_UPDATE = new TreeSet<>(
-	    Stream.of("AAA_Signaturenkatalog").collect(Collectors.toSet()));
+	    Stream.of("AAA_Signaturenkatalog", "AAA_Signaturenkatalog 1.1").collect(Collectors.toSet()));
 
     public static final String ID_FOR_ASSOCIATION_ROLE_WITHOUT_NAME = "{noname}";
 
@@ -157,6 +157,27 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	tagsWithFixedValue.put("reverseRoleNAS", "");
 	tagsWithFixedValue.put("xsdEncodingRule", "");
 
+//	EITHER
+	// Mapping the old UML profile to the new
+//	initialiseProfileMappingAaaToGid();
+
+	// OR
+	/*
+	 * Fixing up the new UML profile - especially for duplicated schema packages
+	 * (where EA 17.0 apparently loses track of fully qualified stereotypes for
+	 * association role stereotypes and / or the tags assigned to such association
+	 * roles)
+	 */
+	initialiseProfileMappingGidToGidFix();
+
+	for (StereotypeMappingInfo smi : this.stereotypeMappingInfos) {
+	    for (String sourceTVFQName : smi.getTvNameToSourceFQNameMap().values()) {
+		this.numberOfNonBlankValuesBySourceTaggedValueFQName.put(sourceTVFQName, 0);
+	    }
+	}
+    }
+
+    private void initialiseProfileMappingGidToGidFix() {
 	{
 	    // retired
 
@@ -167,11 +188,11 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    SortedMap<String, String> retTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> retTVSourceToTargetFQNameMap = new TreeMap<>();
 
-	    retTVNameToSourceFQNameMap.put("AAA:GueltigBis", "AAA::retired::AAA:GueltigBis");
+	    retTVNameToSourceFQNameMap.put("GID:GueltigBis", "GID::GID_Retired::GID:GueltigBis");
 
-	    retTVSourceToTargetFQNameMap.put("AAA::retired::AAA:GueltigBis", "GID::GID_Retired::GID:GueltigBis");
+	    retTVSourceToTargetFQNameMap.put("GID::GID_Retired::GID:GueltigBis", "GID::GID_Retired::GID:GueltigBis");
 
-	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::retired", "GID::GID_Retired",
+	    StereotypeMappingInfo smi = new StereotypeMappingInfo("GID::GID_Retired", "GID::GID_Retired",
 		    retTVNameToSourceFQNameMap, retTVSourceToTargetFQNameMap, MetaType.ANY, false);
 	    this.stereotypeMappingInfos.add(smi);
 	}
@@ -186,103 +207,58 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    SortedMap<String, String> pkgTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> pkgTVSourceToTargetFQNameMap = new TreeMap<>();
 
-	    pkgTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::applicationSchema::AAA:Kennung");
-	    pkgTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::applicationSchema::AAA:Modellart");
-	    pkgTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::applicationSchema::AAA:Revisionsnummer");
+	    pkgTVNameToSourceFQNameMap.put("GID:Modellart", "GID::GID_ElementMitModellart::GID:Modellart");
+	    pkgTVNameToSourceFQNameMap.put("GID:Revisionsnummer",
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
 
-	    pkgTVNameToSourceFQNameMap.put("version", "AAA::applicationSchema::version");
+	    pkgTVNameToSourceFQNameMap.put("version", "GID::ApplicationSchema::version");
 
-	    pkgTVNameToSourceFQNameMap.put("AAA:AAAVersion", "AAA::applicationSchema::AAA:AAAVersion");
-	    pkgTVNameToSourceFQNameMap.put("AAA:Organisation", "AAA::applicationSchema::AAA:Organisation");
-	    pkgTVNameToSourceFQNameMap.put("AAA:Datum", "AAA::applicationSchema::AAA:Datum");
-	    pkgTVNameToSourceFQNameMap.put("gmlProfileSchema", "AAA::applicationSchema::gmlProfileSchema");
-	    pkgTVNameToSourceFQNameMap.put("targetNamespace", "AAA::applicationSchema::targetNamespace");
-	    pkgTVNameToSourceFQNameMap.put("xmlns", "AAA::applicationSchema::xmlns");
-	    pkgTVNameToSourceFQNameMap.put("xsdDocument", "AAA::applicationSchema::xsdDocument");
-	    pkgTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::applicationSchema::xsdEncodingRule");
+	    pkgTVNameToSourceFQNameMap.put("GID:AAAVersion", "GID::GID_ApplicationSchema::GID:AAAVersion");
+	    pkgTVNameToSourceFQNameMap.put("GID:Organisation", "GID::GID_ApplicationSchema::GID:Organisation");
+	    pkgTVNameToSourceFQNameMap.put("GID:Datum", "GID::GID_ApplicationSchema::GID:Datum");
+	    pkgTVNameToSourceFQNameMap.put("gmlProfileSchema", "GID::GID_ApplicationSchema::gmlProfileSchema");
+	    pkgTVNameToSourceFQNameMap.put("targetNamespace", "GID::GID_ApplicationSchema::targetNamespace");
+	    pkgTVNameToSourceFQNameMap.put("xmlns", "GID::GID_ApplicationSchema::xmlns");
+	    pkgTVNameToSourceFQNameMap.put("xsdDocument", "GID::GID_ApplicationSchema::xsdDocument");
+	    pkgTVNameToSourceFQNameMap.put("xsdEncodingRule", "GID::GID_ApplicationSchema::xsdEncodingRule");
+
+	    pkgTVNameToSourceFQNameMap.put("definition", "GID::GI_Element::definition");
+	    pkgTVNameToSourceFQNameMap.put("description", "GID::GI_Element::description");
+	    pkgTVNameToSourceFQNameMap.put("designation", "GID::GI_Element::designation");
 
 	    // -------------
 
-	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::AAA:Modellart",
+	    pkgTVSourceToTargetFQNameMap.put("GID::GI_Element::definition", "GID::GI_Element::definition");
+	    pkgTVSourceToTargetFQNameMap.put("GID::GI_Element::description", "GID::GI_Element::description");
+	    pkgTVSourceToTargetFQNameMap.put("GID::GI_Element::designation", "GID::GI_Element::designation");
+
+	    pkgTVSourceToTargetFQNameMap.put("GID::GID_ElementMitModellart::GID:Modellart",
 		    "GID::GID_ElementMitModellart::GID:Modellart");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::AAA:Revisionsnummer",
+	    pkgTVSourceToTargetFQNameMap.put("GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer",
 		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
 
-	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::version", "GID::ApplicationSchema::version");
+	    pkgTVSourceToTargetFQNameMap.put("GID::ApplicationSchema::version", "GID::ApplicationSchema::version");
 
-	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::AAA:AAAVersion",
+	    pkgTVSourceToTargetFQNameMap.put("GID::GID_ApplicationSchema::GID:AAAVersion",
 		    "GID::GID_ApplicationSchema::GID:AAAVersion");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::AAA:Organisation",
+	    pkgTVSourceToTargetFQNameMap.put("GID::GID_ApplicationSchema::GID:Organisation",
 		    "GID::GID_ApplicationSchema::GID:Organisation");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::AAA:Datum",
+	    pkgTVSourceToTargetFQNameMap.put("GID::GID_ApplicationSchema::GID:Datum",
 		    "GID::GID_ApplicationSchema::GID:Datum");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::gmlProfileSchema",
+	    pkgTVSourceToTargetFQNameMap.put("GID::GID_ApplicationSchema::gmlProfileSchema",
 		    "GID::GID_ApplicationSchema::gmlProfileSchema");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::targetNamespace",
+	    pkgTVSourceToTargetFQNameMap.put("GID::GID_ApplicationSchema::targetNamespace",
 		    "GID::GID_ApplicationSchema::targetNamespace");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::xmlns", "GID::GID_ApplicationSchema::xmlns");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::xsdDocument",
+	    pkgTVSourceToTargetFQNameMap.put("GID::GID_ApplicationSchema::xmlns", "GID::GID_ApplicationSchema::xmlns");
+	    pkgTVSourceToTargetFQNameMap.put("GID::GID_ApplicationSchema::xsdDocument",
 		    "GID::GID_ApplicationSchema::xsdDocument");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::xsdEncodingRule",
+	    pkgTVSourceToTargetFQNameMap.put("GID::GID_ApplicationSchema::xsdEncodingRule",
 		    "GID::GID_ApplicationSchema::xsdEncodingRule");
 
-	    StereotypeMappingInfo smiAppSchema = new StereotypeMappingInfo("AAA::applicationSchema",
+	    StereotypeMappingInfo smiAppSchema = new StereotypeMappingInfo("GID::GID_ApplicationSchema",
 		    "GID::GID_ApplicationSchema", pkgTVNameToSourceFQNameMap, pkgTVSourceToTargetFQNameMap,
 		    MetaType.PACKAGE, false);
 	    this.stereotypeMappingInfos.add(smiAppSchema);
-	}
-
-	{
-	    // schema
-
-	    /*
-	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
-	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
-	     */
-	    SortedMap<String, String> pkgTVNameToSourceFQNameMap = new TreeMap<>();
-	    SortedMap<String, String> pkgTVSourceToTargetFQNameMap = new TreeMap<>();
-
-	    pkgTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::schema::AAA:Kennung");
-	    pkgTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::schema::AAA:Modellart");
-	    pkgTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::schema::AAA:Revisionsnummer");
-
-	    pkgTVNameToSourceFQNameMap.put("version", "AAA::schema::version");
-
-	    pkgTVNameToSourceFQNameMap.put("AAA:AAAVersion", "AAA::schema::AAA:AAAVersion");
-	    pkgTVNameToSourceFQNameMap.put("AAA:Organisation", "AAA::schema::AAA:Organisation");
-	    pkgTVNameToSourceFQNameMap.put("AAA:Datum", "AAA::schema::AAA:Datum");
-	    pkgTVNameToSourceFQNameMap.put("gmlProfileSchema", "AAA::schema::gmlProfileSchema");
-	    pkgTVNameToSourceFQNameMap.put("targetNamespace", "AAA::schema::targetNamespace");
-	    pkgTVNameToSourceFQNameMap.put("xmlns", "AAA::schema::xmlns");
-	    pkgTVNameToSourceFQNameMap.put("xsdDocument", "AAA::schema::xsdDocument");
-	    pkgTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::schema::xsdEncodingRule");
-
-	    // -------------
-
-	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::AAA:Modellart",
-		    "GID::GID_ElementMitModellart::GID:Modellart");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::AAA:Revisionsnummer",
-		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
-
-	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::version", "GID::ApplicationSchema::version");
-
-	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::AAA:AAAVersion",
-		    "GID::GID_ApplicationSchema::GID:AAAVersion");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::AAA:Organisation",
-		    "GID::GID_ApplicationSchema::GID:Organisation");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::AAA:Datum", "GID::GID_ApplicationSchema::GID:Datum");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::gmlProfileSchema",
-		    "GID::GID_ApplicationSchema::gmlProfileSchema");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::targetNamespace",
-		    "GID::GID_ApplicationSchema::targetNamespace");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::xmlns", "GID::GID_ApplicationSchema::xmlns");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::xsdDocument", "GID::GID_ApplicationSchema::xsdDocument");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::xsdEncodingRule",
-		    "GID::GID_ApplicationSchema::xsdEncodingRule");
-
-	    StereotypeMappingInfo smiSchema = new StereotypeMappingInfo("AAA::schema", "GID::GID_ApplicationSchema",
-		    pkgTVNameToSourceFQNameMap, pkgTVSourceToTargetFQNameMap, MetaType.PACKAGE, false);
-	    this.stereotypeMappingInfos.add(smiSchema);
 	}
 
 	{
@@ -295,25 +271,35 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    SortedMap<String, String> pkgTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> pkgTVSourceToTargetFQNameMap = new TreeMap<>();
 
-	    pkgTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::package::AAA:Kennung");
-	    pkgTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::package::AAA:Modellart");
-	    pkgTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::package::AAA:Revisionsnummer");
+	    pkgTVNameToSourceFQNameMap.put("GID:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
+	    pkgTVNameToSourceFQNameMap.put("GID:Modellart", "GID::GID_ElementMitModellart::GID:Modellart");
+	    pkgTVNameToSourceFQNameMap.put("GID:Revisionsnummer",
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
 
-	    pkgTVNameToSourceFQNameMap.put("xsdDocument", "AAA::package::xsdDocument");
-	    pkgTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::package::xsdEncodingRule");
+	    pkgTVNameToSourceFQNameMap.put("xsdDocument", "GID::GID_Package::xsdDocument");
+	    pkgTVNameToSourceFQNameMap.put("xsdEncodingRule", "GID::GID_Package::xsdEncodingRule");
+
+	    pkgTVNameToSourceFQNameMap.put("definition", "GID::GI_Element::definition");
+	    pkgTVNameToSourceFQNameMap.put("description", "GID::GI_Element::description");
+	    pkgTVNameToSourceFQNameMap.put("designation", "GID::GI_Element::designation");
 
 	    // -------------
 
-	    pkgTVSourceToTargetFQNameMap.put("AAA::package::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::package::AAA:Modellart",
+	    pkgTVSourceToTargetFQNameMap.put("GID::GI_Element::definition", "GID::GI_Element::definition");
+	    pkgTVSourceToTargetFQNameMap.put("GID::GI_Element::description", "GID::GI_Element::description");
+	    pkgTVSourceToTargetFQNameMap.put("GID::GI_Element::designation", "GID::GI_Element::designation");
+
+	    pkgTVSourceToTargetFQNameMap.put("GID::GID_ElementMitKennung::GID:Kennung",
+		    "GID::GID_ElementMitKennung::GID:Kennung");
+	    pkgTVSourceToTargetFQNameMap.put("GID::GID_ElementMitModellart::GID:Modellart",
 		    "GID::GID_ElementMitModellart::GID:Modellart");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::package::AAA:Revisionsnummer",
+	    pkgTVSourceToTargetFQNameMap.put("GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer",
 		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
 
-	    pkgTVSourceToTargetFQNameMap.put("AAA::package::xsdDocument", "GID::GID_Package::xsdDocument");
-	    pkgTVSourceToTargetFQNameMap.put("AAA::package::xsdEncodingRule", "GID::GID_Package::xsdEncodingRule");
+	    pkgTVSourceToTargetFQNameMap.put("GID::GID_Package::xsdDocument", "GID::GID_Package::xsdDocument");
+	    pkgTVSourceToTargetFQNameMap.put("GID::GID_Package::xsdEncodingRule", "GID::GID_Package::xsdEncodingRule");
 
-	    StereotypeMappingInfo smiPackage = new StereotypeMappingInfo("AAA::package", "GID::GID_Package",
+	    StereotypeMappingInfo smiPackage = new StereotypeMappingInfo("GID::GID_Package", "GID::GID_Package",
 		    pkgTVNameToSourceFQNameMap, pkgTVSourceToTargetFQNameMap, MetaType.PACKAGE, true);
 	    this.stereotypeMappingInfos.add(smiPackage);
 	}
@@ -328,37 +314,47 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    SortedMap<String, String> tTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> tTVSourceToTargetFQNameMap = new TreeMap<>();
 
-	    tTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::type::AAA:Grunddatenbestand");
-	    tTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::type::AAA:Kennung");
-	    tTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::type::AAA:LetzteAenderung");
-	    tTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::type::AAA:Modellart");
-	    tTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::type::AAA:Nutzungsart");
-	    tTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::type::AAA:Nutzungsartkennung");
-	    tTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::type::AAA:Profile");
-	    tTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::type::AAA:Revisionsnummer");
-	    tTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
-	    tTVNameToSourceFQNameMap.put("byValuePropertyType", "AAA::type::byValuePropertyType");
-	    tTVNameToSourceFQNameMap.put("isCollection", "AAA::type::isCollection");
-	    tTVNameToSourceFQNameMap.put("noPropertyType", "AAA::type::noPropertyType");
-	    tTVNameToSourceFQNameMap.put("xmlSchemaType", "AAA::type::xmlSchemaType");
-	    tTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::type::xsdEncodingRule");
+	    tTVNameToSourceFQNameMap.put("definition", "GID::GI_Element::definition");
+	    tTVNameToSourceFQNameMap.put("description", "GID::GI_Element::description");
+	    tTVNameToSourceFQNameMap.put("designation", "GID::GI_Element::designation");
+
+	    tTVNameToSourceFQNameMap.put("GID:Grunddatenbestand",
+		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+	    tTVNameToSourceFQNameMap.put("GID:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
+	    tTVNameToSourceFQNameMap.put("GID:Modellart", "GID::GID_ElementMitModellart::GID:Modellart");
+	    tTVNameToSourceFQNameMap.put("AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
+	    tTVNameToSourceFQNameMap.put("GID:Revisionsnummer",
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+	    tTVNameToSourceFQNameMap.put("byValuePropertyType", "GID::GID_Mixin::byValuePropertyType");
+	    tTVNameToSourceFQNameMap.put("isCollection", "GID::GID_Mixin::isCollection");
+	    tTVNameToSourceFQNameMap.put("noPropertyType", "GID::GID_Mixin::noPropertyType");
+	    tTVNameToSourceFQNameMap.put("xmlSchemaType", "GID::GID_Mixin::xmlSchemaType");
+	    tTVNameToSourceFQNameMap.put("xsdEncodingRule", "GID::GID_Mixin::xsdEncodingRule");
 
 	    // -------------
 
-	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Grunddatenbestand",
-		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
-	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
-	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Modellart", "GID::GID_ElementMitModellart::GID:Modellart");
-	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
-	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Revisionsnummer",
-		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
-	    tTVSourceToTargetFQNameMap.put("AAA::type::byValuePropertyType", "GID::GID_Mixin::byValuePropertyType");
-	    tTVSourceToTargetFQNameMap.put("AAA::type::isCollection", "GID::GID_Mixin::isCollection");
-	    tTVSourceToTargetFQNameMap.put("AAA::type::noPropertyType", "GID::GID_Mixin::noPropertyType");
-	    tTVSourceToTargetFQNameMap.put("AAA::type::xmlSchemaType", "GID::GID_Mixin::xmlSchemaType");
-	    tTVSourceToTargetFQNameMap.put("AAA::type::xsdEncodingRule", "GID::GID_Mixin::xsdEncodingRule");
+	    tTVSourceToTargetFQNameMap.put("GID::GI_Element::definition", "GID::GI_Element::definition");
+	    tTVSourceToTargetFQNameMap.put("GID::GI_Element::description", "GID::GI_Element::description");
+	    tTVSourceToTargetFQNameMap.put("GID::GI_Element::designation", "GID::GI_Element::designation");
 
-	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::type", "GID::GID_Mixin",
+	    tTVSourceToTargetFQNameMap.put("GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand",
+		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+	    tTVSourceToTargetFQNameMap.put("GID::GID_ElementMitKennung::GID:Kennung",
+		    "GID::GID_ElementMitKennung::GID:Kennung");
+	    tTVSourceToTargetFQNameMap.put("GID::GID_ElementMitModellart::GID:Modellart",
+		    "GID::GID_ElementMitModellart::GID:Modellart");
+	    tTVSourceToTargetFQNameMap.put("GID::AAA_ProfilElement::AAA:Profile",
+		    "GID::AAA_ProfilElement::AAA:Profile");
+	    tTVSourceToTargetFQNameMap.put("GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer",
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+	    tTVSourceToTargetFQNameMap.put("GID::GID_Mixin::byValuePropertyType",
+		    "GID::GID_Mixin::byValuePropertyType");
+	    tTVSourceToTargetFQNameMap.put("GID::GID_Mixin::isCollection", "GID::GID_Mixin::isCollection");
+	    tTVSourceToTargetFQNameMap.put("GID::GID_Mixin::noPropertyType", "GID::GID_Mixin::noPropertyType");
+	    tTVSourceToTargetFQNameMap.put("GID::GID_Mixin::xmlSchemaType", "GID::GID_Mixin::xmlSchemaType");
+	    tTVSourceToTargetFQNameMap.put("GID::GID_Mixin::xsdEncodingRule", "GID::GID_Mixin::xsdEncodingRule");
+
+	    StereotypeMappingInfo smi = new StereotypeMappingInfo("GID::GID_Mixin", "GID::GID_Mixin",
 		    tTVNameToSourceFQNameMap, tTVSourceToTargetFQNameMap, MetaType.CLASS, false);
 	    this.stereotypeMappingInfos.add(smi);
 	}
@@ -373,42 +369,54 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    SortedMap<String, String> ftTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> ftTVSourceToTargetFQNameMap = new TreeMap<>();
 
-	    ftTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::featureType::AAA:Grunddatenbestand");
-	    ftTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::featureType::AAA:Kennung");
-	    ftTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::featureType::AAA:LetzteAenderung");
-	    ftTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::featureType::AAA:Modellart");
-	    ftTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::featureType::AAA:Nutzungsart");
-	    ftTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::featureType::AAA:Nutzungsartkennung");
-	    ftTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::featureType::AAA:Profile");
-	    ftTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::featureType::AAA:Revisionsnummer");
-	    ftTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
-	    ftTVNameToSourceFQNameMap.put("byValuePropertyType", "AAA::featureType::byValuePropertyType");
-	    ftTVNameToSourceFQNameMap.put("isCollection", "AAA::featureType::isCollection");
-	    ftTVNameToSourceFQNameMap.put("noPropertyType", "AAA::featureType::noPropertyType");
-	    ftTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::featureType::xsdEncodingRule");
+	    ftTVNameToSourceFQNameMap.put("GID:Grunddatenbestand",
+		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+	    ftTVNameToSourceFQNameMap.put("GID:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
+	    ftTVNameToSourceFQNameMap.put("GID:Modellart", "GID::GID_ElementMitModellart::GID:Modellart");
+	    ftTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "GID::GID_FeatureType::AAA:Nutzungsart");
+	    ftTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung",
+		    "GID::AAA_NutzungsartkennungElement::AAA:Nutzungsartkennung");
+	    ftTVNameToSourceFQNameMap.put("AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
+	    ftTVNameToSourceFQNameMap.put("GID:Revisionsnummer",
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+	    ftTVNameToSourceFQNameMap.put("byValuePropertyType", "GID::GID_FeatureType::byValuePropertyType");
+	    ftTVNameToSourceFQNameMap.put("isCollection", "GID::GID_FeatureType::isCollection");
+	    ftTVNameToSourceFQNameMap.put("noPropertyType", "GID::GID_FeatureType::noPropertyType");
+	    ftTVNameToSourceFQNameMap.put("xsdEncodingRule", "GID::GID_FeatureType::xsdEncodingRule");
+
+	    ftTVNameToSourceFQNameMap.put("definition", "GID::GI_Element::definition");
+	    ftTVNameToSourceFQNameMap.put("description", "GID::GI_Element::description");
+	    ftTVNameToSourceFQNameMap.put("designation", "GID::GI_Element::designation");
 
 	    // -------------
 
-	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Grunddatenbestand",
+	    ftTVSourceToTargetFQNameMap.put("GID::GI_Element::definition", "GID::GI_Element::definition");
+	    ftTVSourceToTargetFQNameMap.put("GID::GI_Element::description", "GID::GI_Element::description");
+	    ftTVSourceToTargetFQNameMap.put("GID::GI_Element::designation", "GID::GI_Element::designation");
+
+	    ftTVSourceToTargetFQNameMap.put("GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand",
 		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
-	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
-	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Modellart",
+	    ftTVSourceToTargetFQNameMap.put("GID::GID_ElementMitKennung::GID:Kennung",
+		    "GID::GID_ElementMitKennung::GID:Kennung");
+	    ftTVSourceToTargetFQNameMap.put("GID::GID_ElementMitModellart::GID:Modellart",
 		    "GID::GID_ElementMitModellart::GID:Modellart");
-	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Nutzungsart",
+	    ftTVSourceToTargetFQNameMap.put("GID::GID_FeatureType::AAA:Nutzungsart",
 		    "GID::GID_FeatureType::AAA:Nutzungsart");
-	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Nutzungsartkennung",
+	    ftTVSourceToTargetFQNameMap.put("GID::AAA_NutzungsartkennungElement::AAA:Nutzungsartkennung",
 		    "GID::AAA_NutzungsartkennungElement::AAA:Nutzungsartkennung");
-	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
-	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Revisionsnummer",
+	    ftTVSourceToTargetFQNameMap.put("GID::AAA_ProfilElement::AAA:Profile",
+		    "GID::AAA_ProfilElement::AAA:Profile");
+	    ftTVSourceToTargetFQNameMap.put("GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer",
 		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
-	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::byValuePropertyType",
+	    ftTVSourceToTargetFQNameMap.put("GID::GID_FeatureType::byValuePropertyType",
 		    "GID::GID_FeatureType::byValuePropertyType");
-	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::isCollection", "GID::GID_FeatureType::isCollection");
-	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::noPropertyType", "GID::GID_FeatureType::noPropertyType");
-	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::xsdEncodingRule",
+	    ftTVSourceToTargetFQNameMap.put("GID::GID_FeatureType::isCollection", "GID::GID_FeatureType::isCollection");
+	    ftTVSourceToTargetFQNameMap.put("GID::GID_FeatureType::noPropertyType",
+		    "GID::GID_FeatureType::noPropertyType");
+	    ftTVSourceToTargetFQNameMap.put("GID::GID_FeatureType::xsdEncodingRule",
 		    "GID::GID_FeatureType::xsdEncodingRule");
 
-	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::featureType", "GID::GID_FeatureType",
+	    StereotypeMappingInfo smi = new StereotypeMappingInfo("GID::GID_FeatureType", "GID::GID_FeatureType",
 		    ftTVNameToSourceFQNameMap, ftTVSourceToTargetFQNameMap, MetaType.CLASS, false);
 	    this.stereotypeMappingInfos.add(smi);
 	}
@@ -423,77 +431,43 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    SortedMap<String, String> dtTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> dtTVSourceToTargetFQNameMap = new TreeMap<>();
 
-	    dtTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::dataType::AAA:Grunddatenbestand");
-	    dtTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::dataType::AAA:Kennung");
-	    dtTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::dataType::AAA:LetzteAenderung");
-	    dtTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::dataType::AAA:Modellart");
-	    dtTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::dataType::AAA:Nutzungsart");
-	    dtTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::dataType::AAA:Nutzungsartkennung");
-	    dtTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::dataType::AAA:Profile");
-	    dtTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::dataType::AAA:Revisionsnummer");
-	    dtTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
-	    dtTVNameToSourceFQNameMap.put("isCollection", "AAA::dataType::isCollection");
-	    dtTVNameToSourceFQNameMap.put("noPropertyType", "AAA::dataType::noPropertyType");
-	    dtTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::dataType::xsdEncodingRule");
+	    dtTVNameToSourceFQNameMap.put("definition", "GID::GI_Element::definition");
+	    dtTVNameToSourceFQNameMap.put("description", "GID::GI_Element::description");
+	    dtTVNameToSourceFQNameMap.put("designation", "GID::GI_Element::designation");
+
+	    dtTVNameToSourceFQNameMap.put("GID:Grunddatenbestand",
+		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+	    dtTVNameToSourceFQNameMap.put("GID:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
+	    dtTVNameToSourceFQNameMap.put("GID:Modellart", "GID::GID_ElementMitModellart::GID:Modellart");
+	    dtTVNameToSourceFQNameMap.put("AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
+	    dtTVNameToSourceFQNameMap.put("GID:Revisionsnummer",
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+	    dtTVNameToSourceFQNameMap.put("isCollection", "GID::GID_DataType::isCollection");
+	    dtTVNameToSourceFQNameMap.put("noPropertyType", "GID::GID_DataType::noPropertyType");
+	    dtTVNameToSourceFQNameMap.put("xsdEncodingRule", "GID::GID_DataType::xsdEncodingRule");
 
 	    // -------------
 
-	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Grunddatenbestand",
-		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
-	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
-	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Modellart",
-		    "GID::GID_ElementMitModellart::GID:Modellart");
-	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
-	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Revisionsnummer",
-		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
-	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::isCollection", "GID::GID_DataType::isCollection");
-	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::noPropertyType", "GID::GID_DataType::noPropertyType");
-	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::xsdEncodingRule", "GID::GID_DataType::xsdEncodingRule");
+	    dtTVSourceToTargetFQNameMap.put("GID::GI_Element::definition", "GID::GI_Element::definition");
+	    dtTVSourceToTargetFQNameMap.put("GID::GI_Element::description", "GID::GI_Element::description");
+	    dtTVSourceToTargetFQNameMap.put("GID::GI_Element::designation", "GID::GI_Element::designation");
 
-	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::dataType", "GID::GID_DataType",
+	    dtTVSourceToTargetFQNameMap.put("GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand",
+		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+	    dtTVSourceToTargetFQNameMap.put("GID::GID_ElementMitKennung::GID:Kennung",
+		    "GID::GID_ElementMitKennung::GID:Kennung");
+	    dtTVSourceToTargetFQNameMap.put("GID::GID_ElementMitModellart::GID:Modellart",
+		    "GID::GID_ElementMitModellart::GID:Modellart");
+	    dtTVSourceToTargetFQNameMap.put("GID::AAA_ProfilElement::AAA:Profile",
+		    "GID::AAA_ProfilElement::AAA:Profile");
+	    dtTVSourceToTargetFQNameMap.put("GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer",
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+	    dtTVSourceToTargetFQNameMap.put("GID::GID_DataType::isCollection", "GID::GID_DataType::isCollection");
+	    dtTVSourceToTargetFQNameMap.put("GID::GID_DataType::noPropertyType", "GID::GID_DataType::noPropertyType");
+	    dtTVSourceToTargetFQNameMap.put("GID::GID_DataType::xsdEncodingRule", "GID::GID_DataType::xsdEncodingRule");
+
+	    StereotypeMappingInfo smi = new StereotypeMappingInfo("GID::GID_DataType", "GID::GID_DataType",
 		    dtTVNameToSourceFQNameMap, dtTVSourceToTargetFQNameMap, MetaType.DATATYPE, true);
-	    this.stereotypeMappingInfos.add(smi);
-	}
-
-	{
-	    // union (wird umgewandelt)
-
-	    /*
-	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
-	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
-	     */
-	    SortedMap<String, String> unionTVNameToSourceFQNameMap = new TreeMap<>();
-	    SortedMap<String, String> unionTVSourceToTargetFQNameMap = new TreeMap<>();
-
-	    unionTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::union::AAA:Grunddatenbestand");
-	    unionTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::union::AAA:Kennung");
-	    unionTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::union::AAA:LetzteAenderung");
-	    unionTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::union::AAA:Modellart");
-	    unionTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::union::AAA:Nutzungsart");
-	    unionTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::union::AAA:Nutzungsartkennung");
-	    unionTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::union::AAA:Profile");
-	    unionTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::union::AAA:Revisionsnummer");
-	    unionTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
-	    unionTVNameToSourceFQNameMap.put("isCollection", "AAA::union::isCollection");
-	    unionTVNameToSourceFQNameMap.put("noPropertyType", "AAA::union::noPropertyType");
-	    unionTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::union::xsdEncodingRule");
-
-	    // -------------
-
-	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Grunddatenbestand",
-		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
-	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
-	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Modellart",
-		    "GID::GID_ElementMitModellart::GID:Modellart");
-	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
-	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Revisionsnummer",
-		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
-	    unionTVSourceToTargetFQNameMap.put("AAA::union::isCollection", "GID::GID_DataType::isCollection");
-	    unionTVSourceToTargetFQNameMap.put("AAA::union::noPropertyType", "GID::GID_DataType::noPropertyType");
-	    unionTVSourceToTargetFQNameMap.put("AAA::union::xsdEncodingRule", "GID::GID_DataType::xsdEncodingRule");
-
-	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::union", "GID::GID_DataType",
-		    unionTVNameToSourceFQNameMap, unionTVSourceToTargetFQNameMap, MetaType.DATATYPE, false);
 	    this.stereotypeMappingInfos.add(smi);
 	}
 
@@ -507,29 +481,31 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    SortedMap<String, String> clTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> clTVSourceToTargetFQNameMap = new TreeMap<>();
 
-	    clTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::codeList::AAA:Grunddatenbestand");
-	    clTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::codeList::AAA:Kennung");
-	    clTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::codeList::AAA:LetzteAenderung");
-	    clTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::codeList::AAA:Modellart");
-	    clTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::codeList::AAA:Nutzungsart");
-	    clTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::codeList::AAA:Nutzungsartkennung");
-	    clTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::codeList::AAA:Profile");
-	    clTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::codeList::AAA:Revisionsnummer");
-	    clTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
-	    clTVNameToSourceFQNameMap.put("asDictionary", "AAA::codeList::asDictionary");
-	    clTVNameToSourceFQNameMap.put("codeList", "AAA::codeList::codeList");
-	    clTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::codeList::xsdEncodingRule");
+	    clTVNameToSourceFQNameMap.put("definition", "GID::GI_Element::definition");
+	    clTVNameToSourceFQNameMap.put("description", "GID::GI_Element::description");
+	    clTVNameToSourceFQNameMap.put("designation", "GID::GI_Element::designation");
+
+	    clTVNameToSourceFQNameMap.put("GID:Modellart", "GID::GID_ElementMitModellart::GID:Modellart");
+	    clTVNameToSourceFQNameMap.put("AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
+	    clTVNameToSourceFQNameMap.put("asDictionary", "GID::GID_CodeSet::asDictionary");
+	    clTVNameToSourceFQNameMap.put("codeList", "GID::GID_CodeSet::codeList");
+	    clTVNameToSourceFQNameMap.put("xsdEncodingRule", "GID::GID_CodeSet::xsdEncodingRule");
 
 	    // -------------
 
-	    clTVSourceToTargetFQNameMap.put("AAA::codeList::AAA:Modellart",
-		    "GID::GID_ElementMitModellart::GID:Modellart");
-	    clTVSourceToTargetFQNameMap.put("AAA::codeList::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
-	    clTVSourceToTargetFQNameMap.put("AAA::codeList::asDictionary", "GID::GID_CodeSet::asDictionary");
-	    clTVSourceToTargetFQNameMap.put("AAA::codeList::codeList", "GID::GID_CodeSet::codeList");
-	    clTVSourceToTargetFQNameMap.put("AAA::codeList::xsdEncodingRule", "GID::GID_CodeSet::xsdEncodingRule");
+	    clTVSourceToTargetFQNameMap.put("GID::GI_Element::definition", "GID::GI_Element::definition");
+	    clTVSourceToTargetFQNameMap.put("GID::GI_Element::description", "GID::GI_Element::description");
+	    clTVSourceToTargetFQNameMap.put("GID::GI_Element::designation", "GID::GI_Element::designation");
 
-	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::codeList", "GID::GID_CodeSet",
+	    clTVSourceToTargetFQNameMap.put("GID::GID_ElementMitModellart::GID:Modellart",
+		    "GID::GID_ElementMitModellart::GID:Modellart");
+	    clTVSourceToTargetFQNameMap.put("GID::AAA_ProfilElement::AAA:Profile",
+		    "GID::AAA_ProfilElement::AAA:Profile");
+	    clTVSourceToTargetFQNameMap.put("GID::GID_CodeSet::asDictionary", "GID::GID_CodeSet::asDictionary");
+	    clTVSourceToTargetFQNameMap.put("GID::GID_CodeSet::codeList", "GID::GID_CodeSet::codeList");
+	    clTVSourceToTargetFQNameMap.put("GID::GID_CodeSet::xsdEncodingRule", "GID::GID_CodeSet::xsdEncodingRule");
+
+	    StereotypeMappingInfo smi = new StereotypeMappingInfo("GID::GID_CodeSet", "GID::GID_CodeSet",
 		    clTVNameToSourceFQNameMap, clTVSourceToTargetFQNameMap, MetaType.DATATYPE, false);
 	    this.stereotypeMappingInfos.add(smi);
 	}
@@ -544,30 +520,36 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    SortedMap<String, String> eTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> eTVSourceToTargetFQNameMap = new TreeMap<>();
 
-	    eTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::enumeration::AAA:Grunddatenbestand");
-	    eTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::enumeration::AAA:Kennung");
-	    eTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::enumeration::AAA:LetzteAenderung");
-	    eTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::enumeration::AAA:Modellart");
-	    eTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::enumeration::AAA:Nutzungsart");
-	    eTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::enumeration::AAA:Nutzungsartkennung");
-	    eTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::enumeration::AAA:Profile");
-	    eTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::enumeration::AAA:Revisionsnummer");
-	    eTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
-	    eTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::enumeration::xsdEncodingRule");
+	    eTVNameToSourceFQNameMap.put("definition", "GID::GI_Element::definition");
+	    eTVNameToSourceFQNameMap.put("description", "GID::GI_Element::description");
+	    eTVNameToSourceFQNameMap.put("designation", "GID::GI_Element::designation");
+
+	    eTVNameToSourceFQNameMap.put("GID:Grunddatenbestand",
+		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+	    eTVNameToSourceFQNameMap.put("GID:Modellart", "GID::GID_ElementMitModellart::GID:Modellart");
+	    eTVNameToSourceFQNameMap.put("AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
+	    eTVNameToSourceFQNameMap.put("GID:Revisionsnummer",
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+	    eTVNameToSourceFQNameMap.put("xsdEncodingRule", "GID::GID_Enumeration::xsdEncodingRule");
 
 	    // -------------
 
-	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::AAA:Grunddatenbestand",
+	    eTVSourceToTargetFQNameMap.put("GID::GI_Element::definition", "GID::GI_Element::definition");
+	    eTVSourceToTargetFQNameMap.put("GID::GI_Element::description", "GID::GI_Element::description");
+	    eTVSourceToTargetFQNameMap.put("GID::GI_Element::designation", "GID::GI_Element::designation");
+
+	    eTVSourceToTargetFQNameMap.put("GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand",
 		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
-	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::AAA:Modellart",
+	    eTVSourceToTargetFQNameMap.put("GID::GID_ElementMitModellart::GID:Modellart",
 		    "GID::GID_ElementMitModellart::GID:Modellart");
-	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
-	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::AAA:Revisionsnummer",
+	    eTVSourceToTargetFQNameMap.put("GID::AAA_ProfilElement::AAA:Profile",
+		    "GID::AAA_ProfilElement::AAA:Profile");
+	    eTVSourceToTargetFQNameMap.put("GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer",
 		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
-	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::xsdEncodingRule",
+	    eTVSourceToTargetFQNameMap.put("GID::GID_Enumeration::xsdEncodingRule",
 		    "GID::GID_Enumeration::xsdEncodingRule");
 
-	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::enumeration", "GID::GID_Enumeration",
+	    StereotypeMappingInfo smi = new StereotypeMappingInfo("GID::GID_Enumeration", "GID::GID_Enumeration",
 		    eTVNameToSourceFQNameMap, eTVSourceToTargetFQNameMap, MetaType.ENUMERATION, true);
 	    this.stereotypeMappingInfos.add(smi);
 	}
@@ -582,46 +564,56 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    SortedMap<String, String> propTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> propTVSourceToTargetFQNameMap = new TreeMap<>();
 
-	    propTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::property::AAA:Kennung");
-	    propTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::property::AAA:Modellart");
-	    propTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::property::AAA:Grunddatenbestand");
-	    propTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::property::AAA:LetzteAenderung");
-	    propTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::property::AAA:Revisionsnummer");
-	    propTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::property::AAA:Profile");
-	    propTVNameToSourceFQNameMap.put("AAA:UnitOfMeasure", "AAA::property::AAA:UnitOfMeasure");
+	    propTVNameToSourceFQNameMap.put("GID:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
+	    propTVNameToSourceFQNameMap.put("GID:Modellart", "GID::GID_ElementMitModellart::GID:Modellart");
+	    propTVNameToSourceFQNameMap.put("GID:Grunddatenbestand",
+		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+	    propTVNameToSourceFQNameMap.put("GID:Revisionsnummer",
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+	    propTVNameToSourceFQNameMap.put("AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
 
-	    propTVNameToSourceFQNameMap.put("AAA:Landnutzung", "AAA::property::AAA:Landnutzung");
-	    propTVNameToSourceFQNameMap.put("allowedTypesNAS", "AAA::property::allowedTypesNAS");
+	    propTVNameToSourceFQNameMap.put("AAA:Landnutzung", "GID::AAA_LandnutzungElement::AAA:Landnutzung");
 
-	    propTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::property::AAA:Nutzungsart");
-	    propTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::property::AAA:Nutzungsartkennung");
+	    propTVNameToSourceFQNameMap.put("GID:UnitOfMeasure", "GID::GID_Property::GID:UnitOfMeasure");
+	    propTVNameToSourceFQNameMap.put("inlineOrByReference", "GID::GID_Property::inlineOrByReference");
+	    propTVNameToSourceFQNameMap.put("GID:objektbildend", "GID::GID_Property::GID:objektbildend");
+	    propTVNameToSourceFQNameMap.put("reverseRoleNAS", "GID::GID_Property::reverseRoleNAS");
+	    propTVNameToSourceFQNameMap.put("sequenceNumber", "GID::GID_Property::sequenceNumber");
 
-	    propTVNameToSourceFQNameMap.put("inlineOrByReference", "AAA::property::inlineOrByReference");
-	    propTVNameToSourceFQNameMap.put("AAA:objektbildend", "AAA::property::AAA:objektbildend");
-	    propTVNameToSourceFQNameMap.put("reverseRoleNAS", "AAA::property::reverseRoleNAS");
-	    propTVNameToSourceFQNameMap.put("sequenceNumber", "AAA::property::sequenceNumber");
+	    propTVNameToSourceFQNameMap.put("definition", "GID::GI_Element::definition");
+	    propTVNameToSourceFQNameMap.put("description", "GID::GI_Element::description");
+	    propTVNameToSourceFQNameMap.put("designation", "GID::GI_Element::designation");
 
 	    // -------------
 
-	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
-	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Modellart",
+	    propTVSourceToTargetFQNameMap.put("GID::GI_Element::definition", "GID::GI_Element::definition");
+	    propTVSourceToTargetFQNameMap.put("GID::GI_Element::description", "GID::GI_Element::description");
+	    propTVSourceToTargetFQNameMap.put("GID::GI_Element::designation", "GID::GI_Element::designation");
+
+	    propTVSourceToTargetFQNameMap.put("GID::GID_ElementMitKennung::GID:Kennung",
+		    "GID::GID_ElementMitKennung::GID:Kennung");
+	    propTVSourceToTargetFQNameMap.put("GID::GID_ElementMitModellart::GID:Modellart",
 		    "GID::GID_ElementMitModellart::GID:Modellart");
-	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Grunddatenbestand",
+	    propTVSourceToTargetFQNameMap.put("GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand",
 		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
-	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Revisionsnummer",
+	    propTVSourceToTargetFQNameMap.put("GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer",
 		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
-	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
+	    propTVSourceToTargetFQNameMap.put("GID::AAA_ProfilElement::AAA:Profile",
+		    "GID::AAA_ProfilElement::AAA:Profile");
 
-	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Landnutzung", "GID::GID_Property::AAA:Landnutzung");
-	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:UnitOfMeasure", "GID::GID_Property::GID:UnitOfMeasure");
-	    propTVSourceToTargetFQNameMap.put("AAA::property::inlineOrByReference",
+	    propTVSourceToTargetFQNameMap.put("GID::AAA_LandnutzungElement::AAA:Landnutzung",
+		    "GID::AAA_LandnutzungElement::AAA:Landnutzung");
+
+	    propTVSourceToTargetFQNameMap.put("GID::GID_Property::GID:UnitOfMeasure",
+		    "GID::GID_Property::GID:UnitOfMeasure");
+	    propTVSourceToTargetFQNameMap.put("GID::GID_Property::inlineOrByReference",
 		    "GID::GID_Property::inlineOrByReference");
-	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:objektbildend",
+	    propTVSourceToTargetFQNameMap.put("GID::GID_Property::GID:objektbildend",
 		    "GID::GID_Property::GID:objektbildend");
-	    propTVSourceToTargetFQNameMap.put("AAA::property::reverseRoleNAS", "GID::GID_Property::reverseRoleNAS");
-	    propTVSourceToTargetFQNameMap.put("AAA::property::sequenceNumber", "GID::GID_Property::sequenceNumber");
+	    propTVSourceToTargetFQNameMap.put("GID::GID_Property::reverseRoleNAS", "GID::GID_Property::reverseRoleNAS");
+	    propTVSourceToTargetFQNameMap.put("GID::GID_Property::sequenceNumber", "GID::GID_Property::sequenceNumber");
 
-	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::property", "GID::GID_Property",
+	    StereotypeMappingInfo smi = new StereotypeMappingInfo("GID::GID_Property", "GID::GID_Property",
 		    propTVNameToSourceFQNameMap, propTVSourceToTargetFQNameMap, MetaType.PROPERTY, true);
 	    this.stereotypeMappingInfos.add(smi);
 	}
@@ -636,36 +628,556 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 	    SortedMap<String, String> elTVNameToSourceFQNameMap = new TreeMap<>();
 	    SortedMap<String, String> elTVSourceToTargetFQNameMap = new TreeMap<>();
 
-	    elTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::enum::AAA:Kennung");
-	    elTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::enum::AAA:Modellart");
-	    elTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::enum::AAA:Grunddatenbestand");
-	    elTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::enum::AAA:LetzteAenderung");
-	    elTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::enum::AAA:Revisionsnummer");
-	    elTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::enum::AAA:Nutzungsart");
-	    elTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::enum::AAA:Nutzungsartkennung");
-	    elTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::enum::AAA:Profile");
+	    elTVNameToSourceFQNameMap.put("definition", "GID::GI_Element::definition");
+	    elTVNameToSourceFQNameMap.put("description", "GID::GI_Element::description");
+	    elTVNameToSourceFQNameMap.put("designation", "GID::GI_Element::designation");
+
+	    elTVNameToSourceFQNameMap.put("GID:Modellart", "GID::GID_ElementMitModellart::GID:Modellart");
+	    elTVNameToSourceFQNameMap.put("GID:Grunddatenbestand",
+		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+	    elTVNameToSourceFQNameMap.put("GID:Revisionsnummer",
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+	    elTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung",
+		    "GID::AAA_NutzungsartkennungElement::AAA:Nutzungsartkennung");
+	    elTVNameToSourceFQNameMap.put("AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
+	    elTVNameToSourceFQNameMap.put("AAA:Landnutzung", "GID::AAA_LandnutzungElement::AAA:Landnutzung");
 
 	    // -------------
 
-	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Modellart", "GID::GID_ElementMitModellart::GID:Modellart");
-	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Grunddatenbestand",
-		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
-	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Revisionsnummer",
-		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
-	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Nutzungsartkennung",
-		    "GID::AAA_NutzungsartkennungElement::AAA:Nutzungsartkennung");
-	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
+	    elTVSourceToTargetFQNameMap.put("GID::GI_Element::definition", "GID::GI_Element::definition");
+	    elTVSourceToTargetFQNameMap.put("GID::GI_Element::description", "GID::GI_Element::description");
+	    elTVSourceToTargetFQNameMap.put("GID::GI_Element::designation", "GID::GI_Element::designation");
 
-	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::enum", "GID::GID_EnumerationLiteral",
-		    elTVNameToSourceFQNameMap, elTVSourceToTargetFQNameMap, MetaType.ENUMERATIONLITERAL, true);
+	    elTVSourceToTargetFQNameMap.put("GID::GID_ElementMitModellart::GID:Modellart",
+		    "GID::GID_ElementMitModellart::GID:Modellart");
+	    elTVSourceToTargetFQNameMap.put("GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand",
+		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+	    elTVSourceToTargetFQNameMap.put("GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer",
+		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+	    elTVSourceToTargetFQNameMap.put("GID::AAA_NutzungsartkennungElement::AAA:Nutzungsartkennung",
+		    "GID::AAA_NutzungsartkennungElement::AAA:Nutzungsartkennung");
+	    elTVSourceToTargetFQNameMap.put("GID::AAA_ProfilElement::AAA:Profile",
+		    "GID::AAA_ProfilElement::AAA:Profile");
+	    elTVSourceToTargetFQNameMap.put("GID::AAA_LandnutzungElement::AAA:Landnutzung",
+		    "GID::AAA_LandnutzungElement::AAA:Landnutzung");
+
+	    StereotypeMappingInfo smi = new StereotypeMappingInfo("GID::GID_EnumerationLiteral",
+		    "GID::GID_EnumerationLiteral", elTVNameToSourceFQNameMap, elTVSourceToTargetFQNameMap,
+		    MetaType.ENUMERATIONLITERAL, true);
 	    this.stereotypeMappingInfos.add(smi);
 	}
+    }
 
-	for (StereotypeMappingInfo smi : this.stereotypeMappingInfos) {
-	    for (String sourceTVFQName : smi.getTvNameToSourceFQNameMap().values()) {
-		this.numberOfNonBlankValuesBySourceTaggedValueFQName.put(sourceTVFQName, 0);
-	    }
-	}
+    private void initialiseProfileMappingAaaToGid() {
+//	{
+//	    // retired
+//
+//	    /*
+//	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+//	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+//	     */
+//	    SortedMap<String, String> retTVNameToSourceFQNameMap = new TreeMap<>();
+//	    SortedMap<String, String> retTVSourceToTargetFQNameMap = new TreeMap<>();
+//
+//	    retTVNameToSourceFQNameMap.put("AAA:GueltigBis", "AAA::retired::AAA:GueltigBis");
+//
+//	    retTVSourceToTargetFQNameMap.put("AAA::retired::AAA:GueltigBis", "GID::GID_Retired::GID:GueltigBis");
+//
+//	    StereotypeMappingInfo smi = new StereotypeMappingInfo("GID::GID_Retired", "GID::GID_Retired",
+//		    retTVNameToSourceFQNameMap, retTVSourceToTargetFQNameMap, MetaType.ANY, false);
+//	    this.stereotypeMappingInfos.add(smi);
+//	}
+//
+//	{
+//	    // applicationSchema
+//
+//	    /*
+//	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+//	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+//	     */
+//	    SortedMap<String, String> pkgTVNameToSourceFQNameMap = new TreeMap<>();
+//	    SortedMap<String, String> pkgTVSourceToTargetFQNameMap = new TreeMap<>();
+//
+//	    pkgTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::applicationSchema::AAA:Kennung");
+//	    pkgTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::applicationSchema::AAA:Modellart");
+//	    pkgTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::applicationSchema::AAA:Revisionsnummer");
+//
+//	    pkgTVNameToSourceFQNameMap.put("version", "AAA::applicationSchema::version");
+//
+//	    pkgTVNameToSourceFQNameMap.put("AAA:AAAVersion", "AAA::applicationSchema::AAA:AAAVersion");
+//	    pkgTVNameToSourceFQNameMap.put("AAA:Organisation", "AAA::applicationSchema::AAA:Organisation");
+//	    pkgTVNameToSourceFQNameMap.put("AAA:Datum", "AAA::applicationSchema::AAA:Datum");
+//	    pkgTVNameToSourceFQNameMap.put("gmlProfileSchema", "AAA::applicationSchema::gmlProfileSchema");
+//	    pkgTVNameToSourceFQNameMap.put("targetNamespace", "AAA::applicationSchema::targetNamespace");
+//	    pkgTVNameToSourceFQNameMap.put("xmlns", "AAA::applicationSchema::xmlns");
+//	    pkgTVNameToSourceFQNameMap.put("xsdDocument", "AAA::applicationSchema::xsdDocument");
+//	    pkgTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::applicationSchema::xsdEncodingRule");
+//
+//	    // -------------
+//
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::AAA:Modellart",
+//		    "GID::GID_ElementMitModellart::GID:Modellart");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::AAA:Revisionsnummer",
+//		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+//
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::version", "GID::ApplicationSchema::version");
+//
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::AAA:AAAVersion",
+//		    "GID::GID_ApplicationSchema::GID:AAAVersion");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::AAA:Organisation",
+//		    "GID::GID_ApplicationSchema::GID:Organisation");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::AAA:Datum",
+//		    "GID::GID_ApplicationSchema::GID:Datum");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::gmlProfileSchema",
+//		    "GID::GID_ApplicationSchema::gmlProfileSchema");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::targetNamespace",
+//		    "GID::GID_ApplicationSchema::targetNamespace");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::xmlns", "GID::GID_ApplicationSchema::xmlns");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::xsdDocument",
+//		    "GID::GID_ApplicationSchema::xsdDocument");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::applicationSchema::xsdEncodingRule",
+//		    "GID::GID_ApplicationSchema::xsdEncodingRule");
+//	        
+//	    StereotypeMappingInfo smiAppSchema = new StereotypeMappingInfo("AAA::applicationSchema",
+//		    "GID::GID_ApplicationSchema", pkgTVNameToSourceFQNameMap, pkgTVSourceToTargetFQNameMap,
+//		    MetaType.PACKAGE, false);
+//	    this.stereotypeMappingInfos.add(smiAppSchema);
+//	}
+//
+//	{
+//	    // schema
+//
+//	    /*
+//	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+//	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+//	     */
+//	    SortedMap<String, String> pkgTVNameToSourceFQNameMap = new TreeMap<>();
+//	    SortedMap<String, String> pkgTVSourceToTargetFQNameMap = new TreeMap<>();
+//
+//	    pkgTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::schema::AAA:Kennung");
+//	    pkgTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::schema::AAA:Modellart");
+//	    pkgTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::schema::AAA:Revisionsnummer");
+//
+//	    pkgTVNameToSourceFQNameMap.put("version", "AAA::schema::version");
+//
+//	    pkgTVNameToSourceFQNameMap.put("AAA:AAAVersion", "AAA::schema::AAA:AAAVersion");
+//	    pkgTVNameToSourceFQNameMap.put("AAA:Organisation", "AAA::schema::AAA:Organisation");
+//	    pkgTVNameToSourceFQNameMap.put("AAA:Datum", "AAA::schema::AAA:Datum");
+//	    pkgTVNameToSourceFQNameMap.put("gmlProfileSchema", "AAA::schema::gmlProfileSchema");
+//	    pkgTVNameToSourceFQNameMap.put("targetNamespace", "AAA::schema::targetNamespace");
+//	    pkgTVNameToSourceFQNameMap.put("xmlns", "AAA::schema::xmlns");
+//	    pkgTVNameToSourceFQNameMap.put("xsdDocument", "AAA::schema::xsdDocument");
+//	    pkgTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::schema::xsdEncodingRule");
+//
+//	    // -------------
+//
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::AAA:Modellart",
+//		    "GID::GID_ElementMitModellart::GID:Modellart");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::AAA:Revisionsnummer",
+//		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+//
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::version", "GID::ApplicationSchema::version");
+//
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::AAA:AAAVersion",
+//		    "GID::GID_ApplicationSchema::GID:AAAVersion");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::AAA:Organisation",
+//		    "GID::GID_ApplicationSchema::GID:Organisation");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::AAA:Datum", "GID::GID_ApplicationSchema::GID:Datum");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::gmlProfileSchema",
+//		    "GID::GID_ApplicationSchema::gmlProfileSchema");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::targetNamespace",
+//		    "GID::GID_ApplicationSchema::targetNamespace");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::xmlns", "GID::GID_ApplicationSchema::xmlns");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::xsdDocument", "GID::GID_ApplicationSchema::xsdDocument");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::schema::xsdEncodingRule",
+//		    "GID::GID_ApplicationSchema::xsdEncodingRule");
+//
+//	    StereotypeMappingInfo smiSchema = new StereotypeMappingInfo("AAA::schema", "GID::GID_ApplicationSchema",
+//		    pkgTVNameToSourceFQNameMap, pkgTVSourceToTargetFQNameMap, MetaType.PACKAGE, false);
+//	    this.stereotypeMappingInfos.add(smiSchema);
+//	}
+//
+//	{
+//	    // package (without stereotype)
+//
+//	    /*
+//	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+//	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+//	     */
+//	    SortedMap<String, String> pkgTVNameToSourceFQNameMap = new TreeMap<>();
+//	    SortedMap<String, String> pkgTVSourceToTargetFQNameMap = new TreeMap<>();
+//
+//	    pkgTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::package::AAA:Kennung");
+//	    pkgTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::package::AAA:Modellart");
+//	    pkgTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::package::AAA:Revisionsnummer");
+//
+//	    pkgTVNameToSourceFQNameMap.put("xsdDocument", "AAA::package::xsdDocument");
+//	    pkgTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::package::xsdEncodingRule");
+//
+//	    // -------------
+//
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::package::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::package::AAA:Modellart",
+//		    "GID::GID_ElementMitModellart::GID:Modellart");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::package::AAA:Revisionsnummer",
+//		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+//
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::package::xsdDocument", "GID::GID_Package::xsdDocument");
+//	    pkgTVSourceToTargetFQNameMap.put("AAA::package::xsdEncodingRule", "GID::GID_Package::xsdEncodingRule");
+//
+//	    StereotypeMappingInfo smiPackage = new StereotypeMappingInfo("AAA::package", "GID::GID_Package",
+//		    pkgTVNameToSourceFQNameMap, pkgTVSourceToTargetFQNameMap, MetaType.PACKAGE, true);
+//	    this.stereotypeMappingInfos.add(smiPackage);
+//	}
+//
+//	{
+//	    // type
+//
+//	    /*
+//	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+//	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+//	     */
+//	    SortedMap<String, String> tTVNameToSourceFQNameMap = new TreeMap<>();
+//	    SortedMap<String, String> tTVSourceToTargetFQNameMap = new TreeMap<>();
+//
+//	    tTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::type::AAA:Grunddatenbestand");
+//	    tTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::type::AAA:Kennung");
+//	    tTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::type::AAA:LetzteAenderung");
+//	    tTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::type::AAA:Modellart");
+//	    tTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::type::AAA:Nutzungsart");
+//	    tTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::type::AAA:Nutzungsartkennung");
+//	    tTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::type::AAA:Profile");
+//	    tTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::type::AAA:Revisionsnummer");
+//	    tTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
+//	    tTVNameToSourceFQNameMap.put("byValuePropertyType", "AAA::type::byValuePropertyType");
+//	    tTVNameToSourceFQNameMap.put("isCollection", "AAA::type::isCollection");
+//	    tTVNameToSourceFQNameMap.put("noPropertyType", "AAA::type::noPropertyType");
+//	    tTVNameToSourceFQNameMap.put("xmlSchemaType", "AAA::type::xmlSchemaType");
+//	    tTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::type::xsdEncodingRule");
+//
+//	    // -------------
+//
+//	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Grunddatenbestand",
+//		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+//	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
+//	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Modellart", "GID::GID_ElementMitModellart::GID:Modellart");
+//	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
+//	    tTVSourceToTargetFQNameMap.put("AAA::type::AAA:Revisionsnummer",
+//		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+//	    tTVSourceToTargetFQNameMap.put("AAA::type::byValuePropertyType", "GID::GID_Mixin::byValuePropertyType");
+//	    tTVSourceToTargetFQNameMap.put("AAA::type::isCollection", "GID::GID_Mixin::isCollection");
+//	    tTVSourceToTargetFQNameMap.put("AAA::type::noPropertyType", "GID::GID_Mixin::noPropertyType");
+//	    tTVSourceToTargetFQNameMap.put("AAA::type::xmlSchemaType", "GID::GID_Mixin::xmlSchemaType");
+//	    tTVSourceToTargetFQNameMap.put("AAA::type::xsdEncodingRule", "GID::GID_Mixin::xsdEncodingRule");
+//
+//	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::type", "GID::GID_Mixin",
+//		    tTVNameToSourceFQNameMap, tTVSourceToTargetFQNameMap, MetaType.CLASS, false);
+//	    this.stereotypeMappingInfos.add(smi);
+//	}
+//
+//	{
+//	    // featureType
+//
+//	    /*
+//	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+//	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+//	     */
+//	    SortedMap<String, String> ftTVNameToSourceFQNameMap = new TreeMap<>();
+//	    SortedMap<String, String> ftTVSourceToTargetFQNameMap = new TreeMap<>();
+//
+//	    ftTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::featureType::AAA:Grunddatenbestand");
+//	    ftTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::featureType::AAA:Kennung");
+//	    ftTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::featureType::AAA:LetzteAenderung");
+//	    ftTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::featureType::AAA:Modellart");
+//	    ftTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::featureType::AAA:Nutzungsart");
+//	    ftTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::featureType::AAA:Nutzungsartkennung");
+//	    ftTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::featureType::AAA:Profile");
+//	    ftTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::featureType::AAA:Revisionsnummer");
+//	    ftTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
+//	    ftTVNameToSourceFQNameMap.put("byValuePropertyType", "AAA::featureType::byValuePropertyType");
+//	    ftTVNameToSourceFQNameMap.put("isCollection", "AAA::featureType::isCollection");
+//	    ftTVNameToSourceFQNameMap.put("noPropertyType", "AAA::featureType::noPropertyType");
+//	    ftTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::featureType::xsdEncodingRule");
+//
+//	    // -------------
+//
+//	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Grunddatenbestand",
+//		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+//	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
+//	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Modellart",
+//		    "GID::GID_ElementMitModellart::GID:Modellart");
+//	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Nutzungsart",
+//		    "GID::GID_FeatureType::AAA:Nutzungsart");
+//	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Nutzungsartkennung",
+//		    "GID::AAA_NutzungsartkennungElement::AAA:Nutzungsartkennung");
+//	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
+//	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::AAA:Revisionsnummer",
+//		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+//	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::byValuePropertyType",
+//		    "GID::GID_FeatureType::byValuePropertyType");
+//	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::isCollection", "GID::GID_FeatureType::isCollection");
+//	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::noPropertyType", "GID::GID_FeatureType::noPropertyType");
+//	    ftTVSourceToTargetFQNameMap.put("AAA::featureType::xsdEncodingRule",
+//		    "GID::GID_FeatureType::xsdEncodingRule");
+//
+//	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::featureType", "GID::GID_FeatureType",
+//		    ftTVNameToSourceFQNameMap, ftTVSourceToTargetFQNameMap, MetaType.CLASS, false);
+//	    this.stereotypeMappingInfos.add(smi);
+//	}
+//
+//	{
+//	    // dataType
+//
+//	    /*
+//	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+//	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+//	     */
+//	    SortedMap<String, String> dtTVNameToSourceFQNameMap = new TreeMap<>();
+//	    SortedMap<String, String> dtTVSourceToTargetFQNameMap = new TreeMap<>();
+//
+//	    dtTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::dataType::AAA:Grunddatenbestand");
+//	    dtTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::dataType::AAA:Kennung");
+//	    dtTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::dataType::AAA:LetzteAenderung");
+//	    dtTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::dataType::AAA:Modellart");
+//	    dtTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::dataType::AAA:Nutzungsart");
+//	    dtTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::dataType::AAA:Nutzungsartkennung");
+//	    dtTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::dataType::AAA:Profile");
+//	    dtTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::dataType::AAA:Revisionsnummer");
+//	    dtTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
+//	    dtTVNameToSourceFQNameMap.put("isCollection", "AAA::dataType::isCollection");
+//	    dtTVNameToSourceFQNameMap.put("noPropertyType", "AAA::dataType::noPropertyType");
+//	    dtTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::dataType::xsdEncodingRule");
+//
+//	    // -------------
+//
+//	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Grunddatenbestand",
+//		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+//	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
+//	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Modellart",
+//		    "GID::GID_ElementMitModellart::GID:Modellart");
+//	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
+//	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::AAA:Revisionsnummer",
+//		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+//	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::isCollection", "GID::GID_DataType::isCollection");
+//	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::noPropertyType", "GID::GID_DataType::noPropertyType");
+//	    dtTVSourceToTargetFQNameMap.put("AAA::dataType::xsdEncodingRule", "GID::GID_DataType::xsdEncodingRule");
+//
+//	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::dataType", "GID::GID_DataType",
+//		    dtTVNameToSourceFQNameMap, dtTVSourceToTargetFQNameMap, MetaType.DATATYPE, true);
+//	    this.stereotypeMappingInfos.add(smi);
+//	}
+//
+//	{
+//	    // union (wird umgewandelt)
+//
+//	    /*
+//	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+//	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+//	     */
+//	    SortedMap<String, String> unionTVNameToSourceFQNameMap = new TreeMap<>();
+//	    SortedMap<String, String> unionTVSourceToTargetFQNameMap = new TreeMap<>();
+//
+//	    unionTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::union::AAA:Grunddatenbestand");
+//	    unionTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::union::AAA:Kennung");
+//	    unionTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::union::AAA:LetzteAenderung");
+//	    unionTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::union::AAA:Modellart");
+//	    unionTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::union::AAA:Nutzungsart");
+//	    unionTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::union::AAA:Nutzungsartkennung");
+//	    unionTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::union::AAA:Profile");
+//	    unionTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::union::AAA:Revisionsnummer");
+//	    unionTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
+//	    unionTVNameToSourceFQNameMap.put("isCollection", "AAA::union::isCollection");
+//	    unionTVNameToSourceFQNameMap.put("noPropertyType", "AAA::union::noPropertyType");
+//	    unionTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::union::xsdEncodingRule");
+//
+//	    // -------------
+//
+//	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Grunddatenbestand",
+//		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+//	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
+//	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Modellart",
+//		    "GID::GID_ElementMitModellart::GID:Modellart");
+//	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
+//	    unionTVSourceToTargetFQNameMap.put("AAA::union::AAA:Revisionsnummer",
+//		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+//	    unionTVSourceToTargetFQNameMap.put("AAA::union::isCollection", "GID::GID_DataType::isCollection");
+//	    unionTVSourceToTargetFQNameMap.put("AAA::union::noPropertyType", "GID::GID_DataType::noPropertyType");
+//	    unionTVSourceToTargetFQNameMap.put("AAA::union::xsdEncodingRule", "GID::GID_DataType::xsdEncodingRule");
+//
+//	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::union", "GID::GID_DataType",
+//		    unionTVNameToSourceFQNameMap, unionTVSourceToTargetFQNameMap, MetaType.DATATYPE, false);
+//	    this.stereotypeMappingInfos.add(smi);
+//	}
+//
+//	{
+//	    // code list
+//
+//	    /*
+//	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+//	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+//	     */
+//	    SortedMap<String, String> clTVNameToSourceFQNameMap = new TreeMap<>();
+//	    SortedMap<String, String> clTVSourceToTargetFQNameMap = new TreeMap<>();
+//
+//	    clTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::codeList::AAA:Grunddatenbestand");
+//	    clTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::codeList::AAA:Kennung");
+//	    clTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::codeList::AAA:LetzteAenderung");
+//	    clTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::codeList::AAA:Modellart");
+//	    clTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::codeList::AAA:Nutzungsart");
+//	    clTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::codeList::AAA:Nutzungsartkennung");
+//	    clTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::codeList::AAA:Profile");
+//	    clTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::codeList::AAA:Revisionsnummer");
+//	    clTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
+//	    clTVNameToSourceFQNameMap.put("asDictionary", "AAA::codeList::asDictionary");
+//	    clTVNameToSourceFQNameMap.put("codeList", "AAA::codeList::codeList");
+//	    clTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::codeList::xsdEncodingRule");
+//
+//	    // -------------
+//
+//	    clTVSourceToTargetFQNameMap.put("AAA::codeList::AAA:Modellart",
+//		    "GID::GID_ElementMitModellart::GID:Modellart");
+//	    clTVSourceToTargetFQNameMap.put("AAA::codeList::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
+//	    clTVSourceToTargetFQNameMap.put("AAA::codeList::asDictionary", "GID::GID_CodeSet::asDictionary");
+//	    clTVSourceToTargetFQNameMap.put("AAA::codeList::codeList", "GID::GID_CodeSet::codeList");
+//	    clTVSourceToTargetFQNameMap.put("AAA::codeList::xsdEncodingRule", "GID::GID_CodeSet::xsdEncodingRule");
+//
+//	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::codeList", "GID::GID_CodeSet",
+//		    clTVNameToSourceFQNameMap, clTVSourceToTargetFQNameMap, MetaType.DATATYPE, false);
+//	    this.stereotypeMappingInfos.add(smi);
+//	}
+//
+//	{
+//	    // enumeration
+//
+//	    /*
+//	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+//	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+//	     */
+//	    SortedMap<String, String> eTVNameToSourceFQNameMap = new TreeMap<>();
+//	    SortedMap<String, String> eTVSourceToTargetFQNameMap = new TreeMap<>();
+//
+//	    eTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::enumeration::AAA:Grunddatenbestand");
+//	    eTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::enumeration::AAA:Kennung");
+//	    eTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::enumeration::AAA:LetzteAenderung");
+//	    eTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::enumeration::AAA:Modellart");
+//	    eTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::enumeration::AAA:Nutzungsart");
+//	    eTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::enumeration::AAA:Nutzungsartkennung");
+//	    eTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::enumeration::AAA:Profile");
+//	    eTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::enumeration::AAA:Revisionsnummer");
+//	    eTVNameToSourceFQNameMap.put("AAA:Themen", "AAA::type::AAA:Themen");
+//	    eTVNameToSourceFQNameMap.put("xsdEncodingRule", "AAA::enumeration::xsdEncodingRule");
+//
+//	    // -------------
+//
+//	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::AAA:Grunddatenbestand",
+//		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+//	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::AAA:Modellart",
+//		    "GID::GID_ElementMitModellart::GID:Modellart");
+//	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
+//	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::AAA:Revisionsnummer",
+//		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+//	    eTVSourceToTargetFQNameMap.put("AAA::enumeration::xsdEncodingRule",
+//		    "GID::GID_Enumeration::xsdEncodingRule");
+//
+//	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::enumeration", "GID::GID_Enumeration",
+//		    eTVNameToSourceFQNameMap, eTVSourceToTargetFQNameMap, MetaType.ENUMERATION, true);
+//	    this.stereotypeMappingInfos.add(smi);
+//	}
+//
+//	{
+//	    // property (for attributes and association roles)
+//
+//	    /*
+//	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+//	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+//	     */
+//	    SortedMap<String, String> propTVNameToSourceFQNameMap = new TreeMap<>();
+//	    SortedMap<String, String> propTVSourceToTargetFQNameMap = new TreeMap<>();
+//
+//	    propTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::property::AAA:Kennung");
+//	    propTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::property::AAA:Modellart");
+//	    propTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::property::AAA:Grunddatenbestand");
+//	    propTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::property::AAA:LetzteAenderung");
+//	    propTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::property::AAA:Revisionsnummer");
+//	    propTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::property::AAA:Profile");
+//	    propTVNameToSourceFQNameMap.put("AAA:UnitOfMeasure", "AAA::property::AAA:UnitOfMeasure");
+//
+//	    propTVNameToSourceFQNameMap.put("AAA:Landnutzung", "AAA::property::AAA:Landnutzung");
+//	    propTVNameToSourceFQNameMap.put("allowedTypesNAS", "AAA::property::allowedTypesNAS");
+//
+//	    propTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::property::AAA:Nutzungsart");
+//	    propTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::property::AAA:Nutzungsartkennung");
+//
+//	    propTVNameToSourceFQNameMap.put("inlineOrByReference", "AAA::property::inlineOrByReference");
+//	    propTVNameToSourceFQNameMap.put("AAA:objektbildend", "AAA::property::AAA:objektbildend");
+//	    propTVNameToSourceFQNameMap.put("reverseRoleNAS", "AAA::property::reverseRoleNAS");
+//	    propTVNameToSourceFQNameMap.put("sequenceNumber", "AAA::property::sequenceNumber");
+//
+//	    // -------------
+//
+//	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Kennung", "GID::GID_ElementMitKennung::GID:Kennung");
+//	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Modellart",
+//		    "GID::GID_ElementMitModellart::GID:Modellart");
+//	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Grunddatenbestand",
+//		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+//	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Revisionsnummer",
+//		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+//	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
+//
+//	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:Landnutzung",
+//		    "GID::AAA_LandnutzungElement::AAA:Landnutzung");
+//
+//	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:UnitOfMeasure",
+//		    "GID::GID_Property::GID:UnitOfMeasure");
+//	    propTVSourceToTargetFQNameMap.put("AAA::property::inlineOrByReference",
+//		    "GID::GID_Property::inlineOrByReference");
+//	    propTVSourceToTargetFQNameMap.put("AAA::property::AAA:objektbildend",
+//		    "GID::GID_Property::GID:objektbildend");
+//	    propTVSourceToTargetFQNameMap.put("AAA::property::reverseRoleNAS", "GID::GID_Property::reverseRoleNAS");
+//	    propTVSourceToTargetFQNameMap.put("AAA::property::sequenceNumber", "GID::GID_Property::sequenceNumber");
+//
+//	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::property", "GID::GID_Property",
+//		    propTVNameToSourceFQNameMap, propTVSourceToTargetFQNameMap, MetaType.PROPERTY, true);
+//	    this.stereotypeMappingInfos.add(smi);
+//	}
+//
+//	{
+//	    // enumeration literal
+//
+//	    /*
+//	     * Die xxxTVNameToSourceFQNameMap sollte alle im Source-UML-Profil enthaltenen
+//	     * Tags umfassen - selbst die, die im neuen Profil entfallen.
+//	     */
+//	    SortedMap<String, String> elTVNameToSourceFQNameMap = new TreeMap<>();
+//	    SortedMap<String, String> elTVSourceToTargetFQNameMap = new TreeMap<>();
+//
+//	    elTVNameToSourceFQNameMap.put("AAA:Kennung", "AAA::enum::AAA:Kennung");
+//	    elTVNameToSourceFQNameMap.put("AAA:Modellart", "AAA::enum::AAA:Modellart");
+//	    elTVNameToSourceFQNameMap.put("AAA:Grunddatenbestand", "AAA::enum::AAA:Grunddatenbestand");
+//	    elTVNameToSourceFQNameMap.put("AAA:LetzteAenderung", "AAA::enum::AAA:LetzteAenderung");
+//	    elTVNameToSourceFQNameMap.put("AAA:Revisionsnummer", "AAA::enum::AAA:Revisionsnummer");
+//	    elTVNameToSourceFQNameMap.put("AAA:Nutzungsart", "AAA::enum::AAA:Nutzungsart");
+//	    elTVNameToSourceFQNameMap.put("AAA:Nutzungsartkennung", "AAA::enum::AAA:Nutzungsartkennung");
+//	    elTVNameToSourceFQNameMap.put("AAA:Profile", "AAA::enum::AAA:Profile");
+//	    elTVNameToSourceFQNameMap.put("AAA:Landnutzung", "AAA::enum::AAA:Landnutzung");
+//
+//	    // -------------
+//
+//	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Modellart", "GID::GID_ElementMitModellart::GID:Modellart");
+//	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Grunddatenbestand",
+//		    "GID::GID_ElementMitGrunddatenbestand::GID:Grunddatenbestand");
+//	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Revisionsnummer",
+//		    "GID::GID_ElementMitRevisionsnummer::GID:Revisionsnummer");
+//	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Nutzungsartkennung",
+//		    "GID::AAA_NutzungsartkennungElement::AAA:Nutzungsartkennung");
+//	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Profile", "GID::AAA_ProfilElement::AAA:Profile");
+//	    elTVSourceToTargetFQNameMap.put("AAA::enum::AAA:Landnutzung",
+//		    "GID::AAA_LandnutzungElement::AAA:Landnutzung");
+//
+//	    StereotypeMappingInfo smi = new StereotypeMappingInfo("AAA::enum", "GID::GID_EnumerationLiteral",
+//		    elTVNameToSourceFQNameMap, elTVSourceToTargetFQNameMap, MetaType.ENUMERATIONLITERAL, true);
+//	    this.stereotypeMappingInfos.add(smi);
+//	}
     }
 
     public void shutdown() {
@@ -1604,7 +2116,9 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 //	System.out.println("   old StereotypeEx: " + oldStereotypeEx);
 
 	String newStex = smis.stream().map(smi -> smi.getTargetStereotypeFQName()).collect(Collectors.joining(","));
-	newStex = oldStereotypeEx + (oldStereotypeEx.length() > 0 ? "," : "") + newStex;
+	if (!newStex.contains(oldStereotypeEx)) {
+	    newStex = oldStereotypeEx + (oldStereotypeEx.length() > 0 ? "," : "") + newStex;
+	}
 //	System.out.println("   new StereotypeEx: " + newStex);
 
 	return newStex;
@@ -1621,6 +2135,12 @@ public class GidProfileTransformer implements Transformer, MessageSource {
 
 	String stex = ce.GetStereotypeEx();
 	String newStex = determineNewStereotypeEx(stex, smis);
+
+	// TEST: remove new stereotype before setting it again
+	if (newStex.contains(newStex)) {
+	    EAConnectorEndUtil.setEAStereotypeEx(ce, "");
+	}
+
 	EAConnectorEndUtil.setEAStereotypeEx(ce, newStex);
     }
 

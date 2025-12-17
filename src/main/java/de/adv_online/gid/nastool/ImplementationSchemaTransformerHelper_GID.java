@@ -27,7 +27,7 @@
  * Germany
  */
 
-package de.adv_online.aaa.nastool;
+package de.adv_online.gid.nastool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,7 +62,8 @@ import de.interactive_instruments.shapechange.ea.util.EATaggedValue;
 import de.interactive_instruments.shapechange.ea.util.modelhelper.EAElement;
 import de.interactive_instruments.shapechange.ea.util.modelhelper.EAPackage;
 import de.interactive_instruments.shapechange.ea.util.modelhelper.EARepository;
-import shadow.org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 public class ImplementationSchemaTransformerHelper_GID {
 
@@ -72,7 +73,7 @@ public class ImplementationSchemaTransformerHelper_GID {
     private EARepository eaRepo = null;
     private ShapeChangeResult result = null;
     protected HashMap<String, Package> allPackages = new HashMap<String, Package>();
-    protected List<Package> aaaPackages = new ArrayList<>();
+    protected List<Package> gidPackages = new ArrayList<>();
     public HashMap<String, Element> allClasses = new HashMap<String, Element>();
     public HashMap<String, Element> gidClasses = new HashMap<String, Element>();
     private int SeqNo = 32000;
@@ -133,14 +134,18 @@ public class ImplementationSchemaTransformerHelper_GID {
 
     /**
      * Multiple Vererbung: Weder ISO 19136 / GML 3.3 noch ISO/TS 19139 unterstützen
-     * in den Abbildungsregeln multiple Vererbung, das AAA-Modell verwendet diese
-     * jedoch in Mixin-Klassen (z.B. AP_GPO, AX_Katalogeintrag). Die Mixin-Klassen
-     * werden aufgelöst: - Alle Attribute werden in die nächsten in der NAS
-     * codierten Subtypen kopiert. - Alle Relationen zu den Mixin-Klassen werden
-     * ebenfalls jeweils auf die nächsten in der NAS codierten Subtypen kopiert.
-     * Dabei wird der Rollenname durch Anhängen des Klassennamens geändert, um die
-     * Eindeutigkeit der Ei- genschaftsnamen zu gewährleisten. - Die Mixin-Klassen
-     * werden gelöscht.
+     * in den Abbildungsregeln multiple Vererbung, das AAA-Anwendungsschema
+     * verwendet diese jedoch in Mixin-Klassen (z.B. AP_GPO, AX_Katalogeintrag). Die
+     * Mixin-Klassen werden aufgelöst:
+     * <ul>
+     * <li>Alle Attribute werden in die nächsten in der NAS codierten Subtypen
+     * kopiert.</li>
+     * <li>Alle Relationen zu den Mixin-Klassen werden ebenfalls jeweils auf die
+     * nächsten in der NAS codierten Subtypen kopiert. Dabei wird der Rollenname
+     * durch Anhängen des Klassennamens geändert, um die Eindeutigkeit der
+     * Eigenschaftsnamen zu gewährleisten.</li>
+     * <li>Die Mixin-Klassen werden gelöscht.</li>
+     * </ul>
      * 
      * @param importedMixins tbd
      */
@@ -193,19 +198,27 @@ public class ImplementationSchemaTransformerHelper_GID {
     }
 
     /**
-     * Bei allen Klassen wird das UML Tagged Value „xsdEncodingRule“ gesetzt: -
-     * "NAS" außer bei Typen, die mit einer der Zeichenketten "AX_DQ", "AX_LI",
-     * "AX_Datenerhebung" beginnen; - bei diesen wird „iso19139_2007“ verwendet.
+     * Bei allen Klassen wird das UML Tagged Value „xsdEncodingRule“ gesetzt:
      * 
-     * Bei Klassen werden die folgenden UML Tagged Values gesetzt: - noPropertyType:
-     * “true” bei Feature Type; “false” bei Data Type und Union -
-     * byValuePropertyType: “false” bei Feature Type, Data Type und Union -
-     * isCollection: "false" bei Feature Type, Data Type und Union - asDictionary:
-     * „true“, nur bei Code List
+     * <ul>
+     * <li>"NAS" außer bei Typen, die mit einer der Zeichenketten "AX_DQ", "AX_LI",
+     * "AX_Datenerhebung" beginnen;</li>
+     * <li>bei diesen wird „iso19139_2007“ verwendet.</li>
+     * </ul>
+     * 
+     * Bei Klassen werden die folgenden UML Tagged Values gesetzt:
+     * <ul>
+     * <li>noPropertyType: <code>true</code> bei Feature Type; <code>false</code>
+     * bei Data Type</li>
+     * <li>byValuePropertyType: <code>false</code> bei Feature Type und Data
+     * Type</li>
+     * <li>isCollection: <code>false</code> bei Feature Type und DataType</li>
+     * <li>asDictionary: <code>true</code>, nur bei CodeList</li>
+     * </ul>
      */
     public void setTaggedValues() {
 
-	for (Package pkg : aaaPackages) {
+	for (Package pkg : gidPackages) {
 
 	    try {
 		EAPackageUtil.updateTaggedValue(pkg, "xsdEncodingRule", "NAS", false);
@@ -357,23 +370,23 @@ public class ImplementationSchemaTransformerHelper_GID {
     }
 
     private boolean isEnumerationStereotype(String st_lowercase) {
-	return StringUtils.equalsAny(st_lowercase, "enumeration", "gid_enumeration");
+	return Strings.CS.equalsAny(st_lowercase, "enumeration", "gid_enumeration");
     }
 
     private boolean isFeatureTypeStereotype(String st_lowercase) {
-	return StringUtils.equalsAny(st_lowercase, "featuretype", "gid_featuretype");
+	return Strings.CS.equalsAny(st_lowercase, "featuretype", "gid_featuretype");
     }
 
     private boolean isTypeStereotype(String st_lowercase) {
-	return StringUtils.equalsAny(st_lowercase, "type", "gid_mixin");
+	return Strings.CS.equalsAny(st_lowercase, "type", "gid_mixin");
     }
 
     private boolean isDataTypeStereotype(String st_lowercase) {
-	return StringUtils.equalsAny(st_lowercase, "datatype", "gid_datatype");
+	return Strings.CS.equalsAny(st_lowercase, "datatype", "gid_datatype");
     }
 
     private boolean isCodelistStereotype(String st_lowercase) {
-	return StringUtils.equalsAny(st_lowercase, "codelist", "gid_codeset");
+	return Strings.CS.equalsAny(st_lowercase, "codelist", "gid_codeset");
     }
 
     public void addGeneralization(Element e1, Element e2) {
@@ -911,9 +924,14 @@ public class ImplementationSchemaTransformerHelper_GID {
     }
 
     /**
-     * @param implSchemaNameByAppSchemaFullName tbd
-     * @param relevantDependenciesToLoad        Full name (in the model) of relevant
-     *                                          schema dependency packages to load
+     * @param implSchemaNameByAppSchemaFullName Map of the application schemas to
+     *                                          process (key: fully qualified
+     *                                          application schema name; value: the
+     *                                          name for the implementation schema
+     *                                          to generate)
+     * @param relevantDependenciesToLoad        Fully qualified name (in the model)
+     *                                          of relevant schema dependency
+     *                                          packages to load
      * @throws ShapeChangeAbortException tbd
      */
     public void prepareModel(SortedMap<String, String> implSchemaNameByAppSchemaFullName,
@@ -1036,7 +1054,7 @@ public class ImplementationSchemaTransformerHelper_GID {
 	    allPackages.put(s, p);
 	}
 	if (gid) {
-	    aaaPackages.add(p);
+	    gidPackages.add(p);
 	}
 
 	Collection<Element> c = p.GetElements();

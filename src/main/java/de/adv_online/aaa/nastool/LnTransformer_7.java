@@ -57,7 +57,7 @@ public class LnTransformer_7 implements Transformer {
 	 */
 	public void transform() throws ShapeChangeAbortException {
 		
-		helper.prepareModel("LN_Landnutzung","NAS-LN");
+		helper.prepareModel("LN_Landnutzung 1.1","NAS-LN 1.1");
 				
 		/* Bei allen Klassen wird das UML Tagged Value „xsdEncodingRule“ gesetzt: 
 		 * - "NAS" außer bei Typen, die mit einer der Zeichenketten "AX_DQ", "AX_LI", "AX_Datenerhebung" beginnen;
