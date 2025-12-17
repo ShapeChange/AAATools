@@ -34,7 +34,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
   <xsl:variable name="fc.Modellart">Modellart</xsl:variable>
   <xsl:variable name="fc.Modellarten">Modellarten</xsl:variable>
   <xsl:variable name="fc.Multiplizität">Multiplizität</xsl:variable>
-  <xsl:variable name="fc.Name">Bezeichnung</xsl:variable>
+  <xsl:variable name="fc.Name">Bezeichner</xsl:variable>
   <xsl:variable name="fc.NichtÄnderbar">nicht änderbar</xsl:variable>
   <xsl:variable name="fc.Nutzungsart">Nutzungsart</xsl:variable>
   <xsl:variable name="fc.Nutzungsartkennung">Nutzungsartkennung</xsl:variable>
