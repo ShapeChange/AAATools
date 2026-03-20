@@ -1,7 +1,7 @@
 /**
  * NAS-Tool (schema transformer)
  *
- * (c) 2009-2025 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
+ * (c) 2009-2026 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
  * Länder der Bundesrepublik Deutschland (AdV)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,8 +19,8 @@
  *
  * Contact:
  * interactive instruments GmbH
- * Trierer Strasse 70-72
- * 53115 Bonn
+ * Bundeskanzlerplatz 2d
+ * 53113 Bonn
  * Germany
  */
 
@@ -36,6 +36,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.sparx.Attribute;
 import org.sparx.Element;
 
@@ -43,9 +44,11 @@ import de.interactive_instruments.shapechange.core.Options;
 import de.interactive_instruments.shapechange.core.ShapeChangeAbortException;
 import de.interactive_instruments.shapechange.core.ShapeChangeResult;
 import de.interactive_instruments.shapechange.core.model.Transformer;
-import org.apache.commons.lang3.StringUtils;
+import de.interactive_instruments.shapechange.ea.util.modelhelper.EAElement;
 
 public class NasTransformer_7_GID implements Transformer {
+
+    public static final String PARAM_IMPLEMENTATION_SCHEMAS = "nasTransformer7GidImplementationSchemas";
 
     private ShapeChangeResult result = null;
     private ImplementationSchemaTransformerHelper_GID helper = null;
@@ -57,9 +60,172 @@ public class NasTransformer_7_GID implements Transformer {
     private SortedMap<String, String> implSchemaNameByAppSchemaFullName = new TreeMap<>();
 
     public void initialise(Options o, ShapeChangeResult r, String repositoryFileName) throws ShapeChangeAbortException {
+
 	result = r;
 	helper = new ImplementationSchemaTransformerHelper_GID();
 	helper.initialise(o, r, repositoryFileName);
+
+	List<String> implementationSchemasList = o.parameterAsStringList(null, PARAM_IMPLEMENTATION_SCHEMAS, null, true,
+		true);
+
+	if (implementationSchemasList.contains(NasSchemaConstants.AAA_AK_DEV_FULLNAME)) {
+	    implSchemaNameByAppSchemaFullName.put(NasSchemaConstants.AAA_AK_DEV_FULLNAME, "NAS-AK");
+	}
+
+	if (implementationSchemasList.contains(NasSchemaConstants.AAA_SCHEMA_7_1_FULLNAME)) {
+	    implSchemaNameByAppSchemaFullName.put(NasSchemaConstants.AAA_SCHEMA_7_1_FULLNAME, "NAS");
+	}
+
+	if (implementationSchemasList.contains(NasSchemaConstants.AAA_SCHEMA_DEV_FULLNAME)) {
+	    implSchemaNameByAppSchemaFullName.put(NasSchemaConstants.AAA_SCHEMA_DEV_FULLNAME, "NAS");
+	}
+
+	if (implementationSchemasList.contains(NasSchemaConstants.GN_SCHEMA_1_1_0_FULLNAME)) {
+	    implSchemaNameByAppSchemaFullName.put(NasSchemaConstants.GN_SCHEMA_1_1_0_FULLNAME, "NAS-GN 1.1");
+	}
+
+	if (implementationSchemasList.contains(NasSchemaConstants.LN_SCHEMA_1_1_0_FULLNAME)) {
+	    implSchemaNameByAppSchemaFullName.put(NasSchemaConstants.LN_SCHEMA_1_1_0_FULLNAME, "NAS-LN 1.1");
+	}
+
+	/*
+	 * TODO Problem wenn sowohl AAA-AS als auch abhängige Schemas transformiert
+	 * werden: das Klonen des AAA-AS (als Paket 'NAS') führt dazu, dass Unterklassen
+	 * aus abhängigen Schemas - wie z.B. LN_Landnutzung - mehrere Oberklassen haben,
+	 * einmal aus dem originalen AAA-AS und einmal aus dem geklonten Schema ('NAS').
+	 * Es müsste sichergestellt werden, dass zuerst das AAA-AS geklont wird und dass
+	 * in den Klons der abhängigen Schemas alle Connectors auf das originale AAA-AS
+	 * entfernt werden.
+	 * 
+	 * Beispiel aus ShapeChange-Log:
+	 * 
+	 * W The class 'GN_GeographischesNamensgut' is modelled as a feature type,
+	 * object type, data type, mixin, or union, but has more than one supertype of
+	 * the same kind. Some targets (e.g. the XmlSchema target) ignore all but one
+	 * (arbitrary) supertype.
+	 * 
+	 * W ... Context: Class 'Model::GeoInfoDok::Geographische Informationen::NAS-GN
+	 * 1.1::GN_GeographischesNamensgut'
+	 */
+
+	// weitere Mappings in Zukunft:
+	// "BR_Bodenrichtwerte" -> "NAS-BR"
+	// "GV_Geometrische Verbesserungen" -> "NAS-GV"
+	// "LB_Landbedeckung" -> "NAS-LB"
+
+	// TODO Schema dependencies sollten konfigurierbar sein.
+	SortedMap<String, List<String>> dependenciesBySchema = new TreeMap<>();
+
+	dependenciesBySchema.put(NasSchemaConstants.AAA_AK_DEV_FULLNAME, Arrays.asList(
+		/*
+		 * NOTE: Not using NAS for AAA 7.1 schema here, because xsd mapping should
+		 * suffice for GeoInfoDok schemas that depend upon the AAA schema.
+		 */
+		NasSchemaConstants.AAA_SCHEMA_7_1_FULLNAME,
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
+
+	dependenciesBySchema.put(NasSchemaConstants.AAA_SCHEMA_7_1_FULLNAME, Arrays.asList(/*
+											    * "Model::GeoInfoDok::AAA_Ausgabekatalog",
+											    * "Model::GeoInfoDok::AAA_Objektartenkatalog".
+											    */
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types",
+		"Model::ISO/TC 211::ISO 19107 Spatial schema::ISO 19107 Edition 1",
+		"Model::ISO/TC 211::Informative::Spatial Examples from ISO 19107::Application Schema",
+		"Model::ISO/TC 211::ISO 19108 Temporal schema::ISO 19108 Edition 1",
+		"Model::ISO/TC 211::ISO 19109 Rules for application schema::ISO 19109 Edition 2",
+		"Model::ISO/TC 211::ISO 19110 Methodology for feature cataloguing::ISO 19110 Edition 2",
+		"Model::ISO/TC 211::ISO 19111 Referencing by coordinates::ISO 19111 Edition 3",
+		"Model::ISO/TC 211::ISO 19115 Metadata::ISO 19115-1 Edition 1",
+		"Model::ISO/TC 211::ISO 19123 Schema for coverage geometry and functions::ISO 19123-1 Edition 1",
+		// Zur Ableitung der NAS benötigen wir ebenfalls ISO 19123-2 Edition 1
+		"Model::ISO/TC 211::ISO 19123 Schema for coverage geometry and functions::ISO 19123-2 Edition 1",
+		"Model::ISO/TC 211::ISO 19157 Data quality::ISO 19157-1 Edition 1",
+		"Model::OGC::Filter Encoding::Filter Encoding 2.0",
+		"Model::GeoInfoDok::Web Feature Service Erweiterungen::Web Feature Service Erweiterungen 2.0",
+		"Model::OGC::Web Feature Service::Web Feature Service 2.0", "Model::OGC::OWS Common::OWS Common 1.1"));
+
+	dependenciesBySchema.put(NasSchemaConstants.AAA_SCHEMA_DEV_FULLNAME, Arrays.asList(/*
+											    * "Model::GeoInfoDok::AAA_Ausgabekatalog",
+											    * "Model::GeoInfoDok::AAA_Objektartenkatalog".
+											    */
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types",
+		"Model::ISO/TC 211::ISO 19107 Spatial schema::ISO 19107 Edition 2",
+		"Model::ISO/TC 211::ISO 19108 Temporal schema::ISO 19108 Edition 1",
+		"Model::ISO/TC 211::ISO 19109 Rules for application schema::ISO 19109 Edition 2",
+		"Model::ISO/TC 211::ISO 19110 Methodology for feature cataloguing::ISO 19110 Edition 2",
+		"Model::ISO/TC 211::ISO 19111 Referencing by coordinates::ISO 19111 Edition 3",
+		"Model::ISO/TC 211::ISO 19115 Metadata::ISO 19115-1 Edition 1",
+		"Model::ISO/TC 211::ISO 19123 Schema for coverage geometry and functions::ISO 19123-1 Edition 1",
+		// Zur Ableitung der NAS benötigen wir ebenfalls ISO 19123-2 Edition 1
+		"Model::ISO/TC 211::ISO 19123 Schema for coverage geometry and functions::ISO 19123-2 Edition 1",
+		"Model::ISO/TC 211::ISO 19157 Data quality::ISO 19157-1 Edition 1",
+		"Model::OGC::Filter Encoding::Filter Encoding 2.0",
+		"Model::GeoInfoDok::Web Feature Service Erweiterungen::Web Feature Service Erweiterungen 2.0",
+		"Model::OGC::Web Feature Service::Web Feature Service 2.0", "Model::OGC::OWS Common::OWS Common 1.1"));
+
+	dependenciesBySchema.put(NasSchemaConstants.GN_SCHEMA_1_1_0_FULLNAME, Arrays.asList(
+		/*
+		 * NOTE: Not using NAS for AAA 7.1 schema here, because xsd mapping should
+		 * suffice for GeoInfoDok schemas that depend upon the AAA schema.
+		 */
+		NasSchemaConstants.AAA_SCHEMA_7_1_FULLNAME,
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
+
+	dependenciesBySchema.put(NasSchemaConstants.LN_SCHEMA_1_1_0_FULLNAME, Arrays.asList(
+		/*
+		 * NOTE: Not using NAS for AAA 7.1 schema here, because xsd mapping should
+		 * suffice for GeoInfoDok schemas that depend upon the AAA schema.
+		 */
+		NasSchemaConstants.AAA_SCHEMA_7_1_FULLNAME,
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
+
+	SortedMap<String, List<String>> relevantDependenciesBySchema = new TreeMap<>();
+	for (Entry<String, List<String>> e : dependenciesBySchema.entrySet()) {
+	    if (implSchemaNameByAppSchemaFullName.containsKey(e.getKey())) {
+		relevantDependenciesBySchema.put(e.getKey(), e.getValue());
+	    }
+	}
+
+	SortedSet<String> relevantSchemas = new TreeSet<>();
+
+	for (Entry<String, List<String>> e : relevantDependenciesBySchema.entrySet()) {
+	    relevantSchemas.addAll(e.getValue());
+	}
+
+	/*
+	 * remove implementation schemas from relevant schemas, so that these packages
+	 * are not loaded twice
+	 */
+	relevantSchemas.removeAll(implSchemaNameByAppSchemaFullName.keySet());
+
+	result.addProcessFlowInfo("Prepare model - Start");
+	helper.prepareModel(implSchemaNameByAppSchemaFullName, relevantSchemas);
+	result.addProcessFlowInfo("Prepare model - Completed");
+
+	/*
+	 * Stelle sicher, dass die Encoding Rule für bzw. basierend auf NAS 7 nur für
+	 * Schemas mit Bezug zu AAA-AS 7.x ausgeführt wird.
+	 */
+	List<String> invalidAaaVersionValues = helper.aaaVersionTagValues.stream()
+		.filter(v -> v != null && (v.isEmpty() || !v.startsWith("7"))).collect(Collectors.toList());
+	if (!invalidAaaVersionValues.isEmpty()) {
+	    result.addFatalError(
+		    "Invalider Wert für GID:AAAVersion gefunden. Erwartet wurde durchgängig die Version 7, gefunden wurden die Versionen "
+			    + StringUtils.join(helper.aaaVersionTagValues, ", ") + ". Invalide Werte: "
+			    + StringUtils.join(invalidAaaVersionValues, ", "));
+	    throw new ShapeChangeAbortException();
+	}
+
+	/*
+	 * Stelle nun sicher, dass die zu verarbeitenden Schemas alle auf derselben
+	 * AAA-Version basieren.
+	 */
+	if (helper.aaaVersionTagValues.size() != 1) {
+	    result.addFatalError(
+		    "Es wird genau 1 Wert für GID:AAAVersion in den zu transformierenden Schemas gefunden. Gefunden wurden "
+			    + helper.aaaVersionTagValues.size() + " Werte.");
+	    throw new ShapeChangeAbortException();
+	}
     }
 
     public void shutdown() {
@@ -76,108 +242,63 @@ public class NasTransformer_7_GID implements Transformer {
      */
     public void transform() throws ShapeChangeAbortException {
 
-	// TODO Die zu transformierenden Schemas sollte konfigurierbar sein
+	result.addProcessFlowInfo("Transforming now");
 
-//	implSchemaNameByAppSchemaFullName.put(
-//		NasSchemaConstants.AAA_SCHEMA_7_1_FULLNAME, "NAS");
+	if (appSchemasToProcessContainsAaaSchema()) {
 
-	// schemaMappings.put("AAA_Ausgabekatalog","NAS-AK");
-//	schemaMappings.put("BR_Bodenrichtwerte", "NAS-BR");
-//	schemaMappings.put("GN_Geographische Informationen","NAS-GN");
-//	schemaMappings.put("GV_Geometrische Verbesserungen","NAS-GV");
-//	schemaMappings.put("LB_Landbedeckung","NAS-LB");
-//	schemaMappings.put("LN_Landnutzung","NAS-LN");
+	    if ("7.1.2".equals(helper.relevantAaaVersion())) {
 
-	implSchemaNameByAppSchemaFullName.put(NasSchemaConstants.LN_SCHEMA_1_1_0_FULLNAME, "NAS-LN 1.1");
+		result.addProcessFlowInfo(
+			"Applying AAA Schema specific transformations for NAS 7.1.2 encoding rule, part 1");
+		applyAaaSchemaSpecificTransformationsNas712Part1();
 
-	// TODO Schema dependencies sollten konfigurierbar sein.
-	SortedMap<String, List<String>> dependenciesBySchema = new TreeMap<>();
+	    } else if ("7.1.3".equals(helper.relevantAaaVersion())) {
 
-	dependenciesBySchema.put(NasSchemaConstants.AAA_SCHEMA_7_1_FULLNAME, Arrays.asList(/*
-											    * "Model::GeoInfoDok::AAA_Ausgabekatalog",
-											    * "Model::GeoInfoDok::AAA_Objektartenkatalog".
-											    */
-		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types",
-		"Model::ISO/TC 211::ISO 19107 Spatial schema::ISO 19107 Edition 1",
-		"Model::ISO/TC 211::Informative::Spatial Examples from ISO 19107::Application Schema",
-		"Model::ISO/TC 211::ISO 19108 Temporal schema::ISO 19108 Edition 1",
-		"Model::ISO/TC 211::ISO 19109 Rules for application schema::ISO 19109 Edition 2",
-		"Model::ISO/TC 211::ISO 19110 Methodology for feature cataloguing::ISO 19110 Edition 2",
-		"Model::ISO/TC 211::ISO 19111 Referencing by coordinates::ISO 19111 Edition 3",
-		"Model::ISO/TC 211::ISO 19115 Metadata::ISO 19115-1 Edition 1",
-		"Model::ISO/TC 211::ISO 19123 Schema for coverage geometry and functions::ISO 19123-1 Edition 1",
-		// für die Erzeugung des NAS-Implementierungsschemas wird auch 19123-2 benötigt
-		"Model::ISO/TC 211::ISO 19123 Schema for coverage geometry and functions::ISO 19123-2 Edition 1",
-		"Model::ISO/TC 211::ISO 19157 Data quality::ISO 19157-1 Edition 1",
-		"Model::OGC::Filter Encoding::Filter Encoding 2.0",
-		"Model::GeoInfoDok::Web Feature Service Erweiterungen::Web Feature Service Erweiterungen 2.0",
-		"Model::OGC::Web Feature Service::Web Feature Service 2.0", "Model::OGC::OWS Common::OWS Common 1.1"));
+		result.addProcessFlowInfo(
+			"Applying AAA Schema specific transformations for NAS 7.1.3 encoding rule, part 1");
+		applyAaaSchemaSpecificTransformationsNas713Part1();
 
-	dependenciesBySchema.put("Model::GeoInfoDok::Landnutzung::LN_Landnutzung 1.1", Arrays.asList(
-		/*
-		 * NOTE: Not using NAS for AAA 7.1 schema here, because xsd mapping should
-		 * suffice for GeoInfoDok schemas that depend upon the AAA schema.
-		 */
-		NasSchemaConstants.AAA_SCHEMA_7_1_FULLNAME,
-		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"
-//		"Model::ISO/TC 211::ISO 19107 Spatial schema::ISO 19107 Edition 1",
-//		"Model::ISO/TC 211::Informative::Spatial Examples from ISO 19107::Application Schema",
-//		"Model::ISO/TC 211::ISO 19108 Temporal schema::ISO 19108 Edition 1",
-//		"Model::ISO/TC 211::ISO 19109 Rules for application schema::ISO 19109 Edition 2",
-//		"Model::ISO/TC 211::ISO 19110 Methodology for feature cataloguing::ISO 19110 Edition 2",
-//		"Model::ISO/TC 211::ISO 19111 Referencing by coordinates::ISO 19111 Edition 3",
-//		"Model::ISO/TC 211::ISO 19115 Metadata::ISO 19115-1 Edition 1",
-//		"Model::ISO/TC 211::ISO 19123 Schema for coverage geometry and functions::ISO 19123-1 Edition 1",
-//		// für die Erzeugung des NAS-Implementierungsschemas wird auch 19123-2 benötigt
-//		"Model::ISO/TC 211::ISO 19123 Schema for coverage geometry and functions::ISO 19123-2 Edition 1",
-//		"Model::ISO/TC 211::ISO 19157 Data quality::ISO 19157-1 Edition 1",
-//		"Model::OGC::Filter Encoding::Filter Encoding 2.0",
-//		"Model::GeoInfoDok::Web Feature Service Erweiterungen::Web Feature Service Erweiterungen 2.0",
-//		"Model::OGC::Web Feature Service::Web Feature Service 2.0", "Model::OGC::OWS Common::OWS Common 1.1"
-	));
-
-	SortedMap<String, List<String>> relevantDependenciesBySchema = new TreeMap<>();
-	for (Entry<String, List<String>> e : dependenciesBySchema.entrySet()) {
-	    if (implSchemaNameByAppSchemaFullName.containsKey(e.getKey())) {
-		relevantDependenciesBySchema.put(e.getKey(), e.getValue());
+	    } else {
+		result.addFatalError("GID:AAAVersion " + helper.relevantAaaVersion()
+			+ " wird nicht unterstützt. Die Version muss explizit umgesetzt sein, "
+			+ "damit die dafür passende Encoding Rule garantiert berücksichtigt wird.");
+		throw new ShapeChangeAbortException();
 	    }
 	}
 
-	SortedSet<String> relevantSchemas = new TreeSet<>();
-
-	for (Entry<String, List<String>> e : relevantDependenciesBySchema.entrySet()) {
-	    relevantSchemas.addAll(e.getValue());
-	}
-
-	helper.prepareModel(implSchemaNameByAppSchemaFullName, relevantSchemas);
-
-	List<String> invalidAaaVersionValues = helper.aaaVersionTagValues.stream()
-		.filter(v -> v != null && (v.isEmpty() || !v.startsWith("7"))).collect(Collectors.toList());
-	if (!invalidAaaVersionValues.isEmpty()) {
-	    result.addFatalError(
-		    "Invalider Wert für AAA:Version gefunden. Erwartet wurde durchgängig die Version 7, gefunden wurden die Versionen "
-			    + StringUtils.join(helper.aaaVersionTagValues, ", ") + ". Invalide Werte: "
-			    + StringUtils.join(invalidAaaVersionValues, ", "));
-	    throw new ShapeChangeAbortException();
-	}
-
-	if (appSchemasToProcessContainsAaaSchema()) {
-	    applyAaaSchemaSpecificNasTransformationsPart1();
-	}
-
+	result.addProcessFlowInfo("Setting tagged values");
 	helper.setTaggedValues();
 
+	result.addProcessFlowInfo("Resolving mixins");
 	helper.resolveMixins(true);
 
 	if (appSchemasToProcessContainsAaaSchema()) {
-	    applyAaaSchemaSpecificNasTransformationsPart2();
+
+	    if ("7.1.2".equals(helper.relevantAaaVersion())) {
+
+		result.addProcessFlowInfo(
+			"Applying AAA Schema specific transformations for NAS 7.1.2 encoding rule, part 2");
+		applyAaaSchemaSpecificTransformationsNas712Part2();
+
+	    } else if ("7.1.3".equals(helper.relevantAaaVersion())) {
+
+		result.addProcessFlowInfo(
+			"Applying AAA Schema specific transformations for NAS 7.1.3 encoding rule, part 2");
+		applyAaaSchemaSpecificTransformationsNas713Part2();
+
+	    } else {
+		result.addFatalError("GID:AAAVersion " + helper.relevantAaaVersion()
+			+ " wird nicht unterstützt. Die Version muss explizit umgesetzt sein, "
+			+ "damit die dafür passende Encoding Rule garantiert berücksichtigt wird.");
+		throw new ShapeChangeAbortException();
+	    }
 	}
     }
 
     /**
-     * Die Eigenschaften von AA_PMO und AA_Objekt werden wie bei Mixin-Klassen
-     * (siehe oben) auf "AD_PunktCoverage" und "AD_GitterCoverage" übertragen. Die
-     * konzeptuellen Attribute AA_PMO.ausdehnung, AD_PunktCoverage.geometrie und
+     * Die Eigenschaften von AA_PMO und AA_Objekt werden wie bei Mixin-Klassen auf
+     * "AD_PunktCoverage" und "AD_GitterCoverage" übertragen. Die konzeptuellen
+     * Attribute AA_PMO.ausdehnung, AD_PunktCoverage.geometrie und
      * AD_PunktCoverage.werte gelöscht.
      * 
      * Zusätzlich werden Vererbungsbeziehungen auf Implementierungen von
@@ -185,25 +306,29 @@ public class NasTransformer_7_GID implements Transformer {
      * 
      * Zuletzt wird AA_PMO gelöscht.
      */
-    private void applyAaaSchemaSpecificNasTransformationsPart2() {
+    private void applyAaaSchemaSpecificTransformationsNas712Part2() {
 
 	helper.deleteAttribute("AA_PMO", "ausdehnung");
 	helper.deleteAttribute("AD_PunktCoverage", "geometrie");
 	helper.deleteAttribute("AD_PunktCoverage", "werte");
 
-	Element e1 = helper.gidClasses.get("AA_Objekt");
+	EAElement eaElmt1 = helper.gidClasses.get("AA_Objekt");
+	Element e1 = helper.rep.GetElementByID(eaElmt1.getElementId());
 	if (e1 == null) {
 	    result.addError("Klasse 'AA_Objekt' nicht gefunden");
 	} else {
-	    Element e2 = helper.gidClasses.get("AA_PMO");
+	    EAElement eaElmt2 = helper.gidClasses.get("AA_PMO");
+	    Element e2 = helper.rep.GetElementByID(eaElmt2.getElementId());
 	    if (e2 == null) {
 		result.addError("Klasse 'AA_PMO' nicht gefunden");
 	    } else {
-		Element e3 = helper.gidClasses.get("AD_PunktCoverage");
+		EAElement eaElmt3 = helper.gidClasses.get("AD_PunktCoverage");
+		Element e3 = helper.rep.GetElementByID(eaElmt3.getElementId());
 		if (e3 == null) {
 		    result.addError("Klasse 'AD_PunktCoverage' nicht gefunden");
 		} else {
-		    Element e4 = helper.gidClasses.get("AD_GitterCoverage");
+		    EAElement eaElmt4 = helper.gidClasses.get("AD_GitterCoverage");
+		    Element e4 = helper.rep.GetElementByID(eaElmt4.getElementId());
 		    if (e4 == null) {
 			result.addError("Klasse 'AD_GitterCoverage' nicht gefunden");
 		    } else {
@@ -216,10 +341,6 @@ public class NasTransformer_7_GID implements Transformer {
 			    helper.cloneAttribute(a, e4);
 			}
 
-			/*
-			 * Für die Erzeugung des NAS-Implementierungsschemas werden die Classifier aus
-			 * 19123-2 benötigt.
-			 */
 			String iso19123_2_fullName = "Model::ISO/TC 211::ISO 19123 Schema for coverage geometry and functions::ISO 19123-2 Edition 1";
 			Optional<Element> mpcElmtOpt = helper.getElement(iso19123_2_fullName, "MultiPointCoverage");
 			Optional<Element> rgcElmtOpt = helper.getElement(iso19123_2_fullName, "RectifiedGridCoverage");
@@ -241,12 +362,30 @@ public class NasTransformer_7_GID implements Transformer {
 	helper.deleteClass("AA_PMO");
     }
 
-    private void applyAaaSchemaSpecificNasTransformationsPart1() {
+    /**
+     * Die Eigenschaften von AA_PMO und AA_Objekt werden wie bei Mixin-Klassen auf
+     * "AD_PunktCoverage" und "AD_GitterCoverage" übertragen. Die konzeptuellen
+     * Attribute AA_PMO.ausdehnung, AD_PunktCoverage.geometrie und
+     * AD_PunktCoverage.werte gelöscht.
+     * 
+     * Zusätzlich werden Vererbungsbeziehungen auf Implementierungen von
+     * "RectifiedGridCoverage" bzw. "MultiPointCoverage" gesetzt.
+     * 
+     * Zuletzt wird AA_PMO gelöscht.
+     */
+    private void applyAaaSchemaSpecificTransformationsNas713Part2() {
+
+	applyAaaSchemaSpecificTransformationsNas712Part2();
+    }
+
+    private void applyAaaSchemaSpecificTransformationsNas712Part1() {
+
 	/*
 	 * Die Modellelemente, die Inhalte besitzen, die nicht in die NAS umgesetzt
 	 * werden, werden bei der Ableitung des Implementierungsmodells für den
 	 * Datenaustausch entfernt:
 	 */
+	// wie beim NasTransformer_7
 	helper.deletePackage("AAA Versionierungsschema");
 	helper.deleteAttribute("AA_Objekt", "identifikator");
 	helper.deleteClass("AA_ObjektOhneRaumbezug");
@@ -287,22 +426,21 @@ public class NasTransformer_7_GID implements Transformer {
 	/*
 	 * Die folgenden Attribute erhalten einen neuen Typ:
 	 */
-	// TODO: Wurde laut Transformationsvorschrift für Unions auf GM_Object gesetzt
 	helper.changeType("AU_Punkthaufenobjekt", "position", "GM_MultiPoint");
-	// TODO: Wurde laut Transformationsvorschrift für Unions auf GM_Object gesetzt
 	helper.changeType("AU_KontinuierlichesLinienobjekt", "position", "GM_Curve");
 	helper.changeType("AG_Punktobjekt", "position", "GM_Point");
 	helper.changeType("AU_UmringObjekt_3D", "position", "GM_MultiCurve");
-	// TODO: Wurde laut Transformationsvorschrift für Unions auf GM_Object gesetzt
 	helper.changeType("AU_PunkthaufenObjekt_3D", "position", "GM_MultiPoint");
 
 	helper.changeType("AP_TransformationsMatrix_3D", "parameter", "doubleList");
+
 	helper.changeType("AX_DQOhneDatenerhebung", "herkunft", "LI_Lineage");
 	helper.changeType("AX_DQMitDatenerhebung", "herkunft", "LI_Lineage");
 	helper.changeTypeAndMultiplicity("AX_DQErhebung3D", "herkunft3D", "LI_Lineage", "0", "1");
 	helper.changeTypeAndMultiplicity("AX_DQPunktort", "herkunft", "LI_Lineage", "0", "1");
 	helper.changeType("AX_DQDachhoehe", "herkunft", "LI_Lineage");
 	helper.changeType("AX_DQBodenhoehe", "herkunft", "LI_Lineage");
+
 	helper.changeType("AX_Sperrauftrag", "uuidListe", "URI");
 	helper.changeType("AX_Entsperrauftrag", "uuidListe", "URI");
 	helper.changeType("ExceptionFortfuehrung", "bereitsGesperrteObjekte", "URI");
@@ -351,8 +489,123 @@ public class NasTransformer_7_GID implements Transformer {
 	helper.deleteClass("AX_LI_ProcessStep3D");
 	helper.deleteClass("AD_ReferenzierbaresGitter");
 	helper.deleteClass("AD_Wertematrix");
-	// helper.deleteClass( "AX_Listenelement3D" );
-	// helper.deleteClass( "AX_NullEnumeration3D" );
+    }
+
+    private void applyAaaSchemaSpecificTransformationsNas713Part1() {
+
+	/*
+	 * Die Modellelemente, die Inhalte besitzen, die nicht in die NAS umgesetzt
+	 * werden, werden bei der Ableitung des Implementierungsmodells für den
+	 * Datenaustausch entfernt:
+	 */
+	helper.deletePackage("AAA Versionierungsschema");
+	helper.deleteAttribute("AA_Objekt", "identifikator");
+	helper.deleteClass("AA_ObjektOhneRaumbezug");
+	helper.deleteClass("AX_Fortfuehrung");
+	helper.deleteClass("AX_Datenbank");
+	helper.deleteClass("AX_Operation_Datenbank");
+	helper.deleteClass("AX_TemporaererBereich");
+	helper.deleteClass("AX_NeuesObjekt");
+	helper.deleteClass("AX_GeloeschtesObjekt");
+	helper.deleteClass("AX_AktualisiertesObjekt");
+	helper.deleteClass("AX_Fortfuehrungsobjekt");
+
+	/*
+	 * Die Modellelemente, die Inhalte besitzen, die auf spezifische Weise in die
+	 * NAS umgesetzt werden sollen, werden entsprechend angepasst:
+	 */
+
+	/*
+	 * Die folgenden Attribute erhalten einen neuen Typ:
+	 */
+	/*
+	 * TODO TBD mit PG Revision GID
+	 */
+	helper.changeType("AU_Punkthaufenobjekt", "position", "Collection");
+	helper.updateTaggedValue("AU_Punkthaufenobjekt", "position", "collectionGeometryType", "point");
+
+	helper.updateTaggedValue("AU_Linienobjekt", "position", "collectionGeometryType", "curve");
+
+	/*
+	 * In NAS 7.1.2 war sowohl einzelne als auch Multi-Fläche erlaubt. Das setzen
+	 * wir hier ebenfalls um.
+	 */
+	helper.changeType("TA_MultiSurfaceComponent", "position", "Geometry");
+
+	/*
+	 * TODO TBD mit PG Revision GID
+	 */
+	helper.changeType("AU_UmringObjekt_3D", "position", "Collection");
+	helper.updateTaggedValue("AU_UmringObjekt_3D", "position", "collectionGeometryType", "curve");
+
+	/*
+	 * TODO TBD mit PG Revision GID
+	 */
+	helper.changeType("AU_PunkthaufenObjekt_3D", "position", "Collection");
+	helper.updateTaggedValue("AU_PunkthaufenObjekt_3D", "position", "collectionGeometryType", "point");
+
+	helper.changeType("AP_TransformationsMatrix_3D", "parameter", "doubleList");
+
+	helper.changeType("AX_DQOhneDatenerhebung", "herkunft", "LI_Lineage");
+	helper.changeType("AX_DQMitDatenerhebung", "herkunft", "LI_Lineage");
+	helper.changeTypeAndMultiplicity("AX_DQErhebung3D", "herkunft3D", "LI_Lineage", "0", "1");
+	helper.changeTypeAndMultiplicity("AX_DQPunktort", "herkunft", "LI_Lineage", "0", "1");
+	helper.changeType("AX_DQDachhoehe", "herkunft", "LI_Lineage");
+	helper.changeType("AX_DQBodenhoehe", "herkunft", "LI_Lineage");
+
+	helper.changeType("AX_Sperrauftrag", "uuidListe", "URI");
+	helper.changeType("AX_Entsperrauftrag", "uuidListe", "URI");
+	helper.changeType("ExceptionFortfuehrung", "bereitsGesperrteObjekte", "URI");
+	helper.changeType("ExceptionFortfuehrung", "nichtMehrAktuelleObjekte", "URI");
+	helper.changeType("ExceptionAAAFortfuehrungOderSperrung", "bereitsGesperrteObjekte", "URI");
+	helper.changeType("ExceptionAAAFortfuehrungOderSperrung", "nichtMehrAktuelleObjekte", "URI");
+	helper.changeType("ExceptionAAAEntsperren", "uuidListe", "URI");
+	helper.changeType("DCP", "HTTP", "URI");
+	helper.changeType("DCP", "email", "URI");
+	helper.changeType("AX_Fortfuehrungsergebnis", "fortfuehrungsnachweis", "Any");
+
+	/*
+	 * Verweise in den Projektsteuerungskatalog werden als XLink-href realisiert
+	 * (Map-Entry mit gml:Referencetype in ShapeChange-Konfiguration):
+	 */
+	helper.addAttribute("AA_Antrag", "art", "AA_Antragsart", "242");
+	helper.addAttribute("AA_Projektsteuerung", "art", "AA_Projektsteuerungsart", "249");
+	helper.addAttribute("AA_Vorgang", "art", "AA_Vorgangsart", "262");
+	helper.addAttribute("AA_Aktivitaet", "art", "AA_Aktivitaetsart", "304");
+
+	/*
+	 * Die Klassen des Projektsteuerungskatalogs werden gelöscht:
+	 */
+	helper.deleteClass("AA_Antragsart");
+	helper.deleteClass("AA_Projektsteuerungsart");
+	helper.deleteClass("AA_Vorgangsart");
+	helper.deleteClass("AA_Aktivitaetsart");
+	helper.deleteClass("AA_Projektsteuerungskatalog");
+	helper.deleteClass("AA_AktivitaetInVorgang");
+	helper.deleteClass("AA_VorgangInProzess");
+	helper.deleteClass("AA_Dokumentationsbedarf");
+	helper.deleteClass("AA_DurchfuehrungAktivitaet");
+	helper.deleteClass("AA_ProzesszuordnungAktivitaet");
+
+	/*
+	 * Als Folge der obigen Anpassungen können außerdem die folgenden Typen
+	 * gelöscht werden:
+	 */
+
+	helper.deleteClass("AA_PunktLinienThema");
+	helper.deleteClass("AX_LI_ProcessStep_OhneDatenerhebung");
+	helper.deleteClass("AX_LI_ProcessStep_MitDatenerhebung");
+	helper.deleteClass("AX_LI_ProcessStep_Punktort");
+	helper.deleteClass("AX_LI_ProcessStep_Bodenhoehe");
+	helper.deleteClass("AX_LI_ProcessStep_Dachhoehe");
+	helper.deleteClass("AX_LI_ProcessStep3D");
+	helper.deleteClass("AD_ReferenzierbaresGitter");
+	helper.deleteClass("AD_Wertematrix");
+	// Entsprechend können weitere Datentypen und Codesets gelöscht werden
+	helper.deleteClass("SequenceRule");
+	helper.deleteClass("GridCoordinate");
+	helper.deleteClass("GridEnvelope");
+	helper.deleteClass("SequenceType");
     }
 
     /**

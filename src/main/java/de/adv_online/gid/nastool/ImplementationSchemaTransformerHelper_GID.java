@@ -4,7 +4,7 @@
  * The class in this file implements the ShapeChange Target interface to 
  * generate and load the 3AP files.
  *
- * (c) 2009-2025 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
+ * (c) 2009-2026 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
  * Länder der Bundesrepublik Deutschland (AdV)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,8 +22,8 @@
  *
  * Contact:
  * interactive instruments GmbH
- * Trierer Strasse 70-72
- * 53115 Bonn
+ * Bundeskanzlerplatz 2d
+ * 53113 Bonn
  * Germany
  */
 
@@ -39,6 +39,8 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.sparx.Attribute;
 import org.sparx.AttributeTag;
 import org.sparx.Collection;
@@ -58,28 +60,39 @@ import de.interactive_instruments.shapechange.ea.util.EAConnectorEndUtil;
 import de.interactive_instruments.shapechange.ea.util.EAElementUtil;
 import de.interactive_instruments.shapechange.ea.util.EAException;
 import de.interactive_instruments.shapechange.ea.util.EAPackageUtil;
+import de.interactive_instruments.shapechange.ea.util.EARepositoryUtil;
 import de.interactive_instruments.shapechange.ea.util.EATaggedValue;
 import de.interactive_instruments.shapechange.ea.util.modelhelper.EAElement;
 import de.interactive_instruments.shapechange.ea.util.modelhelper.EAPackage;
 import de.interactive_instruments.shapechange.ea.util.modelhelper.EARepository;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Strings;
 
 public class ImplementationSchemaTransformerHelper_GID {
 
-    // FIXME Store EAElements and EAPackages instead of Element and Package objects
-
-    private Repository rep = null;
-    private EARepository eaRepo = null;
+    Repository rep = null;
+    EARepository eaRepo = null;
     private ShapeChangeResult result = null;
-    protected HashMap<String, Package> allPackages = new HashMap<String, Package>();
-    protected List<Package> gidPackages = new ArrayList<>();
-    public HashMap<String, Element> allClasses = new HashMap<String, Element>();
-    public HashMap<String, Element> gidClasses = new HashMap<String, Element>();
+
+    protected HashMap<String, EAPackage> allPackages = new HashMap<>();
+    protected HashMap<String, EAPackage> gidPackages = new HashMap<>();
+    HashMap<String, EAElement> allClasses = new HashMap<>();
+    HashMap<String, EAElement> gidClasses = new HashMap<>();
     private int SeqNo = 32000;
-    protected List<String> aaaVersionTagValues = new ArrayList<>();
-//    private String path = null;
-//    protected Package aaaPackage = null;
+    protected SortedSet<String> aaaVersionTagValues = new TreeSet<>();
+
+    protected SpecialRoleHandler specialRoleHandler = new SpecialRoleHandler();
+
+    /**
+     * @return Die GID:AAAVersion, die für diesen Durchlauf relevant ist.
+     *         <code>null</code>, falls kein eindeutiger Wert ermittelt werden
+     *         konnte.
+     */
+    public String relevantAaaVersion() {
+	if (this.aaaVersionTagValues.size() != 1) {
+	    return null;
+	} else {
+	    return this.aaaVersionTagValues.getFirst();
+	}
+    }
 
     public void initialise(Options o, ShapeChangeResult r, String repositoryFileName) throws ShapeChangeAbortException {
 	result = r;
@@ -108,8 +121,6 @@ public class ImplementationSchemaTransformerHelper_GID {
 	    r.addFatalError(null, 30, errormsg, repositoryFileName);
 	    throw new ShapeChangeAbortException();
 	}
-
-//	path = o.parameter("transformerTargetPath");
     }
 
     public void shutdown() {
@@ -150,8 +161,10 @@ public class ImplementationSchemaTransformerHelper_GID {
      * @param importedMixins tbd
      */
     public void resolveMixins(boolean importedMixins) {
+
 	List<String> tobedeleted = new ArrayList<String>();
-	for (Element e : gidClasses.values()) {
+	for (EAElement eaElmt : gidClasses.values()) {
+	    Element e = rep.GetElementByID(eaElmt.getElementId());
 	    String st = e.GetStereotype().toLowerCase();
 	    if (isTypeStereotype(st)) {
 		copyDown(e);
@@ -164,7 +177,9 @@ public class ImplementationSchemaTransformerHelper_GID {
 	}
 
 	if (importedMixins) {
-	    for (Element e : gidClasses.values()) {
+	    for (EAElement eaElmt : gidClasses.values()) {
+		Element e = rep.GetElementByID(eaElmt.getElementId());
+		result.addDebug("Now processing imported mixins for GID class " + e.GetName());
 		boolean cont = true;
 		while (cont) {
 		    cont = false;
@@ -218,8 +233,10 @@ public class ImplementationSchemaTransformerHelper_GID {
      */
     public void setTaggedValues() {
 
-	for (Package pkg : gidPackages) {
-
+	for (EAPackage eaPkg : gidPackages.values()) {
+	    result.addDebug("Now looking up package " + eaPkg.getFullName() + " (PkgId: " + eaPkg.getPkgId()
+		    + ", Pkg ElementId: " + eaPkg.getPkgElementId() + ")");
+	    Package pkg = rep.GetPackageByID(eaPkg.getPkgId());
 	    try {
 		EAPackageUtil.updateTaggedValue(pkg, "xsdEncodingRule", "NAS", false);
 	    } catch (EAException ex) {
@@ -227,8 +244,11 @@ public class ImplementationSchemaTransformerHelper_GID {
 	    }
 	}
 
-	for (Element e : gidClasses.values()) {
-	    String n = e.GetName();
+	for (EAElement eaElmt : gidClasses.values()) {
+	    result.addDebug(
+		    "Now setting tagged values on gid class " + eaElmt.getName() + " (" + eaElmt.getFullName() + ")");
+	    Element e = rep.GetElementByID(eaElmt.getElementId());
+	    String n = eaElmt.getName();
 	    String st = e.GetStereotype().toLowerCase();
 	    String type = e.GetType().toLowerCase();
 
@@ -258,10 +278,10 @@ public class ImplementationSchemaTransformerHelper_GID {
 	    deleteMethods(e);
 
 	    /*
-	     * Nicht navigierbare Assoziationsrollen werden - navigierbar gesetzt - sofern
-	     * nicht vorhanden mit dem Namen „inversZu_“ und den Namen der inversen Rolle
-	     * versehen - mit einer minimalen Kardinalität von "0" versehen - der UML
-	     * Tagged Value "reverseRoleNAS" wird auf „true“ gesetzt
+	     * Nicht navigierbare Assoziationsrollen werden: 1. navigierbar gesetzt, 2.
+	     * sofern nicht vorhanden mit dem Namen „inversZu_“ und den Namen der inversen
+	     * Rolle versehen, 3. mit einer minimalen Kardinalität von "0" versehen, 4. der
+	     * UML Tagged Value "reverseRoleNAS" wird auf „true“ gesetzt
 	     */
 	    boolean cont = true;
 	    ConnectorEnd ei1, ei2;
@@ -391,25 +411,28 @@ public class ImplementationSchemaTransformerHelper_GID {
 
     public void addGeneralization(Element e1, Element e2) {
 	if (e1 != null && e2 != null) {
-	    e1.GetConnectors().Refresh();
-	    Connector r = e1.GetConnectors().AddNew("", "Generalization");
-	    if (r == null)
-		result.addError(
-			"Fehler beim Erzeugen der Generalisierung '" + e1.GetName() + "'-'" + e2.GetName() + "'");
-	    else {
-		r.SetSupplierID(e2.GetElementID());
+
+	    try {
+		EARepositoryUtil.createEAGeneralization(rep, e1, e2);
 		result.addDebug("Generalisierung '" + e1.GetName() + "'-'" + e2.GetName() + "' erzeugt");
-		if (!r.Update()) {
-		    result.addError("Fehler bei Erzeugung der Generalisierung '" + e1.GetName() + "'-'" + e2.GetName()
-			    + "': " + r.GetLastError());
-		}
+
+	    } catch (EAException ex) {
+		result.addError("Fehler beim Erzeugen der Generalisierung '" + e1.GetName() + "'-'" + e2.GetName()
+			+ "': " + ex.getMessage());
 	    }
 	}
     }
 
     public void removeGeneralization(String sub, String sup) {
-	org.sparx.Element e1 = allClasses.get(sub);
-	org.sparx.Element e2 = allClasses.get(sup);
+
+	// TODO move removal of generalization relationship to the EA util classes
+
+	EAElement eaElmt1 = gidClasses.get(sub);
+
+	EAElement eaElmt2 = gidClasses.containsKey(sup) ? gidClasses.get(sup) : allClasses.get(sup);
+
+	Element e1 = rep.GetElementByID(eaElmt1.getElementId());
+	Element e2 = rep.GetElementByID(eaElmt2.getElementId());
 	if (e1 == null) {
 	    result.addError("Klasse '" + sub + "' nicht gefunden.");
 	} else if (e2 == null) {
@@ -442,44 +465,63 @@ public class ImplementationSchemaTransformerHelper_GID {
 	copyDown(e, e);
     }
 
-    protected void copyDown(Element e0, Element e) {
-	if (e0.GetLocked()) {
-	    result.addWarning("Element '" + e0.GetName() + "' ist gesperrt und wird ignoriert.");
-	} /*
-	   * FIXME else if (!gidClasses.containsValue(e0)) {
-	   * result.addInfo("Element '"+e0.GetName()
-	   * +"' ist nicht Teil des Anwendungsschemas und wird ignoriert."); }
-	   */ else {
-	    for (Connector r : e.GetConnectors()) {
-		if (r.GetType().equals("Generalization") && r.GetSupplierID() == e.GetElementID()) {
-		    Element e2 = rep.GetElementByID(r.GetClientID());
-		    if (e2 == null) {
+    protected void copyDown(Element classToCopyDown, Element contextForCopyingDown) {
+
+	int classToCopyDownElementId = classToCopyDown.GetElementID();
+
+	if (classToCopyDown.GetLocked()) {
+	    result.addWarning("Element '" + classToCopyDown.GetName() + "' ist gesperrt und wird ignoriert.");
+	} else if (!gidClasses.values().stream().anyMatch(elmt -> elmt.getElementId() == classToCopyDownElementId)) {
+	    result.addInfo("Element '" + classToCopyDown.GetName()
+		    + "' ist nicht Teil des Anwendungsschemas und wird ignoriert.");
+	} else {
+	    for (Connector conn : contextForCopyingDown.GetConnectors()) {
+		// note: clientId = element at source end, supplierId = element at target end
+
+		/*
+		 * FIXME Wenn man die Reihenfolge der Verarbeitung der Unterklassen einheitlich
+		 * gestalten möchte dann müsste man hier zunächst alle Vererbungsbeziehungen
+		 * einsammeln und diese dann passend sortieren (z.B. alphabetisch aufsteigend
+		 * nach Name der Unterklasse).
+		 */
+		if (conn.GetType().equals("Generalization")
+			&& conn.GetSupplierID() == contextForCopyingDown.GetElementID()) {
+		    /*
+		     * contextForCopyingDown is supertype; determine the subtype identified in this
+		     * generalization connector
+		     */
+		    int clientId = conn.GetClientID();
+		    Element subtype = rep.GetElementByID(clientId);
+		    if (subtype == null) {
 			// Nichts zu tun
-		    } /*
-		       * FIXME else if (!gidClasses.containsKey(e2.GetName())) {
-		       * result.addInfo("Element '"+e2.GetName()
-		       * +"' ist nicht Teil des Anwendungsschemas und wird ignoriert."); }
-		       */ else {
-			String st = e2.GetStereotype().toLowerCase();
+		    } else if (!gidClasses.values().stream().anyMatch(elmt -> elmt.getElementId() == clientId)) {
+			result.addInfo("Element '" + subtype.GetName()
+				+ "' ist nicht Teil des Anwendungsschemas und wird ignoriert.");
+		    } else {
+			String st = subtype.GetStereotype().toLowerCase();
 			if (isTypeStereotype(st)) {
-			    copyDown(e0, e2);
-			} else if (!gidClasses.containsKey(e2.GetName())) {
-			    result.addInfo("Element '" + e2.GetName()
-				    + "' ist nicht Teil des Anwendungsschemas und wird ignoriert.");
-			} else {
-			    for (Attribute a : e0.GetAttributes()) {
+			    // subtype is mixin, so copy down to its subclasses
+			    copyDown(classToCopyDown, subtype);
+			}
+			// 2026-02-24 JE: überflüssig da bereits zuvor gecheckt?
+//			else if (!gidClasses.containsKey(e2.GetName())) {
+//			    result.addInfo("Element '" + e2.GetName()
+//				    + "' ist nicht Teil des Anwendungsschemas und wird ignoriert.");
+//			} 
+			else {
+			    for (Attribute a : classToCopyDown.GetAttributes()) {
 				try {
-				    cloneAttribute(a, e2);
+				    cloneAttribute(a, subtype);
 				} catch (Exception ex) {
 				    result.addError("Fehler beim Clonen von Attribut '" + a.GetName()
-					    + "' (Zielklasse '" + e2.GetName() + "'): " + e2.GetLastError());
+					    + "' (Zielklasse '" + subtype.GetName() + "'): " + subtype.GetLastError());
 				}
 			    }
 			    SortedMap<String, Connector> map = new TreeMap<String, Connector>();
-			    for (Connector r2 : e0.GetConnectors()) {
+			    for (Connector r2 : classToCopyDown.GetConnectors()) {
 				String rt = r2.GetType();
 				if (rt.equals("Association") || rt.equals("Aggregation")) {
-				    String key = (r2.GetClientID() == e0.GetElementID()
+				    String key = (r2.GetClientID() == classToCopyDown.GetElementID()
 					    ? rep.GetElementByID(r2.GetSupplierID()).GetName() + "."
 						    + r2.GetSupplierEnd().GetRole() + "." + r2.GetClientEnd().GetRole()
 					    : rep.GetElementByID(r2.GetClientID()).GetName() + "."
@@ -493,10 +535,10 @@ public class ImplementationSchemaTransformerHelper_GID {
 			    }
 			    for (Connector r2 : map.values()) {
 				try {
-				    cloneAssociation(r2, e0, e2);
+				    cloneAssociation(r2, classToCopyDown, subtype);
 				} catch (Exception ex) {
-				    result.addError("Fehler beim Clonen von Relation '" + e0.GetName() + "'/'"
-					    + e2.GetName() + "'");
+				    result.addError("Fehler beim Clonen von Relation '" + classToCopyDown.GetName()
+					    + "'/'" + subtype.GetName() + "'");
 				}
 			    }
 			}
@@ -537,42 +579,49 @@ public class ImplementationSchemaTransformerHelper_GID {
 	}
     }
 
-    private void cloneAssociation(Connector r1, Element e1, Element e2) {
+    private void cloneAssociation(Connector associationWithSupertype, Element supertype, Element subtype) {
 	Connector r2;
 	Element e3;
-	if (r1.GetClientID() == e1.GetElementID()) {
-	    e3 = rep.GetElementByID(r1.GetSupplierID());
-	    e2.GetConnectors().Refresh();
-	    r2 = e2.GetConnectors().AddNew("", r1.GetType());
+	if (associationWithSupertype.GetClientID() == supertype.GetElementID()) {
+	    // supertype is association source
+	    e3 = rep.GetElementByID(associationWithSupertype.GetSupplierID());
+	    // add new association in subtype, using the target from the original
+	    // association as target
+	    subtype.GetConnectors().Refresh();
+	    r2 = subtype.GetConnectors().AddNew("", associationWithSupertype.GetType());
 	    if (r2 == null) {
-		result.addError("Fehler beim Clonen von Relation '" + e1.GetName() + "'/'" + e2.GetName() + "'-'"
-			+ e3.GetName() + "'");
+		result.addError("Fehler beim Clonen von Relation '" + supertype.GetName() + "'/'" + subtype.GetName()
+			+ "'-'" + e3.GetName() + "'");
 		return;
 	    }
 	    r2.SetSupplierID(e3.GetElementID());
 	} else {
-	    e3 = rep.GetElementByID(r1.GetClientID());
+	    // supertype is association target
+	    e3 = rep.GetElementByID(associationWithSupertype.GetClientID());
+	    // add new association in association source element, using the subtype as
+	    // target
 	    e3.GetConnectors().Refresh();
-	    r2 = e3.GetConnectors().AddNew("", r1.GetType());
+	    r2 = e3.GetConnectors().AddNew("", associationWithSupertype.GetType());
 	    if (r2 == null) {
-		result.addError("Fehler beim Clonen von Relation '" + e1.GetName() + "'/'" + e2.GetName() + "'-'"
-			+ e3.GetName() + "'");
+		result.addError("Fehler beim Clonen von Relation '" + supertype.GetName() + "'/'" + subtype.GetName()
+			+ "'-'" + e3.GetName() + "'");
 		return;
 	    }
-	    r2.SetSupplierID(e2.GetElementID());
+	    r2.SetSupplierID(subtype.GetElementID());
 	}
 
 	r2.SetDirection("Bi-Directional");
 
-	result.addDebug("Relation '" + e1.GetName() + "'/'" + e2.GetName() + "'-'" + e3.GetName() + "' geclont");
+	result.addDebug(
+		"Relation '" + supertype.GetName() + "'/'" + subtype.GetName() + "'-'" + e3.GetName() + "' geclont");
 	if (!r2.Update()) {
-	    result.addError("Fehler beim Clonen von Relation '" + e1.GetName() + "'/'" + e2.GetName() + "'-'"
-		    + e3.GetName() + "': " + r2.GetLastError());
+	    result.addError("Fehler beim Clonen von Relation '" + supertype.GetName() + "'/'" + subtype.GetName()
+		    + "'-'" + e3.GetName() + "': " + r2.GetLastError());
 	}
 
 	ConnectorEnd r1c, r1s, r2c, r2s;
-	r1c = r1.GetClientEnd();
-	r1s = r1.GetSupplierEnd();
+	r1c = associationWithSupertype.GetClientEnd();
+	r1s = associationWithSupertype.GetSupplierEnd();
 	r2c = r2.GetClientEnd();
 	r2s = r2.GetSupplierEnd();
 
@@ -584,8 +633,8 @@ public class ImplementationSchemaTransformerHelper_GID {
 	    s = "0" + s.substring(1);
 	r2c.SetCardinality(s);
 
-	if (r1.GetClientID() == e1.GetElementID()) {
-	    r2c.SetRole(r1c.GetRole() + "_" + e2.GetName());
+	if (associationWithSupertype.GetClientID() == supertype.GetElementID()) {
+	    r2c.SetRole(r1c.GetRole() + "_" + subtype.GetName());
 	} else {
 	    r2c.SetRole(r1c.GetRole());
 	}
@@ -610,10 +659,10 @@ public class ImplementationSchemaTransformerHelper_GID {
 	    s = "0" + s.substring(1);
 	r2s.SetCardinality(s);
 
-	if (r1.GetClientID() == e1.GetElementID()) {
+	if (associationWithSupertype.GetClientID() == supertype.GetElementID()) {
 	    r2s.SetRole(r1s.GetRole());
 	} else {
-	    r2s.SetRole(r1s.GetRole() + "_" + e2.GetName());
+	    r2s.SetRole(r1s.GetRole() + "_" + subtype.GetName());
 	}
 	r2s.SetRoleNote(r1s.GetRoleNote());
 
@@ -629,8 +678,8 @@ public class ImplementationSchemaTransformerHelper_GID {
 	for (RoleTag tv : r1c.GetTaggedValues()) {
 	    RoleTag tv2 = r2c.GetTaggedValues().AddNew(tv.GetTag(), tv.GetValue());
 	    if (!tv2.Update()) {
-		result.addError("Fehler beim Clonen von Relation '" + e1.GetName() + "'/'" + e2.GetName() + "'-'"
-			+ e3.GetName() + "': " + tv.GetLastError());
+		result.addError("Fehler beim Clonen von Relation '" + supertype.GetName() + "'/'" + subtype.GetName()
+			+ "'-'" + e3.GetName() + "': " + tv.GetLastError());
 	    }
 	    r2c.GetTaggedValues().Refresh();
 
@@ -639,70 +688,104 @@ public class ImplementationSchemaTransformerHelper_GID {
 	for (RoleTag tv : r1s.GetTaggedValues()) {
 	    RoleTag tv2 = r2s.GetTaggedValues().AddNew(tv.GetTag(), tv.GetValue());
 	    if (!tv2.Update()) {
-		result.addError("Fehler beim Clonen von Relation '" + e1.GetName() + "'/'" + e2.GetName() + "'-'"
-			+ e3.GetName() + "': " + tv.GetLastError());
+		result.addError("Fehler beim Clonen von Relation '" + supertype.GetName() + "'/'" + subtype.GetName()
+			+ "'-'" + e3.GetName() + "': " + tv.GetLastError());
 	    }
 	    r2s.GetTaggedValues().Refresh();
 
 	}
 
-	if (r1.GetClientID() == e1.GetElementID()) {
-	    updateTaggedValueRole(r2c, "sequenceNumber", Integer.valueOf(SeqNo++).toString(), true);
-	    updateTaggedValueRole(r2s, "sequenceNumber", Integer.valueOf(SeqNo++).toString(), false);
+	String r2cRoleName = r2c.GetRole();
+	String r2sRoleName = r2s.GetRole();
+	if (associationWithSupertype.GetClientID() == supertype.GetElementID()) {
+	    updateTaggedValueRole(r2c, "sequenceNumber", determineSequenceNumber(r2cRoleName),
+		    determineForceSequenceNumberTagUpdate(r2cRoleName, true));
+	    updateTaggedValueRole(r2s, "sequenceNumber", determineSequenceNumber(r2sRoleName),
+		    determineForceSequenceNumberTagUpdate(r2sRoleName, false));
 	} else {
-	    updateTaggedValueRole(r2c, "sequenceNumber", Integer.valueOf(SeqNo++).toString(), false);
-	    updateTaggedValueRole(r2s, "sequenceNumber", Integer.valueOf(SeqNo++).toString(), true);
+	    updateTaggedValueRole(r2c, "sequenceNumber", determineSequenceNumber(r2cRoleName),
+		    determineForceSequenceNumberTagUpdate(r2cRoleName, false));
+	    updateTaggedValueRole(r2s, "sequenceNumber", determineSequenceNumber(r2sRoleName),
+		    determineForceSequenceNumberTagUpdate(r2sRoleName, true));
 	}
 
 	r2c.Update();
 	r2s.Update();
     }
 
-    protected void schemaLocationOfPackage(String name, String locprefix) {
-	org.sparx.Package p = allPackages.get(name);
-	if (p != null) {
-	    Element e = p.GetElement();
-	    Collection<org.sparx.TaggedValue> cTV = e.GetTaggedValues();
-	    org.sparx.TaggedValue tv = cTV.GetByName("xsdDocument");
-	    if (tv == null) {
-		result.addError("TaggedValue 'xsdDocument' nicht vorhanden bei Paket '" + e.GetName() + "'");
-	    } else {
-		String v2 = tv.GetValue();
-		tv.SetValue(locprefix + v2);
-		if (!tv.Update()) {
-		    result.addError("Fehler beim Setzen von TaggedValue 'xsdDocument'-'" + locprefix + v2 + "': "
-			    + tv.GetLastError());
-		} else {
-		    result.addDebug(
-			    "Setzen von TaggedValue 'xsdDocument'-'" + locprefix + v2 + "' (alter Wert: '" + v2 + "')");
-		}
-	    }
+    private boolean determineForceSequenceNumberTagUpdate(String roleName, boolean defaultForForce) {
+	return defaultForForce || specialRoleHandler.forceSequenceNumberTagUpdate(roleName);
+    }
+
+    private String determineSequenceNumber(String roleName) {
+
+	Optional<String> specialSequenceNumberOpt = specialRoleHandler.determineSpecialSequenceNumber(roleName);
+
+	if (specialSequenceNumberOpt.isPresent()) {
+	    return specialSequenceNumberOpt.get();
+	} else {
+	    return Integer.valueOf(SeqNo++).toString();
+	}
+    }
+
+//    protected void schemaLocationOfPackage(String name, String locprefix) {
+//	EAPackage eaPkg = allPackages.get(name);
+//	Package p = rep.GetPackageByID(eaPkg.getPkgId());
+//	if (p != null) {
+//	    Element e = p.GetElement();
+//	    Collection<org.sparx.TaggedValue> cTV = e.GetTaggedValues();
+//	    org.sparx.TaggedValue tv = cTV.GetByName("xsdDocument");
+//	    if (tv == null) {
+//		result.addError("TaggedValue 'xsdDocument' nicht vorhanden bei Paket '" + e.GetName() + "'");
+//	    } else {
+//		String v2 = tv.GetValue();
+//		tv.SetValue(locprefix + v2);
+//		if (!tv.Update()) {
+//		    result.addError("Fehler beim Setzen von TaggedValue 'xsdDocument'-'" + locprefix + v2 + "': "
+//			    + tv.GetLastError());
+//		} else {
+//		    result.addDebug(
+//			    "Setzen von TaggedValue 'xsdDocument'-'" + locprefix + v2 + "' (alter Wert: '" + v2 + "')");
+//		}
+//	    }
+//	} else {
+//	    result.addError("Package '" + name + "' nicht gefunden.");
+//	}
+//    }
+
+    public void deletePackage(String name) {
+
+	if (allPackages.containsKey(name)) {
+	    EAPackage eaPkg = allPackages.get(name);
+	    EARepositoryUtil.deletePackage(rep, eaPkg.getPkgId());
+
+	    this.allPackages.remove(name);
+	    this.gidPackages.remove(name);
+
+	    // also remove classes and subpackages
+	    this.removeClasses(this.gidClasses, eaPkg.getFullName());
+	    this.removeClasses(this.allClasses, eaPkg.getFullName());
+
+	    this.removePackages(this.gidPackages, eaPkg.getFullName());
+	    this.removePackages(this.allPackages, eaPkg.getFullName());
 	} else {
 	    result.addError("Package '" + name + "' nicht gefunden.");
 	}
     }
 
-    public void deletePackage(String name) {
-	org.sparx.Package e = allPackages.get(name);
-	if (e != null) {
-	    Package parent = rep.GetPackageByID(e.GetParentID());
-	    Package ei;
-	    Collection<Package> c = parent.GetPackages();
-	    for (short i = 0; i < c.GetCount(); i++) {
-		ei = c.GetAt(i);
-		if (ei.GetPackageID() == e.GetPackageID()) {
-		    c.Delete(i);
-		    if (!parent.Update()) {
-			result.addError("Fehler beim Löschen von Package '" + name + "': " + parent.GetLastError());
-		    } else {
-			result.addDebug("Package '" + name + "' gelöscht.");
-		    }
-		    c.Refresh();
-		    break;
-		}
-	    }
-	} else {
-	    result.addError("Package '" + name + "' nicht gefunden.");
+    private void removeClasses(HashMap<String, EAElement> classesByNameMap, String fullNamePrefix) {
+	List<EAElement> classesToRemove = classesByNameMap.values().stream()
+		.filter(elmt -> elmt.getFullName().startsWith(fullNamePrefix)).toList();
+	for (EAElement e : classesToRemove) {
+	    classesByNameMap.remove(e.getName());
+	}
+    }
+
+    private void removePackages(HashMap<String, EAPackage> packagesByNameMap, String fullNamePrefix) {
+	List<EAPackage> packagesToRemove = packagesByNameMap.values().stream()
+		.filter(pkg -> pkg.getFullName().startsWith(fullNamePrefix)).toList();
+	for (EAPackage p : packagesToRemove) {
+	    packagesByNameMap.remove(p.getName());
 	}
     }
 
@@ -718,7 +801,6 @@ public class ImplementationSchemaTransformerHelper_GID {
      */
 
     private void updateTaggedValueRole(ConnectorEnd ce, String name, String value, boolean force) {
-	org.sparx.RoleTag tv = null;
 
 	String existingTVValue = EAConnectorEndUtil.taggedValue(ce, name);
 
@@ -753,30 +835,23 @@ public class ImplementationSchemaTransformerHelper_GID {
     }
 
     public void deleteClass(String name) {
-	org.sparx.Element e = gidClasses.get(name);
-	if (e != null) {
-	    Package parent = rep.GetPackageByID(e.GetPackageID());
-	    Element ei;
-	    Collection<Element> c = parent.GetElements();
-	    for (short i = 0; i < c.GetCount(); i++) {
-		ei = c.GetAt(i);
-		if (ei.GetElementID() == e.GetElementID()) {
-		    c.Delete(i);
-		    if (!parent.Update()) {
-			result.addError("Fehler beim Löschen von Klasse '" + name + "': " + parent.GetLastError());
-		    } else {
-			result.addDebug("Klasse '" + name + "' gelöscht.");
-		    }
-		    c.Refresh();
-		    break;
-		}
-	    }
+
+	if (gidClasses.containsKey(name)) {
+	    EAElement eaElmt = gidClasses.get(name);
+	    Package parent = rep.GetPackageByID(eaElmt.getPackageId());
+	    EAPackageUtil.deleteElement(parent, eaElmt.getElementId());
+
+	    this.allClasses.remove(eaElmt.getName());
+	    this.gidClasses.remove(eaElmt.getName());
 	} else {
 	    result.addError("Klasse '" + name + "' nicht gefunden.");
 	}
     }
 
     private void deleteMethods(Element e) {
+
+	// TODO nach EA utils verschieben
+
 	while (e.GetMethods().GetCount() > 0) {
 	    e.GetMethods().Delete((short) 0);
 	    if (!e.Update()) {
@@ -790,84 +865,67 @@ public class ImplementationSchemaTransformerHelper_GID {
     }
 
     public void addAttribute(String cname, String name, String type, String sequenceNumber) {
-	org.sparx.Element e = allClasses.get(cname);
-	if (e != null) {
-	    Attribute a = e.GetAttributes().AddNew(name, type);
-	    if (!a.Update()) {
-		result.addError("Fehler beim Ergänzen von Attribut '" + cname + "." + name + "': " + a.GetLastError());
-	    } else {
-		result.addDebug("Attribut '" + cname + "." + name + "' ergänzt.");
-	    }
-	    e.GetAttributes().Refresh();
+
+	if (gidClasses.containsKey(cname)) {
+
+	    EAElement eaElmt = gidClasses.get(cname);
+	    Element e = rep.GetElementByID(eaElmt.getElementId());
+
+	    EAElement typeElmt = gidClasses.containsKey(type) ? gidClasses.get(type) : allClasses.get(type);
+
 	    try {
-		EAAttributeUtil.setTaggedValue(a, "sequenceNumber", sequenceNumber);
+		Attribute att = EAElementUtil.createEAAttribute(e, name, null, null, null, null, false, false, false,
+			null, false, null, type, typeElmt != null ? typeElmt.getElementId() : null);
+
+		EAAttributeUtil.setTaggedValue(att, "sequenceNumber", sequenceNumber);
+
 	    } catch (EAException ex) {
-		result.addError(ex.getMessage());
+		result.addError("Fehler beim Ergänzen von Attribut '" + cname + "." + name + "': " + ex.getMessage());
 	    }
 	} else {
 	    result.addError("Klasse '" + cname + "' nicht gefunden.");
 	}
     }
 
-    public void deleteAttribute(String cname, String name) {
-	org.sparx.Element e = allClasses.get(cname);
-	if (e != null) {
+    public void deleteAttribute(String cname, String attName) {
 
-	    // FIXME Extend EAElementUtil to cover attribute deletion?
+	if (gidClasses.containsKey(cname)) {
 
-	    Attribute ei;
-	    Collection<Attribute> c = e.GetAttributes();
-	    for (short i = 0; i < c.GetCount(); i++) {
-		ei = c.GetAt(i);
-		if (ei.GetName().equals(name)) {
-		    c.Delete(i);
-		    if (!e.Update()) {
-			result.addError(
-				"Fehler beim Löschen von Attribut '" + cname + "." + name + "': " + e.GetLastError());
-		    } else {
-			result.addDebug("Attribut '" + cname + "." + name + "' gelöscht.");
-		    }
-		    c.Refresh();
-		    break;
-		}
-	    }
+	    EAElement eaElmt = gidClasses.get(cname);
+	    Element e = rep.GetElementByID(eaElmt.getElementId());
+	    EAElementUtil.deleteAttribute(e, attName);
 	} else {
 	    result.addError("Klasse '" + cname + "' nicht gefunden.");
 	}
     }
 
     public void changeTypeAndMultiplicity(String cname, String name, String tname, String lower, String upper) {
-	org.sparx.Element e = allClasses.get(cname);
-	if (e != null) {
-	    Attribute ei;
-	    Collection<Attribute> c = e.GetAttributes();
-	    for (short i = 0; i < c.GetCount(); i++) {
-		ei = c.GetAt(i);
-		if (ei.GetName().equals(name)) {
 
-		    try {
-			EAAttributeUtil.setEAType(ei, tname);
+	if (gidClasses.containsKey(cname)) {
 
-			/*
-			 * FIXME - eigentlich müsste man die erlaubten Dependencies durchgehen und
-			 * korrekt verlinken; für die XSD-Ableitung ist das aber unerheblich
-			 */
-			EAAttributeUtil.setEAClassifierID(ei, 0);
-			result.addDebug("Typ von Attribut '" + cname + "." + name + "' geändert.");
-		    } catch (EAException ex) {
-			result.addError("Fehler beim Setzen des Typs von Attribut '" + cname + "." + name + "': "
-				+ ex.getMessage());
-		    }
+	    EAElement eaElmt = gidClasses.get(cname);
+	    Element e = rep.GetElementByID(eaElmt.getElementId());
 
-		    try {
-			EAAttributeUtil.setEALowerBound(ei, lower);
-			EAAttributeUtil.setEAUpperBound(ei, upper);
-			result.addDebug("Multiplizität von Attribut '" + cname + "." + name + "' geändert.");
-		    } catch (EAException ex) {
-			result.addError("Fehler beim Setzen der Multiplizität von Attribut '" + cname + "." + name
-				+ "': " + ex.getMessage());
-		    }
-		    break;
+	    Attribute att = EAElementUtil.getAttributeByName(e, name);
+
+	    if (att != null) {
+		try {
+		    EAAttributeUtil.setEAType(att, tname);
+		    EAElement typeElmt = gidClasses.containsKey(tname) ? gidClasses.get(tname) : allClasses.get(tname);
+		    EAAttributeUtil.setEAClassifierID(att, typeElmt == null ? 0 : typeElmt.getElementId());
+		    result.addDebug("Typ von Attribut '" + cname + "." + name + "' geändert.");
+		} catch (EAException ex) {
+		    result.addError("Fehler beim Setzen des Typs von Attribut '" + cname + "." + name + "': "
+			    + ex.getMessage());
+		}
+
+		try {
+		    EAAttributeUtil.setEALowerBound(att, lower);
+		    EAAttributeUtil.setEAUpperBound(att, upper);
+		    result.addDebug("Multiplizität von Attribut '" + cname + "." + name + "' geändert.");
+		} catch (EAException ex) {
+		    result.addError("Fehler beim Setzen der Multiplizität von Attribut '" + cname + "." + name + "': "
+			    + ex.getMessage());
 		}
 	    }
 	} else {
@@ -876,22 +934,23 @@ public class ImplementationSchemaTransformerHelper_GID {
     }
 
     public void changeType(String cname, String name, String tname) {
-	org.sparx.Element e = allClasses.get(cname);
-	if (e != null) {
-	    Attribute ei;
-	    Collection<Attribute> c = e.GetAttributes();
-	    for (short i = 0; i < c.GetCount(); i++) {
-		ei = c.GetAt(i);
-		if (ei.GetName().equals(name)) {
-		    try {
-			EAAttributeUtil.setEAType(ei, tname);
-			EAAttributeUtil.setEAClassifierID(ei, 0);
-			result.addDebug("Typ von Attribut '" + cname + "." + name + "' geändert.");
-		    } catch (EAException ex) {
-			result.addError("Fehler beim Setzen des Typs von Attribut '" + cname + "." + name + "': "
-				+ ex.getMessage());
-		    }
-		    break;
+
+	if (gidClasses.containsKey(cname)) {
+
+	    EAElement eaElmt = gidClasses.get(cname);
+	    Element e = rep.GetElementByID(eaElmt.getElementId());
+
+	    Attribute att = EAElementUtil.getAttributeByName(e, name);
+
+	    if (att != null) {
+		try {
+		    EAAttributeUtil.setEAType(att, tname);
+		    EAElement typeElmt = gidClasses.containsKey(tname) ? gidClasses.get(tname) : allClasses.get(tname);
+		    EAAttributeUtil.setEAClassifierID(att, typeElmt == null ? 0 : typeElmt.getElementId());
+		    result.addDebug("Typ von Attribut '" + cname + "." + name + "' geändert.");
+		} catch (EAException ex) {
+		    result.addError("Fehler beim Setzen des Typs von Attribut '" + cname + "." + name + "': "
+			    + ex.getMessage());
 		}
 	    }
 	} else {
@@ -900,7 +959,11 @@ public class ImplementationSchemaTransformerHelper_GID {
     }
 
     public void deleteRole(String cname, String name) {
-	org.sparx.Element e = allClasses.get(cname);
+
+	// TODO move deletion of role to EA utils classes
+
+	EAElement eaElmt = gidClasses.get(cname);
+	Element e = rep.GetElementByID(eaElmt.getElementId());
 	if (e != null) {
 	    Connector ei;
 	    Collection<Connector> c = e.GetConnectors();
@@ -958,8 +1021,8 @@ public class ImplementationSchemaTransformerHelper_GID {
 
 		Package p = rep.GetPackageByID(appSchemaPkg.getPkgId());
 
-		// TBD: Changed from parsing tag 'version' to parsing tag 'AAA:Version'
-		TaggedValue tv = p.GetElement().GetTaggedValues().GetByName("AAA:Version");
+		// Changed from parsing tag 'version' to parsing tag 'GID:AAAVersion'
+		TaggedValue tv = p.GetElement().GetTaggedValues().GetByName("GID:AAAVersion");
 		if (tv != null) {
 		    aaaVersionTagValues.add(tv.GetValue());
 		}
@@ -1046,38 +1109,63 @@ public class ImplementationSchemaTransformerHelper_GID {
 
     private void commonPackagePreparations(Package p, boolean gid) {
 
+	EAPackage eaPkg = eaRepo.lookupPackageByElementId(p.GetElement().GetElementID()).get();
 	// ... remember package by name
 	String s = p.GetName();
 	if (allPackages.containsKey(s)) {
-	    result.addDebug("Information: Paket '" + s + "' mehrfach vorhanden.");
+	    result.addInfo("Information: Paket '" + s + "' mehrfach vorhanden.");
 	} else {
-	    allPackages.put(s, p);
+	    allPackages.put(s, eaPkg);
 	}
 	if (gid) {
-	    gidPackages.add(p);
+	    gidPackages.put(s, eaPkg);
 	}
 
 	Collection<Element> c = p.GetElements();
 	c.Refresh();
 	for (Element e : c) {
 	    String type = e.GetType();
+	    EAElement eaElmt = eaRepo.lookupElement(e.GetElementID()).get();
 	    if (type.equalsIgnoreCase("class") || type.equalsIgnoreCase("enumeration")
 		    || type.equalsIgnoreCase("datatype")) {
 		s = e.GetName();
 		if (allClasses.containsKey(s)) {
-		    result.addDebug("Information: Classifier '" + s + "' mehrfach vorhanden.");
+		    result.addInfo("Information: Classifier '" + s + "' mehrfach vorhanden.");
 		} else {
-		    allClasses.put(s, e);
+		    allClasses.put(s, eaElmt);
 		}
 		if (gid) {
 		    if (gidClasses.containsKey(s)) {
 			result.addError(
 				"Information: Classifier '" + s + "' in Implementierungsschemas mehrfach vorhanden.");
 		    } else {
-			gidClasses.put(s, e);
+			gidClasses.put(s, eaElmt);
 		    }
 		}
 	    }
+	}
+    }
+
+    public void updateTaggedValue(String className, String attributeName, String tagName, String tagValue) {
+
+	if (gidClasses.containsKey(className)) {
+	    EAElement eaElmt = gidClasses.get(className);
+	    Element e = rep.GetElementByID(eaElmt.getElementId());
+
+	    Attribute att = EAElementUtil.getAttributeByName(e, attributeName);
+
+	    if (att != null) {
+		try {
+		    EAAttributeUtil.updateTaggedValue(att, tagName, tagValue, false);
+		    result.addDebug("Tag '" + tagName + "' für Attribut '" + className + "." + attributeName
+			    + "' auf Wert '" + tagValue + "' gesetzt.");
+		} catch (EAException ex) {
+		    result.addError("Fehler beim Setzen des Tag '" + tagName + "' auf Attribut '" + className + "."
+			    + attributeName + "': " + ex.getMessage());
+		}
+	    }
+	} else {
+	    result.addError("Klasse '" + className + "' nicht gefunden.");
 	}
     }
 
