@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.sparx.Attribute;
 import org.sparx.Collection;
 import org.sparx.Element;
@@ -236,15 +237,19 @@ public class LandnutzungsartkennungTagTransformer implements Transformer, Messag
     private void updateElement(Element elmt, String lnaksString) throws EAException {
 	EAElementUtil.updateTaggedValue(elmt, FQNAME_TV_LANDNUTZUNGSARTKENNUNG, lnaksString, false);
 	String gidRevNr = EAElementUtil.taggedValue(elmt, TV_GID_REVISIONSNUMMER);
-	EAElementUtil.updateTaggedValue(elmt, FQNAME_TV_GID_REVISIONSNUMMER,
-		determineGidRevisionsnummer(gidRevNr, TICKET_NUMMER), false);
+	if (!Strings.CS.contains(gidRevNr, TICKET_NUMMER)) {
+	    EAElementUtil.updateTaggedValue(elmt, FQNAME_TV_GID_REVISIONSNUMMER,
+		    determineGidRevisionsnummer(gidRevNr, TICKET_NUMMER), false);
+	}
     }
 
     private void updateAttribute(Attribute att, String lnaksString) throws EAException {
 	EAAttributeUtil.updateTaggedValue(att, FQNAME_TV_LANDNUTZUNGSARTKENNUNG, lnaksString, false);
 	String gidRevNr = EAAttributeUtil.taggedValue(att, TV_GID_REVISIONSNUMMER);
-	EAAttributeUtil.updateTaggedValue(att, FQNAME_TV_GID_REVISIONSNUMMER,
-		determineGidRevisionsnummer(gidRevNr, TICKET_NUMMER), false);
+	if (!Strings.CS.contains(gidRevNr, TICKET_NUMMER)) {
+	    EAAttributeUtil.updateTaggedValue(att, FQNAME_TV_GID_REVISIONSNUMMER,
+		    determineGidRevisionsnummer(gidRevNr, TICKET_NUMMER), false);
+	}
     }
 
     private String determineGidRevisionsnummer(String gidRevisionsnummerTvAktuell, String ticketNummer) {
@@ -261,19 +266,24 @@ public class LandnutzungsartkennungTagTransformer implements Transformer, Messag
 
 	String attGidKennung = EAAttributeUtil.taggedValue(att, "GID:Kennung");
 
-	List<LandnutzungsartkennungInfo> lnaksForAtt = lnaks.stream()
-		.filter(info -> (attCase == 1 && info.getAttributart1().isPresent()
-			&& info.getAttributart1().get().equalsIgnoreCase(attGidKennung)
-			&& info.getAttributart2().isEmpty() && info.getAttributartPlus1().isEmpty()
+	List<LandnutzungsartkennungInfo> lnaksForAtt = lnaks.stream().filter(info -> (attCase == 1
+		&& info.getAttributart1().isPresent() && info.getAttributart1().get().equalsIgnoreCase(attGidKennung)
+	/*
+	 * Klärung per E-Mail am 24.03.2026: Für die Kombineation Attribut 1 und
+	 * Werteart 1 sollen ebenfalls die Landnutzungsartenkennungen aus allen
+	 * Einträgen (mit gleicher Kennung und Initialwert/Code) im TV
+	 * LN:Landnutzungsartkennung gelistet werden.
+	 * 
+	 * && info.getAttributart2().isEmpty() && info.getAttributartPlus1().isEmpty()
+	 * && info.getAttributartPlus2().isEmpty()
+	 */) || (attCase == 2 && info.getAttributart2().isPresent()
+		&& info.getAttributart2().get().equalsIgnoreCase(attGidKennung) && info.getAttributartPlus1().isEmpty()
+		&& info.getAttributartPlus2().isEmpty())
+		|| (attCase == 3 && info.getAttributartPlus1().isPresent()
+			&& info.getAttributartPlus1().get().equalsIgnoreCase(attGidKennung)
 			&& info.getAttributartPlus2().isEmpty())
-			|| (attCase == 2 && info.getAttributart2().isPresent()
-				&& info.getAttributart2().get().equalsIgnoreCase(attGidKennung)
-				&& info.getAttributartPlus1().isEmpty() && info.getAttributartPlus2().isEmpty())
-			|| (attCase == 3 && info.getAttributartPlus1().isPresent()
-				&& info.getAttributartPlus1().get().equalsIgnoreCase(attGidKennung)
-				&& info.getAttributartPlus2().isEmpty())
-			|| (attCase == 4 && info.getAttributartPlus2().isPresent()
-				&& info.getAttributartPlus2().get().equalsIgnoreCase(attGidKennung)))
+		|| (attCase == 4 && info.getAttributartPlus2().isPresent()
+			&& info.getAttributartPlus2().get().equalsIgnoreCase(attGidKennung)))
 		.toList();
 
 	// Für das Attribut selbst wird kein Wert gesetzt!
