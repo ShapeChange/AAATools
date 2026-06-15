@@ -842,7 +842,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			options.setParameter("inputModelType", "EA7");
 
 		// update target config from dialog also in the target configurations (strictly this is the only place where they need to be updated)
-		for (TargetConfiguration cfg : options.getInputTargetConfigs()) {
+		for (TargetConfiguration cfg : options.getTargetConfigsOnInputModel()) {
 			if (cfg.getClassName().equalsIgnoreCase(paramKatalogClass)) {
 				Map<String, String> m = cfg.getParameters();
 				m.put("ausgabeformat", opt);

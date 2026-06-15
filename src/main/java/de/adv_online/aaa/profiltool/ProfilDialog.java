@@ -704,7 +704,7 @@ public class ProfilDialog extends JFrame implements ActionListener, ItemListener
 		options.setParameter("inputFile", mdlDirField.getText());
 		
 		// update target config from dialog also in the target configurations (strictly this is the only place where they need to be updated)
-		for (TargetConfiguration cfg : options.getInputTargetConfigs()) {
+		for (TargetConfiguration cfg : options.getTargetConfigsOnInputModel()) {
 			if (cfg.getClassName().equalsIgnoreCase(paramProfilClass)) {
 				Map<String, String> m = cfg.getParameters();
 				m.put("Modellart", modellartField.getText());

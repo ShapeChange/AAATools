@@ -6,7 +6,8 @@
 <!--		<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\KONF\Analyse Umstellung UML-Profil\testprojekt_type_fix.qea"/>-->
 <!--		<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\KONF\Analyse Umstellung UML-Profil\Test_AAA-7.1.2.qea"/>-->
 <!--		<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\KONF\Analyse Umstellung UML-Profil\issue_setting_association_stereotype.qea"/>-->
-		<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\KONF\Analyse Umstellung UML-Profil\20240823_GeoInfoDok.qea"/>
+<!--		<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\KONF\Analyse Umstellung UML-Profil\20240823_GeoInfoDok.qea"/>-->
+		<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\RAUS\25 Aufwandschätzung AAA AS 7.1.3\20251113_GeoInfoDok.qea"/>
 		
 		<parameter name="transformer" value="de.adv_online.aaa.uml.GidProfileTransformer"/>
 		<parameter name="skipModelLoadingIfProcessingIsOnlyInputTransformations" value="true"/>
