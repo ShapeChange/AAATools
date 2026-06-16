@@ -19,8 +19,8 @@
  *
  * Contact:
  * interactive instruments GmbH
- * Trierer Strasse 70-72
- * 53115 Bonn
+ * Bundeskanzlerplatz 2d
+ * 53113 Bonn
  * Germany
  */
 
@@ -96,12 +96,16 @@ public class LinkTransformer implements Transformer, MessageSource {
     // dependency checks AND model transformations
 //    public static final boolean DUPLICATE_ELEMENTS_CHECK = true;
 //    public static final boolean IDENTIFY_PACKAGE_DEPENDENCIES = true;
-//    public static final boolean EXTRA_CHECK_ATTRIBUTE_LINKAGE = false;
+//    public static final boolean EXTRA_CHECK_ATTRIBUTE_LINKAGE = true;
 //    public static final boolean APPLY_TRANSFORMATIONS = true;
 //    public static final boolean ONLY_LINK_ANALYSIS = false;
 //    public static final boolean PROCESS_CONNECTORS = true;
 //    public static final boolean PROCESS_ATTRIBUTES = true;
 //    public static final boolean COPY_REPOSITORY = true;
+
+    public static final boolean TRANSFORM_MEASURE_TYPES = false;
+    public static final boolean TRANSFORM_UNIONS = false;
+    public static final boolean PROCESS_SCHEMA_DEPENDENCIES = true;
 
     /**
      * If <code>true</code>, the package structure of the GeoInfoDok will be
@@ -110,7 +114,7 @@ public class LinkTransformer implements Transformer, MessageSource {
      * package structure for subsequent dependency and link checking, set the
      * parameter value to <code>false</code>.
      */
-    public static final boolean UPDATE_MODEL_STRUCTURE = true;
+    public static final boolean UPDATE_MODEL_STRUCTURE = false;
 
     public static final String REPO_COPY_NAME_SUFFIX = "_modified";
     public static final String PROPERTY_CHOICE_UNION_TAG = "isPropertyChoiceUnion";
@@ -119,7 +123,8 @@ public class LinkTransformer implements Transformer, MessageSource {
 
     public static final String AAA_SCHEMA_FULL_NAME = "Model::GeoInfoDok::AFIS-ALKIS-ATKIS Anwendungsschema";
     public static final String AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE = "Model::GeoInfoDok::AFIS-ALKIS-ATKIS Anwendungsschema::AFIS-ALKIS-ATKIS Anwendungsschema 7.1";
-    public static final String AAA_SCHEMA_DEV_FULL_NAME_NEW_STRUCTURE = "Model::GeoInfoDok::AFIS-ALKIS-ATKIS Anwendungsschema::AFIS-ALKIS-ATKIS Anwendungsschema DEV";
+    public static final String AAA_SCHEMA_7_2_FULL_NAME_NEW_STRUCTURE = "Model::GeoInfoDok::AFIS-ALKIS-ATKIS Anwendungsschema::AFIS-ALKIS-ATKIS Anwendungsschema 7.2";
+//    public static final String AAA_SCHEMA_DEV_FULL_NAME_NEW_STRUCTURE = "Model::GeoInfoDok::AFIS-ALKIS-ATKIS Anwendungsschema::AFIS-ALKIS-ATKIS Anwendungsschema DEV";
     public static final String GEOINFODOK_PKG_FULL_NAME = "Model::GeoInfoDok";
 
     private ShapeChangeResult result = null;
@@ -259,15 +264,40 @@ public class LinkTransformer implements Transformer, MessageSource {
 	 * Dependencies for new model structure
 	 */
 
+	/*
+	 * ===================
+	 * 
+	 * AAA Ausgabekatalog
+	 * 
+	 * ===================
+	 */
 	dependenciesBySchemaIn.put("Model::GeoInfoDok::AAA Ausgabekatalog::AAA_Ausgabekatalog 2.0", Arrays.asList(
 		AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE,
 		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
 
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::AAA Ausgabekatalog::AAA_Ausgabekatalog 2.1", Arrays.asList(
+		AAA_SCHEMA_7_2_FULL_NAME_NEW_STRUCTURE,
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
+
+	/*
+	 * ===================
+	 * 
+	 * AAA Objektartenkatalog
+	 * 
+	 * ===================
+	 */
 	dependenciesBySchemaIn.put("Model::GeoInfoDok::AAA Objektartenkatalog::AAA_Objektartenkatalog 1.0",
 		Arrays.asList(AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE,
 			"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types",
 			"Model::ISO/TC 211::ISO 19110 Methodology for feature cataloguing::ISO 19110 Edition 2"));
 
+	/*
+	 * ====================================
+	 * 
+	 * AFIS-ALKIS-ATKIS Anwendungsschema
+	 * 
+	 * ====================================
+	 */
 	dependenciesBySchemaIn.put(AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE, Arrays.asList(/*
 											  * "Model::GeoInfoDok::AAA_Ausgabekatalog",
 											  * "Model::GeoInfoDok::AAA_Objektartenkatalog".
@@ -286,7 +316,7 @@ public class LinkTransformer implements Transformer, MessageSource {
 		"Model::GeoInfoDok::Web Feature Service Erweiterungen::Web Feature Service Erweiterungen 2.0",
 		"Model::OGC::Web Feature Service::Web Feature Service 2.0", "Model::OGC::OWS Common::OWS Common 1.1"));
 
-	dependenciesBySchemaIn.put(AAA_SCHEMA_DEV_FULL_NAME_NEW_STRUCTURE, Arrays.asList(/*
+	dependenciesBySchemaIn.put(AAA_SCHEMA_7_2_FULL_NAME_NEW_STRUCTURE, Arrays.asList(/*
 											  * "Model::GeoInfoDok::AAA_Ausgabekatalog",
 											  * "Model::GeoInfoDok::AAA_Objektartenkatalog".
 											  */
@@ -303,31 +333,101 @@ public class LinkTransformer implements Transformer, MessageSource {
 		"Model::GeoInfoDok::Web Feature Service Erweiterungen::Web Feature Service Erweiterungen 2.0",
 		"Model::OGC::Web Feature Service::Web Feature Service 2.0", "Model::OGC::OWS Common::OWS Common 1.1"));
 
-	dependenciesBySchemaIn.put("Model::GeoInfoDok::Bodenrichtwerte::BR_Bodenrichtwerte 3.0", Arrays.asList(
+	/*
+	 * ===================
+	 * 
+	 * Bodenrichtwerte
+	 * 
+	 * ===================
+	 */
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::Bodenrichtwerte::BR_Bodenrichtwerte 3.0.1", Arrays.asList(
 		AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE,
 		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
 
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::Bodenrichtwerte::BR_Bodenrichtwerte 3.0.2", Arrays.asList(
+		AAA_SCHEMA_7_2_FULL_NAME_NEW_STRUCTURE,
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
+
+	/*
+	 * ===================
+	 * 
+	 * Geographische Informationen
+	 * 
+	 * ===================
+	 */
 	dependenciesBySchemaIn.put("Model::GeoInfoDok::Geographische Informationen::GN_Geographische Informationen 1.0",
 		Arrays.asList(AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE,
 			"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
 
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::Geographische Informationen::GN_Geographische Informationen 1.1",
+		Arrays.asList(AAA_SCHEMA_7_2_FULL_NAME_NEW_STRUCTURE,
+			"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
+
+	/*
+	 * ============================
+	 * 
+	 * Geometrische Verbesserungen
+	 * 
+	 * ============================
+	 */
 	dependenciesBySchemaIn.put("Model::GeoInfoDok::Geometrische Verbesserungen::GV_Geometrische Verbesserungen 1.0",
 		Arrays.asList(AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE,
 			"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types",
 			"Model::ISO/TC 211::ISO 19107 Spatial schema::ISO 19107 Edition 1"));
 
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::Geometrische Verbesserungen::GV_Geometrische Verbesserungen DEV",
+		Arrays.asList(AAA_SCHEMA_7_2_FULL_NAME_NEW_STRUCTURE,
+			"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types",
+			"Model::ISO/TC 211::ISO 19107 Spatial schema::ISO 19107 Edition 1"));
+
+	/*
+	 * ============================
+	 * 
+	 * Landbedeckung
+	 * 
+	 * ============================
+	 */
 	dependenciesBySchemaIn.put("Model::GeoInfoDok::Landbedeckung::LB_Landbedeckung 1.0", Arrays.asList(
 		AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE,
 		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
 
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::Landbedeckung::LB_Landbedeckung DEV", Arrays.asList(
+		AAA_SCHEMA_7_2_FULL_NAME_NEW_STRUCTURE,
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
+
+	/*
+	 * ============================
+	 * 
+	 * Landnutzung
+	 * 
+	 * ============================
+	 */
 	dependenciesBySchemaIn.put("Model::GeoInfoDok::Landnutzung::LN_Landnutzung 1.0", Arrays.asList(
 		AAA_SCHEMA_7_1_FULL_NAME_NEW_STRUCTURE,
 		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
 
+	dependenciesBySchemaIn.put("Model::GeoInfoDok::Landnutzung::LN_Landnutzung 1.1", Arrays.asList(
+		AAA_SCHEMA_7_2_FULL_NAME_NEW_STRUCTURE,
+		"Model::ISO/TC 211::ISO 19103 Conceptual schema language::ISO 19103 Edition 2::Core Data Types"));
+
+	/*
+	 * ============================
+	 * 
+	 * Web Feature Service Erweiterungen
+	 * 
+	 * ============================
+	 */
 	dependenciesBySchemaIn.put(
 		"Model::GeoInfoDok::Web Feature Service Erweiterungen::Web Feature Service Erweiterungen 2.0",
 		Arrays.asList("Model::OGC::Web Feature Service::Web Feature Service 2.0"));
 
+	/*
+	 * ============================
+	 * 
+	 * AAA Signaturenkatalog
+	 * 
+	 * ============================
+	 */
 	dependenciesBySchemaIn.put("Model::GeoInfoDok::AAA Signaturenkatalog::AAA_Signaturenkatalog 1.1",
 		Arrays.asList());
 
@@ -599,15 +699,22 @@ public class LinkTransformer implements Transformer, MessageSource {
 	    }
 
 	    if (APPLY_TRANSFORMATIONS) {
-		// 2. explicit model transformations
-		// a) measure types in AAA schema
-		aaaMeasureTypeTransformation();
 
-		// b) unions
-		transformAaaUnions();
+		if (TRANSFORM_MEASURE_TYPES) {
+		    // 2. explicit model transformations
+		    // a) measure types in AAA schema
+		    aaaMeasureTypeTransformation();
+		}
 
-		// 3. actual processing of schema dependencies
-		processSchemaDependencies();
+		if (TRANSFORM_UNIONS) {
+		    // b) unions
+		    transformAaaUnions();
+		}
+
+		if (PROCESS_SCHEMA_DEPENDENCIES) {
+		    // 3. actual processing of schema dependencies
+		    processSchemaDependencies();
+		}
 
 		/*
 		 * LAST (BECAUSE THIS WILL SCREW UP FULL NAMES OF MODEL ELEMENTS): update model

@@ -22,8 +22,8 @@
  *
  * Contact:
  * interactive instruments GmbH
- * Trierer Strasse 70-72
- * 53115 Bonn
+ * Bundeskanzlerplatz 2d
+ * 53113 Bonn
  * Germany
  */
 package de.adv_online.aaa.nastool;
