@@ -1,1 +1,3 @@
 java -jar AAATools-${project.version}.jar -d -c "Konfigurationen/AAAProfil-7.1.2.xml" 
+
+PAUSE

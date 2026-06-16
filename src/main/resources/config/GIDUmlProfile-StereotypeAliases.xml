@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stereotypeAliases xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1">
+	<!-- NOTE: case for stereotype names is ignored! Thus aliases "Schema" and "schema" would map to the same wellknown stereotype -->
+	<StereotypeAlias wellknown="Application Schema" alias="GID_ApplicationSchema" />
+<!--	<StereotypeAlias wellknown="" alias="GID_Package" />	-->
+	<StereotypeAlias wellknown="CodeList" alias="GID_CodeSet" />
+	<StereotypeAlias wellknown="DataType" alias="GID_DataType" />
+	<StereotypeAlias wellknown="FeatureType" alias="GID_FeatureType" />	
+	<StereotypeAlias wellknown="Type" alias="GID_Mixin" />
+	<StereotypeAlias wellknown="Enumeration" alias="GID_Enumeration" />
+	<StereotypeAlias wellknown="property" alias="GID_Property" />
+	<StereotypeAlias wellknown="enum" alias="GID_EnumerationLiteral" />
+	<StereotypeAlias wellknown="retired" alias="GID_Retired" />
+	
+	<StereotypeAlias wellknown="Application Schema" alias="applicationSchema" />
+	<StereotypeAlias wellknown="Application Schema" alias="schema" />
+	<StereotypeAlias wellknown="Application Schema" alias="requirementsClass" />
+	<StereotypeAlias wellknown="Application Schema" alias="ApplicationSchema" />
+	<StereotypeAlias wellknown="Application Schema" alias="Schema" />
+	<StereotypeAlias wellknown="Type" alias="interface" />
+	<StereotypeAlias wellknown="" alias="abstract" />
+	<StereotypeAlias wellknown="" alias="Estimated" />
+</stereotypeAliases>

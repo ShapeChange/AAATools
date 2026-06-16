@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import de.interactive_instruments.ShapeChange.InputAndLogParameterProvider;
+import de.interactive_instruments.shapechange.core.InputAndLogParameterProvider;
 
 /**
  * @author Johannes Echterhoff (echterhoff at interactive-instruments dot de)

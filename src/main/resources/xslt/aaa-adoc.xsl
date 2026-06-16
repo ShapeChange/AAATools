@@ -496,7 +496,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
     <xsl:choose>
      <xsl:when test="/FC_FeatureCatalogue/FC_FeatureAttribute[@id = $featuretype/characterizedBy/@idref]">
       <xsl:for-each select="/FC_FeatureCatalogue/FC_FeatureAttribute[@id = $featuretype/characterizedBy/@idref]">
-       <xsl:sort select="@sequenceNumber"/>
+       <xsl:sort select="@sequenceNumber" data-type="number"/>
        <xsl:sort select="name"/>
        <xsl:text>* </xsl:text>
        <xsl:value-of select="adoc:idref(@id, name/text())"/>
@@ -517,7 +517,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
     <xsl:choose>
      <xsl:when test="/FC_FeatureCatalogue/FC_RelationshipRole[inType/@idref = $featuretype/@id]">
       <xsl:for-each select="/FC_FeatureCatalogue/FC_RelationshipRole[inType/@idref = $featuretype/@id]">
-       <xsl:sort select="@sequenceNumber"/>
+       <xsl:sort select="@sequenceNumber" data-type="number"/>
        <xsl:sort select="name"/>
        <xsl:text>* </xsl:text>
        <xsl:value-of select="adoc:idref(@id, name/text())"/>
@@ -534,7 +534,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
 
   <xsl:for-each select="key('modelElement', $featuretype/characterizedBy/@idref | /FC_FeatureCatalogue/FC_RelationshipRole[inType/@idref = $featuretype/@id]/@id)">
    <!-- apply an alphabetical sort of feature type characteristics (attributes, relationships etc) -->
-   <xsl:sort select="@sequenceNumber"/>
+   <xsl:sort select="@sequenceNumber" data-type="number"/>
    <xsl:sort select="name"/>
    <xsl:apply-templates mode="detail" select="."/>
   </xsl:for-each>

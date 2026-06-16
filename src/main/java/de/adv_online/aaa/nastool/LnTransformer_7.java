@@ -29,12 +29,10 @@
 
 package de.adv_online.aaa.nastool;
 
-import org.sparx.Connector;
-
-import de.interactive_instruments.ShapeChange.Options;
-import de.interactive_instruments.ShapeChange.ShapeChangeAbortException;
-import de.interactive_instruments.ShapeChange.ShapeChangeResult;
-import de.interactive_instruments.ShapeChange.Model.Transformer;
+import de.interactive_instruments.shapechange.core.Options;
+import de.interactive_instruments.shapechange.core.ShapeChangeAbortException;
+import de.interactive_instruments.shapechange.core.ShapeChangeResult;
+import de.interactive_instruments.shapechange.core.model.Transformer;
 
 public class LnTransformer_7 implements Transformer {
 
@@ -59,7 +57,7 @@ public class LnTransformer_7 implements Transformer {
 	 */
 	public void transform() throws ShapeChangeAbortException {
 		
-		helper.prepareModel("LN_Landnutzung","NAS-LN");
+		helper.prepareModel("LN_Landnutzung 1.1","NAS-LN 1.1");
 				
 		/* Bei allen Klassen wird das UML Tagged Value „xsdEncodingRule“ gesetzt: 
 		 * - "NAS" außer bei Typen, die mit einer der Zeichenketten "AX_DQ", "AX_LI", "AX_Datenerhebung" beginnen;

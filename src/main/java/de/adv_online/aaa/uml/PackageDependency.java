@@ -1,0 +1,64 @@
+/**
+ * GeoInfoDok Transformations (Link Transformer)
+ *
+ * (c) 2009-2024 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
+ * Länder der Bundesrepublik Deutschland (AdV)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact:
+ * interactive instruments GmbH
+ * Trierer Strasse 70-72
+ * 53115 Bonn
+ * Germany
+ */
+
+package de.adv_online.aaa.uml;
+
+/**
+ * @author Johannes Echterhoff (echterhoff at interactive-instruments dot de)
+ *
+ */
+public class PackageDependency {
+
+    private String caseInfo;
+    private String schemaFullName;
+    private String externalFullName;
+    private boolean externalAllowed;
+
+    public PackageDependency(String caseInfo, String schemaFullName, String externalFullName, boolean externalAllowed) {
+	super();
+	this.caseInfo = caseInfo;
+	this.schemaFullName = schemaFullName;
+	this.externalFullName = externalFullName;
+	this.externalAllowed = externalAllowed;
+    }
+
+    public String getCaseInfo() {
+	return caseInfo;
+    }
+
+    public String getSchemaFullName() {
+	return schemaFullName;
+    }
+
+    public String getExternalFullName() {
+	return externalFullName;
+    }
+
+    public boolean getExternalAllowed() {
+	return externalAllowed;
+    }
+
+}

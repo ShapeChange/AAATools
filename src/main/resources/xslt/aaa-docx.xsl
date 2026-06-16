@@ -531,7 +531,7 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
   </xsl:if>
   <xsl:for-each select="key('modelElement', $featuretype/characterizedBy/@idref|/FC_FeatureCatalogue/FC_RelationshipRole[inType/@idref=$featuretype/@id]/@id)">
 	<!-- apply an alphabetical sort of feature type characteristics (attributes, relationships etc) -->
-   <xsl:sort select="@sequenceNumber" />
+   <xsl:sort select="@sequenceNumber" data-type="number"/>
 	<xsl:sort select="name"/>
 	<xsl:apply-templates mode="detail" select="."/>
    </xsl:for-each>

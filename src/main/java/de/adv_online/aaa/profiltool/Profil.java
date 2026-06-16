@@ -29,14 +29,14 @@
 
 package de.adv_online.aaa.profiltool;
 
-import de.interactive_instruments.ShapeChange.Options;
-import de.interactive_instruments.ShapeChange.RuleRegistry;
-import de.interactive_instruments.ShapeChange.ShapeChangeAbortException;
-import de.interactive_instruments.ShapeChange.ShapeChangeResult;
-import de.interactive_instruments.ShapeChange.Model.ClassInfo;
-import de.interactive_instruments.ShapeChange.Model.Model;
-import de.interactive_instruments.ShapeChange.Model.PackageInfo;
-import de.interactive_instruments.ShapeChange.Target.Target;
+import de.interactive_instruments.shapechange.core.Options;
+import de.interactive_instruments.shapechange.core.RuleRegistry;
+import de.interactive_instruments.shapechange.core.ShapeChangeAbortException;
+import de.interactive_instruments.shapechange.core.ShapeChangeResult;
+import de.interactive_instruments.shapechange.core.model.ClassInfo;
+import de.interactive_instruments.shapechange.core.model.Model;
+import de.interactive_instruments.shapechange.core.model.PackageInfo;
+import de.interactive_instruments.shapechange.core.target.Target;
 
 /**
  * @author Clemens Portele (portele <at> interactive-instruments <dot> de)

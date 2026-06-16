@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tagAliases xmlns="http://www.interactive-instruments.de/ShapeChange/Configuration/1.1">
+	<TagAlias wellknown="AAA:Kennung" alias="GID:Kennung"/>
+	<TagAlias wellknown="AAA:Datum" alias="GID:Datum"/>
+	<TagAlias wellknown="AAA:Organisation" alias="GID:Organisation"/>
+	<TagAlias wellknown="AAA:Modellart" alias="GID:Modellart"/>
+	<!-- AAA:Profile bleibt mit dem Namen erhalten. Deshalb kein Mapping. -->
+	<TagAlias wellknown="AAA:Grunddatenbestand" alias="GID:Grunddatenbestand"/>
+	<!-- AAA:Nutzungsart bleibt mit dem Namen erhalten. Deshalb kein Mapping. -->
+	<!-- AAA:Nutzungsartkennung bleibt mit dem Namen erhalten. Deshalb kein Mapping. -->
+	<TagAlias wellknown="AAA:objektbildend" alias="GID:objektbildend"/>
+	<!-- AAA:Themen wird nicht gemappt. -->
+	<TagAlias wellknown="AAA:AAAVersion" alias="GID:AAAVersion"/>
+	<TagAlias wellknown="AAA:GueltigBis" alias="GID:GueltigBis"/>
+	<TagAlias wellknown="AAA:Revisionsnummer" alias="GID:Revisionsnummer"/>
+	<!-- AAA:Landnutzung bleibt mit dem Namen erhalten. Deshalb kein Mapping. -->
+	<TagAlias wellknown="AAA:UnitOfMeasure" alias="GID:UnitOfMeasure"/>
+</tagAliases>

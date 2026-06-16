@@ -1,10 +1,7 @@
 /**
  * NAS-Tool (schema transformer)
  *
- * The class in this file implements the ShapeChange Target interface to 
- * generate and load the 3AP files.
- *
- * (c) 2009-2012 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
+ * (c) 2009-2024 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
  * Länder der Bundesrepublik Deutschland (AdV)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -32,10 +29,10 @@ package de.adv_online.aaa.nastool;
 import org.sparx.Attribute;
 import org.sparx.Element;
 
-import de.interactive_instruments.ShapeChange.Options;
-import de.interactive_instruments.ShapeChange.ShapeChangeAbortException;
-import de.interactive_instruments.ShapeChange.ShapeChangeResult;
-import de.interactive_instruments.ShapeChange.Model.Transformer;
+import de.interactive_instruments.shapechange.core.Options;
+import de.interactive_instruments.shapechange.core.ShapeChangeAbortException;
+import de.interactive_instruments.shapechange.core.ShapeChangeResult;
+import de.interactive_instruments.shapechange.core.model.Transformer;
 
 public class NasTransformer_7 implements Transformer {
 

@@ -29,8 +29,10 @@ package de.adv_online.aaa.katalogtool;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Collection;
@@ -55,36 +57,33 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import de.adv_online.aaa.profiltool.ProfilRep;
-import de.interactive_instruments.ShapeChange.MessageSource;
-import de.interactive_instruments.ShapeChange.Options;
-import de.interactive_instruments.ShapeChange.RuleRegistry;
-import de.interactive_instruments.ShapeChange.ShapeChangeAbortException;
-import de.interactive_instruments.ShapeChange.ShapeChangeException;
-import de.interactive_instruments.ShapeChange.ShapeChangeResult;
-import de.interactive_instruments.ShapeChange.ShapeChangeResult.MessageContext;
-import de.interactive_instruments.ShapeChange.Type;
-import de.interactive_instruments.ShapeChange.Model.ClassInfo;
-import de.interactive_instruments.ShapeChange.Model.Constraint;
-import de.interactive_instruments.ShapeChange.Model.Info;
-import de.interactive_instruments.ShapeChange.Model.Model;
-import de.interactive_instruments.ShapeChange.Model.PackageInfo;
-import de.interactive_instruments.ShapeChange.Model.PropertyInfo;
-import de.interactive_instruments.ShapeChange.ModelDiff.DiffElement;
-import de.interactive_instruments.ShapeChange.ModelDiff.DiffElement.ElementType;
-import de.interactive_instruments.ShapeChange.ModelDiff.DiffElement.Operation;
-import de.interactive_instruments.ShapeChange.ModelDiff.Differ;
-import de.interactive_instruments.ShapeChange.Target.Target;
-import de.interactive_instruments.ShapeChange.UI.StatusBoard;
-import de.interactive_instruments.ShapeChange.Util.XMLUtil;
-import org.apache.commons.lang3.StringUtils;
+import de.interactive_instruments.shapechange.core.MessageSource;
+import de.interactive_instruments.shapechange.core.Options;
+import de.interactive_instruments.shapechange.core.RuleRegistry;
+import de.interactive_instruments.shapechange.core.ShapeChangeAbortException;
+import de.interactive_instruments.shapechange.core.ShapeChangeResult;
+import de.interactive_instruments.shapechange.core.ShapeChangeResult.MessageContext;
+import de.interactive_instruments.shapechange.core.Type;
+import de.interactive_instruments.shapechange.core.model.ClassInfo;
+import de.interactive_instruments.shapechange.core.model.Constraint;
+import de.interactive_instruments.shapechange.core.model.Info;
+import de.interactive_instruments.shapechange.core.model.Model;
+import de.interactive_instruments.shapechange.core.model.PackageInfo;
+import de.interactive_instruments.shapechange.core.model.PropertyInfo;
+import de.interactive_instruments.shapechange.core.modeldiff.DiffElement;
+import de.interactive_instruments.shapechange.core.modeldiff.DiffElement.ElementType;
+import de.interactive_instruments.shapechange.core.modeldiff.DiffElement.Operation;
+import de.interactive_instruments.shapechange.core.modeldiff.Differ;
+import de.interactive_instruments.shapechange.core.target.Target;
+import de.interactive_instruments.shapechange.core.ui.StatusBoard;
+import de.interactive_instruments.shapechange.core.util.XMLUtil;
+import de.interactive_instruments.shapechange.core.util.ZipHandler;
 
 /**
  * @author Clemens Portele (portele <at> interactive-instruments <dot> de)
@@ -113,6 +112,7 @@ public class Katalog implements Target, MessageSource {
     private static final String INS_CLOSE_OPEN = "[[/ins]][[ins]]";
     private static final String INS_OPEN = "[[ins]]";
     private static final String INS_OPEN_CLOSE = "[[ins]][[/ins]]";
+    private static final String OHNE_WERTEARTEN_DETAILS = "ohneWerteartenDetails";
     private static final String MODE = "mode";
     private static final String MODELL = "Modell";
     private static final String MODELLART = "modellart";
@@ -130,14 +130,23 @@ public class Katalog implements Target, MessageSource {
     private static final String TRUE = "true";
     private static final String FALSE = "false";
     private static final String VERZEICHNIS = "Verzeichnis";
+    public static final int STATUS_WRITE_HTML = 23;
     public static final int STATUS_WRITE_XML = 24;
     public static final int STATUS_WRITE_CSV = 26;
+    public static final int STATUS_WRITE_DOCX = 27;
     public static final int STATUS_WRITE_ADOC = 28;
 
     public static final String PARAM_ADOC_TEMPLATE_PATH = "adocTemplatePath";
     public static final String PARAM_ADOC_ATTRIBUTES_PATH = "adocAttributesPath";
     public static final String DEFAULT_ADOC_TEMPLATE_PATH = "resources/templates/adoc/katalog-mit-nutzungsartkennung.adoc";
     public static final String DEFAULT_ADOC_ATTRIBUTES_PATH = "resources/templates/adoc/attribute.adoc";
+
+    /**
+     * The string used as placeholder in the docx template. The paragraph this
+     * placeholder text belongs to will be replaced with the feature catalogue.
+     */
+    public static final String DOCX_PLACEHOLDER = "ShapeChangeFeatureCatalogue";
+    public static final String DOCX_TEMPLATE_URL = "resources/templates/aaa-template.docx";
 
     private PackageInfo pi = null;
     private Model model = null;
@@ -168,6 +177,7 @@ public class Katalog implements Target, MessageSource {
     private Boolean Inherit = false;
     private HashSet<PropertyInfo> exportedAssociation = new HashSet<PropertyInfo>();
     private HashSet<PropertyInfo> processedProperty = new HashSet<PropertyInfo>();
+    private Set<String> noEnumDetails = null;
 
     private Map<String, String> regelnClass = null;
     private Map<String, String> regelnProp = null;
@@ -214,6 +224,9 @@ public class Katalog implements Target, MessageSource {
 	String s = options.parameter(this.getClass().getName(), NUR_GRUNDDATENBESTAND);
 	if (s != null && s.equals(TRUE))
 	    OnlyGDB = true;
+
+	noEnumDetails = new HashSet<>(
+		options.parameterAsStringList(this.getClass().getName(), OHNE_WERTEARTEN_DETAILS, null, true, true));
 
 	s = options.parameter(this.getClass().getName(), GEERBTE_EIGENSCHAFTEN);
 	if (s != null && s.equals(TRUE))
@@ -282,7 +295,7 @@ public class Katalog implements Target, MessageSource {
 	    try {
 		FileUtils.copyDirectory(adocMediaTemplateDir, adocMediaDestinationDir);
 	    } catch (IOException e) {
-		result.addError(this, 19, adocMediaTemplateDir.getAbsolutePath(),
+		result.addError(this, 21, adocMediaTemplateDir.getAbsolutePath(),
 			adocMediaDestinationDir.getAbsolutePath(), e.getMessage());
 	    }
 
@@ -291,7 +304,7 @@ public class Katalog implements Target, MessageSource {
 	    try {
 		FileUtils.copyDirectory(adocResourcesTemplateDir, adocResourcesDestinationDir);
 	    } catch (IOException e) {
-		result.addError(this, 19, adocResourcesTemplateDir.getAbsolutePath(),
+		result.addError(this, 21, adocResourcesTemplateDir.getAbsolutePath(),
 			adocResourcesDestinationDir.getAbsolutePath(), e.getMessage());
 	    }
 
@@ -302,7 +315,7 @@ public class Katalog implements Target, MessageSource {
 	    try {
 		FileUtils.copyFile(adocTemplateFile, adocTemplateDestinationFile);
 	    } catch (IOException e) {
-		result.addError(this, 20, adocTemplateFile.getAbsolutePath(),
+		result.addError(this, 22, adocTemplateFile.getAbsolutePath(),
 			adocTemplateDestinationFile.getAbsolutePath(), e.getMessage());
 	    }
 
@@ -313,14 +326,16 @@ public class Katalog implements Target, MessageSource {
 	    try {
 		FileUtils.copyFile(adocAttributesFile, adocAttributesDestinationFile);
 	    } catch (IOException e) {
-		result.addError(this, 20, adocAttributesFile.getAbsolutePath(),
+		result.addError(this, 22, adocAttributesFile.getAbsolutePath(),
 			adocAttributesDestinationFile.getAbsolutePath(), e.getMessage());
 	    }
 	}
 
 	refModel = getReferenceModel();
+	String refSchemaName = options.parameterAsString(this.getClass().getName(), "referenceSchemaName", p.name(),
+		false, true);
 	if (refModel != null) {
-	    SortedSet<PackageInfo> set = refModel.schemas(p.name());
+	    SortedSet<PackageInfo> set = refModel.schemas(refSchemaName);
 	    if (set.size() == 1) {
 		differ = new Differ(true, MAList, model, refModel);
 		refPackage = set.iterator().next();
@@ -466,19 +481,18 @@ public class Katalog implements Target, MessageSource {
 
 	// Support original model type codes
 	if (imt.equalsIgnoreCase("ea7"))
-	    imt = "de.interactive_instruments.ShapeChange.Model.EA.EADocument";
+	    imt = "de.interactive_instruments.shapechange.ea.model.EADocument";
 	else if (imt.equalsIgnoreCase("xmi10"))
-	    imt = "de.interactive_instruments.ShapeChange.Model.Xmi10.Xmi10Document";
+	    imt = "de.interactive_instruments.shapechange.core.model.xmi10.Xmi10Document";
 	else if (imt.equalsIgnoreCase("gsip"))
 	    imt = "us.mitre.ShapeChange.Model.GSIP.GSIPDocument";
 	else if (imt.equalsIgnoreCase("scxml"))
-	    imt = "de.interactive_instruments.ShapeChange.Model.Generic.GenericModel";
+	    imt = "de.interactive_instruments.shapechange.core.model.generic.GenericModel";
 
 	Model m = null;
 
 	// Get model object from reflection API
-	@SuppressWarnings("rawtypes")
-	Class theClass;
+	Class<?> theClass;
 	try {
 	    theClass = Class.forName(imt);
 	    if (theClass == null) {
@@ -486,7 +500,7 @@ public class Katalog implements Target, MessageSource {
 		result.addError(null, 22, mdl);
 		return null;
 	    }
-	    m = (Model) theClass.newInstance();
+	    m = (Model) theClass.getConstructor().newInstance();
 	    if (m != null) {
 		m.initialise(result, options, mdl);
 	    } else {
@@ -495,10 +509,11 @@ public class Katalog implements Target, MessageSource {
 		return null;
 	    }
 	} catch (ClassNotFoundException e) {
-	    result.addError(null, 17, imt);
+	    result.addError(this, 11, imt);
 	    result.addError(null, 22, mdl);
-	} catch (InstantiationException e) {
-	    result.addError(null, 19, imt);
+	} catch (IllegalArgumentException | InstantiationException | InvocationTargetException
+		| NoSuchMethodException e) {
+	    result.addError(this, 14, imt);
 	    result.addError(null, 22, mdl);
 	} catch (IllegalAccessException e) {
 	    result.addError(null, 20, imt);
@@ -507,6 +522,7 @@ public class Katalog implements Target, MessageSource {
 	    result.addError(null, 22, mdl);
 	    m = null;
 	}
+
 	return m;
     }
 
@@ -722,12 +738,7 @@ public class Katalog implements Target, MessageSource {
 	return packageInPackage(pi.owner());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see de.interactive_instruments.ShapeChange.Target.Target#process(de.
-     * interactive_instruments.ShapeChange.Model.ClassInfo)
-     */
+    @Override
     public void process(ClassInfo ci) {
 	if (error)
 	    return;
@@ -1677,36 +1688,43 @@ public class Katalog implements Target, MessageSource {
 			if (op != null)
 			    addAttribute(document, e2, MODE, op.toString());
 			e1.appendChild(e2);
-			e2 = document.createElement("ValueDomainType");
-			if (op != null)
-			    addAttribute(document, e2, MODE, op.toString());
-			e1.appendChild(e2);
-			if (!cix.name().equals("Boolean")) {
-			    e2.setTextContent("1");
-			    for (PropertyInfo ei : cix.properties().values()) {
-				if (ei != null && ExportValue(ei)) {
-				    e2 = document.createElement("enumeratedBy");
-				    addAttribute(document, e2, IDREF, "_A" + ei.id());
-				    e1.appendChild(e2);
-				}
-			    }
-			    if (diffs != null && diffs.get(cix) != null)
-				for (DiffElement diff : diffs.get(cix)) {
-				    if (diff.subElementType == ElementType.ENUM && diff.change == Operation.DELETE) {
+
+			if (noEnumDetails.contains(cix.name())) {
+			    // keine Wertearten für diese Codeliste / Enumeration ausgeben
+			} else {
+			    e2 = document.createElement("ValueDomainType");
+			    if (op != null)
+				addAttribute(document, e2, MODE, op.toString());
+			    e1.appendChild(e2);
+			    if (!cix.name().equals("Boolean")) {
+				e2.setTextContent("1");
+				for (PropertyInfo ei : cix.properties().values()) {
+				    if (ei != null && ExportValue(ei)) {
 					e2 = document.createElement("enumeratedBy");
-					addAttribute(document, e2, IDREF, "_A" + ((PropertyInfo) diff.subElement).id());
+					addAttribute(document, e2, IDREF, "_A" + ei.id());
 					e1.appendChild(e2);
 				    }
 				}
-			    if (op != Operation.DELETE) {
-				if (cix.inSchema(propi.inClass().pkg()))
-				    enumerations.add(cix);
+				if (diffs != null && diffs.get(cix) != null)
+				    for (DiffElement diff : diffs.get(cix)) {
+					if (diff.subElementType == ElementType.ENUM
+						&& diff.change == Operation.DELETE) {
+					    e2 = document.createElement("enumeratedBy");
+					    addAttribute(document, e2, IDREF,
+						    "_A" + ((PropertyInfo) diff.subElement).id());
+					    e1.appendChild(e2);
+					}
+				    }
+				if (op != Operation.DELETE) {
+				    if (cix.inSchema(propi.inClass().pkg()))
+					enumerations.add(cix);
+				} else {
+				    if (cix.inSchema(refPackage))
+					enumerations.add(cix);
+				}
 			    } else {
-				if (cix.inSchema(refPackage))
-				    enumerations.add(cix);
+				e2.setTextContent("0");
 			    }
-			} else {
-			    e2.setTextContent("0");
 			}
 			break;
 		    default:
@@ -1965,19 +1983,15 @@ public class Katalog implements Target, MessageSource {
 
 	if (Revisionsnummern) {
 	    s = i.taggedValue("AAA:Revisionsnummer");
-	    if (s != null && !s.isEmpty()) {
-		e2 = document.createElement("letzteAenderungRevisionsnummer");
-		e2.setTextContent(PrepareToPrint(s));
-		e1.appendChild(e2);
-	    }
+	if (s != null && !s.isEmpty()) {
+	    e2 = document.createElement("letzteAenderungRevisionsnummer");
+	    e2.setTextContent(PrepareToPrint(s));
+	    e1.appendChild(e2);
 	}
     }
+}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see de.interactive_instruments.ShapeChange.Target.Target#write()
-     */
+    @Override
     public void write() {
 	if (error || printed)
 	    return;
@@ -2019,7 +2033,9 @@ public class Katalog implements Target, MessageSource {
 
 	    String outfileBasename = pi.xsdDocument().replace(".xsd", "");
 
-	    writeADOC(xmlName, outfileBasename);
+      writeADOC(xmlName, outfileBasename);
+	    writeDOCX(xmlName, outfileBasename);
+	    writeHTML(xmlName, outfileBasename);
 	    writeXML(xmlName, outfileBasename);
 	    writeCSV(xmlName, outfileBasename);
 
@@ -2030,25 +2046,7 @@ public class Katalog implements Target, MessageSource {
 	    if (s != null && s.equalsIgnoreCase(TRUE))
 		xmlFile.delete();
 
-	    // create CSV files for enumerations and codelists only for non-diff processing
-	    if (refModel == null) {
-
-		/*
-		 * Only process the enumerations and codelists that are a) used by the schema
-		 * that is being processed, and are b) contained in that schema.
-		 */
-		Set<ClassInfo> codelistsAndEnumerationsForCSVSingleFileOutput = new HashSet<>(enumerations);
-		Set<ClassInfo> schemaClasses = model.classes(pi);
-		codelistsAndEnumerationsForCSVSingleFileOutput.retainAll(schemaClasses);
-
-		File csvFilesDir = new File(outDir, "csv");
-
-		for (ClassInfo ci : codelistsAndEnumerationsForCSVSingleFileOutput) {
-		    PrintCodeCSV(ci, csvFilesDir);
-		}
-	    }
-
-	} catch (ShapeChangeException | IOException e) {
+	} catch (Exception e) {
 	    String m = e.getMessage();
 	    if (m != null) {
 		result.addError(m);
@@ -2062,26 +2060,182 @@ public class Katalog implements Target, MessageSource {
 	printed = true;
     }
 
-    private void PrintCodeCSV(ClassInfo ci, File csvFilesDir) throws IOException {
+    /**
+     * Transforms the contents of the temporary feature catalogue xml and inserts it
+     * into a specific place (denoted by a placeholder) of a docx template file. The
+     * result is copied into a new output file. The template file is not modified.
+     * 
+     * @param xmlName         Name of the temporary feature catalogue xml file,
+     *                        located in the output directory.
+     * @param outfileBasename Base name of the output file, without file type
+     *                        ending.
+     */
+    private void writeDOCX(String xmlName, String outfileBasename) {
 
-	if (!csvFilesDir.exists()) {
-	    csvFilesDir.mkdirs();
+	if (!OutputFormat.toLowerCase().contains("docx"))
+	    return;
+
+	StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_DOCX);
+
+	ZipHandler zipHandler = new ZipHandler();
+
+	String xsldocxfileName = options.parameter(this.getClass().getName(), "xsldocxFile");
+	if (xsldocxfileName == null)
+	    xsldocxfileName = "aaa-docx.xsl";
+
+	String docxfileName = outfileBasename + ".docx";
+
+	String docxTemplateFilePath = options.parameter(this.getClass().getName(), "docxTemplateFilePath");
+	if (docxTemplateFilePath == null)
+	    docxTemplateFilePath = options.parameter("docxTemplateFilePath");
+	// if no path is provided, use the directory of the default template
+	if (docxTemplateFilePath == null) {
+	    docxTemplateFilePath = DOCX_TEMPLATE_URL;
+	    result.addDebug(this, 17, "docxTemplateFilePath", DOCX_TEMPLATE_URL);
 	}
 
-	File outputFile = new File(csvFilesDir, ci.name() + ".csv");
+	try {
 
-	try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
-		CSVPrinter csvPrinter = new CSVPrinter(writer,
-			CSVFormat.Builder.create(CSVFormat.DEFAULT).setHeader("Code", "Name").build());) {
+	    // Setup directories
+	    File outDir = new File(outputDirectory);
+	    File tmpDir = new File(outDir, "tmpdocx");
+	    File tmpinputDir = new File(tmpDir, "input");
+	    File tmpoutputDir = new File(tmpDir, "output");
 
-	    for (PropertyInfo pi : ci.properties().values()) {
+	    // get docx template
 
-		String code = StringUtils.isNotBlank(pi.initialValue()) ? pi.initialValue() : pi.name();
-		String name = pi.name();
-		csvPrinter.printRecord(code, name);
+	    // create temporary file for the docx template copy
+	    File docxtemplate_copy = new File(tmpDir, "docxtemplatecopy.tmp");
+
+	    // populate temporary file either from remote or local URI
+	    if (docxTemplateFilePath.toLowerCase().startsWith("http")) {
+		URL templateUrl = new URL(docxTemplateFilePath);
+		FileUtils.copyURLToFile(templateUrl, docxtemplate_copy);
+	    } else {
+		File docxtemplate = new File(docxTemplateFilePath);
+		if (docxtemplate.exists()) {
+		    FileUtils.copyFile(docxtemplate, docxtemplate_copy);
+		} else {
+		    result.addError(this, 19, docxtemplate.getAbsolutePath());
+		    return;
+		}
 	    }
 
-	    csvPrinter.flush();
+	    /*
+	     * Unzip the docx template to tmpinputDir and tmpoutputDir The contents of the
+	     * tmpinputdir will be used as input for the transformation. The transformation
+	     * result will overwrite the relevant files in the tmpoutputDir.
+	     */
+	    zipHandler.unzip(docxtemplate_copy, tmpinputDir);
+	    zipHandler.unzip(docxtemplate_copy, tmpoutputDir);
+
+	    /*
+	     * Get hold of the styles.xml file from which the transformation will get
+	     * relevant information. The path to this file will be used as a transformation
+	     * parameter.
+	     */
+	    File styleXmlFile = new File(tmpinputDir, "word/styles.xml");
+	    if (!styleXmlFile.canRead()) {
+		result.addError(null, 301, styleXmlFile.getName(), "styles.xml");
+		return;
+	    }
+
+	    /*
+	     * Get hold of the temporary feature catalog xml file. The path to this file
+	     * will be used as a transformation parameter.
+	     */
+	    File xmlFile = new File(outDir, xmlName);
+	    if (!xmlFile.canRead()) {
+		result.addError(null, 301, xmlFile.getName(), xmlName);
+		return;
+	    }
+
+	    /*
+	     * Get hold of the input document.xml file (internal .xml file from the
+	     * docxtemplate). It will be used as the source for the transformation.
+	     */
+	    File indocumentxmlFile = new File(tmpinputDir, "word/document.xml");
+	    if (!indocumentxmlFile.canRead()) {
+		result.addError(null, 301, indocumentxmlFile.getName(), "document.xml");
+		return;
+	    }
+
+	    /*
+	     * Get hold of the output document.xml file. It will be used as the
+	     * transformation target.
+	     */
+	    File outdocumentxmlFile = new File(tmpoutputDir, "word/document.xml");
+	    if (!outdocumentxmlFile.canWrite()) {
+		result.addError(null, 307, outdocumentxmlFile.getName(), "document.xml");
+		return;
+	    }
+
+	    /*
+	     * Prepare the transformation.
+	     */
+	    Map<String, String> transformationParameters = new HashMap<String, String>();
+	    transformationParameters.put("styleXmlPath", styleXmlFile.toURI().toString());
+	    transformationParameters.put("catalogXmlPath", xmlFile.toURI().toString());
+	    transformationParameters.put("DOCX_PLACEHOLDER", DOCX_PLACEHOLDER);
+
+	    /*
+	     * Execute the transformation.
+	     */
+	    this.xsltWrite(indocumentxmlFile, xsldocxfileName, outdocumentxmlFile, transformationParameters);
+
+	    /*
+	     * === Create the docx result file ===
+	     */
+
+	    // Get hold of the output docx file (it will be overwritten or
+	    // initialized).
+	    File outFile = new File(outDir, docxfileName);
+
+	    /*
+	     * Zip the temporary output directory and copy it to the output docx file.
+	     */
+	    zipHandler.zip(tmpoutputDir, outFile);
+
+	    /*
+	     * === Delete the temporary directory ===
+	     */
+
+	    try {
+		FileUtils.deleteDirectory(tmpDir);
+	    } catch (IOException e) {
+		result.addWarning(this, 20, e.getMessage());
+	    }
+
+	    result.addResult(getTargetName(), outputDirectory, docxfileName, null);
+
+	} catch (Exception e) {
+	    String m = e.getMessage();
+	    if (m != null) {
+		result.addError(m);
+	    }
+	    e.printStackTrace(System.err);
+	}
+    }
+
+    private void writeHTML(String xmlName, String outfileBasename) {
+
+	if (!OutputFormat.toLowerCase().contains("html"))
+	    return;
+
+	StatusBoard.getStatusBoard().statusChanged(STATUS_WRITE_HTML);
+
+	String xslfofileName = options.parameter(this.getClass().getName(), "xslhtmlFile");
+	if (xslfofileName == null)
+	    xslfofileName = "aaa-html.xsl";
+	String htmlfileName = outfileBasename + ".html";
+
+	if (xmlName != null && xmlName.length() > 0 && xslfofileName != null && xslfofileName.length() > 0
+		&& htmlfileName != null && htmlfileName.length() > 0) {
+	    // Setup input and output files
+	    File outDir = new File(outputDirectory);
+	    File xmlFile = new File(outDir, xmlName);
+	    File outFile = new File(outDir, htmlfileName);
+	    xsltWrite(xmlFile, xslfofileName, outFile, null);
 	}
     }
 
@@ -2157,7 +2311,7 @@ public class Katalog implements Target, MessageSource {
 	    if (xslTransformerFactory != null) {
 		try {
 		    System.setProperty("javax.xml.transform.TransformerFactory", xslTransformerFactory);
-		    @SuppressWarnings("unused")
+
 		    TransformerFactory factory = TransformerFactory.newInstance();
 
 		    if (factory.getClass().getName().equalsIgnoreCase("net.sf.saxon.TransformerFactoryImpl")) {
@@ -2238,12 +2392,48 @@ public class Katalog implements Target, MessageSource {
 	return "AAA-Objektartenkatalog";
     }
 
+    /**
+     * This is the message text provision proper. It returns a message for a number.
+     * 
+     * @param mnr Message number
+     * @return Message text or null
+     */
+    protected String messageText(int mnr) {
+	switch (mnr) {
+	case 11:
+	    return "Unknown model type: '$1$'.";
+	case 12:
+	    return "Directory named '$1$' does not exist or is not accessible.";
+	case 13:
+	    return "File '$1$' does not exist or is not accessible.";
+	case 14:
+	    return "Reference model object could not be instantiated: '$1$'.";
+	case 17:
+	    return "No value provided for configuration parameter '$1$', defaulting to: '$2$'.";
+	case 18:
+	    return "XSLT stylesheet $1$ not found.";
+	case 19:
+	    return "DOCX template $1$ not found.";
+	case 20:
+	    return "Could not delete temporary directory created for docx transformation; IOException message is: $1$";
+	case 21:
+	    return "Exception occurred while copying directory '$1$' to '$2$'. Exception message is: $3$";
+	case 22:
+	    return "Exception occurred while copying file '$1$' to '$2$'. Exception message is: $3$";
+	case 100:
+	    return "Parameter 'xslTransformerFactory' is set to '$1$'. A transformer with this factory could not be instantiated. Make the implementation of the transformer factory available on the classpath.";
+	case 102:
+	    return "This version of the AAA-Tools requires an XSLT 2.0 processor, which should be set via the configuration parameter 'xslTransformerFactory'. That parameter was not found, and the default TransformerFactory implementation is not 'net.sf.saxon.TransformerFactoryImpl' (which is known to be an XSLT 2.0 processor); ensure that the parameter is configured correctly.";
+	}
+	return null;
+    }
+
     @Override
     /**
      * <p>
      * This method returns messages belonging to the Feature Catalogue target by
      * their message number. The organization corresponds to the logic in module
-     * ShapeChangeResult. All functions in that class, which require a message
+     * ShapeChangeResult. All functions in that class, which require an message
      * number can be redirected to the function at hand.
      * </p>
      * 
@@ -2261,33 +2451,5 @@ public class Katalog implements Target, MessageSource {
 	    mess = mess.substring(2);
 	}
 	return prefix + "Katalogtool: " + mess;
-    }
-
-    /**
-     * This is the message text provision proper. It returns a message for a number.
-     * 
-     * @param mnr Message number
-     * @return Message text or null
-     */
-    protected String messageText(int mnr) {
-	switch (mnr) {
-	case 12:
-	    return "Directory named '$1$' does not exist or is not accessible.";
-	case 13:
-	    return "File '$1$' does not exist or is not accessible.";
-	case 17:
-	    return "No value provided for configuration parameter '$1$', defaulting to: '$2$'.";
-	case 18:
-	    return "XSLT stylesheet $1$ not found.";
-	case 19:
-	    return "Exception occurred while copying directory '$1$' to '$2$'. Exception message is: $3$";
-	case 20:
-	    return "Exception occurred while copying file '$1$' to '$2$'. Exception message is: $3$";
-	case 100:
-	    return "Parameter 'xslTransformerFactory' is set to '$1$'. A transformer with this factory could not be instantiated. Make the implementation of the transformer factory available on the classpath.";
-	case 102:
-	    return "This version of the AAA-Tools requires an XSLT 2.0 processor, which should be set via the configuration parameter 'xslTransformerFactory'. That parameter was not found, and the default TransformerFactory implementation is not 'net.sf.saxon.TransformerFactoryImpl' (which is known to be an XSLT 2.0 processor); ensure that the parameter is configured correctly.";
-	}
-	return null;
     }
 }

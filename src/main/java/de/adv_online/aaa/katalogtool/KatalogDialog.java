@@ -57,16 +57,16 @@ import javax.swing.border.TitledBorder;
 
 import org.apache.commons.lang3.SystemUtils;
 
-import de.interactive_instruments.ShapeChange.Converter;
-import de.interactive_instruments.ShapeChange.DefaultModelProvider;
-import de.interactive_instruments.ShapeChange.Options;
-import de.interactive_instruments.ShapeChange.ShapeChangeAbortException;
-import de.interactive_instruments.ShapeChange.ShapeChangeResult;
-import de.interactive_instruments.ShapeChange.TargetConfiguration;
-import de.interactive_instruments.ShapeChange.Model.Model;
-import de.interactive_instruments.ShapeChange.UI.Dialog;
-import de.interactive_instruments.ShapeChange.UI.StatusBoard;
-import de.interactive_instruments.ShapeChange.UI.StatusReader;
+import de.interactive_instruments.shapechange.core.Converter;
+import de.interactive_instruments.shapechange.core.DefaultModelProvider;
+import de.interactive_instruments.shapechange.core.Options;
+import de.interactive_instruments.shapechange.core.ShapeChangeAbortException;
+import de.interactive_instruments.shapechange.core.ShapeChangeResult;
+import de.interactive_instruments.shapechange.core.TargetConfiguration;
+import de.interactive_instruments.shapechange.core.model.Model;
+import de.interactive_instruments.shapechange.core.ui.Dialog;
+import de.interactive_instruments.shapechange.core.ui.StatusBoard;
+import de.interactive_instruments.shapechange.core.ui.StatusReader;
 import org.apache.commons.lang3.StringUtils;
 
 public class KatalogDialog extends JFrame implements ActionListener, ItemListener, Dialog, StatusReader {
@@ -126,22 +126,22 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
             onlyInitialise = false;
         }
 
-	public void setOnlyInitialise(boolean o){
+		public void setOnlyInitialise(boolean o){
 			onlyInitialise = o;
 		}
 		
-	public void initialise() throws ShapeChangeAbortException{
+		public void initialise() throws ShapeChangeAbortException{
             if(dialog.model!=null){
             	dialog.model.shutdown();
             	dialog.model = null;
             }
 				dialog.saveModelMsgText = true;
-		String imt = options.parameter("inputModelType");
-
-		DefaultModelProvider mp = new DefaultModelProvider(result, options);
-		dialog.model = mp.getModel(imt, modelAbsolutePath, null, null, true, null);
-//            	dialog.model = new EADocument(result, options, modelAbsolutePath);
+				String imt = options.parameter("inputModelType");
+				DefaultModelProvider mp = new DefaultModelProvider(result, options);
+				dialog.model = mp.getModel(imt, modelAbsolutePath, null, null, true, null);
+				//            	dialog.model = new EADocument(result, options, modelAbsolutePath);
 				dialog.saveModelMsgText = false;
+                
             if(onlyInitialise)
             	dialog.threadInitialised();
 		}
@@ -215,10 +215,10 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
     static {
     	// Reihenfolge der Einträge sollte stabil bleiben - wird verwendet in statusChanged()!
     	targetLabels.add("XML");
-//    	targetLabels.add("HTML");
-//    	targetLabels.add("DOCX");
+    	targetLabels.add("HTML");
+    	targetLabels.add("DOCX");
     	targetLabels.add("CSV");
-    	targetLabels.add("ADOC");
+      //targetLabels.add("ADOC");
     }
     private StatusBar statusBar;
     
@@ -242,8 +242,8 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 	JTextField modellartField = null; 
 	
 	private JCheckBox retiredBox;
-	private JCheckBox revisionBox;
-	private JCheckBox grundDatBox;
+	//private JCheckBox revisionBox;
+	private JCheckBox grundDatBox;	
 	private JCheckBox nutzungsartkennungBox;
 	
 	private JCheckBox profEinschrBox;
@@ -416,7 +416,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
     	String s = "";
     	
     	String appSchemaStr;
-		s = options.parameter("appSchemaName");
+		s = StringUtils.defaultIfBlank(options.parameter("RELEVANT_PACKAGE_NAME"), options.parameter("appSchemaName")) ;
 		if (s!=null && s.trim().length()>0)
 			appSchemaStr = s.trim();
 		else
@@ -439,12 +439,12 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 		s = options.parameter(paramKatalogClass,"stillgelegteElemente");
 		if (s!=null && s.equals("true"))
 			retiredBool = true;
-		
-	Boolean revisionBool = false;
+
+/*	Boolean revisionBool = false;
 		s = options.parameter(paramKatalogClass,"revisionsnummern");
 		if (s!=null && s.equals("true"))
 		    revisionBool = true;
-		
+*/
 	Boolean nutzungsartkennungBool = true;
 		s = options.parameter("ignoreTaggedValues");
 		if (s!=null && s.contains("AAA:Nutzungsartkennung"))
@@ -582,14 +582,14 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
         retiredBox.addItemListener(this);
         retiredPanel.add(retiredBox);
         outOptBox.add(retiredPanel);
-        
+/*
         final JPanel revisionPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 10, 5));
         revisionBox = new JCheckBox("Auch Revisionsnummern ausgeben");
         revisionBox.setSelected(revisionBool);
         revisionBox.addItemListener(this);
         revisionPanel.add(revisionBox);
         outOptBox.add(revisionPanel);
-        
+        */
         final JPanel nutzungsartkennungPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 10, 5));
         nutzungsartkennungBox = new JCheckBox("Nutzungsartkennung ausgeben");
         nutzungsartkennungBox.setSelected(nutzungsartkennungBool);
@@ -814,7 +814,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 		}
 		options.setParameter(paramKatalogClass,"ausgabeformat", opt);
 		
-		options.setParameter("appSchemaName", appSchemaField.getText());
+		options.setParameter("RELEVANT_PACKAGE_NAME", appSchemaField.getText());
 		options.setParameter(paramKatalogClass,"schemakennungen", schemaKennField.getText());
 		if(geerbEigBox.isSelected())
 			options.setParameter(paramKatalogClass,"geerbteEigenschaften","true");
@@ -824,11 +824,11 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			options.setParameter(paramKatalogClass,"stillgelegteElemente","true");
 		else
 			options.setParameter(paramKatalogClass,"stillgelegteElemente","false");
-		if(revisionBox.isSelected())
+	/*	if(revisionBox.isSelected())
 			options.setParameter(paramKatalogClass,"revisionsnummern","true");
 		else
 			options.setParameter(paramKatalogClass,"revisionsnummern","false");
-		
+	*/	
 		options.setParameter(paramKatalogClass,"modellarten", modellartField.getText());
 		if(grundDatBox.isSelected())
 			options.setParameter(paramKatalogClass,"nurGrunddatenbestand","true");
@@ -848,7 +848,6 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			options.setParameter(paramKatalogClass,"paket", "");
 		options.setParameter(paramKatalogClass,"xsltPfad", xsltpfadField.getText());
 		options.setParameter(paramKatalogClass,"Verzeichnis", outDirField.getText());
-
 		String mdl = mdlDirField.getText();
 		options.setParameter("inputFile", mdl);
 		
@@ -857,11 +856,11 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 
 		else if (mdl.toLowerCase().endsWith(".xmi"))
 			options.setParameter("inputModelType", "XMI10");
-		else if (mdl.toLowerCase().endsWith(".eap")||mdl.toLowerCase().endsWith(".eapx"))
+		else if (mdl.toLowerCase().endsWith(".qea")||mdl.toLowerCase().endsWith(".qeax"))
 			options.setParameter("inputModelType", "EA7");
 
 		// update target config from dialog also in the target configurations (strictly this is the only place where they need to be updated)
-		for (TargetConfiguration cfg : options.getInputTargetConfigs()) {
+		for (TargetConfiguration cfg : options.getTargetConfigsOnInputModel()) {
 			if (cfg.getClassName().equalsIgnoreCase(paramKatalogClass)) {
 				Map<String, String> m = cfg.getParameters();
 				m.put("ausgabeformat", opt);
@@ -874,10 +873,11 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 					m.put("stillgelegteElemente","true");
 				else
 					m.put("stillgelegteElemente","false");
-				if(revisionBox.isSelected())
+		/*		if(revisionBox.isSelected())
 					m.put("revisionsnummern","true");
 				else
 					m.put("revisionsnummern","false");
+*/
 				m.put("modellarten", modellartField.getText());
 				if(grundDatBox.isSelected())
 					m.put("nurGrunddatenbestand","true");
@@ -941,7 +941,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			schemaKennField.setEnabled(false); 
 			geerbEigBox.setEnabled(false);
 			retiredBox.setEnabled(false);
-			revisionBox.setEnabled(false);
+			//revisionBox.setEnabled(false);
 			nutzungsartkennungBox.setEnabled(false);
 			modellartField.setEnabled(false); 
 			grundDatBox.setEnabled(false);
@@ -975,7 +975,7 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			schemaKennField.setEnabled(true); 
 			geerbEigBox.setEnabled(true);
 			retiredBox.setEnabled(true);
-			revisionBox.setEnabled(true);
+			//revisionBox.setEnabled(true);
 			nutzungsartkennungBox.setEnabled(true);
 			modellartField.setEnabled(true); 
 			grundDatBox.setEnabled(true);
@@ -1141,26 +1141,27 @@ public class KatalogDialog extends JFrame implements ActionListener, ItemListene
 			if(targetLabels!=null && targetLabels.size()>=1)
 				msg += " - " + targetLabels.get(0);
 			break;
-//		case Katalog.STATUS_WRITE_HTML:
-//			msg += "AAA-Katalogtool: Schreiben des Katalogs";
-//			if(targetLabels!=null && targetLabels.size()>=2)
-//				msg += " - " + targetLabels.get(1);
-//			break;
-//		case Katalog.STATUS_WRITE_DOCX:
-//			msg += "AAA-Katalogtool: Schreiben des Katalogs";
-//			if(targetLabels!=null && targetLabels.size()>=3)
-//				msg += " - " + targetLabels.get(2);
-//			break;		
+		case Katalog.STATUS_WRITE_HTML:
+			msg += "AAA-Katalogtool: Schreiben des Katalogs";
+			if(targetLabels!=null && targetLabels.size()>=2)
+				msg += " - " + targetLabels.get(1);
+			break;
+		case Katalog.STATUS_WRITE_DOCX:
+			msg += "AAA-Katalogtool: Schreiben des Katalogs";
+			if(targetLabels!=null && targetLabels.size()>=3)
+				msg += " - " + targetLabels.get(2);
+			break;		
 		case Katalog.STATUS_WRITE_CSV:
 			msg += "AAA-Katalogtool: Schreiben des Katalogs";
-			if(targetLabels!=null && targetLabels.size()>=4)
-				msg += " - " + targetLabels.get(3);
+			if(targetLabels!=null && targetLabels.size()>=6)
+				msg += " - " + targetLabels.get(5);
 			break;
-		case Katalog.STATUS_WRITE_ADOC:
+	/*	case Katalog.STATUS_WRITE_ADOC:
 			msg += "AAA-Katalogtool: Schreiben des Katalogs";
 			if(targetLabels!=null && targetLabels.size()>=5)
 				msg += " - " + targetLabels.get(4);
 			break;
+*/
 		// default: delete status bar text
 		default:
 			msg = null;

@@ -1,1 +1,3 @@
-java -jar AAATools-${project.version}.jar -d -c "Konfigurationen/AAAKatalog-ALKIS-7.1.2.xml" 
+java -jar AAATools-${project.version}.jar -d -c "Konfigurationen/AAAKatalog-ALKIS-7.1.2-SCXML.xml"
+
+PAUSE 
