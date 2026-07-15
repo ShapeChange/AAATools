@@ -1,0 +1,39 @@
+/**
+ * GeoInfoDok Model Validators (Modellarten)
+ *
+ * (c) 2009-2026 Arbeitsgemeinschaft der Vermessungsverwaltungen der 
+ * Länder der Bundesrepublik Deutschland (AdV)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact:
+ * interactive instruments GmbH
+ * Bundeskanzlerplatz 2d
+ * 53113 Bonn
+ * Germany
+ */
+package de.adv_online.aaa.modelvalidation;
+
+/**
+ * @author Johannes Echterhoff (echterhoff at interactive-instruments dot de)
+ *
+ */
+public class GIDModelValidatorModellartenConstants {
+
+    public static final String RULE_GID_MODELLART_FOR_ENUM_VALUED_PROPERTIES = "rule-val-gid-gidModellartForEnumValuedProperties";
+
+    public static final String TV_GID_MODELLART = "GID:Modellart";
+    
+    
+}
