@@ -699,13 +699,19 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
    <xsl:for-each select="$lines">
     <xsl:variable name="line" select="
       if (. instance of element()) then
-        adoc:indented(adoc:diff-element(.))
+        adoc:indented(adoc:escape-list-marker(adoc:diff-element(.)))
       else
-        adoc:indented(adoc:text(.))"/>
-    <xsl:if test="string-length(normalize-space($line)) != 0">
-     <xsl:value-of disable-output-escaping="no" select="$line"/>
-     <xsl:value-of select="$newline"/>
-    </xsl:if>
+        adoc:indented(adoc:escape-list-marker(adoc:text(.)))"/>
+    <xsl:choose>
+     <xsl:when test="string-length(normalize-space($line)) != 0">
+      <xsl:value-of disable-output-escaping="no" select="$line"/>
+      <xsl:value-of select="$newline"/>
+     </xsl:when>
+     <xsl:when test=". instance of element()">
+      <!-- Empty element (e.g. empty definition): preserve as blank line paragraph separator -->
+      <xsl:value-of select="$newline"/>
+     </xsl:when>
+    </xsl:choose>
    </xsl:for-each>
    <xsl:value-of select="$doublenewline"/>
   </xsl:if>
@@ -720,13 +726,19 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
    <xsl:for-each select="$lines">
     <xsl:variable name="line" select="
       if (. instance of element()) then       
-        adoc:indented(adoc:diff-element(.))
+        adoc:indented(adoc:escape-list-marker(adoc:diff-element(.)))
       else
-        adoc:indented(adoc:text(.))"/>
-    <xsl:if test="string-length(normalize-space($line)) != 0">
-     <xsl:value-of disable-output-escaping="no" select="$line"/>
-     <xsl:value-of select="$newline"/>
-    </xsl:if>
+        adoc:indented(adoc:escape-list-marker(adoc:text(.)))"/>
+    <xsl:choose>
+     <xsl:when test="string-length(normalize-space($line)) != 0">
+      <xsl:value-of disable-output-escaping="no" select="$line"/>
+      <xsl:value-of select="$newline"/>
+     </xsl:when>
+     <xsl:when test=". instance of element()">
+      <!-- Empty element (e.g. empty definition): preserve as blank line paragraph separator -->
+      <xsl:value-of select="$newline"/>
+     </xsl:when>
+    </xsl:choose>
    </xsl:for-each>
    <xsl:value-of select="$newline"/>
   </xsl:if>
@@ -834,5 +846,18 @@ im Auftrag der Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der B
    <xsl:value-of select="$newline"/>
   </xsl:if>
  </xsl:template>
+ 
+     <!-- Custom function to escape Asciidoctor list markers -->
+    <!-- see https://github.com/asciidoctor/asciidoctor/issues/4276 -->
+    <xsl:function name="adoc:escape-list-marker" as="xs:string">
+        <xsl:param name="line" as="xs:string"/>
+        
+        <!-- 
+          Regex breakdown:
+          ^((-\d+\.)) -> Group 1: Matches line start with a hyphen OR digits and a dot
+          (.*)$       -> Group 2: Matches the rest of the line
+        -->
+        <xsl:value-of select="replace($line, '^((-|\d+\.))(.*)$', '$1{empty}$3')"/>
+    </xsl:function>
 
 </xsl:stylesheet>

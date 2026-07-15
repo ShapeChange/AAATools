@@ -42,29 +42,32 @@ image::media/aaa.jpg[]
 = Dokumentation zur Modellierung der Geoinformationen des amtlichen Vermessungswesens (GeoInfoDok)
 
 [.text-center]
---
-
 [discrete] 
 == {aaa}-Katalogwerke
 
+[.text-center]
 [discrete] 
 == Ausleitung des {aaa}-Objektartenkataloges {mat}
 
+[.text-center]
 *{aaaVersion}*
 
+[.text-center]
 *{aaaStand}*
 
 ---
 
+[.text-center]
 [discrete] 
 == Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder der Bundesrepublik Deutschland (AdV)
 
+[.text-center]
 [discrete] 
 == {aaa}-Objektartenkatalog
 
+[.text-center]
 [discrete] 
 === Teil A: Vorbemerkungen
---
 
 toc::[]
 

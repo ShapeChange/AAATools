@@ -133,10 +133,12 @@ public class Katalog implements Target, MessageSource {
     public static final int STATUS_WRITE_DOCX = 27;
     public static final int STATUS_WRITE_ADOC = 28;
 
-    public static final String PARAM_ADOC_TEMPLATE_PATH = "adocTemplatePath";
-    public static final String PARAM_ADOC_ATTRIBUTES_PATH = "adocAttributesPath";
-    public static final String DEFAULT_ADOC_TEMPLATE_PATH = "resources/templates/adoc/katalog-mit-nutzungsartkennung.adoc";
-    public static final String DEFAULT_ADOC_ATTRIBUTES_PATH = "resources/templates/adoc/attribute.adoc";
+    public static final String PARAM_ADOC_TEMPLATE_DIR = "adocTemplateDir";
+    public static final String PARAM_ADOC_TEMPLATE_FILENAME = "adocTemplateFilename";
+    public static final String PARAM_ADOC_ATTRIBUTES_FILENAME = "adocAttributesFilename";
+    public static final String DEFAULT_ADOC_TEMPLATE_DIR = "resources/templates/adoc";
+    public static final String DEFAULT_ADOC_TEMPLATE_FILENAME = "katalog-mit-nutzungsartkennung.adoc";
+    public static final String DEFAULT_ADOC_ATTRIBUTES_FILENAME = "attribute.adoc";
 
     /**
      * The string used as placeholder in the docx template. The paragraph this
@@ -287,7 +289,11 @@ public class Katalog implements Target, MessageSource {
 	    // Kopiere relevante Dateien aus dem Template-Verzeichnis
 	    File outDir = new File(outputDirectory);
 
-	    File adocMediaTemplateDir = new File("resources/templates/adoc/media");
+	    String adocTemplateDirValue = options.parameterAsString(this.getClass().getName(), PARAM_ADOC_TEMPLATE_DIR,
+		    DEFAULT_ADOC_TEMPLATE_DIR, false, true);
+	    File adocTemplateDir = new File(adocTemplateDirValue);
+
+	    File adocMediaTemplateDir = new File(adocTemplateDir, "media");
 	    File adocMediaDestinationDir = new File(outDir, "media");
 	    try {
 		FileUtils.copyDirectory(adocMediaTemplateDir, adocMediaDestinationDir);
@@ -296,7 +302,7 @@ public class Katalog implements Target, MessageSource {
 			adocMediaDestinationDir.getAbsolutePath(), e.getMessage());
 	    }
 
-	    File adocResourcesTemplateDir = new File("resources/templates/adoc/resources");
+	    File adocResourcesTemplateDir = new File(adocTemplateDir, "resources");
 	    File adocResourcesDestinationDir = new File(outDir, "resources");
 	    try {
 		FileUtils.copyDirectory(adocResourcesTemplateDir, adocResourcesDestinationDir);
@@ -305,9 +311,9 @@ public class Katalog implements Target, MessageSource {
 			adocResourcesDestinationDir.getAbsolutePath(), e.getMessage());
 	    }
 
-	    String adocTemplatePath = options.parameterAsString(this.getClass().getName(), PARAM_ADOC_TEMPLATE_PATH,
-		    DEFAULT_ADOC_TEMPLATE_PATH, false, true);
-	    File adocTemplateFile = new File(adocTemplatePath);
+	    String adocTemplateFilename = options.parameterAsString(this.getClass().getName(), PARAM_ADOC_TEMPLATE_FILENAME,
+		    DEFAULT_ADOC_TEMPLATE_FILENAME, false, true);
+	    File adocTemplateFile = new File(adocTemplateDir,adocTemplateFilename);
 	    File adocTemplateDestinationFile = new File(outDir, "katalog.adoc");
 	    try {
 		FileUtils.copyFile(adocTemplateFile, adocTemplateDestinationFile);
@@ -316,9 +322,9 @@ public class Katalog implements Target, MessageSource {
 			adocTemplateDestinationFile.getAbsolutePath(), e.getMessage());
 	    }
 
-	    String adocAttributesPath = options.parameterAsString(this.getClass().getName(), PARAM_ADOC_ATTRIBUTES_PATH,
-		    DEFAULT_ADOC_ATTRIBUTES_PATH, false, true);
-	    File adocAttributesFile = new File(adocAttributesPath);
+	    String adocAttributesFilename = options.parameterAsString(this.getClass().getName(), PARAM_ADOC_ATTRIBUTES_FILENAME,
+		    DEFAULT_ADOC_ATTRIBUTES_FILENAME, false, true);
+	    File adocAttributesFile = new File(adocTemplateDir,adocAttributesFilename);
 	    File adocAttributesDestinationFile = new File(outDir, "attribute.adoc");
 	    try {
 		FileUtils.copyFile(adocAttributesFile, adocAttributesDestinationFile);
@@ -659,7 +665,7 @@ public class Katalog implements Target, MessageSource {
 		e2.setAttribute(aname, aval);
 
 	    line = PrepareToPrint(line);
-
+	    
 	    if (ins) {
 		line = INS_OPEN + line;
 		ins = false;
