@@ -26,9 +26,6 @@
 
 package de.adv_online.aaa.katalogtool;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -1234,9 +1231,17 @@ public class Katalog implements Target, MessageSource {
 		}
 	    }
 
-	    // New style for constraints, only if no reference model, as otherwise this has
-	    // already been taken into account so that we could diff it
-	    if (refModel == null || op == Operation.INSERT) {
+	    /*
+	     * New style for constraints, only if no reference model, as otherwise this has
+	     * already been taken into account so that we could diff it. Also take into
+	     * account cases of new class, and the special case in which the documentation
+	     * was not changed (no diff for the documentation is available) - because then
+	     * we want to grab the (unchanged) 'Konsistenzbedingungen' from the constraints
+	     * defined for ci. If a documentation diff IS available, then the
+	     * 'Konsistenzbedingungen' are already part of the documentation, and will be
+	     * parsed from there.
+	     */
+	    if (refModel == null || op == Operation.INSERT || !documentationDiffAvailable(ci)) {
 		for (Constraint ocl : ci.constraints()) {
 		    s = null;
 
@@ -1383,6 +1388,19 @@ public class Katalog implements Target, MessageSource {
 	}
 
 	PrintProperties(ci, false, root, op);
+    }
+
+    private boolean documentationDiffAvailable(ClassInfo ci) {
+
+	if (diffs != null && diffs.get(ci) != null) {
+	    for (DiffElement diff : diffs.get(ci)) {
+		if (diff.subElementType == ElementType.DOCUMENTATION) {
+		    return true;
+		}
+	    }
+	}
+
+	return false;
     }
 
     private void PrintProperties(ClassInfo ci, boolean listOnly, Element e1, Operation op) {
@@ -1983,13 +2001,13 @@ public class Katalog implements Target, MessageSource {
 
 	if (Revisionsnummern) {
 	    s = i.taggedValue("AAA:Revisionsnummer");
-	if (s != null && !s.isEmpty()) {
-	    e2 = document.createElement("letzteAenderungRevisionsnummer");
-	    e2.setTextContent(PrepareToPrint(s));
-	    e1.appendChild(e2);
+	    if (s != null && !s.isEmpty()) {
+		e2 = document.createElement("letzteAenderungRevisionsnummer");
+		e2.setTextContent(PrepareToPrint(s));
+		e1.appendChild(e2);
+	    }
 	}
     }
-}
 
     @Override
     public void write() {
@@ -2033,7 +2051,7 @@ public class Katalog implements Target, MessageSource {
 
 	    String outfileBasename = pi.xsdDocument().replace(".xsd", "");
 
-      writeADOC(xmlName, outfileBasename);
+	    writeADOC(xmlName, outfileBasename);
 	    writeDOCX(xmlName, outfileBasename);
 	    writeHTML(xmlName, outfileBasename);
 	    writeXML(xmlName, outfileBasename);
