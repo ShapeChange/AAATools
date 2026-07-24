@@ -32,9 +32,12 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -55,6 +58,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -135,10 +139,9 @@ public class Katalog implements Target, MessageSource {
 
     public static final String PARAM_ADOC_TEMPLATE_DIR = "adocTemplateDir";
     public static final String PARAM_ADOC_TEMPLATE_FILENAME = "adocTemplateFilename";
-    public static final String PARAM_ADOC_ATTRIBUTES_FILENAME = "adocAttributesFilename";
-    public static final String DEFAULT_ADOC_TEMPLATE_DIR = "resources/templates/adoc";
-    public static final String DEFAULT_ADOC_TEMPLATE_FILENAME = "katalog-mit-nutzungsartkennung.adoc";
-    public static final String DEFAULT_ADOC_ATTRIBUTES_FILENAME = "attribute.adoc";
+    public static final String PARAM_ADOC_KATALOGWERK_BEZEICHNUNG = "adocKatalogwerkBezeichnung";
+    public static final String PARAM_ADOC_MODELLARTEN_KURZBEZEICHNUNG = "adocModellartenKurzbezeichnung";
+    public static final String PARAM_ADOC_MODELLARTEN_BEZEICHNUNG = "adocModellartenBezeichnung";
 
     /**
      * The string used as placeholder in the docx template. The paragraph this
@@ -257,7 +260,7 @@ public class Katalog implements Target, MessageSource {
 
 	s = options.parameter(this.getClass().getName(), MODELLARTEN);
 	if (s == null || s.trim().length() == 0)
-	    MAList = new String[0];
+	    MAList = new String[0]; 
 	else
 	    MAList = s.trim().split(",");
 
@@ -290,7 +293,7 @@ public class Katalog implements Target, MessageSource {
 	    File outDir = new File(outputDirectory);
 
 	    String adocTemplateDirValue = options.parameterAsString(this.getClass().getName(), PARAM_ADOC_TEMPLATE_DIR,
-		    DEFAULT_ADOC_TEMPLATE_DIR, false, true);
+		    "resources/templates/adoc", false, true);
 	    File adocTemplateDir = new File(adocTemplateDirValue);
 
 	    File adocMediaTemplateDir = new File(adocTemplateDir, "media");
@@ -311,9 +314,9 @@ public class Katalog implements Target, MessageSource {
 			adocResourcesDestinationDir.getAbsolutePath(), e.getMessage());
 	    }
 
-	    String adocTemplateFilename = options.parameterAsString(this.getClass().getName(), PARAM_ADOC_TEMPLATE_FILENAME,
-		    DEFAULT_ADOC_TEMPLATE_FILENAME, false, true);
-	    File adocTemplateFile = new File(adocTemplateDir,adocTemplateFilename);
+	    String adocTemplateFilename = options.parameterAsString(this.getClass().getName(),
+		    PARAM_ADOC_TEMPLATE_FILENAME, "katalog-ohne-nutzungsartkennung.adoc", false, true);
+	    File adocTemplateFile = new File(adocTemplateDir, adocTemplateFilename);
 	    File adocTemplateDestinationFile = new File(outDir, "katalog.adoc");
 	    try {
 		FileUtils.copyFile(adocTemplateFile, adocTemplateDestinationFile);
@@ -322,15 +325,30 @@ public class Katalog implements Target, MessageSource {
 			adocTemplateDestinationFile.getAbsolutePath(), e.getMessage());
 	    }
 
-	    String adocAttributesFilename = options.parameterAsString(this.getClass().getName(), PARAM_ADOC_ATTRIBUTES_FILENAME,
-		    DEFAULT_ADOC_ATTRIBUTES_FILENAME, false, true);
-	    File adocAttributesFile = new File(adocTemplateDir,adocAttributesFilename);
+	    String katalogwerkBez = options.parameterAsString(this.getClass().getName(),
+		    PARAM_ADOC_KATALOGWERK_BEZEICHNUNG, "FIXME_Target-Parameter_adocKatalogwerkBezeichnung", false,
+		    true);
+	    String modellartenKurzBez = options.parameterAsString(this.getClass().getName(),
+		    PARAM_ADOC_MODELLARTEN_KURZBEZEICHNUNG, "",
+		    false, true);
+	    String modellartenBez = options.parameterAsString(this.getClass().getName(),
+		    PARAM_ADOC_MODELLARTEN_BEZEICHNUNG, "FIXME_Target-Parameter_adocModellartenBezeichnung", false,
+		    true);
+
+	    String schemaVersion = p.version();
+	    String schemaDate = p.taggedValue("AAA:Datum");
+
 	    File adocAttributesDestinationFile = new File(outDir, "attribute.adoc");
+	    if(adocAttributesDestinationFile.exists()) {
+		adocAttributesDestinationFile.delete();
+	    }
 	    try {
-		FileUtils.copyFile(adocAttributesFile, adocAttributesDestinationFile);
+		Files.write(adocAttributesDestinationFile.toPath(),
+			List.of(":katalogwerk: " + katalogwerkBez, ":mat: " + modellartenKurzBez,
+				":mat_langtext: " + modellartenBez, ":version: Version " + schemaVersion,
+				":stand: Stand " + StringUtils.defaultIfBlank(schemaDate, "FIXME")));
 	    } catch (IOException e) {
-		result.addError(this, 22, adocAttributesFile.getAbsolutePath(),
-			adocAttributesDestinationFile.getAbsolutePath(), e.getMessage());
+		result.addError(this, 23, adocAttributesDestinationFile.getAbsolutePath(), e.getMessage());
 	    }
 	}
 
@@ -665,7 +683,7 @@ public class Katalog implements Target, MessageSource {
 		e2.setAttribute(aname, aval);
 
 	    line = PrepareToPrint(line);
-	    
+
 	    if (ins) {
 		line = INS_OPEN + line;
 		ins = false;
@@ -2444,6 +2462,8 @@ public class Katalog implements Target, MessageSource {
 	    return "Exception occurred while copying directory '$1$' to '$2$'. Exception message is: $3$";
 	case 22:
 	    return "Exception occurred while copying file '$1$' to '$2$'. Exception message is: $3$";
+	case 23:
+	    return "Exception occurred while creating file '$1$'. Exception message is: $3$";
 	case 100:
 	    return "Parameter 'xslTransformerFactory' is set to '$1$'. A transformer with this factory could not be instantiated. Make the implementation of the transformer factory available on the classpath.";
 	case 102:
