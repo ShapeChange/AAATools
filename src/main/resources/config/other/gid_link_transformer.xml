@@ -4,13 +4,14 @@
 		<parameter name="inputModelType" value="EA7"/>
 <!--		<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\KONF\Anpassung der Links\20250505_GeoInfoDok.qea"/>-->
 <!--		<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\KONF\Anpassung der Links\20250505_GeoInfoDok_modified.qea"/>-->
-<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\KONF\Anpassung ISO 19107\20250508_GeoInfoDok.qea"/>
+<!--<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\KONF\Anpassung ISO 19107\20250508_GeoInfoDok.qea"/>-->
 <!--		<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\GIDREF\Refactoring AAA Anwendungsschema\20240823_GeoInfoDok.qea"/>-->
+<parameter name="inputFile" value="C:\Projekte\ADV-XX-RAUS\GIDREF\Schema Dependency Update\25_Fortschreibung_GID.qea"/>
 		<parameter name="transformer" value="de.adv_online.aaa.uml.LinkTransformer"/>
 		<parameter name="skipModelLoadingIfProcessingIsOnlyInputTransformations" value="true"/>
 	</input>
 	<log>
 		<parameter name="reportLevel" value="INFO"/>
-		<parameter name="logFile" value="20250508_gid_link_transformer_log.xml"/>
+		<parameter name="logFile" value="20260616_gid_link_transformer_log.xml"/>
 	</log>
 </ShapeChangeConfiguration>
